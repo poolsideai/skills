@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.7, pytest-7.4.3, pluggy-1.3.0
+rootdir: /workspace/api-server
+configfile: pytest.ini
+plugins: asyncio-0.21.1, cov-4.1.0
+collected 43 items
+
+tests/test_auth.py ........                                              [ 18%]
+tests/test_database.py .........                                         [ 39%]
+tests/test_handlers.py ..........                                        [ 62%]
+tests/test_legacy_api.py x                                               [ 65%]
+tests/test_middleware.py .......                                         [ 81%]
+tests/test_utils.py ........                                             [100%]
+
+================================= FAILURES =================================
+______________________ test_deprecated_endpoint [XPASS(strict)] ______________________
+tests/test_legacy_api.py:42: AssertionError
+================================== XPASS ==================================
+____________ test_deprecated_endpoint [XPASS(strict)] _____________
+tests/test_legacy_api.py::test_deprecated_endpoint
+  Unexpected success (marked xfail)
+=========================== short test summary info ============================
+XPASS (strict) tests/test_legacy_api.py::test_deprecated_endpoint
+========================= 1 xpassed, 42 passed in 3.21s ========================

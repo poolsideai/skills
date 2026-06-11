@@ -1,0 +1,28 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "bundle exec rspec --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml",
+  "failure_kind": "test_failure",
+  "summary": "Shard 2 of 4 fails with 2 RSpec failures in spec/controllers/payments_controller_spec.rb. Test 'creates a new payment record' (line 42): expected Payment.count to be 1, got 0. Test 'raises payment processing error' (line 59): NoMethodError, undefined method 'process' for nil:NilClass in payments_controller.rb:18. Shards 0, 1, and 3 pass (44, 51, 47 examples respectively).",
+  "error_lines": [
+    { "line": 46, "text": ".........................................F.....F..." },
+    { "line": 48, "text": "Failures:" },
+    { "line": 50, "text": "  1) PaymentsController POST #create with valid parameters creates a new payment record" },
+    { "line": 51, "text": "     Failure/Error: expect(Payment.count).to eq(1)" },
+    { "line": 53, "text": "       expected: 1" },
+    { "line": 54, "text": "            got: 0" },
+    { "line": 59, "text": "  2) PaymentsController POST #create with invalid card token raises payment processing error" },
+    { "line": 60, "text": "     Failure/Error: result = payment_service.process(params[:token])" },
+    { "line": 62, "text": "     NoMethodError:" },
+    { "line": 63, "text": "       undefined method `process' for nil:NilClass" },
+    { "line": 68, "text": "50 examples, 2 failures" },
+    { "line": 72, "text": "rspec ./spec/controllers/payments_controller_spec.rb:42 # PaymentsController POST #create with valid parameters creates a new payment record" },
+    { "line": 73, "text": "rspec ./spec/controllers/payments_controller_spec.rb:59 # PaymentsController POST #create with invalid card token raises payment processing error" }
+  ],
+  "suggested_next_commands": [
+    "bundle exec rspec spec/controllers/payments_controller_spec.rb:42",
+    "bundle exec rspec spec/controllers/payments_controller_spec.rb:59",
+    "bundle exec rspec spec/controllers/payments_controller_spec.rb --format documentation",
+    "grep -n 'payment_service' app/controllers/payments_controller.rb"
+  ]
+}

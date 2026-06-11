@@ -1,0 +1,21 @@
+{
+  "id": "ci-log-reducer-circleci-rspec-parallel-shard-conflict",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ci-log-reducer/scripts/validate_log_summary.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "CircleCI log dialect with parallelism metadata; Ruby RSpec test framework (no existing Ruby coverage); failure attribution under parallel shards where multiple shards emit similar headers but only one shard actually fails; shards 0, 1, 3 pass with 'N examples, 0 failures' epilogues while shard 2 fails with two spec failures in spec/controllers/payments_controller_spec.rb (one expectation mismatch, one nil dereference). The log interleaves shard headers and epilogues; the model must isolate shard 2's failures and ignore the three passing-shard success messages that outnumber the real failure 3:1. Synthetic fixture; no customer data. Generated case."
+}

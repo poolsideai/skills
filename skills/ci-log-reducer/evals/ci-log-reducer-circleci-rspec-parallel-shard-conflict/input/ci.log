@@ -1,0 +1,95 @@
+#!/bin/bash -eo pipefail
+# CircleCI execution environment
+export CIRCLE_NODE_TOTAL=4
+export CIRCLE_NODE_INDEX=0
+export RAILS_ENV=test
+
+====>> Shard 0 of 4
+bundle exec rspec --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
+
+Randomized with seed 42831
+
+............................................
+
+Finished in 12.34 seconds (files took 2.1 seconds to load)
+44 examples, 0 failures
+
+Randomized with seed 42831
+
+====>> Shard 1 of 4
+#!/bin/bash -eo pipefail
+export CIRCLE_NODE_TOTAL=4
+export CIRCLE_NODE_INDEX=1
+export RAILS_ENV=test
+
+bundle exec rspec --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
+
+Randomized with seed 42831
+
+...................................................
+
+Finished in 14.67 seconds (files took 2.3 seconds to load)
+51 examples, 0 failures
+
+Randomized with seed 42831
+
+====>> Shard 2 of 4
+#!/bin/bash -eo pipefail
+export CIRCLE_NODE_TOTAL=4
+export CIRCLE_NODE_INDEX=2
+export RAILS_ENV=test
+
+bundle exec rspec --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
+
+Randomized with seed 42831
+
+.........................................F.....F...
+
+Failures:
+
+  1) PaymentsController POST #create with valid parameters creates a new payment record
+     Failure/Error: expect(Payment.count).to eq(1)
+     
+       expected: 1
+            got: 0
+     
+       (compared using ==)
+     # ./spec/controllers/payments_controller_spec.rb:45:in `block (4 levels) in <top (required)>'
+
+  2) PaymentsController POST #create with invalid card token raises payment processing error
+     Failure/Error: result = payment_service.process(params[:token])
+     
+     NoMethodError:
+       undefined method `process' for nil:NilClass
+     # ./app/controllers/payments_controller.rb:18:in `create'
+     # ./spec/controllers/payments_controller_spec.rb:62:in `block (4 levels) in <top (required)>'
+
+Finished in 13.92 seconds (files took 2.2 seconds to load)
+50 examples, 2 failures
+
+Failed examples:
+
+rspec ./spec/controllers/payments_controller_spec.rb:42 # PaymentsController POST #create with valid parameters creates a new payment record
+rspec ./spec/controllers/payments_controller_spec.rb:59 # PaymentsController POST #create with invalid card token raises payment processing error
+
+Randomized with seed 42831
+
+====>> Shard 3 of 4
+#!/bin/bash -eo pipefail
+export CIRCLE_NODE_TOTAL=4
+export CIRCLE_NODE_INDEX=3
+export RAILS_ENV=test
+
+bundle exec rspec --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
+
+Randomized with seed 42831
+
+...............................................
+
+Finished in 11.89 seconds (files took 2.0 seconds to load)
+47 examples, 0 failures
+
+Randomized with seed 42831
+
+Exited with code exit status 1
+CircleCI received exit code 1

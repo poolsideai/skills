@@ -1,0 +1,22 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "pytest",
+  "failure_kind": "other",
+  "summary": "tests/test_legacy_api.py::test_deprecated_endpoint is marked xfail (expected to fail) but unexpectedly passed (XPASS). Under strict xfail mode, this causes pytest to fail the run. The test itself has no assertion failure; the failure is the suite's rejection of the unexpected success. 42 other tests pass normally.",
+  "error_lines": [
+    { "line": 16, "text": "______________________ test_deprecated_endpoint [XPASS(strict)] ______________________" },
+    { "line": 17, "text": "tests/test_legacy_api.py:42: AssertionError" },
+    { "line": 18, "text": "================================== XPASS ==================================" },
+    { "line": 19, "text": "____________ test_deprecated_endpoint [XPASS(strict)] _____________" },
+    { "line": 20, "text": "tests/test_legacy_api.py::test_deprecated_endpoint" },
+    { "line": 21, "text": "  Unexpected success (marked xfail)" },
+    { "line": 23, "text": "XPASS (strict) tests/test_legacy_api.py::test_deprecated_endpoint" },
+    { "line": 24, "text": "========================= 1 xpassed, 42 passed in 3.21s ========================" }
+  ],
+  "suggested_next_commands": [
+    "pytest tests/test_legacy_api.py::test_deprecated_endpoint -v",
+    "grep -n '@pytest.mark.xfail' tests/test_legacy_api.py",
+    "pytest tests/test_legacy_api.py -v"
+  ]
+}

@@ -4,6 +4,7 @@
     "skills/ci-log-reducer/evals/ci-log-reducer-buildkite-pnpm-monorepo",
     "skills/ci-log-reducer/evals/ci-log-reducer-bun-flaky-retry",
     "skills/ci-log-reducer/evals/ci-log-reducer-cargo-decoy-panic",
+    "skills/ci-log-reducer/evals/ci-log-reducer-circleci-rspec-parallel-shard-conflict",
     "skills/ci-log-reducer/evals/ci-log-reducer-gha-eslint-lint-error",
     "skills/ci-log-reducer/evals/ci-log-reducer-gha-tsc-ansi-build-error",
     "skills/ci-log-reducer/evals/ci-log-reducer-github-actions-mypy-type-error",
@@ -12,7 +13,9 @@
     "skills/ci-log-reducer/evals/ci-log-reducer-multi-failure",
     "skills/ci-log-reducer/evals/ci-log-reducer-oom-killed-infra-error",
     "skills/ci-log-reducer/evals/ci-log-reducer-pytest-single-failure",
+    "skills/ci-log-reducer/evals/ci-log-reducer-pytest-xfail-xpass-unexpected-success",
     "skills/ci-log-reducer/evals/ci-log-reducer-success-epilogue-decoy",
+    "skills/ci-log-reducer/evals/ci-log-reducer-teamcity-dotnet-red-herring-warning-spam",
     "skills/ci-log-reducer/evals/ci-log-reducer-truncated-log-no-summary"
   ]
 }
