@@ -11,6 +11,7 @@
     "skills/ci-log-reducer/evals/ci-log-reducer-gitlab-go-test-failure",
     "skills/ci-log-reducer/evals/ci-log-reducer-jenkins-gradle-module-failure",
     "skills/ci-log-reducer/evals/ci-log-reducer-multi-failure",
+    "skills/ci-log-reducer/evals/ci-log-reducer-no-log-file-refuse",
     "skills/ci-log-reducer/evals/ci-log-reducer-oom-killed-infra-error",
     "skills/ci-log-reducer/evals/ci-log-reducer-pytest-single-failure",
     "skills/ci-log-reducer/evals/ci-log-reducer-pytest-xfail-xpass-unexpected-success",
