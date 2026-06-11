@@ -18,6 +18,8 @@
  *   bun ui/bench.ts eval-suites
  *   bun ui/bench.ts eval-run --suite <path> [--case <id>]... [--arm <arm>]...
  *   bun ui/bench.ts eval-runs
+ *   bun ui/bench.ts optimize-skill --skill <name> [--max-metric-calls N] [--smoke|--baseline-only]
+ *   bun ui/bench.ts optimize-runs
  *   bun ui/bench.ts node-evals [--project <id>]
  *   bun ui/bench.ts node-eval-insitu <runId> [--project <id>]
  *   bun ui/bench.ts node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>]
@@ -40,12 +42,14 @@ import {
   listHarnessProcesses,
   listModels,
   listNodeEvals,
+  listOptimizeRuns,
   listRuns,
   listSkills,
   listWorkflows,
   runDetail,
   skillEvalSummaries,
   startEvalRun,
+  startOptimizeRun,
   startRun,
   syncReviewTraces,
   workflowGraph,
@@ -93,6 +97,8 @@ const USAGE = {
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
     "eval-runs — harness processes + per-arm results from runs/<suite>/<case>/<arm>/",
+    "optimize-skill --skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA SKILL.md optimization (harness/optimize/gepa_skill.py)",
+    "optimize-runs — optimization processes + result.json summaries from runs/optimize/",
     "node-evals [--project <id>] — node-level eval records (in-workflow + standalone)",
     "node-eval-insitu <runId> [--project <id>] — grade every node of a finished run via its skill validator",
     "node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>] [--project <id>] — re-run a node standalone and grade each trial",
@@ -180,6 +186,24 @@ async function main() {
     }
     case "eval-runs":
       return emit({ harness: listHarnessProcesses(), runs: listEvalRuns() });
+    case "optimize-skill": {
+      const skill = flag(args, "skill") ?? args.positional[0];
+      if (!skill) throw new HttpError(400, "usage: optimize-skill --skill <name>");
+      const maxMetricCalls = flag(args, "max-metric-calls");
+      return emit(
+        startOptimizeRun({
+          skill,
+          suite: flag(args, "suite"),
+          maxMetricCalls: maxMetricCalls ? Number(maxMetricCalls) : undefined,
+          reflectionLm: flag(args, "reflection-lm"),
+          arms: args.flags["arm"],
+          smoke: flag(args, "smoke") === "true",
+          baselineOnly: flag(args, "baseline-only") === "true",
+        }),
+      );
+    }
+    case "optimize-runs":
+      return emit(listOptimizeRuns());
     case undefined:
     case "help":
       return emit(USAGE);

@@ -1,0 +1,40 @@
+2026-06-10T09:14:23Z [runner] Initializing test environment
+2026-06-10T09:14:23Z [runner] GOPATH=/home/runner/go GOROOT=/usr/local/go
+2026-06-10T09:14:24Z [runner] Building packages...
+?   	github.com/acme/ledger/config	[no test files]
+?   	github.com/acme/ledger/proto	[no test files]
+ok  	github.com/acme/ledger/audit	(cached)
+ok  	github.com/acme/ledger/report	0.04s
+=== RUN   TestAccountCreate
+--- PASS: TestAccountCreate (0.01s)
+=== RUN   TestAccountDeposit
+--- PASS: TestAccountDeposit (0.02s)
+=== RUN   TestAccountBalance
+--- FAIL: TestAccountBalance (0.08s)
+    account_test.go:42: balance after deposit: got 99.50, want 100.00
+=== RUN   TestAccountWithdrawOverdraft
+--- PASS: TestAccountWithdrawOverdraft (0.01s)
+=== RUN   TestAccountDelete
+--- PASS: TestAccountDelete (0.01s)
+FAIL	github.com/acme/ledger/account	0.13s
+=== RUN   TestCurrencyParse
+--- PASS: TestCurrencyParse (0.00s)
+=== RUN   TestCurrencyFormat
+--- PASS: TestCurrencyFormat (0.00s)
+=== RUN   TestCurrencyConvert
+--- PASS: TestCurrencyConvert (0.01s)
+ok  	github.com/acme/ledger/currency	0.02s
+=== RUN   TestTransferBasic
+--- PASS: TestTransferBasic (0.02s)
+=== RUN   TestTransferNegativeAmount
+--- PASS: TestTransferNegativeAmount (0.01s)
+=== RUN   TestTransferZeroAmount
+--- PASS: TestTransferZeroAmount (0.01s)
+=== RUN   TestTransferSameCurrency
+--- PASS: TestTransferSameCurrency (0.03s)
+=== RUN   TestTransferCurrencyMismatch
+--- PASS: TestTransferCurrencyMismatch (0.01s)
+=== RUN   TestTransferInsufficientFunds
+--- FAIL: TestTransferInsufficientFunds (0.11s)
+    transfer_test.go:78: expected error ErrInsufficientFunds, got nil
+=== RUN   TestTransferConcurrent

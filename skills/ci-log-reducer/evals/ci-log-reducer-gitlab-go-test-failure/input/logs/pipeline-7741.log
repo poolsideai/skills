@@ -1,0 +1,40 @@
+Running with gitlab-runner 16.11.0 (81ab07f6)
+  on runner-abc12345-project-7741-concurrent-0 via runner-5xk9p
+Preparing the "docker" executor
+Using Docker executor with image golang:1.22-alpine ...
+Pulling docker image golang:1.22-alpine ...
+Using docker image sha256:ae1b7ddd3ccab26d08b0d for golang:1.22-alpine ...
+Preparing environment
+Running on runner-abc12345-project-7741-concurrent-0 via runner-5xk9p...
+section_start:1718100000:get_sources[collapsed=true]
+Fetching changes with git depth set to 20...
+Initialized empty Git repository in /builds/vertexlab/greenfield/.git/
+From https://gitlab.example.com/vertexlab/greenfield
+ * [new ref]         refs/pipelines/7741 -> refs/pipelines/7741
+ * [new ref]         refs/heads/main     -> refs/heads/main
+Checking out 3f8e2c1a as detached HEAD (ref is main)...
+Skipping Git submodules setup
+section_end:1718100012:get_sources
+section_start:1718100012:install_deps[collapsed=true]
+$ go mod download
+go: downloading github.com/gorilla/mux v1.8.1
+go: downloading github.com/stretchr/testify v1.9.0
+go: downloading github.com/prometheus/client_golang v1.19.0
+section_end:1718100025:install_deps
+section_start:1718100025:test
+$ go test ./...
+ok  	github.com/vertexlab/greenfield/internal/config	(cached)
+ok  	github.com/vertexlab/greenfield/internal/store	(cached)
+ok  	github.com/vertexlab/greenfield/internal/middleware	0.02s
+--- FAIL: TestRouteHandlerV2 (0.03s)
+    --- FAIL: TestRouteHandlerV2/PUT_returns_405 (0.00s)
+        handler_test.go:84: got 200, want 405
+    --- FAIL: TestRouteHandlerV2/DELETE_requires_auth (0.01s)
+        handler_test.go:112: got 200, want 401
+ok  	github.com/vertexlab/greenfield/internal/router	(cached)
+ok  	github.com/vertexlab/greenfield/cmd/greenfield	0.05s
+FAIL	github.com/vertexlab/greenfield/internal/handler	0.03s
+FAIL
+exit status 1
+section_end:1718100028:test
+ERROR: Job failed: exit code 1

@@ -1,0 +1,26 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "uv run pytest tests/integration/ -q --tb=short",
+  "failure_kind": "test_failure",
+  "summary": "tests/integration/test_billing.py::test_invoice_amount_after_tax fails mid-log: Invoice.total returns 107.5 instead of 108.0 for subtotal=100.00, tax_rate=0.08 (rounding or precision mismatch). 12 other tests passed. Post-failure cleanup, cache-save, artifact-upload, and environment-check steps all completed successfully — the tail of the log looks green, but exit_code=1 confirms the test failure.",
+  "error_lines": [
+    {
+      "line": 21,
+      "text": "E       AssertionError: assert 107.5 == 108.0"
+    },
+    {
+      "line": 26,
+      "text": "FAILED tests/integration/test_billing.py::test_invoice_amount_after_tax - AssertionError: assert 107.5 == 108.0"
+    },
+    {
+      "line": 27,
+      "text": "1 failed, 12 passed in 3.47s"
+    }
+  ],
+  "suggested_next_commands": [
+    "uv run pytest tests/integration/test_billing.py::test_invoice_amount_after_tax -q",
+    "uv run pytest tests/integration/test_billing.py -q",
+    "grep -rn 'def total' billing_service/"
+  ]
+}

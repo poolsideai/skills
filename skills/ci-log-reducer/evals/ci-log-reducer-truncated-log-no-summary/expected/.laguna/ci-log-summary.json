@@ -1,0 +1,19 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "go test ./...",
+  "failure_kind": "test_failure",
+  "summary": "Two test failures visible before log was cut off: TestAccountBalance (account_test.go:42) got balance 99.50 after deposit, expected 100.00; TestTransferInsufficientFunds (transfer_test.go:78) expected error ErrInsufficientFunds but got nil. Log ends abruptly mid-run with no final summary. Command sourced from ci-job.json (absent from log).",
+  "error_lines": [
+    { "line": 13, "text": "--- FAIL: TestAccountBalance (0.08s)" },
+    { "line": 14, "text": "    account_test.go:42: balance after deposit: got 99.50, want 100.00" },
+    { "line": 19, "text": "FAIL\tgithub.com/acme/ledger/account\t0.13s" },
+    { "line": 38, "text": "--- FAIL: TestTransferInsufficientFunds (0.11s)" },
+    { "line": 39, "text": "    transfer_test.go:78: expected error ErrInsufficientFunds, got nil" }
+  ],
+  "suggested_next_commands": [
+    "go test ./...",
+    "go test -v -run TestAccountBalance ./...",
+    "go test -v -run TestTransferInsufficientFunds ./..."
+  ]
+}

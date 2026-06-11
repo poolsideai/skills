@@ -40,6 +40,31 @@ Useful flags: `--case <id>` and `--arm <arm>` (repeatable filters), `--keep-work
 `xs_without_skill`, `xs_with_skill`, `m_without_skill`, `m_with_skill`. Suites: `smoke.json`
 (1 case/skill), `first-bundle.json` (all v0 cases).
 
+Skill optimization (GEPA track — see docs/plans/skill-optimization-gepa-2026-06-11.md;
+genome is SKILL.md prose only, validators/cases/schemas are frozen and gate-enforced):
+
+```sh
+uv run harness/optimize/gepa_skill.py --skill <name> --smoke   # wiring check, no pool/API keys
+uv run harness/optimize/gepa_skill.py --skill <name> --max-metric-calls 60   # live (pool + reflection key)
+uv run harness/optimize/fitness.py --skill <name> --skills-root <candidate>/skills  # mean validator score
+uv run harness/optimize/frozen_paths_gate.py --skill <name> --candidate-root <dir>  # byte-immutability gate
+bun ui/bench.ts optimize-skill --skill <name> [--smoke] && bun ui/bench.ts optimize-runs  # detached + status
+```
+
+Eval-case generation (gskill/SWE-smith recipe: LM-synthesize -> mechanical gates incl. gold
+replay against the frozen validator -> quarantine under runs/generate/ -> human-reviewed
+`--promote`; never auto-merged into evals/):
+
+```sh
+uv run harness/generate/gen_eval_cases.py --skill <name> --n 4                       # needs LM key
+uv run harness/generate/gen_eval_cases.py --skill <name> --validate-only <case-dir>  # offline, no LM
+uv run harness/generate/gen_eval_cases.py --skill <name> --promote <candidate-dir>   # gate + copy + suite
+```
+
+LM selection for both tracks (`harness/llm.py`): any litellm id; OpenRouter via
+`openrouter/<provider>/<model>` + `OPENROUTER_API_KEY`; any OpenAI-compatible endpoint via
+`--api-base`/`--reflection-api-base` (+ `--api-key-env`/`--reflection-api-key-env`).
+
 Trace annotation (error-analysis-first; the labels file feeds the failure taxonomy):
 
 ```sh

@@ -1,0 +1,34 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "./gradlew clean test --continue",
+  "failure_kind": "test_failure",
+  "summary": "Only the :payments-service module fails: PaymentProcessorTest.shouldRefundPartialPaymentWhenAmountExceedsBalance asserts the HTTP response code should be 200 but received 402 (Payment Required). The :api-gateway (12 tests) and :auth-service (8 tests) modules both passed. 1 Gradle test failed; BUILD FAILED.",
+  "error_lines": [
+    {
+      "line": 40,
+      "text": "PaymentProcessorTest > shouldRefundPartialPaymentWhenAmountExceedsBalance FAILED"
+    },
+    {
+      "line": 41,
+      "text": "    java.lang.AssertionError: expected:<200> but was:<402>"
+    },
+    {
+      "line": 46,
+      "text": "1 test completed, 1 failed"
+    },
+    {
+      "line": 48,
+      "text": "> Task :payments-service:test FAILED"
+    },
+    {
+      "line": 60,
+      "text": "BUILD FAILED in 1m 34s"
+    }
+  ],
+  "suggested_next_commands": [
+    "./gradlew :payments-service:test --tests \"com.example.payments.PaymentProcessorTest.shouldRefundPartialPaymentWhenAmountExceedsBalance\"",
+    "./gradlew :payments-service:test",
+    "grep -rn 'shouldRefundPartialPaymentWhenAmountExceedsBalance' payments-service/src/"
+  ]
+}

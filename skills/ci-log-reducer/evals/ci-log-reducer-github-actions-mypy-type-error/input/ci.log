@@ -1,0 +1,29 @@
+##[group]Run mypy src/
+##[endgroup]
+##[group]Operating System
+Ubuntu 22.04.3 LTS
+##[endgroup]
+##[group]Runner Image
+Image: ubuntu-22.04
+Version: 20231217.1.0
+##[endgroup]
+##[group]Runner Image Provisioner
+ImageVersion=20231217.1.0
+##[endgroup]
+Python 3.11.6
+mypy 1.7.1 (compiled: yes)
+##[group]Run mypy src/
+mypy src/
+shell: /usr/bin/bash -e {0}
+env:
+  pythonLocation: /opt/hostedtoolcache/Python/3.11.6/x64
+  PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.6/x64/lib/pkgconfig
+  Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.6/x64
+  Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.6/x64
+  Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.6/x64
+##[endgroup]
+src/api/routes.py:45: error: Argument 1 to "validate_user" has incompatible type "str"; expected "int"  [arg-type]
+src/utils/parser.py:78: error: Missing return statement  [return]
+src/api/routes.py:92: error: Incompatible types in assignment (expression has type "float", variable has type "int")  [assignment]
+Found 3 errors in 2 files (checked 12 source files)
+##[error]Process completed with exit code 1.

@@ -1,0 +1,24 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "pnpm -r test",
+  "failure_kind": "test_failure",
+  "summary": "@acme/billing is the only failing package. Two vitest failures: ProrationCalculator > applies mid-cycle discount correctly (expected 45.00, got 47.50) in src/invoices/prorate.test.ts:33; RefundService > issues partial refund within 30 days (expected status 'refunded', got 'pending') in src/payments/refund.test.ts:61. @acme/shared, @acme/api, and @acme/dashboard all pass.",
+  "error_lines": [
+    { "line": 41, "text": " ✗ src/invoices/prorate.test.ts (1 failed)" },
+    { "line": 43, "text": " ✗ src/payments/refund.test.ts (1 failed)" },
+    { "line": 45, "text": " FAIL  src/invoices/prorate.test.ts" },
+    { "line": 46, "text": "   ● ProrationCalculator > applies mid-cycle discount correctly" },
+    { "line": 47, "text": "     AssertionError: expected 47.50 to equal 45.00" },
+    { "line": 50, "text": " FAIL  src/payments/refund.test.ts" },
+    { "line": 51, "text": "   ● RefundService > issues partial refund within 30 days" },
+    { "line": 52, "text": "     AssertionError: expected status \"refunded\" to equal \"pending\"" },
+    { "line": 55, "text": " Test Files  2 failed | 2 passed (4)" },
+    { "line": 70, "text": "ELIFECYCLE  Command failed with exit code 1." }
+  ],
+  "suggested_next_commands": [
+    "pnpm --filter @acme/billing test",
+    "pnpm --filter @acme/billing test -- --reporter verbose",
+    "grep -rn 'ProrationCalculator\\|RefundService' packages/billing/src"
+  ]
+}

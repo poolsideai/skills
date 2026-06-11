@@ -1,0 +1,30 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "npm run lint",
+  "failure_kind": "lint_error",
+  "summary": "ESLint reports 3 errors across 2 files. In src/routes/users.ts: 'userId' is assigned but never used (no-unused-vars, line 12) and 'authenticateRequest' is not defined (no-undef, line 28). In src/middleware/auth.ts: explicit 'any' type at line 7 (@typescript-eslint/no-explicit-any). One additional warning (prefer-const) does not block the build.",
+  "error_lines": [
+    {
+      "line": 29,
+      "text": "  12:5   error  'userId' is assigned a value but never used  no-unused-vars"
+    },
+    {
+      "line": 30,
+      "text": "  28:1   error  'authenticateRequest' is not defined          no-undef"
+    },
+    {
+      "line": 33,
+      "text": "   7:14  error  Unexpected use of 'any' type                  @typescript-eslint/no-explicit-any"
+    },
+    {
+      "line": 36,
+      "text": "✖ 3 errors, 1 warning"
+    }
+  ],
+  "suggested_next_commands": [
+    "./node_modules/.bin/eslint --ext .ts src/routes/users.ts",
+    "./node_modules/.bin/eslint --ext .ts src/middleware/auth.ts",
+    "grep -rn 'authenticateRequest' src/"
+  ]
+}

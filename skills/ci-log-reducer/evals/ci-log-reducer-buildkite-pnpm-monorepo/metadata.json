@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-buildkite-pnpm-monorepo",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Buildkite-flavored log with ~~~\/--- section markers; pnpm -r test monorepo run where only @acme/billing fails with two vitest failures; noisy passing-package output tests noise filtering."
+}

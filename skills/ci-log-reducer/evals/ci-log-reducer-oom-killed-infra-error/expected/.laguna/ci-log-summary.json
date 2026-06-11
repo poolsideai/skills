@@ -1,0 +1,30 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci-run-3819.log",
+  "failing_command": "go test -v -count=1 ./...",
+  "failure_kind": "infra_error",
+  "summary": "go test -v -count=1 ./... was killed by the OOM killer (SIGKILL, exit code 137) while running TestIndexerBuildLarge/10000_docs. The indexer consumed 498 MiB of the 512 MiB container limit before the process was terminated. No test failures occurred; the process was killed by the OS due to memory exhaustion. Three packages passed before the kill: indexer_small, tokenizer, ranker.",
+  "error_lines": [
+    {
+      "line": 38,
+      "text": "[indexer] indexed 4000/10000 docs (rss: 498 MiB)"
+    },
+    {
+      "line": 39,
+      "text": "Killed"
+    },
+    {
+      "line": 40,
+      "text": "[2026-06-11T04:18:41Z] step \"test\" exited with code 137"
+    },
+    {
+      "line": 41,
+      "text": "[2026-06-11T04:18:41Z] error: container memory limit (512 MiB) exceeded; process received SIGKILL"
+    }
+  ],
+  "suggested_next_commands": [
+    "go test -v -count=1 -run TestIndexerBuildSmall ./...",
+    "go test -v -count=1 -run TestIndexerBuildLarge/10000_docs -memprofile mem.out ./...",
+    "grep -n 'rss:\\|Killed\\|exit code' ci-run-3819.log"
+  ]
+}

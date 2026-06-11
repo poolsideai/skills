@@ -1,0 +1,42 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "logs/pipeline-7741.log",
+  "failing_command": "go test ./...",
+  "failure_kind": "test_failure",
+  "summary": "go test ./... fails in github.com/vertexlab/greenfield/internal/handler: 2 sub-tests of TestRouteHandlerV2 fail. PUT_returns_405 (handler_test.go:84): got status 200, want 405. DELETE_requires_auth (handler_test.go:112): got status 200, want 401. All other packages pass.",
+  "error_lines": [
+    {
+      "line": 29,
+      "text": "--- FAIL: TestRouteHandlerV2 (0.03s)"
+    },
+    {
+      "line": 30,
+      "text": "    --- FAIL: TestRouteHandlerV2/PUT_returns_405 (0.00s)"
+    },
+    {
+      "line": 31,
+      "text": "        handler_test.go:84: got 200, want 405"
+    },
+    {
+      "line": 32,
+      "text": "    --- FAIL: TestRouteHandlerV2/DELETE_requires_auth (0.01s)"
+    },
+    {
+      "line": 33,
+      "text": "        handler_test.go:112: got 200, want 401"
+    },
+    {
+      "line": 36,
+      "text": "FAIL\tgithub.com/vertexlab/greenfield/internal/handler\t0.03s"
+    },
+    {
+      "line": 37,
+      "text": "FAIL"
+    }
+  ],
+  "suggested_next_commands": [
+    "go test -v -run TestRouteHandlerV2 ./internal/handler/",
+    "go test -v -run TestRouteHandlerV2/PUT_returns_405 ./internal/handler/",
+    "grep -n 'FAIL' logs/pipeline-7741.log"
+  ]
+}

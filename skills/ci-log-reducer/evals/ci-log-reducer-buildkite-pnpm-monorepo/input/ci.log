@@ -1,0 +1,72 @@
+~~~ :buildkite: Running pipeline step: pnpm-r-test
+--- :hammer: Build environment
+Node.js v20.14.0
+pnpm 9.1.0
+Working directory: /workspace/acme-platform
+--- :package: Installing dependencies
++ pnpm install --frozen-lockfile
+Lockfile is up-to-date, resolution step is skipped.
+Packages are hard linked from the content-addressable store.
+Done in 3.2s
+--- :test_tube: Running tests
++ pnpm -r test
+
+> @acme/shared@1.4.2 test
+> vitest run
+
+ ✓ src/utils/format.test.ts (12 tests)
+ ✓ src/utils/validate.test.ts (8 tests)
+ ✓ src/models/user.test.ts (5 tests)
+
+ Test Files  3 passed (3)
+      Tests  25 passed (25)
+   Duration  1.20s
+
+> @acme/api@2.3.1 test
+> vitest run
+
+ ✓ src/routes/health.test.ts (3 tests)
+ ✓ src/routes/accounts.test.ts (7 tests)
+ ✓ src/middleware/auth.test.ts (4 tests)
+ ✓ src/middleware/rateLimit.test.ts (6 tests)
+
+ Test Files  4 passed (4)
+      Tests  20 passed (20)
+   Duration  1.85s
+
+> @acme/billing@3.0.0 test
+> vitest run
+
+ ✓ src/invoices/create.test.ts (6 tests)
+ ✗ src/invoices/prorate.test.ts (1 failed)
+ ✓ src/payments/stripe.test.ts (4 tests)
+ ✗ src/payments/refund.test.ts (1 failed)
+
+ FAIL  src/invoices/prorate.test.ts
+   ● ProrationCalculator > applies mid-cycle discount correctly
+     AssertionError: expected 47.50 to equal 45.00
+       at src/invoices/prorate.test.ts:33:18
+
+ FAIL  src/payments/refund.test.ts
+   ● RefundService > issues partial refund within 30 days
+     AssertionError: expected status "refunded" to equal "pending"
+       at src/payments/refund.test.ts:61:16
+
+ Test Files  2 failed | 2 passed (4)
+      Tests  2 failed | 10 passed (12)
+   Duration  2.14s
+
+> @acme/dashboard@1.1.0 test
+> vitest run
+
+ ✓ src/components/Chart.test.ts (4 tests)
+ ✓ src/components/Table.test.ts (6 tests)
+ ✓ src/hooks/useQuery.test.ts (3 tests)
+
+ Test Files  3 passed (3)
+      Tests  13 passed (13)
+   Duration  1.02s
+
+ELIFECYCLE  Command failed with exit code 1.
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @acme/billing@3.0.0 test: `vitest run`
+Exit status 1

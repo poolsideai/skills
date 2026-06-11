@@ -1,0 +1,5 @@
+{
+  "job": "unit-tests",
+  "command": "go test ./...",
+  "exit_code": 1
+}

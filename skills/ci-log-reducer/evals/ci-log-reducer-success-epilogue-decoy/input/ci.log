@@ -1,0 +1,44 @@
+2026-06-09T09:14:02Z [runner] Job: integration-tests
+2026-06-09T09:14:02Z [runner] Runner image: ubuntu-24.04
+2026-06-09T09:14:02Z [runner] Checkout: acme/billing-service @ 3d9f1a2
+2026-06-09T09:14:03Z [runner] step: Set up Python
++ python --version
+Python 3.12.4
+2026-06-09T09:14:03Z [runner] step: Install dependencies
++ uv sync --frozen
+Resolved 52 packages in 198ms
+Installed 52 packages in 2.11s
+2026-06-09T09:14:05Z [runner] step: Run integration tests
++ uv run pytest tests/integration/ -q --tb=short
+.......F.....
+
+================================== FAILURES ==================================
+______________________ test_invoice_amount_after_tax ________________________
+
+    def test_invoice_amount_after_tax():
+        invoice = Invoice(subtotal=100.00, tax_rate=0.08)
+>       assert invoice.total == 108.00
+E       AssertionError: assert 107.5 == 108.0
+E        +  where 107.5 = Invoice(subtotal=100.0, tax_rate=0.08).total
+
+tests/integration/test_billing.py:63: AssertionError
+========================= short test summary info ============================
+FAILED tests/integration/test_billing.py::test_invoice_amount_after_tax - AssertionError: assert 107.5 == 108.0
+1 failed, 12 passed in 3.47s
+2026-06-09T09:14:09Z [runner] step: Save test cache
++ cache save --key uv-billing-service-3f7a1b2c
+Cache saved successfully.
+2026-06-09T09:14:10Z [runner] step: Upload test artifacts
++ artifact upload billing-service-test-results/ --retention 7
+Uploading billing-service-test-results/ (1.2 MB)
+Artifacts uploaded successfully.
+2026-06-09T09:14:11Z [runner] step: Run post-flight checks
++ check_env --verify-mounts --verify-secrets
+All environment checks passed.
+2026-06-09T09:14:12Z [runner] step: Cleanup workspace
++ cleanup_agent --workspace /runner/workspaces/billing-service-42
+Cleanup complete — all steps OK.
+2026-06-09T09:14:12Z [runner] step: Upload coverage report
++ artifact upload coverage/ --retention 30
+Coverage report uploaded (coverage/index.html, 14 files).
+2026-06-09T09:14:13Z [runner] Agent exiting. Goodbye.

@@ -1,0 +1,1 @@
+{"job": "lint", "command": "npm run lint", "exit_code": 1}

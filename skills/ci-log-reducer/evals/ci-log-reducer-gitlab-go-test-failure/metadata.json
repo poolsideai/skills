@@ -1,0 +1,21 @@
+{
+  "id": "ci-log-reducer-gitlab-go-test-failure",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ci-log-reducer/scripts/validate_log_summary.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "GitLab CI log with section_start/section_end markers and go test ./... failing in one package: two sub-tests of TestRouteHandlerV2 fail with got/want status-code diffs; four other packages pass. Log at nested path logs/pipeline-7741.log."
+}

@@ -1,0 +1,5 @@
+{
+  "job": "build-and-test",
+  "command": "./gradlew clean test --continue",
+  "exit_code": 1
+}

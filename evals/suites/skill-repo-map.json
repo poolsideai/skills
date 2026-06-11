@@ -1,0 +1,8 @@
+{
+  "name": "skill-repo-map",
+  "cases": [
+    "skills/repo-map/evals/repo-map-python-uv-service",
+    "skills/repo-map/evals/repo-map-bun-cli-workspace",
+    "skills/repo-map/evals/repo-map-rust-decoy-readme"
+  ]
+}

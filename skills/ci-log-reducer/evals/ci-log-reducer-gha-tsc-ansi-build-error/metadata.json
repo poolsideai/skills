@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-gha-tsc-ansi-build-error",
+  "skill": "ci-log-reducer",
+  "bucket": "edge",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "GHA log where runner/header lines carry ANSI color codes but tsc error output lines are clean; no ci-job.json. Probes ANSI tolerance and verbatim matching when surrounding context is colored."
+}

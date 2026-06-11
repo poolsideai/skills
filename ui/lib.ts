@@ -950,6 +950,108 @@ export function startEvalRun(options: { suite: string; cases?: string[]; arms?: 
   return { ok: true, ...sidecar };
 }
 
+
+type OptimizeProcess = {
+  pid: number;
+  skill: string;
+  mode: string;
+  argv: string[];
+  logPath: string;
+  outDir: string | null;
+  startedAtMs: number;
+  running: boolean;
+  result?: unknown;
+};
+
+const OPTIMIZE_STATE_DIR = join(EVAL_RUNS_ROOT, "optimize", ".state");
+
+/** Launch harness/optimize/gepa_skill.py detached (same pattern as
+ * startEvalRun): output to a log-file fd, pid sidecar on disk so the CLI,
+ * the server, and any agent see the same state. The driver self-gates
+ * candidates (frozen_paths_gate.py + structure checks) before pool spend. */
+export function startOptimizeRun(options: {
+  skill: string;
+  suite?: string;
+  maxMetricCalls?: number;
+  reflectionLm?: string;
+  arms?: string[];
+  smoke?: boolean;
+  baselineOnly?: boolean;
+}) {
+  const skillDir = join(REPO_ROOT, "skills", options.skill);
+  if (!existsSync(join(skillDir, "SKILL.md"))) {
+    throw new HttpError(400, `skill not found: ${options.skill}`);
+  }
+  const argv = ["uv", "run", "harness/optimize/gepa_skill.py", "--skill", options.skill];
+  if (options.suite) {
+    const suitePath = resolve(REPO_ROOT, options.suite);
+    if (!suitePath.startsWith(SUITES_DIR + "/") || !existsSync(suitePath)) {
+      throw new HttpError(400, `suite not found: ${options.suite}`);
+    }
+    argv.push("--suite", options.suite);
+  }
+  if (options.maxMetricCalls) argv.push("--max-metric-calls", String(options.maxMetricCalls));
+  if (options.reflectionLm) argv.push("--reflection-lm", options.reflectionLm);
+  for (const a of options.arms ?? []) argv.push("--arm", a);
+  if (options.smoke) argv.push("--smoke");
+  if (options.baselineOnly) argv.push("--baseline-only");
+
+  const tag = Date.now().toString(36);
+  const outDir = join("runs", "optimize", options.skill, `wb-${tag}`);
+  argv.push("--out-dir", outDir);
+
+  mkdirSync(OPTIMIZE_STATE_DIR, { recursive: true });
+  const logPath = join(OPTIMIZE_STATE_DIR, `optimize-${tag}.log`);
+  const fd = openSync(logPath, "a");
+  const child = spawn(argv[0], argv.slice(1), {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: ["ignore", fd, fd],
+    detached: true,
+  });
+  child.unref();
+  closeSync(fd);
+  const sidecar = {
+    pid: child.pid ?? -1,
+    skill: options.skill,
+    mode: options.smoke ? "smoke" : options.baselineOnly ? "baseline" : "optimize",
+    argv,
+    logPath: logPath.slice(REPO_ROOT.length + 1),
+    outDir,
+    startedAtMs: Date.now(),
+  };
+  writeFileSync(join(OPTIMIZE_STATE_DIR, `optimize-${tag}.json`), JSON.stringify(sidecar, null, 2));
+  return { ok: true, ...sidecar };
+}
+
+/** Optimization runs tracked like harness runs: pid sidecars + liveness,
+ * enriched with the driver's result.json once it lands. */
+export function listOptimizeRuns(): OptimizeProcess[] {
+  if (!existsSync(OPTIMIZE_STATE_DIR)) return [];
+  const procs: OptimizeProcess[] = [];
+  for (const file of readdirSync(OPTIMIZE_STATE_DIR).sort().reverse()) {
+    if (!file.endsWith(".json")) continue;
+    try {
+      const sidecar = JSON.parse(readFileSync(join(OPTIMIZE_STATE_DIR, file), "utf8"));
+      let result: unknown = null;
+      if (sidecar.outDir) {
+        const resultPath = join(REPO_ROOT, sidecar.outDir, "result.json");
+        if (existsSync(resultPath)) {
+          try {
+            result = JSON.parse(readFileSync(resultPath, "utf8"));
+          } catch {
+            // partial write; next poll picks it up
+          }
+        }
+      }
+      procs.push({ ...sidecar, running: pidAlive(sidecar.pid), result });
+    } catch {
+      // unreadable sidecar; skip
+    }
+  }
+  return procs;
+}
+
 export function listEvalRuns(): EvalRunRecord[] {
   if (!existsSync(EVAL_RUNS_ROOT)) return [];
   const records: EvalRunRecord[] = [];

@@ -1,0 +1,9 @@
+{
+  "name": "skill-laguna-task-contract",
+  "cases": [
+    "skills/laguna-task-contract/evals/laguna-task-contract-xs-single-file-patch",
+    "skills/laguna-task-contract/evals/laguna-task-contract-m-router-ci-failure",
+    "skills/laguna-task-contract/evals/laguna-task-contract-fix-whole-repo",
+    "skills/laguna-task-contract/evals/laguna-task-contract-readonly-log-reduction"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "ci-log-reducer-github-actions-mypy-type-error",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "easy",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ci-log-reducer/scripts/validate_log_summary.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "GitHub Actions log running mypy static type checker on a Python project. Three type errors across two files: incompatible argument type in api/routes.py, missing return statement in utils/parser.py, and incompatible assignment in api/routes.py again. Standard mypy error format with file:line: error: messages. Correct failure_kind is lint_error (type checking is static analysis), summary covers all three errors, error_lines cite the mypy diagnostic lines verbatim with correct line numbers. Synthetic fixture; no customer data. Generated case."
+}
