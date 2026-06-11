@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Poolside Skills</title>
+    <meta
+      name="description"
+      content="A catalog of validator-backed software engineering skills for Poolside agents and Laguna models."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Poolside Skills home">
+        <span class="brand-mark">ps</span>
+        <span>Poolside Skills</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#catalog">Catalog</a>
+        <a href="workflows.html">Workflows</a>
+        <a href="#evals">Evals</a>
+        <a href="https://github.com/poolsideai/skills">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="catalog-hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <h1 id="page-title">Poolside skills for verified agent work</h1>
+          <p>
+            Browse task contracts, repo-mapping helpers, log reducers, routers,
+            and patch workflows designed around compact context, executable
+            validation, and measurable Laguna model behavior.
+          </p>
+        </div>
+        <form class="search-panel" action="#" aria-label="Search skills">
+          <label for="skill-search">Search skills</label>
+          <div class="search-box">
+            <span aria-hidden="true">/</span>
+              <input
+                id="skill-search"
+                type="search"
+                placeholder="repo map, CI logs, single-file patch"
+              >
+            <button type="submit">Search</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="tabs" aria-label="Catalog scope">
+        <a class="tab active" href="#catalog">All Skills</a>
+        <a class="tab" href="#catalog">Laguna</a>
+        <a class="tab" href="#catalog">Harness</a>
+        <a class="tab" href="#catalog">Pool Exec</a>
+        <a class="tab" href="#catalog">Community</a>
+      </section>
+
+      <section class="catalog-shell" id="catalog">
+        <aside class="filters" aria-label="Skill filters">
+          <div class="filter-group">
+            <h2>Workflow</h2>
+            <a class="filter active" href="#catalog">Agent workflows</a>
+            <a class="filter" href="#catalog">Eval harness</a>
+            <a class="filter" href="#catalog">Repo archaeology</a>
+            <a class="filter" href="#catalog">Patch loops</a>
+            <a class="filter" href="#catalog">Code review</a>
+            <a class="filter" href="#catalog">Docs</a>
+          </div>
+
+          <div class="filter-group">
+            <h2>Model fit</h2>
+            <a class="filter" href="#catalog">Laguna XS.2</a>
+            <a class="filter" href="#catalog">Laguna M.1</a>
+            <a class="filter" href="#catalog">Router + worker</a>
+            <a class="filter" href="#catalog">Any coding agent</a>
+          </div>
+
+          <div class="filter-group">
+            <h2>Difficulty</h2>
+            <a class="filter" href="#catalog">Beginner</a>
+            <a class="filter active" href="#catalog">Intermediate</a>
+            <a class="filter" href="#catalog">Advanced</a>
+            <a class="filter" href="#catalog">Expert</a>
+          </div>
+        </aside>
+
+        <div class="catalog-content">
+          <div class="catalog-toolbar">
+            <p>Showing <strong>6</strong> starter skills</p>
+            <label>
+              Sort
+              <select>
+                <option>Most validated</option>
+                <option>Recently verified</option>
+                <option>Lowest token cost</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="skill-grid">
+            <article class="skill-card featured">
+              <div class="card-topline">
+                <span>Laguna</span>
+                <a href="skill.html">Open</a>
+              </div>
+              <h2><a href="skill.html">laguna-task-contract</a></h2>
+              <p>
+                Convert open-ended engineering requests into compact task
+                contracts with model mode, context packet, constraints,
+                validators, and one bounded repair loop.
+              </p>
+              <div class="preview contract-preview" aria-hidden="true">
+                <div class="preview-row strong">
+                  model_mode: laguna_xs_worker
+                </div>
+                <div class="preview-row">max_files_to_modify: 1</div>
+                <div class="preview-row">validator: command</div>
+                <div class="preview-row success">
+                  schema_valid + patch_apply
+                </div>
+              </div>
+              <div class="metric-bars">
+                <span>Eval lift <b>+18%</b></span>
+                <span>Schema pass <b>97%</b></span>
+              </div>
+              <div class="tags">
+                <span>contract</span>
+                <span>routing</span>
+                <span>xs-worker</span>
+              </div>
+              <footer class="card-footer">
+                <span>Intermediate</span>
+                <span>6.2k tokens</span>
+                <span>Verified</span>
+              </footer>
+            </article>
+
+            <article class="skill-card">
+              <div class="card-topline">
+                <span>CI</span>
+                <a href="skill.html">Open</a>
+              </div>
+              <h2><a href="skill.html">ci-log-reducer</a></h2>
+              <p>
+                Extract failure windows, traceback blocks, failing commands, and
+                safe next steps from large CI logs before a model spends context
+                on noise.
+              </p>
+              <div class="preview log-preview" aria-hidden="true">
+                <span>tail window</span>
+                <span>error block</span>
+                <span>failing command</span>
+                <span class="success">next command</span>
+              </div>
+              <div class="metric-bars">
+                <span>Line recall <b>94%</b></span>
+                <span>Compression <b>22:1</b></span>
+              </div>
+              <div class="tags">
+                <span>ci</span>
+                <span>logs</span>
+                <span>validator</span>
+              </div>
+              <footer class="card-footer">
+                <span>Beginner</span>
+                <span>4.8k tokens</span>
+                <span>Draft</span>
+              </footer>
+            </article>
+
+            <article class="skill-card">
+              <div class="card-topline">
+                <span>Repo</span>
+                <a href="skill.html">Open</a>
+              </div>
+              <h2><a href="skill.html">repo-map</a></h2>
+              <p>
+                Build a structured map of languages, entry points, test
+                commands, dependency files, important directories, and risk
+                notes from the actual checkout.
+              </p>
+              <div class="preview map-preview" aria-hidden="true">
+                <span>README</span>
+                <span>package</span>
+                <span>src</span>
+                <span>tests</span>
+                <span>docs</span>
+              </div>
+              <div class="metric-bars">
+                <span>Path validity <b>100%</b></span>
+                <span>Command hit <b>91%</b></span>
+              </div>
+              <div class="tags">
+                <span>repo</span>
+                <span>onboarding</span>
+                <span>facts</span>
+              </div>
+              <footer class="card-footer">
+                <span>Beginner</span>
+                <span>3.9k tokens</span>
+                <span>Verified</span>
+              </footer>
+            </article>
+
+            <article class="skill-card">
+              <div class="card-topline">
+                <span>Routing</span>
+                <a href="skill.html">Open</a>
+              </div>
+              <h2><a href="skill.html">stack-trace-router</a></h2>
+              <p>
+                Turn stack traces and failure snippets into ranked files,
+                symbols, evidence, and next inspection steps without broad,
+                wandering repository search.
+              </p>
+              <div class="preview route-preview" aria-hidden="true">
+                <span>trace</span>
+                <span>symbol</span>
+                <span>file</span>
+              </div>
+              <div class="metric-bars">
+                <span>Top-3 recall <b>88%</b></span>
+                <span>Search calls <b>-35%</b></span>
+              </div>
+              <div class="tags">
+                <span>stack-trace</span>
+                <span>triage</span>
+                <span>files</span>
+              </div>
+              <footer class="card-footer">
+                <span>Intermediate</span>
+                <span>5.1k tokens</span>
+                <span>Draft</span>
+              </footer>
+            </article>
+
+            <article class="skill-card">
+              <div class="card-topline">
+                <span>Patch</span>
+                <a href="skill.html">Open</a>
+              </div>
+              <h2><a href="skill.html">single-file-patch</a></h2>
+              <p>
+                Produce a unified diff for one target file, check that it
+                applies cleanly, and run the smallest relevant validation
+                command before returning the patch.
+              </p>
+              <div class="preview patch-preview" aria-hidden="true">
+                <span>- failing branch</span>
+                <span>+ guarded branch</span>
+                <span class="success">git apply --check</span>
+              </div>
+              <div class="metric-bars">
+                <span>Patch apply <b>96%</b></span>
+                <span>Scope pass <b>99%</b></span>
+              </div>
+              <div class="tags">
+                <span>diff</span>
+                <span>repair</span>
+                <span>tests</span>
+              </div>
+              <footer class="card-footer">
+                <span>Advanced</span>
+                <span>7.4k tokens</span>
+                <span>Planned</span>
+              </footer>
+            </article>
+
+            <article class="skill-card">
+              <div class="card-topline">
+                <span>Tests</span>
+                <a href="skill.html">Open</a>
+              </div>
+              <h2><a href="skill.html">regression-test-generator</a></h2>
+              <p>
+                Add or update tests that fail against a known buggy fixture and
+                pass after the reference fix, without changing production code
+                unless the case allows it.
+              </p>
+              <div class="preview test-preview" aria-hidden="true">
+                <span>red</span>
+                <span>gold patch</span>
+                <span class="success">green</span>
+              </div>
+              <div class="metric-bars">
+                <span>Red/green <b>82%</b></span>
+                <span>Convention fit <b>90%</b></span>
+              </div>
+              <div class="tags">
+                <span>tests</span>
+                <span>fixtures</span>
+                <span>regression</span>
+              </div>
+              <footer class="card-footer">
+                <span>Advanced</span>
+                <span>8.1k tokens</span>
+                <span>Planned</span>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="wide-band" id="workflows">
+        <div>
+          <h2>Built around contracts, not prompt folklore</h2>
+          <p>
+            Each skill should make the model's job smaller: declare inputs,
+            constrain edits, return a predictable artifact, and point to a
+            validator that can prove whether the work landed.
+          </p>
+        </div>
+        <ol class="workflow-list">
+          <li><span>01</span> Shape the task into a compact contract</li>
+          <li><span>02</span> Run the narrow worker or router mode</li>
+          <li>
+            <span>03</span> Validate schema, patch, command, or eval result
+          </li>
+          <li><span>04</span> Repair once, then escalate with evidence</li>
+        </ol>
+      </section>
+
+      <section class="eval-section" id="evals">
+        <div class="section-heading">
+          <h2>Evaluation signals</h2>
+          <p>Catalog metadata should come from repeatable runs, not vibes.</p>
+        </div>
+        <div class="signal-grid">
+          <div>
+            <strong>Activation precision</strong
+            ><span>Did the skill trigger only when useful?</span>
+          </div>
+          <div>
+            <strong>Validator pass rate</strong
+            ><span>Did the output actually pass the check?</span>
+          </div>
+          <div>
+            <strong>Cost of pass</strong
+            ><span>How much time and context produced a verified success?</span>
+          </div>
+          <div>
+            <strong>Instruction violations</strong
+            ><span>Did the model stay inside the contract?</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Poolside Skills</strong>
+        <p>Static catalog prototype for GitHub Pages.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="https://github.com/poolsideai/skills">Source</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#evals">Evals</a>
+      </nav>
+    </footer>
+  </body>
+</html>
