@@ -1,0 +1,351 @@
+{
+  "title": "Open-Source MCP Servers – 33,959 in the Glama Registry | Glama",
+  "url": "https://glama.ai/mcp/servers",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Popular MCP Servers"
+    },
+    {
+      "tag": "h2",
+      "text": "CoinRithm/coinrithm-agent\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "SubDownload\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "Pantrist\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "MiniMax MCP JS\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "IP2Location IP Geolocation MCP\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "hasdata-mcp\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "PropLine\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "Mockzilla\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "aegis-dq\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "decisionnode/DecisionNode\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "Connectry Architect Cert\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "AI Design Blueprint Doctrine\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "brilliant-directories-mcp\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "SEO Review Tools - MCP server\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "WhisperGraph\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "mcp-server-comparedge\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "flox-mcp\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "bult-mcp-server\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "Brave Search MCP Server\nofficial"
+    },
+    {
+      "tag": "h2",
+      "text": "MailboxValidator Email\nofficial"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Menu",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Sign Up",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Deep Search",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "combobox",
+      "text": "Search Relevance ↓",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add Server",
+      "type": "button"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search for MCP servers, tools, and more",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Yes",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "No",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "href": "https://glama.ai/mcp/servers#main-content"
+    },
+    {
+      "text": "Glama",
+      "href": "https://glama.ai/"
+    },
+    {
+      "text": "Servers",
+      "href": "https://glama.ai/mcp/servers"
+    },
+    {
+      "text": "Connectors",
+      "href": "https://glama.ai/mcp/connectors"
+    },
+    {
+      "text": "Tools",
+      "href": "https://glama.ai/mcp/tools"
+    },
+    {
+      "text": "Clients",
+      "href": "https://glama.ai/mcp/clients"
+    },
+    {
+      "text": "Inspector",
+      "href": "https://glama.ai/mcp/inspector"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://glama.ai/pricing"
+    },
+    {
+      "text": "",
+      "href": "https://glama.ai/discord"
+    },
+    {
+      "text": "Glama",
+      "href": "https://glama.ai/"
+    },
+    {
+      "text": "MCP",
+      "href": "https://glama.ai/mcp"
+    },
+    {
+      "text": "Servers",
+      "href": "https://glama.ai/mcp/servers"
+    },
+    {
+      "text": "Remote14,912",
+      "href": "https://glama.ai/mcp/servers?attributes=hosting%3Aremote-capable"
+    },
+    {
+      "text": "Python14,782",
+      "href": "https://glama.ai/mcp/servers?attributes=language%3Apython"
+    },
+    {
+      "text": "TypeScript11,676",
+      "href": "https://glama.ai/mcp/servers?attributes=language%3Atypescript"
+    },
+    {
+      "text": "Developer Tools10,358",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Adeveloper-tools"
+    },
+    {
+      "text": "Local8,849",
+      "href": "https://glama.ai/mcp/servers?attributes=hosting%3Alocal-only"
+    },
+    {
+      "text": "Tools7,608",
+      "href": "https://glama.ai/mcp/servers?attributes=capability%3Atools"
+    },
+    {
+      "text": "Hybrid7,080",
+      "href": "https://glama.ai/mcp/servers?attributes=hosting%3Ahybrid"
+    },
+    {
+      "text": "Claimed6,381",
+      "href": "https://glama.ai/mcp/servers?attributes=author%3Aclaimed"
+    },
+    {
+      "text": "Search5,666",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Asearch"
+    },
+    {
+      "text": "App Automation4,345",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aapp-automation"
+    },
+    {
+      "text": "Resources3,534",
+      "href": "https://glama.ai/mcp/servers?attributes=capability%3Aresources"
+    },
+    {
+      "text": "Prompts3,256",
+      "href": "https://glama.ai/mcp/servers?attributes=capability%3Aprompts"
+    },
+    {
+      "text": "Databases2,654",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Adatabases"
+    },
+    {
+      "text": "Autonomous Agents2,552",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aautonomous-agents"
+    },
+    {
+      "text": "RAG Systems2,423",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Arag-systems"
+    },
+    {
+      "text": "Official2,182",
+      "href": "https://glama.ai/mcp/servers?attributes=author%3Aofficial"
+    },
+    {
+      "text": "Finance2,020",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Afinance"
+    },
+    {
+      "text": "Knowledge & Memory1,879",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aknowledge-and-memory"
+    },
+    {
+      "text": "Agent Orchestration1,738",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aagent-orchestration"
+    },
+    {
+      "text": "Research & Data1,719",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aresearch-and-data"
+    },
+    {
+      "text": "Web Scraping1,593",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aweb-scraping"
+    },
+    {
+      "text": "Cloud Platforms1,549",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Acloud-platforms"
+    },
+    {
+      "text": "AI & Machine Learning1,480",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aai-and-machine-learning"
+    },
+    {
+      "text": "Code Execution1,435",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Acode-execution"
+    },
+    {
+      "text": "Browser Automation1,381",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Abrowser-automation"
+    },
+    {
+      "text": "Security1,379",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Asecurity-and-iam"
+    },
+    {
+      "text": "Documentation Access1,364",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Adocumentation-access"
+    },
+    {
+      "text": "Communication1,354",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Acommunication"
+    },
+    {
+      "text": "Project Management1,336",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Aproject-management"
+    },
+    {
+      "text": "Code Analysis1,318",
+      "href": "https://glama.ai/mcp/servers?attributes=category%3Acode-analysis"
+    },
+    {
+      "text": "See all attributes",
+      "href": "https://glama.ai/mcp/attributes"
+    },
+    {
+      "text": "MCP tools",
+      "href": "https://glama.ai/mcp/tools"
+    },
+    {
+      "text": "opa_get_history",
+      "href": "https://glama.ai/mcp/servers/OilpriceAPI/mcp-server/tools/opa_get_history"
+    },
+    {
+      "text": "OilPriceAPI",
+      "href": "https://glama.ai/mcp/servers/OilpriceAPI/mcp-server/tools/opa_get_history"
+    },
+    {
+      "text": "listCities",
+      "href": "https://glama.ai/mcp/servers/brilliantdirectories/brilliant-directories-mcp/tools/listCities"
+    },
+    {
+      "text": "brilliant-directories-mcp",
+      "href": "https://glama.ai/mcp/servers/brilliantdirectories/brilliant-directories-mcp/tools/listCities"
+    },
+    {
+      "text": "listClicks",
+      "href": "https://glama.ai/mcp/servers/brilliantdirectories/brilliant-directories-mcp/tools/listClicks"
+    },
+    {
+      "text": "brilliant-directories-mcp",
+      "href": "https://glama.ai/mcp/servers/brilliantdirectories/brilliant-directories-mcp/tools/listClicks"
+    }
+  ],
+  "text": "Skip to main content\nGlama\nMCP\nServers\n33,959 servers. Last updated 2026-06-10 16:08\nSearch Relevance ↓\nAdd Server\nPopular MCP Servers\nCoinRithm/coinrithm-agent\nofficial\nCryptocurrency\nFinance\nBlockchain\nCoinRithm\nA\nlicense\nA\nquality\nB\nmaintenance\nPaper-trade crypto spot, futures, and prediction markets on CoinRithm with a user-minted API key. Simulated funds only; includes 21 MCP tools and Agent Arena performance tracking.\nLast updated 3 hours ago\n2\n22\n1\nMIT\nSubDownload\nofficial\nEntertainment & Media\nSearch\nKnowledge & Memory\nSubDownload\nA\nlicense\nA\nquality\nC\nmaintenance\nPublic MCP wrapper for SubDownload.Fetch YouTube transcripts, search videos, browse channels and playlists — instant YouTube data for your AI workflow.\nLast updated a month ago\n4\n13\n3\nMIT\nPantrist\nofficial\nE-commerce & Retail\nPantrist-dev\nA\nlicense\nA\nquality\nB\nmaintenance\nManage your Pantrist pantry, shopping list, recipes, and weekly meal plan from Claude. The server wraps the same public REST API that powers the iOS, Android, and web apps, so your changes show up in real time on every device. * \"What's on my shopping list?\" * \"Add milk, eggs, and that brand of olive oil I had last week\" * \"What's expiring in the next three days?\"\nLast updated 3 days ago\n4\n14\nMIT\nMiniMax MCP JS\nofficial\nImage & Video Processing\nText-to-Speech\nMultimedia Processing\nMiniMax-AI\nA\nlicense\nA\nquality\nF\nmaintenance\nJavaScript implementation of MiniMax MCP that enables interaction with MiniMax AI services for image generation, video generation, text-to-speech, and voice cloning through MCP-compatible clients.\nLast updated a year ago\n4\n10\n404\n125\nMIT\nIP2Location IP Geolocation MCP\nofficial\nLocation Services\nip2location\nA\nlicense\nA\nquality\nB\nmaintenance\nIP Geolocation MCP server using IP2Location.io API to ease the query of geolocation information.\nLast updated 15 days ago\n8\n1\n14\nPython\nMIT\nhasdata-mcp\nofficial\nWeb Scraping\nSearch\nHasData\nA\nlicense\nA\nquality\nA\nmaintenance\nDirect access to 40+ scraping and search tools. Extract structured data from Google (Search, Maps, Trends), Amazon, Airbnb, Social Media, and any web page directly into your AI agent.\nLast updated a month ago\n12\n42\n2\nMIT\nPropLine\nofficial\nSports\nResearch & Data\nproplineapi\nA\nlicense\nA\nquality\nB\nmaintenance\nLive sports betting odds, cross-book +EV, and graded player-prop resolution across 13 books.\nLast updated 10 days ago\n4\n11\n268\nMIT\nMockzilla\nofficial\nAPI Testing\nDeveloper Tools\nTesting & QA Tools\nmockzilla\nA\nlicense\nA\nquality\nB\nmaintenance\nMCP server for mockzilla. Lets coding agents (Claude Desktop, Cursor, etc.) install the mockzilla CLI, stand up API mocks from an OpenAPI spec or a single endpoint, and — with an account — deploy hosted mocks on mockzilla.org.\nLast updated 18 days ago\n8\n14\n219\n5\nMIT\naegis-dq\nofficial\nDatabases\nAI & Machine Learning\nCI/CD & DevOps\naegis-dq\nA\nlicense\nB\nquality\nB\nmaintenance\nAgentic data quality MCP server — runs structured validation rules against warehouses (DuckDB, BigQuery, Athena, Databricks, Postgres), diagnoses failures with LLM root cause analysis, and proposes SQL remediations. Full audit trail of every AI decision.\nLast updated 14 days ago\n10\n6\n3\nApache 2.0\ndecisionnode/DecisionNode\nofficial\nKnowledge & Memory\nDeveloper Tools\nRAG Systems\ndecisionnode\nA\nlicense\nA\nquality\nB\nmaintenance\nRecord development decisions as structured JSON, embed them as vectors via Gemini, and search semantically over MCP. Works with Claude Code, Cursor, Windsurf, and any MCP client.\nLast updated 2 months ago\n6\n9\n18\n39\nMIT\nConnectry Architect Cert\nofficial\nEducation & Learning Tools\nDeveloper Tools\nConnectry-io\nA\nlicense\nA\nquality\nB\nmaintenance\nFree certification prep for the Claude Certified Architect exam. 390 scenario-based questions, guided capstone build, 30 concept handouts, 6 reference projects, practice exams, interactive UI with clickable answer cards, progress dashboard, spaced repetition, and deterministic grading. Everything runs locally — no cloud, no accounts, no telemetry.\nLast updated 3 months ago\n4\n18\n25\n23\nMIT\nAI Design Blueprint Doctrine\nofficial\nAgent Orchestration\nAutonomous Agents\naidesignblueprint\nA\nlicense\nA\nquality\nB\nmaintenance\nhe industry standard reference for safe, observable, and steerable AI agent UX. Browse and search 10 Blueprint principles, clusters, curated implementation examples, and application guides. 13 public tools require no credentials.\nLast updated 13 days ago\n8\n24\n2\nMIT\nbrilliant-directories-mcp\nofficial\nContent Management Systems\nApp Automation\nbrilliantdirectories\nA\nlicense\nA\nquality\nB\nmaintenance\nOfficial MCP server for Brilliant Directories, the membership and directory website platform powering 50,000+ sites. Manage members, posts, leads, reviews, email templates, forms, menus, pages, redirects, tags, and more.\nLast updated 11 days ago\n6\n100\n14\nMIT\nSEO Review Tools - MCP server\nofficial\nSearch\nMarketing\nRAG Systems\nSEO-Review-Tools\nA\nlicense\nB\nquality\nC\nmaintenance\nGet access to real-time SEO data, including: keyword insights, backlink data, traffic estimates and more. Allow AI tools and Large Language Models (LLMs) to tap into the real-time SEO Review Tools API with natural language commands.\nLast updated a year ago\n6\n8\n1\n5\nMIT\nWhisperGraph\nofficial\nKnowledge & Memory\nNetworking & Infrastructure\nSecurity\nwhisper-sec\nA\nlicense\nA\nquality\nB\nmaintenance\nSelf-hostable MCP server for WhisperGraph — a graph of 7.39B nodes / 39B edges mapping DNS, BGP, GeoIP, WHOIS, and threat intelligence. Six read-only tools (Cypher query + schema introspection + threat assessment), six resources, eight investigation prompts. stdio and Streamable HTTP transports.\nLast updated 24 days ago\n14\n6\n15\n1\nApache 2.0\nmcp-server-comparedge\nofficial\nCustomer Data Platforms\nResearch & Data\nSearch\ncomparedge\nA\nlicense\nA\nquality\nB\nmaintenance\nQuery verified pricing, aggregated user ratings, feature comparisons, and category rankings for 508+ SaaS, AI, and security tools across 45 categories. No API key required - install with npx @comparedge/mcp-server\nLast updated 11 days ago\n16\n8\n1,721\n1\nMIT\nflox-mcp\nofficial\nFinance\nDeveloper Tools\nAutonomous Agents\nFLOX-Foundation\nA\nlicense\nA\nquality\nB\nmaintenance\nMCP server for the FLOX trading framework. About 30 tools to run backtests, scaffold strategies, validate for lookahead bias, compute indicators, place orders, and query PnL from Claude/Cursor.\nLast updated 10 days ago\n10\n33\n214\nMIT\nbult-mcp-server\nofficial\nCloud Platforms\nDeveloper Tools\nbultcloud\nA\nlicense\nA\nquality\nB\nmaintenance\nDeploy and manage Bult.ai cloud hosting projects from MCP clients like Cursor, Claude Desktop, and Claude Code. Create projects and services, deploy GitHub repositories or Docker images, manage routes and volumes, inspect logs, and troubleshoot deployments from your AI assistant.\nLast updated 2 days ago\n2\n24\n57\n1\nMIT\nBrave Search MCP Server\nofficial\nResearch & Data\nSearch\nText Summarization\nbrave\nA\nlicense\nA\nquality\nB\nmaintenance\nAn MCP implementation that integrates the Brave Search API, providing comprehensive search capabilities including web, local business, image, video, news searches, and AI-powered summarization.\nLast updated 21 hours ago\n1,741\n8\n7,160\n1,167\nMailboxValidator Email\nofficial\nEmail\nSecurity\nMailboxValidator\nA\nlicense\nA\nquality\nB\nmaintenance\nEmail validation MCP server using MailboxValidator API to determine validity of an email address.\nLast updated 7 days ago\n12\n3\nMIT\nWas this helpful?\nYes\nNo\nMCP\nMCP Servers\nMCP Connectors\nMCP Gateway\nMCP Hosting\nMCP Inspector\nMCP Clients\nMCP Tools\nAI\nChat\nAI Gateway\nAI Models\nPolicies\nTerms of Service\nPrivacy Policy\nVDP\nResources\nRelease Notes\nSupport\nPricing\nCareers\nBlog\nNewsletter\nGlama – all-in-one AI workspace.\nAll systems online",
+  "stats": {
+    "bodyTextLength": 7704,
+    "linkCount": 190,
+    "buttonCount": 7,
+    "inputCount": 1,
+    "cardishCount": 20,
+    "scrollHeight": 8362
+  }
+}

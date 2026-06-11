@@ -1,0 +1,27 @@
+{
+  "kind": "node-eval",
+  "id": "mq9dzfp8-insitu-combine",
+  "project": "experiments/smithers-pool",
+  "workflowPath": "/Users/ben/code/poolside/skills/experiments/smithers-pool/example.workflow.tsx",
+  "nodeId": "combine",
+  "mode": "in-workflow",
+  "runId": "c3b7b89d-cbf6-494d-86ec-dd504d776fe5",
+  "trial": null,
+  "skill": null,
+  "grader": "exit-code",
+  "status": "pass",
+  "score": 1,
+  "checks": [
+    {
+      "id": "pool-exit-code",
+      "status": "pass",
+      "detail": "exit 0"
+    }
+  ],
+  "durationMs": 14843,
+  "trajectoryUrl": "https://chat.poolsi.de/console/trajectory-viewer?agent_id=019dbc34-2f3c-7c81-8acb-b8c2ccfdd4bd&agent_session_id=019eb46b-2dd4-7d8d-af12-470a6deff2b5",
+  "workspace": "/Users/ben/code/poolside/skills/experiments/smithers-pool/work/combine",
+  "agentName": null,
+  "gradedAtMs": 1781175634748,
+  "note": "workspace is shared across runs; grade reflects its current contents"
+}

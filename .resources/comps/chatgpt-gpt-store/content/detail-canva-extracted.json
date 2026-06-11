@@ -1,0 +1,99 @@
+{
+  "title": "ChatGPT",
+  "url": "https://chatgpt.com/",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "What are you working on?"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "ChatGPT",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Log in",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Sign up for free",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "file"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add files and more",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Start dictation",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Send prompt",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "file"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "file"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to content",
+      "href": "https://chatgpt.com/#main"
+    },
+    {
+      "text": "Terms",
+      "href": "https://openai.com/terms"
+    },
+    {
+      "text": "Privacy Policy",
+      "href": "https://openai.com/privacy"
+    },
+    {
+      "text": "Learn more",
+      "href": "https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance"
+    }
+  ],
+  "text": "Skip to content\nChatGPT\nLog in\nWhat are you working on?\n\nChatGPT is AI. By using it, you agree to our Terms & Privacy Policy. Chats may be reviewed and used to improve our AI models. Learn more",
+  "stats": {
+    "bodyTextLength": 193,
+    "linkCount": 4,
+    "buttonCount": 7,
+    "inputCount": 3,
+    "cardishCount": 0,
+    "scrollHeight": 844
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "kind": "node-eval",
+  "id": "mq9g3ub8-insitu-dep_scan",
+  "project": "experiments/smithers-pool",
+  "workflowPath": "/Users/ben/code/poolside/skills/experiments/smithers-pool/example.workflow.tsx",
+  "nodeId": "dep_scan",
+  "mode": "in-workflow",
+  "runId": "901f8e4a-b408-4bb4-b091-804bd8b590a9",
+  "trial": null,
+  "skill": null,
+  "grader": "exit-code",
+  "status": "pass",
+  "score": 1,
+  "checks": [
+    {
+      "id": "pool-exit-code",
+      "status": "pass",
+      "detail": "exit 0"
+    }
+  ],
+  "durationMs": 7739,
+  "trajectoryUrl": "https://chat.poolsi.de/console/trajectory-viewer?agent_id=019dbc34-2f3c-7c81-8acb-b8c2ccfdd4bd&agent_session_id=019eb658-cd3a-76eb-8736-61cdae309527",
+  "workspace": "/Users/ben/code/poolside/skills/experiments/smithers-pool/work/dep-scan",
+  "agentName": null,
+  "gradedAtMs": 1781179199568,
+  "note": "workspace is shared across runs; grade reflects its current contents"
+}

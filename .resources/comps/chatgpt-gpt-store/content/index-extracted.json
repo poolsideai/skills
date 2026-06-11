@@ -1,0 +1,28 @@
+{
+  "title": "Explore GPTs",
+  "url": "https://chatgpt.com/gpts",
+  "headings": [],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Sign up for free",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "ChatGPT",
+      "href": "https://chatgpt.com/"
+    }
+  ],
+  "text": "ChatGPT\nSign up for free\nError loading GPTs",
+  "stats": {
+    "bodyTextLength": 43,
+    "linkCount": 1,
+    "buttonCount": 1,
+    "inputCount": 0,
+    "cardishCount": 0,
+    "scrollHeight": 844
+  }
+}

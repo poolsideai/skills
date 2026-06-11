@@ -1,0 +1,579 @@
+{
+  "title": "Agent Skills - Claude API Docs",
+  "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Agent Skills"
+    },
+    {
+      "tag": "h2",
+      "text": "Why use Skills"
+    },
+    {
+      "tag": "h2",
+      "text": "Using Skills"
+    },
+    {
+      "tag": "h2",
+      "text": "How Skills work"
+    },
+    {
+      "tag": "h3",
+      "text": "Three types of Skill content, three levels of loading"
+    },
+    {
+      "tag": "h3",
+      "text": "Level 1: Metadata (always loaded)"
+    },
+    {
+      "tag": "h3",
+      "text": "Level 2: Instructions (loaded when triggered)"
+    },
+    {
+      "tag": "h3",
+      "text": "Level 3: Resources and code (loaded as needed)"
+    },
+    {
+      "tag": "h3",
+      "text": "The Skills architecture"
+    },
+    {
+      "tag": "h3",
+      "text": "Example: Loading a PDF processing skill"
+    },
+    {
+      "tag": "h2",
+      "text": "Where Skills work"
+    },
+    {
+      "tag": "h3",
+      "text": "Claude API"
+    },
+    {
+      "tag": "h3",
+      "text": "Claude Code"
+    },
+    {
+      "tag": "h3",
+      "text": "claude.ai"
+    },
+    {
+      "tag": "h2",
+      "text": "Skill structure"
+    },
+    {
+      "tag": "h2",
+      "text": "Security considerations"
+    },
+    {
+      "tag": "h2",
+      "text": "Available Skills"
+    },
+    {
+      "tag": "h3",
+      "text": "Pre-built Agent Skills"
+    },
+    {
+      "tag": "h3",
+      "text": "Open-source Skills"
+    },
+    {
+      "tag": "h3",
+      "text": "Custom Skills examples"
+    },
+    {
+      "tag": "h2",
+      "text": "Data retention"
+    },
+    {
+      "tag": "h2",
+      "text": "Limitations and constraints"
+    },
+    {
+      "tag": "h3",
+      "text": "Cross-surface availability"
+    },
+    {
+      "tag": "h3",
+      "text": "Sharing scope"
+    },
+    {
+      "tag": "h3",
+      "text": "Runtime environment constraints"
+    },
+    {
+      "tag": "h2",
+      "text": "Next steps"
+    },
+    {
+      "tag": "h3",
+      "text": "Solutions"
+    },
+    {
+      "tag": "h3",
+      "text": "Partners"
+    },
+    {
+      "tag": "h3",
+      "text": "Learn"
+    },
+    {
+      "tag": "h3",
+      "text": "Company"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Resources",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "API reference",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "English",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Console",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Log in",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Search documentation",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "div",
+      "role": "button",
+      "text": "Search...⌘K",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "MCP tunnels",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Open navigation",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Messages",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy page",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy page",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to clipboard",
+      "type": "button"
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://platform.claude.com/docs/en/home"
+    },
+    {
+      "text": "Messages",
+      "href": "https://platform.claude.com/docs/en/intro"
+    },
+    {
+      "text": "Managed Agents",
+      "href": "https://platform.claude.com/docs/en/managed-agents/overview"
+    },
+    {
+      "text": "Admin",
+      "href": "https://platform.claude.com/docs/en/manage-claude/admin-api"
+    },
+    {
+      "text": "API reference",
+      "href": "https://platform.claude.com/docs/en/api/overview"
+    },
+    {
+      "text": "Console",
+      "href": "https://platform.claude.com/"
+    },
+    {
+      "text": "Log in",
+      "href": "https://platform.claude.com/login?returnTo=%2Fdocs%2Fen%2Fagents-and-tools%2Fagent-skills%2Foverview"
+    },
+    {
+      "text": "Intro to Claude",
+      "href": "https://platform.claude.com/docs/en/intro"
+    },
+    {
+      "text": "Quickstart",
+      "href": "https://platform.claude.com/docs/en/get-started"
+    },
+    {
+      "text": "Features overview",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/overview"
+    },
+    {
+      "text": "Using the Messages API",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"
+    },
+    {
+      "text": "Stop reasons and fallback",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons"
+    },
+    {
+      "text": "Refusals and fallback",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback"
+    },
+    {
+      "text": "Fallback credit",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/fallback-credit"
+    },
+    {
+      "text": "Extended thinking",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/extended-thinking"
+    },
+    {
+      "text": "Adaptive thinking",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking"
+    },
+    {
+      "text": "Effort",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/effort"
+    },
+    {
+      "text": "Task budgets (beta)",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/task-budgets"
+    },
+    {
+      "text": "Fast mode (research preview)",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/fast-mode"
+    },
+    {
+      "text": "Structured outputs",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+    },
+    {
+      "text": "Citations",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/citations"
+    },
+    {
+      "text": "Streaming Messages",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/streaming"
+    },
+    {
+      "text": "Batch processing",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    },
+    {
+      "text": "Search results",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/search-results"
+    },
+    {
+      "text": "Streaming refusals",
+      "href": "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals"
+    },
+    {
+      "text": "Multilingual support",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/multilingual-support"
+    },
+    {
+      "text": "Embeddings",
+      "href": "https://platform.claude.com/docs/en/build-with-claude/embeddings"
+    },
+    {
+      "text": "Overview",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+    },
+    {
+      "text": "How tool use works",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works"
+    },
+    {
+      "text": "Tutorial: Build a tool-using agent",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent"
+    },
+    {
+      "text": "Define tools",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools"
+    },
+    {
+      "text": "Handle tool calls",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls"
+    },
+    {
+      "text": "Parallel tool use",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use"
+    },
+    {
+      "text": "Tool Runner (SDK)",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner"
+    },
+    {
+      "text": "Strict tool use",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use"
+    },
+    {
+      "text": "Tool use with prompt caching",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-use-with-prompt-caching"
+    },
+    {
+      "text": "Server tools",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools"
+    },
+    {
+      "text": "Troubleshooting",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/troubleshooting-tool-use"
+    },
+    {
+      "text": "Web search tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool"
+    },
+    {
+      "text": "Web fetch tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool"
+    },
+    {
+      "text": "Code execution tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool"
+    },
+    {
+      "text": "Advisor tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool"
+    },
+    {
+      "text": "Memory tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool"
+    },
+    {
+      "text": "Bash tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool"
+    },
+    {
+      "text": "Computer use tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool"
+    },
+    {
+      "text": "Text editor tool",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool"
+    },
+    {
+      "text": "Tool reference",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference"
+    },
+    {
+      "text": "Manage tool context",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/manage-tool-context"
+    },
+    {
+      "text": "Tool combinations",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-combinations"
+    },
+    {
+      "text": "Tool search",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool"
+    }
+  ],
+  "text": "Messages\nOverview\nAgent Skills\nAgent Skills are modular capabilities that extend Claude's functionality. Each Skill packages instructions, metadata, and optional resources (scripts, templates) that Claude uses automatically when relevant.\nCopy page\n\nThis feature is not eligible for Zero Data Retention (ZDR). Data is retained according to the feature's standard retention policy.\n\nWhy use Skills\n\nSkills are reusable, filesystem-based resources that provide Claude with domain-specific expertise: workflows, context, and best practices that transform general-purpose agents into specialists. Unlike prompts (conversation-level instructions for one-off tasks), Skills load on-demand and eliminate the need to repeatedly provide the same guidance across multiple conversations.\n\nKey benefits:\n\nSpecialize Claude: Tailor capabilities for domain-specific tasks\nReduce repetition: Create once, use automatically\nCompose capabilities: Combine Skills to build complex workflows\n\nFor a deep dive into the architecture and real-world applications of Agent Skills, see the engineering blog post Equipping agents for the real world with Agent Skills.\n\nUsing Skills\n\nAnthropic provides pre-built Agent Skills for common document tasks (PowerPoint, Excel, Word, PDF), and you can create your own custom Skills. Both work the same way. Claude automatically uses them when relevant to your request.\n\nPre-built Agent Skills are available on claude.ai, the Claude API, Claude Platform on AWS, and Microsoft Foundry. See Available Skills for the complete list.\n\nCustom Skills let you package domain expertise and organizational knowledge. They're available across Claude's products: create them in Claude Code, upload them through the Claude API, or add them in claude.ai settings. On Claude Platform on AWS and Microsoft Foundry, upload custom Skills through the Skills API.\n\nGet started:\n\nFor pre-built Agent Skills: See the quickstart tutorial to start using PowerPoint, Excel, Word, and PDF skills in the API\nFor custom Skills: See the Agent Skills Cookbook to learn how to create your own Skills\nHow Skills work\n\nSkills leverage Claude's VM environment to provide capabilities beyond what's possible with prompts alone. Claude operates in a virtual machine with filesystem access, allowing Skills to exist as directories containing instructions, executable code, and reference materials, organized like an onboarding guide you'd create for a new team member.\n\nThis filesystem-based architecture enables progressive disclosure: Claude loads information in stages as needed, rather than consuming context upfront.\n\nThree types of Skill content, three levels of loading\n\nSkills can contain three types of content, each loaded at different times:\n\nLevel 1: Metadata (always loaded)\n\nContent type: Instructions. The Skill's YAML frontmatter provides discovery information:\n\n---\nname: pdf-processing\ndescription: Extract text and tables from PDF files, fill forms, merge documents. Use when working with PDF files or when the user mentions PDFs, forms, or document extraction.\n---\n\n\nClaude loads this metadata at startup and includes it in the system prompt. This lightweight approach means you can install many Skills without context penalty; Claude only knows each Skill exists and when to use it.\n\nLevel 2: Instructions (loaded when triggered)\n\nContent type: Instructions. The main body of SKILL.md contains procedural knowledge: workflows, best practices, and guidance:\n\n# PDF Processing\n\n## Quick start\n\nUse pdfplumber to extract text from PDFs:\n\n```python\nimport pdfplumber\n\nwith pdfplumber.open(\"document.pdf\") as pdf:\n    text = pdf.pages[0].extract_text()\n```\n\nFor advanced form filling, see [FORMS.md](FORMS.md).\n\n\nWhen you request something that matches a Skill's description, Claude reads SKILL.md from the filesystem via bash. Only then does this content enter the context window.\n\nLevel 3: Resources and code (loaded as needed)\n\nContent types: Instructions, code, and resources. Skills can bundle additional materials:\n\npdf-skill/\n├── SKILL.md (main instructions)\n├── FORMS.md (form-filling guide)\n├── REFERENCE.md (detailed API reference)\n└── scripts/\n    └── fill_form.py (utility script)\n\n\nInstructions: Additional markdown files (FORMS.md, REFERENCE.md) containing specialized guidance and workflows\n\nCode: Executable scripts (fill_form.py, validate.py) that Claude runs via bash; scripts provide deterministic operations without consuming context\n\nResources: Reference materials like database schemas, API documentation, templates, or examples\n\nClaude accesses these files only when referenced. The filesystem model means each content type has different strengths: instructions for flexible guidance, code for reliability, resources for factual lookup.\n\nLevel\tWhen Loaded\tToken Cost\tContent\nLevel 1: Metadata\tAlways (at startup)\t~100 tokens per Skill\tname and description from YAML frontmatter\nLevel 2: Instructions\tWhen Skill is triggered\tUnder 5k tokens\tSKILL.md body with instructions and guidance\nLevel 3+: Resources\tAs needed\tEffectively unlimited\tBundled files executed via bash without loading contents into context\n\nProgressive disclosure ensures only relevant content occupies the context window at any given time.\n\nThe Skills architecture\n\nSkills run in a code execution environment where Claude has filesystem access, bash commands, and code execution capabilities. Think of it like this: Skills exist as directories on a virtual machine, and Claude interacts with them using the same bash commands you'd use to navigate files on your computer.\n\nHow Claude accesses Skill content:\n\nWhen a Skill is triggered, Claude uses bash to read SKILL.md from the filesystem, bringing its instructions into the context window. If those instructions reference other files (like FORMS.md or a database schema), Claude reads those files too using additional bash commands. When instructions mention executable scripts, Claude runs them via bash and receives only the output (the script code itself never enters context).\n\nWhat this architecture enables:\n\nOn-demand file access: Claude reads only the files needed for each specific task. A Skill can include dozens of reference files, but if your task only needs the sales schema, Claude loads just that one file. The rest remain on the filesystem consuming zero tokens.\n\nEfficient script execution: When Claude runs validate_form.py, the script's code never loads into the context window. Only the script's output (like \"Validation passed\" or specific error messages) consumes tokens. This makes scripts far more efficient than having Claude generate equivalent code on the fly.\n\nNo practical limit on bundled content: Because files don't consume context until accessed, Skills can include comprehensive API documentation, large datasets, extensive examples, or any reference materials you need. There's no context penalty for bundled content that isn't used.\n\nThis filesystem-based model is what makes progressive disclosure work. Claude navigates your Skill like you'd reference specific sections of an onboarding guide, accessing exactly what each task requires.\n\nExample: Loading a PDF processing skill\n\nHere's how Claude loads and uses a PDF processing skill:\n\nStartup: System prompt includes: PDF Processing - Extract text and tables from PDF files, fill forms, merge documents\nUser request: \"Extract the text from this PDF and summarize it\"\nClaude invokes: bash: read pdf-skill/SKILL.md → Instructions loaded into context\nClaude determines: Form filling is not needed, so FORMS.md is not read\nClaude executes: Uses instructions from SKILL.md to complete the task\n\nThe diagram shows:\n\nDefault state with system prompt and skill metadata pre-loaded\nClaude triggers the skill by reading SKILL.md via bash\nClaude optionally reads additional bundled files like FORMS.md as needed\nClaude proceeds with the task\n\nThis dynamic loading ensures only relevant skill content occupies the context window.\n\nWhere Skills work\n\nSkills are available across Claude's agent products:\n\nClaude Platform on AWS and Microsoft Foundry inherit the same Skills behavior as the Claude API in all following sections.\n\nClaude API\n\nThe Claude API supports both pre-built Agent Skills and custom Skills. Both work identically: specify the relevant skill_id in the container parameter along with the code execution tool.\n\nPrerequisites: Using Skills via the API requires three beta headers:\n\ncode-execution-2025-08-25 - Skills run in the code execution container\nskills-2025-10-02 - Enables Skills functionality\nfiles-api-2025-04-14 - Required for uploading/downloading files to/from the container\n\nUse pre-built Agent Skills by referencing their skill_id (for example, pptx, xlsx), or create and upload your own through the Skills API (/v1/skills endpoints). Custom Skills are shared workspace-wide; all workspace members can access them.\n\nTo learn more, see Use Skills with the Claude API.\n\nClaude Code\n\nClaude Code supports only Custom Skills.\n\nCustom Skills: Create Skills as directories with SKILL.md files. Claude discovers and uses them automatically.\n\nCustom Skills in Claude Code are filesystem-based and don't require API uploads.\n\nTo learn more, see Use Skills in Claude Code.\n\nclaude.ai\n\nclaude.ai supports both pre-built Agent Skills and custom Skills.\n\nPre-built Agent Skills: These Skills are already working behind the scenes when you create documents. Claude uses them without requiring any setup.\n\nCustom Skills: Upload your own Skills as zip files through Settings > Features. Available on Pro, Max, Team, and Enterprise plans with code execution enabled. Custom Skills are individual to each user; they are not shared organization-wide and cannot be centrally managed by admins.\n\nTo learn more about using Skills in claude.ai, see the following resources in the Claude Help Center:\n\nWhat are Skills?\nUsing Skills in Claude\nHow to create custom Skills\nTeach Claude your way of working using Skills\nSkill structure\n\nEvery Skill requires a SKILL.md file with YAML frontmatter:\n\n---\nname: your-skill-name\ndescription: Brief description of what this Skill does and when to use it\n---\n\n# Your Skill Name\n\n## Instructions\n[Clear, step-by-step guidance for Claude to follow]\n\n## Examples\n[Concrete examples of using this Skill]\n\n\nRequired fields: name and description\n\nField requirements:\n\nname:\n\nMaximum 64 characters\nMust contain only lowercase letters, numbers, and hyphens\nCannot contain XML tags\nCannot contain reserved words: \"anthropic\", \"claude\"\n\ndescription:\n\nMust be non-empty\nMaximum 1024 characters\nCannot contain XML tags\n\nThe description should include both what the Skill does and when Claude should use it. For complete authoring guidance, see the best practices guide.\n\nSecurity considerations\n\nUse Skills only from trusted sources: those you created yourself or obtained from Anthropic. Skills provide Claude with new capabilities through instructions and code, and while this makes them powerful, it also means a malicious Skill can direct Claude to invoke tools or execute code in ways that don't match the Skill's stated purpose.\n\nIf you must use a Skill from an untrusted or unknown source, exercise extreme caution and thoroughly audit it before use. Depending on what access Claude has when executing the Skill, malicious Skills could lead to data exfiltration, unauthorized system access, or other security risks.\n\nKey security considerations:\n\nAudit thoroughly: Review all files bundled in the Skill: SKILL.md, scripts, images, and other resources. Look for unusual patterns like unexpected network calls, file access patterns, or operations that don't match the Skill's stated purpose\nExternal sources are risky: Skills that fetch data from external URLs pose particular risk, as fetched content may contain malicious instructions. Even trustworthy Skills can be compromised if their external dependencies change over time\nTool misuse: Malicious Skills can invoke tools (file operations, bash commands, code execution) in harmful ways\nData exposure: Skills with access to sensitive data could be designed to leak information to external systems\nTreat like installing software: Only use Skills from trusted sources. Be especially careful when integrating Skills into production systems with access to sensitive data or critical operations\nAvailable Skills\nPre-built Agent Skills\n\nThe following pre-built Agent Skills are available for immediate use:\n\nPowerPoint (pptx): Create presentations, edit slides, analyze presentation content\nExcel (xlsx): Create spreadsheets, analyze data, generate reports with charts\nWord (docx): Create documents, edit content, format text\nPDF (pdf): Generate formatted PDF documents and reports\n\nThese Skills are available on the Claude API, Claude Platform on AWS, Microsoft Foundry, and claude.ai. See the quickstart tutorial to start using them in the API.\n\nOpen-source Skills\n\nAnthropic also publishes open-source Skills in the skills repository:\n\nClaude API: Provides Claude with up-to-date API reference material, SDK documentation, and best practices for 8 programming languages. Bundled with Claude Code and also available for installation from the skills repository.\nCustom Skills examples\n\nFor complete examples of custom Skills, see the Skills cookbook.\n\nData retention\n\nAgent Skills is not covered by ZDR arrangements. Skill definitions and execution data are retained according to Anthropic's standard data retention policy.\n\nFor ZDR eligibility across all features, see API and data retention.\n\nLimitations and constraints\n\nUnderstanding these limitations helps you plan your Skills deployment effectively. Claude Platform on AWS and Microsoft Foundry follow the same limitations as the Claude API in the following subsections.\n\nCross-surface availability\n\nCustom Skills do not sync across surfaces. Skills uploaded to one surface are not automatically available on others:\n\nSkills uploaded to claude.ai must be separately uploaded to the API\nSkills uploaded through the API are not available on claude.ai\nClaude Code Skills are filesystem-based and separate from both claude.ai and API\n\nYou'll need to manage and upload Skills separately for each surface where you want to use them.\n\nSharing scope\n\nSkills have different sharing models depending on where you use them:\n\nclaude.ai: Individual user only; each team member must upload separately\nClaude API: Workspace-wide; all workspace members can access uploaded Skills\nClaude Code: Personal (~/.claude/skills/) or project-based (.claude/skills/); can also be shared via Claude Code Plugins\n\nclaude.ai does not support centralized admin management or org-wide distribution of custom Skills.\n\nRuntime environment constraints\n\nThe exact runtime environment available to your skill depends on the product surface where you use it.\n\nclaude.ai:\nVarying network access: Depending on user/admin settings, Skills may have full, partial, or no network access. For more details, see the Create and Edit Files support article.\nClaude API:\nNo network access: Skills cannot make external API calls or access the internet\nNo runtime package installation: Only pre-installed packages are available. You cannot install new packages during execution.\nPre-configured dependencies only: Check the code execution tool documentation for the list of available packages\nClaude Code:\nFull network access: Skills have the same network access as any other program on the user's computer\nGlobal package installation discouraged: Skills should only install packages locally in order to avoid interfering with the user's computer\n\nPlan your Skills to work within these constraints.\n\nNext steps\nGet started with Agent Skills\n\nCreate your first Skill\n\nAPI Guide\n\nUse Skills with the Claude API\n\nUse Skills in Claude Code\n\nCreate and manage custom Skills in Claude Code\n\nAuthoring best practices\n\nWrite Skills that Claude can use effectively\n\nWas this page helpful?\n\nSolutions\nAI agents\nCode modernization\nCoding\nCustomer support\nEducation\nFinancial services\nGovernment\nLife sciences\nPartners\nAmazon Bedrock\nGoogle Cloud's Vertex AI\nLearn\nBlog\nCourses\nUse cases\nConnectors\nCustomer stories\nEngineering at Anthropic\nEvents\nPowered by Claude\nService partners\nStartups program\nCompany\nAnthropic\nCareers\nEconomic Futures\nResearch\nNews\nResponsible Scaling Policy\nSecurity and compliance\nTransparency\nHelp and security\nAvailability\nStatus\nSupport\nDiscord\nTerms and policies\nPrivacy policy\nResponsible disclosure policy\nTerms of service: Commercial\nTerms of service: Consumer\nUsage policy",
+  "stats": {
+    "bodyTextLength": 16508,
+    "linkCount": 185,
+    "buttonCount": 48,
+    "inputCount": 0,
+    "cardishCount": 1,
+    "scrollHeight": 14731
+  }
+}

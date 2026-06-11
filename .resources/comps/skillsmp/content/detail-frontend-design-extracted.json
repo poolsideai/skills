@@ -1,0 +1,295 @@
+{
+  "title": "Frontend Design - Official Anthropic Agent Skill | SkillsMP",
+  "url": "https://skillsmp.com/skills/anthropics-claude-code-plugins-frontend-design-skills-frontend-design-skill-md",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "frontend-design"
+    },
+    {
+      "tag": "h3",
+      "text": "Design Thinking"
+    },
+    {
+      "tag": "h3",
+      "text": "Frontend Aesthetics Guidelines"
+    },
+    {
+      "tag": "h2",
+      "text": "More from this repository"
+    },
+    {
+      "tag": "h2",
+      "text": "Skills Marketplace"
+    },
+    {
+      "tag": "h3",
+      "text": "COMMUNITY"
+    },
+    {
+      "tag": "h3",
+      "text": "RESOURCES"
+    },
+    {
+      "tag": "h3",
+      "text": "LEGAL"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "EN",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle menu",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Dismiss banner",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "More",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "Details",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "Example",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Share skill",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "npx",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "bunx",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "pnpm",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "npx skills add https://github.com/anthropics/claude-code --skill frontend-design",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Download Zip",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Scroll to top",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-frontend-design-skills-frontend-design-skill-md#main-content"
+    },
+    {
+      "text": "skills mp",
+      "href": "https://skillsmp.com/en"
+    },
+    {
+      "text": "Skills",
+      "href": "https://skillsmp.com/en/skills"
+    },
+    {
+      "text": "Creators",
+      "href": "https://skillsmp.com/en/creators"
+    },
+    {
+      "text": "Occupations",
+      "href": "https://skillsmp.com/en/occupations"
+    },
+    {
+      "text": "Docs",
+      "href": "https://skillsmp.com/en/docs"
+    },
+    {
+      "text": "Sign In",
+      "href": "https://skillsmp.com/auth/login"
+    },
+    {
+      "text": "Run any Skill in Manus with one click",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "Get Started",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "Home",
+      "href": "https://skillsmp.com/"
+    },
+    {
+      "text": "Occupations",
+      "href": "https://skillsmp.com/occupations"
+    },
+    {
+      "text": "Web and Digital Interface Designers",
+      "href": "https://skillsmp.com/occupations/web-and-digital-interface-designers"
+    },
+    {
+      "text": "Run Skill in Manus",
+      "href": "https://manus.im/import-skills?githubUrl=https%3A%2F%2Fgithub.com%2Fanthropics%2Fclaude-code%2Ftree%2Fmain%2Fplugins%2Ffrontend-design%2Fskills%2Ffrontend-design&utm_source=nav_skillsmp"
+    },
+    {
+      "text": "anthropics/claude-code",
+      "href": "https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design/skills/frontend-design"
+    },
+    {
+      "text": "claude-opus-4-5-migration anthropics/claude-code Migrate prompts and code from Claude Sonnet 4.0, Sonnet 4.5, or Opus 4.1 to Opus 4.5. Use w",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-claude-opus-4-5-migration-skills-claude-opus-4-5-migration-skill-md"
+    },
+    {
+      "text": "agent-identifier anthropics/claude-code This skill should be used when the user asks to \"create an agent\", \"add an agent\", \"write a subagent",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-plugin-dev-skills-agent-development-skill-md"
+    },
+    {
+      "text": "command-development anthropics/claude-code This skill should be used when the user asks to \"create a slash command\", \"add a command\", \"write",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-plugin-dev-skills-command-development-skill-md"
+    },
+    {
+      "text": "hook-development anthropics/claude-code This skill should be used when the user asks to \"create a hook\", \"add a PreToolUse/PostToolUse/Stop ",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-plugin-dev-skills-hook-development-skill-md"
+    },
+    {
+      "text": "mcp-integration anthropics/claude-code This skill should be used when the user asks to \"add MCP server\", \"integrate MCP\", \"configure MCP in ",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-plugin-dev-skills-mcp-integration-skill-md"
+    },
+    {
+      "text": "configured-agent anthropics/claude-code This skill should be used when the user asks about \"plugin settings\", \"store plugin configuration\", ",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-plugin-dev-skills-plugin-settings-skill-md"
+    },
+    {
+      "text": "",
+      "href": "https://anthropic.com/"
+    },
+    {
+      "text": "View GitHub Repository",
+      "href": "https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design/skills/frontend-design"
+    },
+    {
+      "text": "View Creator Repositories",
+      "href": "https://skillsmp.com/creators/anthropics"
+    },
+    {
+      "text": "Run Skill in Manus",
+      "href": "https://manus.im/import-skills?githubUrl=https%3A%2F%2Fgithub.com%2Fanthropics%2Fclaude-code%2Ftree%2Fmain%2Fplugins%2Ffrontend-design%2Fskills%2Ffrontend-design&utm_source=nav_skillsmp"
+    },
+    {
+      "text": "Web and Digital Interface Designers Computer and Mathematical Occupations 15-1255 L4",
+      "href": "https://skillsmp.com/occupations/web-and-digital-interface-designers"
+    },
+    {
+      "text": "Web Developers L4",
+      "href": "https://skillsmp.com/occupations/web-developers"
+    },
+    {
+      "text": "Twitter",
+      "href": "https://x.com/God_I_13"
+    },
+    {
+      "text": "Reddit",
+      "href": "https://www.reddit.com/user/TingXuSuan/"
+    },
+    {
+      "text": "📚 Skills Docs",
+      "href": "https://skillsmp.com/en/docs"
+    },
+    {
+      "text": "📈 Insights",
+      "href": "https://skillsmp.com/en/timeline"
+    },
+    {
+      "text": "📄 Skill Document",
+      "href": "https://code.claude.com/docs/en/skills"
+    },
+    {
+      "text": "📁 Official Skills",
+      "href": "https://github.com/anthropics/skills"
+    },
+    {
+      "text": "📄 Codex Skills Docs",
+      "href": "https://github.com/openai/codex/blob/main/docs/skills.md"
+    },
+    {
+      "text": "📋 Agent Skills Spec",
+      "href": "https://agentskills.io/"
+    },
+    {
+      "text": "📄 About",
+      "href": "https://skillsmp.com/en/about"
+    },
+    {
+      "text": "📋 Changelog",
+      "href": "https://skillsmp.com/en/changelog"
+    },
+    {
+      "text": "🔒 Privacy Policy",
+      "href": "https://skillsmp.com/en/privacy"
+    },
+    {
+      "text": "📜 Terms of Service",
+      "href": "https://skillsmp.com/en/terms"
+    },
+    {
+      "text": "",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    }
+  ],
+  "text": "Skip to main content\nskills\nmp\nRun any Skill in Manus\nwith one click\nHome\nOccupations\nMore\nWeb and Digital Interface Designers\nfrontend-design\nfrontend-design\n\nCreate distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, or applications. Generates creative, polished code that avoids generic AI aesthetics.\n\nRun Skill in Manus\nOverview\n\nCreate distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, or applications. Generates creative, polished code that avoids generic AI aesthetics.\n\nInstall command\nnpx skills add https://github.com/anthropics/claude-code --skill frontend-design\n\nCopy and paste this command into Claude Code to install the skill\n\nSource\nanthropics/claude-code\nStars\n129,828\nForks\n21,105\nUpdated\nNovember 12, 2025 at 01:31\nDetails\nExample\nSKILL.md\nreadonly\nname\tfrontend-design\ndescription\tCreate distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, or applications. Generates creative, polished code that avoids generic AI aesthetics.\nlicense\tComplete terms in LICENSE.txt\n\nThis skill guides creation of distinctive, production-grade frontend interfaces that avoid generic \"AI slop\" aesthetics. Implement real working code with exceptional attention to aesthetic details and creative choices.\n\nThe user provides frontend requirements: a component, page, application, or interface to build. They may include context about the purpose, audience, or technical constraints.\n\nDesign Thinking\n\nBefore coding, understand the context and commit to a BOLD aesthetic direction:\n\nPurpose: What problem does this interface solve? Who uses it?\nTone: Pick an extreme: brutally minimal, maximalist chaos, retro-futuristic, organic/natural, luxury/refined, playful/toy-like, editorial/magazine, brutalist/raw, art deco/geometric, soft/pastel, industrial/utilitarian, etc. There are so many flavors to choose from. Use these for inspiration but design one that is true to the aesthetic direction.\nConstraints: Technical requirements (framework, performance, accessibility).\nDifferentiation: What makes this UNFORGETTABLE? What's the one thing someone will remember?\n\nCRITICAL: Choose a clear conceptual direction and execute it with precision. Bold maximalism and refined minimalism both work - the key is intentionality, not intensity.\n\nThen implement working code (HTML/CSS/JS, React, Vue, etc.) that is:\n\nProduction-grade and functional\nVisually striking and memorable\nCohesive with a clear aesthetic point-of-view\nMeticulously refined in every detail\nFrontend Aesthetics Guidelines\n\nFocus on:\n\nTypography: Choose fonts that are beautiful, unique, and interesting. Avoid generic fonts like Arial and Inter; opt instead for distinctive choices that elevate the frontend's aesthetics; unexpected, characterful font choices. Pair a distinctive display font with a refined body font.\nColor & Theme: Commit to a cohesive aesthetic. Use CSS variables for consistency. Dominant colors with sharp accents outperform timid, evenly-distributed palettes.\nMotion: Use animations for effects and micro-interactions. Prioritize CSS-only solutions for HTML. Use Motion library for React when available. Focus on high-impact moments: one well-orchestrated page load with staggered reveals (animation-delay) creates more delight than scattered micro-interactions. Use scroll-triggering and hover states that surprise.\nSpatial Composition: Unexpected layouts. Asymmetry. Overlap. Diagonal flow. Grid-breaking elements. Generous negative space OR controlled density.\nBackgrounds & Visual Details: Create atmosphere and depth rather than defaulting to solid colors. Add contextual effects and textures that match the overall aesthetic. Apply creative forms like gradient meshes, noise textures, geometric patterns, layered transparencies, dramatic shadows, decorative borders, custom cursors, and grain overlays.\n\nNEVER use generic AI-generated aesthetics like overused font families (Inter, Roboto, Arial, system fonts), cliched color schemes (particularly purple gradients on white backgrounds), predictable layouts and component patterns, and cookie-cutter design that lacks context-specific character.\n\nInterpret creatively and make unexpected choices that feel genuinely designed for the context. No design should be the same. Vary between light and dark themes, different fonts, different aesthetics. NEVER converge on common choices (Space Grotesk, for example) across generations.\n\nIMPORTANT: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.\n\nRemember: Claude is capable of extraordinary creative work. Don't hold back, show what can truly be created when thinking outside the box and committing fully to a distinctive vision.\n\nMore from this repository\nsame repository\nMore from this repository\nclaude-opus-4-5-migration\nanthropics/claude-code\n\nMigrate prompts and code from Claude Sonnet 4.0, Sonnet 4.5, or Opus 4.1 to Opus 4.5. Use when the user wants to update their codebase, prompts, or API calls to use Opus 4.5. Handles model string updates and prompt adjustments for known Opus 4.5 behavioral differences. Does NOT migrate Haiku 4.5.\n\n2025-11-24\n129.8k\nagent-identifier\nanthropics/claude-code\n\nThis skill should be used when the user asks to \"create an agent\", \"add an agent\", \"write a subagent\", \"agent frontmatter\", \"when to use description\", \"agent examples\", \"agent tools\", \"agent colors\", \"autonomous agent\", or needs guidance on agent structure, system prompts, triggering conditions, or agent development best practices for Claude Code plugins.\n\n2025-11-17\n129.8k\ncommand-development\nanthropics/claude-code\n\nThis skill should be used when the user asks to \"create a slash command\", \"add a command\", \"write a custom command\", \"define command arguments\", \"use command frontmatter\", \"organize commands\", \"create command with file references\", \"interactive command\", \"use AskUserQuestion in command\", or needs guidance on slash command structure, YAML frontmatter fields, dynamic arguments, bash execution in commands, user interaction patterns, or command development best practices for Claude Code.\n\n2025-11-17\n129.8k\nhook-development\nanthropics/claude-code\n\nThis skill should be used when the user asks to \"create a hook\", \"add a PreToolUse/PostToolUse/Stop hook\", \"validate tool use\", \"implement prompt-based hooks\", \"use ${CLAUDE_PLUGIN_ROOT}\", \"set up event-driven automation\", \"block dangerous commands\", or mentions hook events (PreToolUse, PostToolUse, Stop, SubagentStop, SessionStart, SessionEnd, UserPromptSubmit, PreCompact, Notification). Provides comprehensive guidance for creating and implementing Claude Code plugin hooks with focus on advanced prompt-based hooks API.\n\n2025-11-17\n129.8k\nmcp-integration\nanthropics/claude-code\n\nThis skill should be used when the user asks to \"add MCP server\", \"integrate MCP\", \"configure MCP in plugin\", \"use .mcp.json\", \"set up Model Context Protocol\", \"connect external service\", mentions \"${CLAUDE_PLUGIN_ROOT} with MCP\", or discusses MCP server types (SSE, stdio, HTTP, WebSocket). Provides comprehensive guidance for integrating Model Context Protocol servers into Claude Code plugins for external tool and service integration.\n\n2025-11-17\n129.8k\nconfigured-agent\nanthropics/claude-code\n\nThis skill should be used when the user asks about \"plugin settings\", \"store plugin configuration\", \"user-configurable plugin\", \".local.md files\", \"plugin state files\", \"read YAML frontmatter\", \"per-project plugin settings\", or wants to make plugin behavior configurable. Documents the .claude/plugin-name.local.md pattern for storing plugin-specific configuration with YAML frontmatter and markdown content.\n\n2025-11-17\n129.8k\nSource\nanthropics\nanthropics/claude-code\nView GitHub Repository\nView Creator Repositories\nInstall command\nnpx\nbunx\npnpm\nnpx skills add https://github.com/anthropics/claude-code --skill frontend-design\nDownload\nDownload Zip\nRun Skill in Manus\nUseful for\nSOC\nWeb and Digital Interface Designers\nComputer and Mathematical Occupations\n15-1255\nL4\nWeb Developers\nL4\nSkills Marketplace\n\nDiscover and explore AI skills built by the community.\n\nCOMMUNITY\nTwitter\nReddit\nRESOURCES\n📚\nSkills Docs\n📈\nInsights\n📄\nSkill Document\n📁\nOfficial Skills\n📄\nCodex Skills Docs\n📋\nAgent Skills Spec\nLEGAL\n📄\nAbout\n📋\nChangelog\n🔒\nPrivacy Policy\n📜\nTerms of Service\nScroll to top",
+  "stats": {
+    "bodyTextLength": 8757,
+    "linkCount": 40,
+    "buttonCount": 16,
+    "inputCount": 0,
+    "cardishCount": 17,
+    "scrollHeight": 7154
+  }
+}

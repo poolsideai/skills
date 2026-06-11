@@ -1,0 +1,61 @@
+{
+  "kind": "node-eval",
+  "id": "mq9e3ba3-solo-repo_map-1",
+  "project": "experiments/smithers-pool",
+  "workflowPath": "example.workflow.tsx",
+  "nodeId": "repo_map",
+  "mode": "standalone",
+  "runId": null,
+  "trial": 1,
+  "skill": "repo-map",
+  "grader": "skill-validator",
+  "status": "pass",
+  "score": 1,
+  "checks": [
+    {
+      "id": "artifact-exists",
+      "status": "pass",
+      "detail": "found and parsed .laguna/repo-map.json"
+    },
+    {
+      "id": "schema-valid",
+      "status": "pass",
+      "detail": "artifact matches repo-map.schema.json"
+    },
+    {
+      "id": "languages-evidenced",
+      "status": "pass",
+      "detail": "all 1 language claims cite an existing, extension-consistent evidence file"
+    },
+    {
+      "id": "frameworks-evidenced",
+      "status": "pass",
+      "detail": "no frameworks claimed (admissible for framework-free repos)"
+    },
+    {
+      "id": "entrypoints-exist",
+      "status": "pass",
+      "detail": "all 1 entrypoint paths exist in the workspace"
+    },
+    {
+      "id": "key-directories-exist",
+      "status": "pass",
+      "detail": "all 2 key directories exist in the workspace"
+    },
+    {
+      "id": "test-commands-supported",
+      "status": "pass",
+      "detail": "all 1 test commands are supported by repo files"
+    },
+    {
+      "id": "test-evidence-covered",
+      "status": "pass",
+      "detail": "the repo has test evidence and test_commands is non-empty"
+    }
+  ],
+  "durationMs": 34872,
+  "trajectoryUrl": "https://chat.poolsi.de/console/trajectory-viewer?agent_id=019dbc34-2f3c-7c81-8acb-b8c2ccfdd4bd&agent_session_id=019eb65a-1b3b-7d18-a75d-16e174c1ef58",
+  "workspace": "/var/folders/x5/_2b58_nj50133djhcr9ylcbr0000gn/T/node-eval-repo_map-8GC9di",
+  "agentName": "laguna-m.1",
+  "gradedAtMs": 1781175850525
+}

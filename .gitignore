@@ -1,0 +1,13 @@
+# Eval run output (manifests, trajectories, validator results)
+runs/
+
+# Python
+__pycache__/
+.venv/
+
+# JavaScript / TypeScript
+node_modules/
+
+# macOS
+.DS_Store
+.gstack/

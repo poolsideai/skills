@@ -1,0 +1,547 @@
+{
+  "title": "Agent Skills Library",
+  "url": "https://mcpservers.org/agent-skills",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Agent Skills Library"
+    },
+    {
+      "tag": "h2",
+      "text": "Official Skills→"
+    },
+    {
+      "tag": "h3",
+      "text": "Anthropic"
+    },
+    {
+      "tag": "h3",
+      "text": "OpenAI"
+    },
+    {
+      "tag": "h3",
+      "text": "GitHub"
+    },
+    {
+      "tag": "h3",
+      "text": "Microsoft"
+    },
+    {
+      "tag": "h3",
+      "text": "Cloudflare"
+    },
+    {
+      "tag": "h3",
+      "text": "Figma"
+    },
+    {
+      "tag": "h3",
+      "text": "Vercel"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Workspace"
+    },
+    {
+      "tag": "h3",
+      "text": "Notion"
+    },
+    {
+      "tag": "h3",
+      "text": "Stripe"
+    },
+    {
+      "tag": "h2",
+      "text": "Featured Skills4→"
+    },
+    {
+      "tag": "h2",
+      "text": "Document Skills5→"
+    },
+    {
+      "tag": "h2",
+      "text": "Browser Automation Skills4→"
+    },
+    {
+      "tag": "h2",
+      "text": "Database Skills5→"
+    },
+    {
+      "tag": "h2",
+      "text": "Development Skills27→"
+    },
+    {
+      "tag": "h2",
+      "text": "Creative Skills7→"
+    },
+    {
+      "tag": "h2",
+      "text": "Media Skills2→"
+    },
+    {
+      "tag": "h2",
+      "text": "Productivity Skills3→"
+    },
+    {
+      "tag": "h2",
+      "text": "Data Analysis Skills2→"
+    },
+    {
+      "tag": "h2",
+      "text": "Research Skills2→"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "English",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Open menu",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://mcpservers.org/"
+    },
+    {
+      "text": "Home",
+      "href": "https://mcpservers.org/"
+    },
+    {
+      "text": "Remote Servers",
+      "href": "https://mcpservers.org/remote-mcp-servers"
+    },
+    {
+      "text": "Topics",
+      "href": "https://mcpservers.org/topics"
+    },
+    {
+      "text": "Clients",
+      "href": "https://mcpservers.org/clients"
+    },
+    {
+      "text": "Agent Skills",
+      "href": "https://mcpservers.org/agent-skills"
+    },
+    {
+      "text": "Submit",
+      "href": "https://mcpservers.org/submit"
+    },
+    {
+      "text": "Advertise",
+      "href": "https://mcpservers.org/advertise"
+    },
+    {
+      "text": "Submit",
+      "href": "https://mcpservers.org/submit"
+    },
+    {
+      "text": "Learn more about Skills →",
+      "href": "https://www.anthropic.com/news/skills"
+    },
+    {
+      "text": "Official Skills→",
+      "href": "https://mcpservers.org/agent-skills/official"
+    },
+    {
+      "text": "Anthropic 353 skills",
+      "href": "https://mcpservers.org/agent-skills/author/anthropic"
+    },
+    {
+      "text": "OpenAI 211 skills",
+      "href": "https://mcpservers.org/agent-skills/author/openai"
+    },
+    {
+      "text": "GitHub 376 skills",
+      "href": "https://mcpservers.org/agent-skills/author/github"
+    },
+    {
+      "text": "Microsoft 647 skills",
+      "href": "https://mcpservers.org/agent-skills/author/microsoft"
+    },
+    {
+      "text": "Cloudflare 61 skills",
+      "href": "https://mcpservers.org/agent-skills/author/cloudflare"
+    },
+    {
+      "text": "Figma 22 skills",
+      "href": "https://mcpservers.org/agent-skills/author/figma"
+    },
+    {
+      "text": "Vercel 310 skills",
+      "href": "https://mcpservers.org/agent-skills/author/vercel"
+    },
+    {
+      "text": "Google Workspace 92 skills",
+      "href": "https://mcpservers.org/agent-skills/author/google"
+    },
+    {
+      "text": "Notion 27 skills",
+      "href": "https://mcpservers.org/agent-skills/author/notion"
+    },
+    {
+      "text": "Stripe 9 skills",
+      "href": "https://mcpservers.org/agent-skills/author/stripe"
+    },
+    {
+      "text": "Featured Skills4→",
+      "href": "https://mcpservers.org/agent-skills/category/featured"
+    },
+    {
+      "text": "Frontend Design by Anthropic Generates distinctive, production-grade frontend interfaces that avoid generic AI aesthetics.",
+      "href": "https://mcpservers.org/agent-skills/anthropic/frontend-design"
+    },
+    {
+      "text": "NotebookLM Skill by pleaseprompto Let Claude Code chat directly with NotebookLM for source-grounded answers based exclusively on your upload",
+      "href": "https://mcpservers.org/agent-skills/pleaseprompto/notebooklm-skill"
+    },
+    {
+      "text": "React Best Practicesby VercelReact and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when w",
+      "href": "https://mcpservers.org/agent-skills/vercel/react-best-practices"
+    },
+    {
+      "text": "YouTube Transcript Downloaderby michalparkolaDownload YouTube video transcripts when user provides a YouTube URL or asks to download/get/fet",
+      "href": "https://mcpservers.org/agent-skills/michalparkola/youtube-transcript"
+    },
+    {
+      "text": "Document Skills5→",
+      "href": "https://mcpservers.org/agent-skills/category/document"
+    },
+    {
+      "text": "Docx by Anthropic Comprehensive document creation, editing, and analysis with support for tracked changes, comments, formatting preservation",
+      "href": "https://mcpservers.org/agent-skills/anthropic/docx"
+    },
+    {
+      "text": "Markdown to EPUB by smerchek A Claude agent skill that converts markdown documents and chat summaries into professional EPUB ebook files. Pe",
+      "href": "https://mcpservers.org/agent-skills/smerchek/markdown-to-epub"
+    },
+    {
+      "text": "PDFby AnthropicComprehensive PDF manipulation toolkit for extracting text and tables, creating new PDFs, merging/splitting documents, and ha",
+      "href": "https://mcpservers.org/agent-skills/anthropic/pdf"
+    },
+    {
+      "text": "PPTXby AnthropicPresentation creation, editing, and analysis. When Claude needs to work with presentations (.pptx files) for: (1) Creating n",
+      "href": "https://mcpservers.org/agent-skills/anthropic/pptx"
+    },
+    {
+      "text": "XLSXby AnthropicComprehensive spreadsheet creation, editing, and analysis with support for formulas, formatting, data analysis, and visualiz",
+      "href": "https://mcpservers.org/agent-skills/anthropic/xlsx"
+    },
+    {
+      "text": "Browser Automation Skills4→",
+      "href": "https://mcpservers.org/agent-skills/category/browser-automation"
+    },
+    {
+      "text": "Agent Browser by Vercel Automates browser interactions for web testing, form filling, screenshots, and data extraction.",
+      "href": "https://mcpservers.org/agent-skills/vercel/agent-browser"
+    },
+    {
+      "text": "browser-act by browser-act browser-act is a CLI for browser automation with stealth and captcha solving capabilities. It supports two browse",
+      "href": "https://mcpservers.org/agent-skills/browser-act/browser-act"
+    },
+    {
+      "text": "browser-useby browser-useAutomates browser interactions for web testing, form filling, screenshots, and data extraction. Use when the user n",
+      "href": "https://mcpservers.org/agent-skills/browser-use/browser-use"
+    },
+    {
+      "text": "Playwrightby MicrosoftAutomates browser interactions for web testing, form filling, screenshots, and data extraction.",
+      "href": "https://mcpservers.org/agent-skills/microsoft/playwright"
+    },
+    {
+      "text": "Database Skills5→",
+      "href": "https://mcpservers.org/agent-skills/category/database"
+    },
+    {
+      "text": "Database Schema Designer by softaworks A comprehensive skill for designing production-ready database schemas with built-in best practices fo",
+      "href": "https://mcpservers.org/agent-skills/softaworks/database-schema-designer"
+    },
+    {
+      "text": "MySQL by PlanetScale Plan and review MySQL/InnoDB schema, indexing, query tuning, transactions, and operations. Use when creating or modifyi",
+      "href": "https://mcpservers.org/agent-skills/planetscale/mysql"
+    },
+    {
+      "text": "Neon Serverless Postgresby NeonGuides and best practices for working with Neon Serverless Postgres.",
+      "href": "https://mcpservers.org/agent-skills/neondatabase/neon-postgres"
+    },
+    {
+      "text": "PlanetScale Postgresby PlanetScalePostgreSQL best practices, query optimization, connection troubleshooting, and performance improvement. Lo",
+      "href": "https://mcpservers.org/agent-skills/planetscale/postgres"
+    },
+    {
+      "text": "Postgres Best Practicesby SupabasePostgres performance optimization and best practices from Supabase. Use this skill when writing, reviewing",
+      "href": "https://mcpservers.org/agent-skills/supabase/postgres-best-practices"
+    },
+    {
+      "text": "Development Skills27→",
+      "href": "https://mcpservers.org/agent-skills/category/development"
+    },
+    {
+      "text": "Agents by ElevenLabs Build voice AI agents with ElevenLabs. Use when creating voice assistants, customer service bots, interactive voice cha",
+      "href": "https://mcpservers.org/agent-skills/elevenlabs/agents"
+    },
+    {
+      "text": "Artifacts Builder by Anthropic Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web tec",
+      "href": "https://mcpservers.org/agent-skills/anthropic/artifacts-builder"
+    },
+    {
+      "text": "ast-grepby ast-grepGuide for writing ast-grep rules to perform structural code search and analysis. Use when users need to search codebases ",
+      "href": "https://mcpservers.org/agent-skills/ast-grep/ast-grep"
+    },
+    {
+      "text": "AWS Cost & Operationsby zxkaneThis skill provides AWS cost optimization, monitoring, and operational best practices with integrated MCP serv",
+      "href": "https://mcpservers.org/agent-skills/zxkane/aws-cost-operations"
+    },
+    {
+      "text": "building-ai-agent-on-cloudflareby Cloudflare| Builds AI agents on Cloudflare using the Agents SDK with state management, real-time WebSocket",
+      "href": "https://mcpservers.org/agent-skills/cloudflare/building-ai-agent-on-cloudflare"
+    },
+    {
+      "text": "building-mcp-server-on-cloudflareby Cloudflare| Builds remote MCP (Model Context Protocol) servers on Cloudflare Workers with tools, OAuth a",
+      "href": "https://mcpservers.org/agent-skills/cloudflare/building-mcp-server-on-cloudflare"
+    }
+  ],
+  "text": "English\nSubmit\nAgent Skills Library\n\nDiscover reusable skills for AI coding agents like Claude Code, Codex, and more. Each skill is a package of instructions and code that teaches your agent to perform specialized tasks and automate complex workflows.\n\nLearn more about Skills →\nOfficial Skills→\nAnthropic\n\n353 skills\n\nOpenAI\n\n211 skills\n\nGitHub\n\n376 skills\n\nMicrosoft\n\n647 skills\n\nCloudflare\n\n61 skills\n\nFigma\n\n22 skills\n\nVercel\n\n310 skills\n\nGoogle Workspace\n\n92 skills\n\nNotion\n\n27 skills\n\nStripe\n\n9 skills\n\nFeatured Skills4→\nFrontend Design\nby Anthropic\nGenerates distinctive, production-grade frontend interfaces that avoid generic AI aesthetics.\nNotebookLM Skill\nby pleaseprompto\nLet Claude Code chat directly with NotebookLM for source-grounded answers based exclusively on your uploaded documents\nDocument Skills5→\nDocx\nby Anthropic\nComprehensive document creation, editing, and analysis with support for tracked changes, comments, formatting preservation, and text extraction. When Claude needs to work with professional documents (.docx files) for: (1) Creating new documents, (2) Modifying or editing content, (3) Working with tracked changes, (4) Adding comments, or any other document tasks\" license: Proprietary. LICENSE.txt has complete terms\nMarkdown to EPUB\nby smerchek\nA Claude agent skill that converts markdown documents and chat summaries into professional EPUB ebook files. Perfect for creating portable, device-agnostic ebooks from research documents, blog posts, articles, or conversation summaries.\nBrowser Automation Skills4→\nAgent Browser\nby Vercel\nAutomates browser interactions for web testing, form filling, screenshots, and data extraction.\nbrowser-act\nby browser-act\nbrowser-act is a CLI for browser automation with stealth and captcha solving capabilities. It supports two browser types (Stealth and Real Chrome) and provides commands for navigation, page interaction, data extraction, tab/session management, and more.\nDatabase Skills5→\nDatabase Schema Designer\nby softaworks\nA comprehensive skill for designing production-ready database schemas with built-in best practices for both SQL and NoSQL databases.\nMySQL\nby PlanetScale\nPlan and review MySQL/InnoDB schema, indexing, query tuning, transactions, and operations. Use when creating or modifying MySQL tables, indexes, or queries; diagnosing slow/locking behavior; planning migrations; or troubleshooting replication and connection issues. Load when using a MySQL database.\nDevelopment Skills27→\nAgents\nby ElevenLabs\nBuild voice AI agents with ElevenLabs. Use when creating voice assistants, customer service bots, interactive voice characters, or any real-time voice conversation experience.\nArtifacts Builder\nby Anthropic\nSuite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts. license: Complete terms in LICENSE.txt\nCreative Skills7→\nAlgorithmic Art\nby Anthropic\nCreating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use this when users request creating art using code, generative art, algorithmic art, flow fields, or particle systems. Create original algorithmic art rather than copying existing artists' work to avoid copyright violations. license: Complete terms in LICENSE.txt\nBrand Guidelines\nby Anthropic\nApplies Anthropic's official brand colors and typography to any sort of artifact that may benefit from having Anthropic's look-and-feel. Use it when brand colors or style guidelines, visual formatting, or company design standards apply. license: Complete terms in LICENSE.txt\nMedia Skills2→\nImage Enhancer\nby composiohq\nThis skill takes your images and screenshots and makes them look better—sharper, clearer, and more professional.\nYouTube Transcript Downloader\nby michalparkola\nDownload YouTube video transcripts when user provides a YouTube URL or asks to download/get/fetch a transcript from YouTube. Also use when user wants to transcribe or get captions/subtitles from a YouTube video.\nProductivity Skills3→\nDomain Name Brainstormer\nby composiohq\nThis skill helps you find the perfect domain name for your project by generating creative options and checking what's actually available to register.\nFile Organizer\nby composiohq\nThis skill acts as your personal organization assistant, helping you maintain a clean, logical file structure across your computer without the mental overhead of constant manual organization.\nData Analysis Skills2→\nCSV Data Summarizer\nby coffeefuelbump\nA powerful Claude Skill that automatically analyzes CSV files and generates comprehensive insights with visualizations. Upload any CSV and get instant, intelligent analysis without being asked what you want!\nRamp Vendor Spend Analysis\nby Ramp\nAnalyzes vendor spend data from Ramp and exports to connected systems. Use when user asks to \"analyze vendor spend\", \"build vendor database\", \"update managed vendors\", \"top vendors report\", \"show vendors over X spend\", \"vendor spend analysis\", \"vendor renewals\", \"contract end dates\", or asks about vendor spending patterns, vendor owners, purchase orders, or department-level vendor data.\nResearch Skills2→\nArticle Extractor\nby michalparkola\nThis skill extracts the main content from web articles and blog posts, removing navigation, ads, newsletter signups, and other clutter. Saves clean, readable text.\nLead Research Assistant\nby composiohq\nThis skill helps you identify and qualify potential leads for your business by analyzing your product/service, understanding your ideal customer profile, and providing actionable outreach strategies.\nNewest MCP Servers\nOfficial MCP Servers\nRemote MCP Servers\nMCP Topics\nBlog\ncontact [at] mcpservers.org",
+  "stats": {
+    "bodyTextLength": 5856,
+    "linkCount": 79,
+    "buttonCount": 45,
+    "inputCount": 0,
+    "cardishCount": 42,
+    "scrollHeight": 5157
+  }
+}

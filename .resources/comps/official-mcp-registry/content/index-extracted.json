@@ -1,0 +1,233 @@
+{
+  "title": "Official MCP Registry",
+  "url": "https://registry.modelcontextprotocol.io/",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Official MCP Registry"
+    },
+    {
+      "tag": "h2",
+      "text": "Recently Updated"
+    },
+    {
+      "tag": "h3",
+      "text": "ai.intuitek.the-stall/the-stall"
+    },
+    {
+      "tag": "h3",
+      "text": "com.kordiapp/kordi-mcp-server"
+    },
+    {
+      "tag": "h3",
+      "text": "com.kordiapp/kordi-mcp-server"
+    },
+    {
+      "tag": "h3",
+      "text": "com.mcpemails/emails"
+    },
+    {
+      "tag": "h3",
+      "text": "com.ontoramp/governance-assessment"
+    },
+    {
+      "tag": "h3",
+      "text": "com.openagenda/mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "cx.alloy/alloy"
+    },
+    {
+      "tag": "h3",
+      "text": "dev.adcrunch/mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Buggy1111/shelly-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Delego-Dev/delego"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Jott2121/agent-gate"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-antigravity"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-codex"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-gemini"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-llm"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-ollama"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.abhiyoheswaran1/agentloopkit"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.apasztetnik/el-buen-agente-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.apasztetnik/el-buen-agente-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.blackdome-ai/blackdome"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.chaandannn/finops-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.greenmtnsun/giteasy"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.kayhendriksen/foehn"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.leadbay/leadbay-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.piiinpiiins/zotero-mcp-local"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.pzfreo/build123d-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.snoozelieb/coach-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.turbyho/fw-context-mcp"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search servers by name...",
+      "type": "search"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Retry",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Previous",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Next",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Server: Local (1.7.9)",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "https://custom-url.com",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Cancel",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Apply",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "GitHub",
+      "href": "https://github.com/modelcontextprotocol/registry"
+    },
+    {
+      "text": "Docs",
+      "href": "https://github.com/modelcontextprotocol/registry/tree/main/docs"
+    },
+    {
+      "text": "API Reference",
+      "href": "https://registry.modelcontextprotocol.io/docs"
+    },
+    {
+      "text": "MCP contributors",
+      "href": "https://github.com/modelcontextprotocol/registry"
+    }
+  ],
+  "text": "Official MCP Registry\n\nDiscover Model Context Protocol servers\n\nGitHub\nDocs\nAPI Reference\nRecently Updated\nai.intuitek.the-stall/the-stall\nv4.60.0\n\n205 pay-per-call AI tools: stocks, crypto, DeFi, historical weather, Stack Overflow, news. USDC.\n\nUpdated 6/10/2026\ncom.kordiapp/kordi-mcp-server\nv1.0.0\n\nTrack, analyze, and act on your streaming and SaaS subscriptions from any AI agent.\n\nUpdated 6/10/2026\ncom.kordiapp/kordi-mcp-server\nv1.0.1\n\nTrack, analyze, and act on your streaming and SaaS subscriptions from any AI agent.\n\nUpdated 6/10/2026\ncom.mcpemails/emails\nv1.0.0\n\nEmail for AI agents: read, search, send, organize, and schedule across your inboxes.\n\nUpdated 6/10/2026\ncom.ontoramp/governance-assessment\nv2.0.0\n\nGovernance maturity assessment, compliance gap analysis, and evidence-linked briefs for AI agents.\n\nUpdated 6/10/2026\ncom.openagenda/mcp\nv1.0.2\n\nSearch, analyze and manage events on OpenAgenda.\n\nUpdated 6/10/2026\ncx.alloy/alloy\nv1.0.0\n\nAI workspace — shared knowledge, skills, and tools for AI agents\n\nUpdated 6/10/2026\ndev.adcrunch/mcp\nv1.0.1\n\nAsk AI about your ads — query Meta, TikTok, and Google Ads performance in natural language.\n\nUpdated 6/10/2026\nio.github.Buggy1111/shelly-mcp\nv0.1.1\n\nLocal-first MCP server for Shelly smart-home devices (Gen1-Gen4): control, energy, automation.\n\nUpdated 6/10/2026\nio.github.Delego-Dev/delego\nv0.3.1\n\nIntent-bound action authorization for AI agents: policy, human approval, and a signed audit trail.\n\nUpdated 6/10/2026\nio.github.Jott2121/agent-gate\nv0.1.1\n\nFail-closed quality gate and hash-chained receipt ledger for AI agent workflows.\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-antigravity\nv0.2.2\n\nBridge Claude with Google's Antigravity CLI (agy) for code review and second opinions\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-codex\nv0.3.11\n\nBridge Claude with OpenAI Codex CLI for AI-to-AI collaboration, code review, and second opinions\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-gemini\nv1.6.11\n\nBridge Claude with Gemini CLI for AI-to-AI collaboration, code review, and second opinions\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-llm\nv0.3.16\n\nUnified MCP server — auto-detects Gemini, Codex, Ollama, Antigravity; registers available tools\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-ollama\nv0.3.6\n\nBridge Claude with local Ollama LLMs for private AI-to-AI collaboration — no API keys, fully local\n\nUpdated 6/10/2026\nio.github.abhiyoheswaran1/agentloopkit\nv0.26.1\n\nRead-only MCP server for AgentLoopKit tasks, policies, reports, handoffs, and status.\n\nUpdated 6/10/2026\nio.github.apasztetnik/el-buen-agente-mcp\nv2.2.0\n\nLa guía 'El Buen Agente' como 17 tools para evaluar, mejorar y construir agentes LLM. En español.\n\nUpdated 6/10/2026\nio.github.apasztetnik/el-buen-agente-mcp\nv2.3.0\n\nLa guía 'El Buen Agente' como 17 tools para evaluar, mejorar y construir agentes LLM. En español.\n\nUpdated 6/10/2026\nio.github.blackdome-ai/blackdome\nv0.1.0\n\nLive honeypot threat intel: attacker IPs, IOCs, credentials, payloads, actors.\n\nUpdated 6/10/2026\nio.github.chaandannn/finops-mcp\nv0.8.59\n\nLocal-first FinOps copilot: ask AWS, Azure, GCP, and SaaS cost questions in plain English.\n\nUpdated 6/10/2026\nio.github.greenmtnsun/giteasy\nv1.5.0\n\n21 plain-English git tools as an MCP server. No jargon.\n\nUpdated 6/10/2026\nio.github.kayhendriksen/foehn\nv0.3.2\n\nAccess Swiss meteorological open data from MeteoSwiss, powered by foehn\n\nUpdated 6/10/2026\nio.github.leadbay/leadbay-mcp\nv0.19.2\n\nAI lead discovery, qualification, and outreach prep on your Leadbay account.\n\nUpdated 6/10/2026\nio.github.piiinpiiins/zotero-mcp-local\nv0.1.4\n\nSearch, read PDFs, and find related papers in your local Zotero library. Read-only, 100% local.\n\nUpdated 6/10/2026\nio.github.pzfreo/build123d-mcp\nv0.3.45\n\nAI-driven 3D CAD via build123d: execute, render, measure, and export geometry interactively.\n\nUpdated 6/10/2026\nio.github.snoozelieb/coach-mcp\nv1.0.0\n\nAdaptive AI training coach MCP server backed by Garmin Connect\n\nUpdated 6/10/2026\nio.github.turbyho/fw-context-mcp\nv0.1.2\n\nBuild-aware code intelligence for embedded C/C++ firmware — libclang, FTS5, call graphs, 19 tools\n\nUpdated 6/10/2026\nio.github.turbyho/mem-context\nv0.1.3\n\nTemporal memory MCP server with LanceDB vector search, weight-decay scoring, and LLM consolidation\n\nUpdated 6/10/2026\nio.github.turbyho/mem-context\nv0.1.4\n\nTemporal memory MCP server with LanceDB vector search, weight-decay scoring, and LLM consolidation\n\nUpdated 6/10/2026\nio.github.vargahis/monarch-money\nv0.1.3\n\nMCP server for Monarch Money — accounts, transactions, budgets, cashflow, investments, and more\n\nUpdated 6/10/2026\nio.github.zoharbabin/web-researcher-mcp\nv1.25.1\n\nYour AI research assistant that cites real sources and stays honest\n\nUpdated 6/10/2026\nio.github.zoharbabin/web-researcher-mcp\nv1.25.2\n\nYour AI research assistant that cites real sources and stays honest\n\nUpdated 6/10/2026\nso.pharaoh/pharaoh\nv1.0.104\n\nCodebase knowledge graph — architectural awareness for AI coding agents via MCP\n\nUpdated 6/10/2026\nShow only latest versions\nac.inference.sh/mcp\nv1.0.1\n\nRun 150+ AI apps — image, video, audio, LLMs, 3D and more. Browse, execute, stream results.\n\n4/13/2026\nac.tandem/docs-mcp\nv0.3.2\n\nRemote MCP server for Tandem docs, install guides, SDKs, workflows, and agent setup help.\n\n4/22/2026\nagency.lona/trading\nv2.0.0\n\nAI-powered trading strategy development: backtesting, market data, and portfolio analysis\n\n2/24/2026\nai.aarna/atars-mcp\nv0.1.0\n\nCrypto market signals, technical indicators, and sentiment analysis for AI agents.\n\n3/10/2026\nai.abmeter/abmeter\nv0.1.0\n\nFeature flagging and A/B testing platform with AI-first experimentation workflows.\n\n4/19/2026\nai.adadvisor/mcp-server\nv1.0.1\n\nQuery Meta Ads performance data — accounts, campaigns, ad sets, ads, metrics & settings.\n\n2/28/2026\nai.adeu/adeu\nv1.7.1\n\nAutomated DOCX Redlining Engine\n\n5/16/2026\nai.adramp/google-ads\nv1.0.3\n\nGoogle Ads MCP server — manage campaigns, keywords, and metrics.\n\n3/20/2026\nai.adweave/meta-ads-mcp\nv1.0.0\n\nMeta Ads MCP server with 47 tools for campaigns, creatives, audiences, and insights.\n\n4/10/2026\nai.agentdm/agentdm\nv2.0.0\n\nAgent communication platform for agent to agent messaging via MCP. Messages, channels, skills.\n\n5/10/2026\nai.agentic-news/mcp\nv1.0.0\n\nAI-powered news intelligence — 21 tools for personalized monitoring, briefings, and semantic search\n\n4/6/2026\nai.agenticshelf/graffeo\nv1.0.2\n\nLive MCP catalog for Graffeo Coffee Roasting - Simply the World's Finest Coffee since 1935.\n\n5/14/2026\nai.agenticshelf/mcp\nv1.0.0\n\nHosted MCP for e-commerce: live product catalog, stock, and pricing for AI agents.\n\n5/6/2026\nai.agenticterminal/directory\nv1.0.0\n\nVerified merchants accepting agentic payments on Lightning/L402/BOLT12/USDT — search, verify, pay.\n\n5/19/2026\nai.agentrapay/agentra\nv1.0.0\n\nIdentity oracle and trust layer for autonomous AI agents. Bidirectional KYA and trust scoring.\n\n3/22/2026\nai.agenttrust/mcp-server\nv1.1.1\n\nIdentity, trust, and A2A orchestration for autonomous AI agents. Official A2A partner.\n\n3/6/2026\nai.aliengiraffe/spotdb\nv0.1.0\n\nEphemeral data sandbox for AI workflows with guardrails and security\n\n10/9/2025\nai.alpic.mcp/alpic-mcp\nv0.0.1\n\nManage your projects, debug deployment, and check analytics for any MCP server you host with Alpic\n\n2/18/2026\nai.alpic.test/test-mcp-server\nv0.0.1\n\nAlpic Test MCP Server - great server!\n\n9/10/2025\nai.ankimcp/anki-mcp-server\nv0.19.2\n\nMCP server for Anki flashcards: adaptive review, notes, media, and deck management via AnkiConnect.\n\n6/4/2026\nai.ankimcp/anki-mcp-server-addon\nv0.18.0\n\nAnki addon that exposes your flashcard collection to AI assistants via a local MCP server.\n\n6/5/2026\nai.anomalyarmor/armor-mcp\nv0.6.1\n\nData observability tools for engineering teams: alerts, freshness, schema drift, lineage, quality.\n\n4/18/2026\nai.anzenna/anzenna\nv0.1\n\nMCP server for Anzenna\n\n2/21/2026\nai.appdeploy/deploy-app\nv1.0.0\n\nAppDeploy turns app ideas described in AI chat into live full-stack web applications\n\n2/9/2026\nai.arclan/registry\nv0.1.0\n\nMCP server registry — validated by live handshake, scored on reliability, monitored continuously.\n\n5/19/2026\nai.artidrop/artidrop\nv1.1.0\n\nPublish HTML, Markdown, and multi-file sites as shareable URLs instantly via MCP.\n\n4/17/2026\nai.auralogs/auralogs\nv0.1.0\n\nRead-only access to Auralogs production logs: search logs, inspect errors, review AI analyses.\n\n6/10/2026\nai.auteng/docs\nv1.1.0\n\nPublish markdown documents as public share links with mermaid diagram support. Built by AutEng.ai\n\n2/6/2026\nai.auteng/mcp\nv1.0.1\n\nPublish markdown documents as public share links with mermaid diagrams. Built by AutEng.ai\n\n2/6/2026\nai.autoblocks/contextlayer-mcp\nv0.0.3\n\nPersonal context management for AI assistants\n\n1/12/2026\nai.autoblocks/ctxl\nv0.0.2\n\nPersonal context management for AI assistants\n\n1/12/2026\nai.autoblocks/ctxl-mcp\nv0.0.2\n\nPersonal context management for AI assistants\n\n1/12/2026\nai.autonomad/computeback\nv1.1.3\n\nAgent Rewards Marketplace: earn $NOMD on B2B work, spend on agent capabilities.\n\n5/12/2026\nai.autonomad/travel\nv1.4.0\n\nAI travel agent — book flights, hotels, activities, and events worldwide via autonomad.ai.\n\n5/11/2026\nai.autorfp/mcp\nv1.0.0\n\nSearch AutoRFP.ai projects, requirements, content library, and tags for Q&A and analytics.\n\n5/18/2026\nai.auxen/auxen\nv1.0.2\n\nProvision private AI model endpoints on dedicated GPUs (Llama, Qwen, Mistral). Pay per minute.\n\n5/19/2026\nai.bankee/inferventis-mcp\nv1.0.2\n\nLoan & mortgage calculator, compound interest, ROI, crypto prices, FX conversion for AI agents.\n\n4/28/2026\nai.bareun/bareun\nv3.0.0\n\nKorean NLP MCP server: morphological analysis, tokenization, spell & grammar checking (Bareun)\n\n6/9/2026\nai.baselight/baselight\nv1.0.0\n\nQuery Baselight's public catalog of 70,000+ datasets — finance, demographics, sports, and more.\n\n4/30/2026\nai.bezal/local-commerce\nv1.0.0\n\nSearch 7,000+ local service businesses across America by category, location, or keyword.\n\n3/3/2026\nai.bittlebits/bittlebits\nv1.0.0\n\nGEO scores and content-rewrite suggestions for any web page, as MCP tools.\n\n6/2/2026\nai.bluenexus/universal-mcp\nv1.4.0\n\nConnect your AI to all your data - 200+ sources, intelligently filtered, compliance-ready.\n\n6/10/2026\nai.boolsai/directory\nv1.0.0\n\nIndexed ecommerce site directory — vendor lookups, brands by city/market/founder. 10 tools.\n\n5/19/2026\nai.boolsai/grep\nv1.0.0\n\nParallel regex across all Boolsai scans — discover new vendor patterns, niche signals. 4 tools.\n\n5/19/2026\nai.boolsai/scan\nv1.0.0\n\nLive tech-stack scan of any public site — vendors, account IDs, scripts, JSON-LD. 2 tools.\n\n5/19/2026\nai.boolsai/signals\nv1.0.0\n\nQuant-research MCP — tradeable signals from public-company website stack changes. 7 tools.\n\n5/19/2026\nai.borealhost/mcp\nv0.1.4\n\nAgent-native web hosting — deploy sites, manage DNS, register domains, scale infrastructure\n\n4/14/2026\nai.bowmark/bowmark\nv3.24.1\n\nPre-computed navigation recipes for public websites — skip explore-and-discover.\n\n6/10/2026\nai.bringyour/bringyour\nv1.1.0\n\nNo-data MCP handoff for local Claude Code to Codex harness moves. $49 lifetime.\n\n4/24/2026\nai.bunzee/bunzee\nv1.0.0\n\nTurn your app idea into IA, wireframes, PRD, style guides, and dev specs for coding agents.\n\n6/5/2026\nai.butlerbrain/mcp\nv1.0.0\n\nPersistent memory for AI assistants. Save once; recall from Claude, ChatGPT, or any MCP client.\n\n5/26/2026\nai.buyersense/buyersense\nv0.1.0\n\nMCP server for the BuyerSense API. Get buyer signals from any MCP client.\n\n5/3/2026\nai.buywhere/buywhere-mcp\nv0.3.1\n\nProduct search, price comparison, and affiliate-ready shopping across Singapore and US retailers.\n\n5/3/2026\nai.buywhere/catalog-api\nv1.0.0\n\nSearch 1.5M+ products across 20+ platforms. Compare prices, find deals, browse categories.\n\n5/5/2026\nai.byteray/byteray-mcp\nv1.1.0\n\nHunt zero-days by talking to binaries. 40+ tools. Hosted, OAuth + SSO, invite: hi@byteray.ai\n\n4/19/2026\nai.calendarmcp/server\nv1.0.0\n\nHosted Google Calendar MCP server for AI agents. No self-hosting or Google Cloud setup.\n\n5/20/2026\nai.calfeed/calfeed\nv1.0.0\n\nTurn a written schedule into a live calendar link people subscribe to in Apple, Google, Outlook.\n\n6/5/2026\nai.canaryusers/canaryusers\nv1.2.1\n\nA flock of AI users tests your deployed app and reports where real people get stuck, with fixes.\n\n6/10/2026\nai.canvora/canvora\nv1.0.0\n\nCreate professional visuals from text, URLs, or PDFs. Carousels, presentations, posts. 100+ formats\n\n6/2/2026\nai.childadhd/library\nv1.0.0\n\nClinician-reviewed library on ADHD in children — evaluation, treatment, school, parenting.\n\n4/26/2026\nai.childanxiety/library\nv1.0.0\n\nClinician-reviewed library on anxiety, OCD, and phobias in children ages 5–12.\n\n4/26/2026\nai.childpsychiatry/library\nv1.0.0\n\nClinician-reviewed library on child psychiatric evaluation and medication decision-making.\n\n4/26/2026\nai.chinamarketing/intelligence\nv1.0.1\n\nRemote MCP server for China brand visibility, destination demand, and KOL discovery workflows.\n\n4/22/2026\nai.cirra/salesforce-mcp\nv1.0.0\n\nComprehensive Salesforce administration and data management capabilities\n\n12/13/2025\nai.clarid/compliance\nv1.0.0\n\nCheck bank marketing for FDIC, NCUA, TILA, Reg DD, Reg Z, UDAAP, and Equal Housing compliance.\n\n2/26/2026\nai.clarid/hmda\nv1.0.0\n\nValidate HMDA LAR files against CFPB edit checks for community banks and credit unions.\n\n2/26/2026\nai.com.mcp/contabo\nv0.6.0\n\nContabo API (v1.0.0) as MCP tools for cloud provisioning, and management. Powered by HAPI MCP server\n\n1/8/2026\nai.com.mcp/hapi-mcp\nv0.6.0\n\nHAPI MCP server: Dynamically exposes OpenAPI REST APIs as MCP tools for AI assistants\n\n1/7/2026\nai.com.mcp/lenny-rachitsky-podcast\nv0.6.0\n\nMCP server for structured access to Lenny Rachitsky podcast transcripts. For content creators.\n\n1/16/2026\nai.com.mcp/linkedin\nv1.0.0+0.7.1\n\nLinkedIn API as MCP tools to retrieve profile data and publish content. Powered by HAPI MCP.\n\n2/19/2026\nai.com.mcp/openai-tools\nv0.6.0\n\nFocused MCP server for OpenAI image/audio generation (v2.0.0). Wraps endpoints via HAPI CLI.\n\n1/22/2026\nai.com.mcp/petstore\nv0.6.0\n\nSwagger Petstore API (v1.0.27) as MCP for testing and prototyping powered by the HAPI MCP server\n\n1/7/2026\nai.com.mcp/registry\nv1.0.0\n\nPublish and discover MCP servers via the official MCP Registry. Powered by HAPI MCP server.\n\n1/10/2026\nai.com.mcp/skills-search\nv1.0.0\n\nSearch and discover Agent Skills from the skills.sh registry. Powered by HAPI MCP server.\n\n2/4/2026\nai.com.mcp/strava\nv3.0.0+0.7.1\n\nStrava MCP tools for AI: athletes, activities, segments, clubs, routes. Powered by HAPI MCP server.\n\n2/19/2026\nai.compeller/compel\nv0.5.1\n\nCreate and track AI music videos and audio-reactive visuals from songs.\n\n5/5/2026\nai.complyhat/compliance\nv1.5.0\n\nMCP for AI compliance documentation across SR 26-2, EU AI Act, NIST AI RMF, and ISO/IEC 42001.\n\n5/31/2026\nai.complyme.mcp/mcp\nv1.0.0\n\nComplyMe.AI MCP server for legal & data protection risk analysis and audits.\n\n4/30/2026\nai.constellationfinance/constellation-finance-mcp\nv1.0.2\n\nFinancial and covenant data for public and private credit: statements, cap stacks, covenants.\n\n5/22/2026\nai.contextstudios/mcp\nv2.0.0\n\nAI agency API: 25 free tools for glossary, comparisons, blog, guides, and estimates\n\n4/2/2026\nai.conveo/conveo\nv1.0.1\n\nQualitative research platform. Design studies, analyze interviews, and generate insights.\n\n5/6/2026\nai.cookiy/cookiy\nv1.7.19\n\nAI user research via studies, interviews, recruitment, reports, and quantitative surveys.\n\n3/28/2026\nai.cosmonote/notes\nv1.0.0\n\nAccess your Cosmonote audio notes, transcriptions, summaries, and action items.\n\n5/5/2026\nai.cueapi/mcp\nv0.1.3\n\nSchedule agent work and report write-once outcomes via CueAPI from any MCP host.\n\n4/15/2026\nai.dataforb2b/dataforb2b\nv1.0.1\n\nSearch and enrich B2B people & companies — 70+ filters (funding, linkedin, industry, country, ...).\n\n5/14/2026\nai.datamerge/mcp\nv1.0.0\n\nB2B data enrichment for 375M+ companies: legal entities, corporate hierarchies, and contacts.\n\n2/27/2026\nai.deepledger/mcp\nv1.0.4\n\nAI Accountant for Quickbooks- recording, reconcile, month-end close\n\n5/30/2026\nai.deinai/creator-skill\nv1.0.2\n\nAI influencer search on TikTok, Instagram, YouTube. Deinai MCP token required; credits per result.\n\n6/5/2026\nai.delega/aws-pricing-calculator\nv1.0.0\n\nCreate AWS cost estimates and shareable AWS Pricing Calculator URLs.\n\n5/25/2026\nai.demanddiscovery/mcp\nv1.1.9\n\nSales-agent MCP for Demand Discovery AI. Validate startup ideas with behavioral signals.\n\n5/19/2026\nai.djwizard/tvwizard\nv0.7.0\n\nControl Android TV from any AI. 38 MCP tools: playback, recap, recommend, smart-home, schedules.\n\n4/27/2026\nai.donethat/donethat\nv1.0.0\n\nPrivacy-first work tracking with summaries, reports, coaching, and AI-ready long-term memory.\n\n4/8/2026\nai.dragoneye/mcp\nv1.0.0\n\nBuild zero-shot video models for object detection, and category and attribute classification.\n\n5/14/2026\nai.dreamlit/mcp\nv0.1.0\n\nCreate, test, publish, and manage Dreamlit notification workflows from AI clients.\n\n5/7/2026\nai.drillr/drillr\nv2.1.0\n\nThe financial MCP for AI agents - 90+ financial tables, SEC filings, signals, alt-data.\n\n6/4/2026\nai.dynamicfeed/dynamic-feed\nv0.7.0\n\nLive, verifiable data for AI — 56 Ed25519-signed tools: weather, hazards, space, CVEs, markets.\n\n6/10/2026\nPrevious\nMore available\nNext\nBuilt in the open by MCP contributors\nServer: Local (1.7.9)",
+  "stats": {
+    "bodyTextLength": 17327,
+    "linkCount": 4,
+    "buttonCount": 6,
+    "inputCount": 7,
+    "cardishCount": 0,
+    "scrollHeight": 21417
+  }
+}

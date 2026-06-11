@@ -1,0 +1,573 @@
+{
+  "title": "In Parallel MCP Server",
+  "url": "https://mcp.so/server/in-parallel",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "In Parallel"
+    },
+    {
+      "tag": "h3",
+      "text": "What is In Parallel?"
+    },
+    {
+      "tag": "h3",
+      "text": "How to use In Parallel?"
+    },
+    {
+      "tag": "h3",
+      "text": "Key Features"
+    },
+    {
+      "tag": "h3",
+      "text": "Use Cases"
+    },
+    {
+      "tag": "h3",
+      "text": "FAQ"
+    },
+    {
+      "tag": "h2",
+      "text": "Server Config"
+    },
+    {
+      "tag": "h1",
+      "text": "mcp.so asks for your consent to use your personal data to:"
+    },
+    {
+      "tag": "h1",
+      "text": "Manage your data"
+    },
+    {
+      "tag": "h2",
+      "text": "Store and/or access information on a device"
+    },
+    {
+      "tag": "h2",
+      "text": "Use limited data to select advertising"
+    },
+    {
+      "tag": "h2",
+      "text": "Create profiles for personalised advertising"
+    },
+    {
+      "tag": "h2",
+      "text": "Use profiles to select personalised advertising"
+    },
+    {
+      "tag": "h2",
+      "text": "Create profiles to personalise content"
+    },
+    {
+      "tag": "h2",
+      "text": "Use profiles to select personalised content"
+    },
+    {
+      "tag": "h2",
+      "text": "Measure advertising performance"
+    },
+    {
+      "tag": "h2",
+      "text": "Measure content performance"
+    },
+    {
+      "tag": "h2",
+      "text": "Understand audiences through statistics or combinations of data from different sources"
+    },
+    {
+      "tag": "h2",
+      "text": "Develop and improve services"
+    },
+    {
+      "tag": "h2",
+      "text": "Use limited data to select content"
+    },
+    {
+      "tag": "h2",
+      "text": "Ensure security, prevent and detect fraud, and fix errors"
+    },
+    {
+      "tag": "h2",
+      "text": "Deliver and present advertising and content"
+    },
+    {
+      "tag": "h2",
+      "text": "Save and communicate privacy choices"
+    },
+    {
+      "tag": "h2",
+      "text": "Match and combine data from other data sources"
+    },
+    {
+      "tag": "h2",
+      "text": "Link different devices"
+    },
+    {
+      "tag": "h2",
+      "text": "Identify devices based on information transmitted automatically"
+    },
+    {
+      "tag": "h2",
+      "text": "Use precise geolocation data"
+    },
+    {
+      "tag": "h2",
+      "text": "Storage, duration, and usage details"
+    },
+    {
+      "tag": "h1",
+      "text": "Confirm our vendors"
+    },
+    {
+      "tag": "h2",
+      "text": "Exponential Interactive, Inc d/b/a VDX.tv"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "ShipAny Two\n\nDismiss",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Dismiss",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle Sidebar",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "combobox",
+      "text": "English",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "button",
+      "text": "Learn more",
+      "type": ""
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "How can I change my choice?",
+      "type": ""
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "What if I don't consent?",
+      "type": ""
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "How does legitimate interest work?",
+      "type": ""
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "Do I have to consent to everything?",
+      "type": ""
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "List of partners.",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "button",
+      "text": "Consent",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "button",
+      "text": "Manage options",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "button",
+      "text": "Back",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "tooltip",
+      "text": "This vendor is registered with the IAB Europe Transparency and Consent Framework and subject to its policies.",
+      "type": ""
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (123 vendors), Store and/or access information on a device",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (75 vendors), Use limited data to select advertising",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "tooltip",
+      "text": "Some vendors are not asking for your consent, but are using your personal data on the basis of their legitimate interest",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Legitimate interest (41 vendors), Use limited data to select advertising",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (106 vendors), Create profiles for personalised advertising",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (106 vendors), Use profiles to select personalised advertising",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (29 vendors), Create profiles to personalise content",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (27 vendors), Use profiles to select personalised content",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (74 vendors), Measure advertising performance",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "tooltip",
+      "text": "Some vendors are not asking for your consent, but are using your personal data on the basis of their legitimate interest",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Legitimate interest (61 vendors), Measure advertising performance",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (27 vendors), Measure content performance",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "tooltip",
+      "text": "Some vendors are not asking for your consent, but are using your personal data on the basis of their legitimate interest",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Legitimate interest (21 vendors), Measure content performance",
+      "type": "checkbox"
+    },
+    {
+      "tag": "a",
+      "role": "button",
+      "text": "View details",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "button",
+      "text": "Consent (55 vendors), Understand audiences through statistics or combinations of data from different sources",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "tooltip",
+      "text": "Some vendors are not asking for your consent, but are using your personal data on the basis of their legitimate interest",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "ShipAny Two Dismiss",
+      "href": "https://shipany.ai/?utm_source=mcp.so&utm_medium=referral&utm_campaign=202509&utm_id=000001&utm_term=web_banner&utm_content=v1"
+    },
+    {
+      "text": "Submit",
+      "href": "https://mcp.so/submit"
+    },
+    {
+      "text": "Home",
+      "href": "https://mcp.so/"
+    },
+    {
+      "text": "",
+      "href": "https://mcp.so/servers"
+    },
+    {
+      "text": "Visit Server",
+      "href": "https://www.in-parallel.ai/mcp"
+    },
+    {
+      "text": "# Project Management",
+      "href": "https://mcp.so/tag/Project%20Management"
+    },
+    {
+      "text": "# Operations",
+      "href": "https://mcp.so/tag/%20Operations"
+    },
+    {
+      "text": "# Knowledge Management",
+      "href": "https://mcp.so/tag/%20Knowledge%20Management"
+    },
+    {
+      "text": "# Strategic Planning",
+      "href": "https://mcp.so/tag/%20Strategic%20Planning"
+    },
+    {
+      "text": "# Team Collaboration",
+      "href": "https://mcp.so/tag/%20Team%20Collaboration"
+    },
+    {
+      "text": "# Executive Visibility",
+      "href": "https://mcp.so/tag/%20Executive%20Visibility"
+    },
+    {
+      "text": "Overview",
+      "href": "https://mcp.so/server/in-parallel?"
+    },
+    {
+      "text": "Tools",
+      "href": "https://mcp.so/server/in-parallel?tab=tools"
+    },
+    {
+      "text": "Comments",
+      "href": "https://mcp.so/server/in-parallel?tab=comments"
+    },
+    {
+      "text": "",
+      "href": "https://mcp.so/server/in-parallel#what-is-in-parallel"
+    },
+    {
+      "text": "",
+      "href": "https://mcp.so/server/in-parallel#how-to-use-in-parallel"
+    },
+    {
+      "text": "",
+      "href": "https://mcp.so/server/in-parallel#key-features"
+    },
+    {
+      "text": "",
+      "href": "https://mcp.so/server/in-parallel#use-cases"
+    },
+    {
+      "text": "",
+      "href": "https://mcp.so/server/in-parallel#faq"
+    },
+    {
+      "text": "Try in Playground",
+      "href": "https://mcp.so/playground?server_uuid=8026c6f3-7356-4135-b7df-70506b3c300d"
+    },
+    {
+      "text": "ShipAny",
+      "href": "https://shipany.ai/?utm_source=mcp.so&utm_medium=referral&utm_campaign=202509&utm_id=000001&utm_term=web_footer&utm_content=v1"
+    },
+    {
+      "text": "Explore",
+      "href": "https://mcp.so/explore"
+    },
+    {
+      "text": "Playground",
+      "href": "https://mcp.so/playground"
+    },
+    {
+      "text": "Blog",
+      "href": "https://mcp.so/posts"
+    },
+    {
+      "text": "Cases",
+      "href": "https://mcp.so/usercases"
+    },
+    {
+      "text": "DXT",
+      "href": "https://mcp.so/dxt"
+    },
+    {
+      "text": "Partners",
+      "href": "https://mcp.so/partners"
+    },
+    {
+      "text": "Privacy",
+      "href": "https://mcp.so/privacy-policy"
+    },
+    {
+      "text": "Terms",
+      "href": "https://mcp.so/terms-of-service"
+    },
+    {
+      "text": "How can I change my choice?",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "What if I don't consent?",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "How does legitimate interest work?",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "Do I have to consent to everything?",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "List of partners.",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    },
+    {
+      "text": "View details",
+      "href": "https://mcp.so/server/in-parallel#"
+    }
+  ],
+  "text": "ShipAny Two\n\nDismiss\nToggle Sidebar\nSubmit\nEnglish\nHome\nIn Parallel\nIn Parallel\nVisit Server\n20 minutes ago\n# Project Management\n# Operations\n# Knowledge Management\n# Strategic Planning\n# Team Collaboration\n# Executive Visibility\nGive teams and AI assistants a shared understanding of goals, projects, decisions, and risks.\nOverview\nTools\nComments\nOverview\nWhat is In Parallel?\n\nOrganizations lose an enormous amount of time to coordination.\n\nStatus meetings. Chasing updates. Searching for information. Re-explaining decisions. Keeping everyone aligned as priorities change.\n\nIn Parallel reduces that coordination tax by continuously maintaining an up-to-date understanding of goals, projects, decisions, ownership, risks, and progress across the organization.\n\nThrough MCP, AI assistants like Claude, ChatGPT, and Copilot can access that shared understanding directly, helping teams get answers grounded in what is actually happening across the business.\n\nHow to use In Parallel?\n\nConnect In Parallel to your existing meetings and workflows.\n\nAs decisions are made and work progresses, In Parallel automatically maintains a shared operational picture of the organization. Teams can use it directly for visibility and execution, or connect AI assistants through MCP to ask questions about projects, priorities, ownership, risks, blockers, and strategic initiatives.\n\nKey Features\n\n• Continuously updated organizational context\n\n• Goals, projects, ownership, and risk tracking\n\n• Decision and action visibility\n\n• Reduced status reporting and coordination overhead\n\n• Cross-functional alignment across teams\n\n• AI assistants grounded in live business context\n\n• MCP integration for Claude, ChatGPT, Copilot, and other AI assistants\n\nUse Cases\n\n• Reducing coordination overhead\n\n• Understanding project and initiative status\n\n• Tracking ownership and accountability\n\n• Identifying emerging risks\n\n• Improving cross-functional alignment\n\n• Providing AI assistants with real organizational context\n\n• Replacing manual status updates with shared visibility\n\nFAQ\n\nWhat problem does In Parallel solve?\n\nMost organizations spend significant time keeping people aligned. Information is spread across meetings, chats, documents, emails, and tools, making it difficult to understand what is happening and what has changed. In Parallel continuously maintains that understanding so teams spend less time coordinating and more time executing. ** Why connect AI assistants to In Parallel?**\n\nAI is only as useful as the context it can access. In Parallel gives AI assistants access to the same up-to-date organizational understanding that teams rely on to make decisions. ** Is In Parallel a project management tool?**\n\nNo. In Parallel focuses on maintaining a shared understanding of execution across the organization. It works alongside existing tools rather than replacing them.\n\nCan I use In Parallel without AI?\n\nYes. Many organizations use In Parallel to improve visibility, alignment, and execution even without connecting AI assistants.\n\nTry in Playground\nServer Config\n{\n  \"mcpServers\": {\n    \"in-parallel\": {\n      \"url\": \"https://www.in-parallel.ai/mcp\"\n    }\n  }\n}\n© 2025 MCP.so. All rights reserved.\n\nBuild with ShipAny.\n\nExplore\nPlayground\nBlog\nCases\nDXT\nPartners\nPrivacy\nTerms\n\nWelcome to mcp.so\n\nmcp.so asks for your consent to use your personal data to:\nPersonalised advertising and content, advertising and content measurement, audience research and services development\nStore and/or access information on a device\nLearn more\n\nYour personal data will be processed and information from your device (cookies, unique identifiers, and other device data) may be stored by, accessed by and shared with 210 partners, or used specifically by this site. We and our partners may use precise geolocation data. List of partners.\n\nSome vendors may process your personal data on the basis of legitimate interest, which you can object to by managing your options below. Look for a link at the bottom of this page or in the site menu to manage or withdraw consent in privacy and cookie settings.\n\nConsent\n\nManage options",
+  "stats": {
+    "bodyTextLength": 4108,
+    "linkCount": 646,
+    "buttonCount": 97,
+    "inputCount": 283,
+    "cardishCount": 1,
+    "scrollHeight": 3234
+  }
+}

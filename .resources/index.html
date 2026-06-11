@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skills Catalog Comps</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080a09;--bg-soft:#0d1110;--panel:#111613;--line:rgba(219,229,213,.14);--line-strong:rgba(219,229,213,.28);--text:#eef4e8;--muted:#aab6a8;--quiet:#748173;--accent:#b5ff6d;--accent-2:#e1f5d1;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:8px;--font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}html{height:100%}body{min-height:100%;margin:0;background:radial-gradient(circle at 18% -12%,rgba(181,255,109,.11),transparent 34rem),linear-gradient(180deg,#0b0e0c 0%,var(--bg) 46rem);color:var(--text);font-family:var(--font);letter-spacing:0}button,input{font:inherit}a{color:inherit}.app{min-height:100vh;display:grid;grid-template-rows:auto 1fr}.topbar{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:minmax(260px,1fr) minmax(300px,520px) auto;gap:16px;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line);background:rgba(8,10,9,.86);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand-mark{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--line-strong);border-radius:7px;background:linear-gradient(145deg,rgba(181,255,109,.18),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.12);color:var(--accent);font-weight:800;font-size:15px}h1{margin:0;font-size:17px;line-height:1.15;font-weight:720}.subtitle{margin-top:3px;color:var(--quiet);font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search{position:relative;min-width:0}.search input{width:100%;height:40px;padding:0 14px 0 38px;color:var(--text);background:rgba(238,244,232,.055);border:1px solid var(--line);border-radius:7px;outline:none}.search input:focus{border-color:rgba(181,255,109,.55);box-shadow:0 0 0 3px rgba(181,255,109,.12)}.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--quiet)}.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.stat{min-width:74px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:rgba(238,244,232,.04);text-align:right}.stat strong{display:block;font-size:14px;line-height:1}.stat span{color:var(--quiet);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.workspace{display:grid;grid-template-columns:320px minmax(0,1fr) 360px;min-height:0}.sidebar,.details{min-height:calc(100vh - 77px);max-height:calc(100vh - 77px);overflow:auto;border-right:1px solid var(--line);background:rgba(10,13,11,.72)}.details{border-right:0;border-left:1px solid var(--line);background:rgba(12,16,13,.76)}.section-head{position:sticky;top:0;z-index:5;padding:16px;border-bottom:1px solid var(--line);background:rgba(10,13,11,.93);backdrop-filter:blur(12px)}.section-head h2,.info-card h3{margin:0;font-size:12px;font-weight:760;line-height:1.2;color:var(--accent-2);text-transform:uppercase;letter-spacing:.08em}.section-head p{margin:6px 0 0;color:var(--quiet);font-size:12px;line-height:1.45}.comp-list{display:grid;gap:8px;padding:10px}.comp-button{width:100%;display:grid;grid-template-columns:56px 1fr;gap:10px;padding:8px;color:inherit;text-align:left;border:1px solid transparent;border-radius:var(--radius);background:transparent;cursor:pointer}.comp-button:hover,.comp-button:focus-visible{border-color:var(--line);background:rgba(238,244,232,.045);outline:none}.comp-button[aria-selected=true]{border-color:rgba(181,255,109,.5);background:rgba(181,255,109,.105)}.thumb-crop{width:56px;height:42px;overflow:hidden;border:1px solid var(--line);border-radius:6px;background:#0f120f}.thumb-crop img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;filter:saturate(.86)}.comp-meta{min-width:0}.comp-title{display:flex;align-items:center;gap:6px;margin-bottom:3px;font-size:13px;font-weight:720;line-height:1.2}.comp-title span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.count-pill{flex:0 0 auto;padding:2px 6px;border-radius:999px;background:rgba(238,244,232,.08);color:var(--muted);font-size:10px;font-weight:680}.comp-kind{color:var(--quiet);font-size:11px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.viewer{min-width:0;min-height:calc(100vh - 77px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:linear-gradient(rgba(238,244,232,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(238,244,232,.025) 1px,transparent 1px),var(--bg-soft);background-size:28px 28px}.viewer-bar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;min-height:66px;padding:14px 18px;border-bottom:1px solid var(--line);background:rgba(13,17,16,.84);backdrop-filter:blur(12px)}.shot-title{min-width:0}.shot-title strong{display:block;font-size:16px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.shot-title span{display:block;margin-top:3px;color:var(--quiet);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.segmented,.controls{display:flex;align-items:center;gap:6px}.segmented{padding:3px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.16)}.segmented button,.icon-button{min-width:34px;height:34px;display:inline-grid;place-items:center;border:1px solid transparent;border-radius:6px;color:var(--muted);background:transparent;cursor:pointer}.segmented button{padding:0 10px;font-size:12px;font-weight:680}.segmented button[aria-pressed=true],.icon-button:hover,.icon-button:focus-visible{color:var(--text);border-color:var(--line);background:rgba(238,244,232,.07);outline:none}.icon-button:disabled{opacity:.35;cursor:default}.stage{min-height:0;overflow:auto;padding:22px;scroll-behavior:smooth}.image-shell{width:min(100%,1320px);margin:0 auto;padding:14px;border:1px solid var(--line);border-radius:10px;background:rgba(3,4,3,.54);box-shadow:var(--shadow)}.image-shell.mobile-mode{width:min(100%,470px)}.screenshot{width:100%;height:auto;display:block;border-radius:6px;background:#fff}.screenshot.fit-height{max-height:calc(100vh - 220px);object-fit:contain;object-position:top center;background:#111}.thumb-strip{display:flex;gap:10px;overflow-x:auto;padding:12px 18px 14px;border-top:1px solid var(--line);background:rgba(8,10,9,.88)}.shot-thumb{flex:0 0 150px;display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:center;padding:7px;border:1px solid var(--line);border-radius:8px;color:inherit;background:rgba(238,244,232,.035);text-align:left;cursor:pointer}.shot-thumb:hover,.shot-thumb:focus-visible,.shot-thumb[aria-selected=true]{border-color:rgba(181,255,109,.54);background:rgba(181,255,109,.095);outline:none}.shot-thumb img{width:52px;height:38px;object-fit:cover;object-position:top center;border-radius:5px;border:1px solid var(--line);background:#111}.shot-thumb span{min-width:0;color:var(--muted);font-size:11px;line-height:1.2}.shot-thumb strong{display:block;color:var(--text);font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.details-inner{display:grid;gap:12px;padding:14px}.info-card{border:1px solid var(--line);border-radius:var(--radius);background:rgba(238,244,232,.035);padding:14px}.info-card h3{margin-bottom:10px}.detail-title{margin:0 0 6px;font-size:20px;line-height:1.16;font-weight:760}.detail-kind{color:var(--accent);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.detail-copy,.notes-list,.pages-list{color:var(--muted);font-size:13px;line-height:1.5}.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}.metric{padding:10px;border:1px solid var(--line);border-radius:7px;background:rgba(0,0,0,.16)}.metric strong{display:block;font-size:18px;line-height:1}.metric span{color:var(--quiet);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.pages-list,.notes-list{display:grid;gap:9px;margin:0;padding:0;list-style:none}.pages-list a{display:block;color:var(--text);text-decoration:none;overflow-wrap:anywhere}.pages-list a:hover{color:var(--accent)}.pages-list span,.notes-list span{display:block;color:var(--quiet);font-size:11px;margin-top:2px}.shot-path{display:block;margin-top:8px;color:var(--quiet);font-size:11px;line-height:1.45;overflow-wrap:anywhere}.empty{display:none;padding:20px;color:var(--quiet);font-size:13px}.lightbox{position:fixed;inset:0;z-index:60;display:none;grid-template-rows:auto 1fr;background:rgba(0,0,0,.86)}.lightbox.open{display:grid}.lightbox-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:rgba(8,10,9,.9)}.lightbox-title{min-width:0;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lightbox-stage{overflow:auto;padding:18px}.lightbox-stage img{display:block;max-width:none;width:min(100%,1440px);margin:0 auto;background:white;border-radius:7px}@media(max-width:1180px){.workspace{grid-template-columns:280px minmax(0,1fr)}.details{grid-column:1/-1;min-height:auto;max-height:none;border-left:0;border-top:1px solid var(--line)}.details-inner{grid-template-columns:repeat(2,minmax(0,1fr))}.info-card:first-child{grid-column:1/-1}}@media(max-width:760px){.topbar{position:static;grid-template-columns:1fr;padding:16px}.stats{justify-content:stretch}.stat{flex:1;text-align:left}.workspace{display:block}.sidebar,.details,.viewer{min-height:auto;max-height:none}.sidebar{border-right:0;border-bottom:1px solid var(--line)}.comp-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:360px;overflow:auto}.comp-button{grid-template-columns:1fr}.thumb-crop{width:100%;height:80px}.viewer-bar{grid-template-columns:1fr}.stage{padding:12px}.details-inner{grid-template-columns:1fr}}
+  </style>
+  <style id="ux-fixes">
+    @media (min-width: 901px) {
+      .workspace {
+        height: calc(100vh - var(--topbar-h, 77px));
+        min-height: 0;
+        overflow: hidden;
+        grid-template-columns: 280px minmax(360px, 1fr) 320px;
+      }
+
+      .sidebar,
+      .viewer,
+      .details {
+        height: 100%;
+        min-height: 0;
+        max-height: none;
+      }
+
+      .viewer {
+        overflow: hidden;
+      }
+
+      .details {
+        grid-column: auto;
+        border-top: 0;
+        border-left: 1px solid var(--line);
+      }
+
+      .details-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .info-card:first-child {
+        grid-column: auto;
+      }
+
+      .stage {
+        min-height: 0;
+        overflow: auto;
+      }
+    }
+
+    .pages-list a.source-url,
+    .notes-list a {
+      color: var(--accent);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .pages-list a.source-url {
+      margin-top: 4px;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .pages-list a.source-url:hover,
+    .notes-list a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    @media (min-width: 901px) and (max-width: 1180px) {
+      .topbar {
+        grid-template-columns: minmax(220px, 0.9fr) minmax(260px, 1fr) auto;
+      }
+
+      .subtitle {
+        max-width: 34ch;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(68px, 1fr));
+      }
+
+      .stat {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 900px) {
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
+      .topbar,
+      .workspace,
+      .sidebar,
+      .viewer,
+      .details,
+      .viewer-bar,
+      .stage,
+      .image-shell,
+      .screenshot {
+        max-width: 100vw;
+        min-width: 0;
+      }
+
+      .topbar {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .subtitle {
+        white-space: normal;
+      }
+
+      .search,
+      .search input {
+        min-width: 0;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat {
+        min-width: 0;
+        text-align: left;
+      }
+
+      .image-shell {
+        width: 100%;
+      }
+
+      .screenshot {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+  <style id="light-mode-theme">
+    :root {
+      color-scheme: light;
+      --bg: #f4f5f2;
+      --bg-soft: #eceee9;
+      --panel: #ffffff;
+      --line: rgba(28, 31, 28, 0.12);
+      --line-strong: rgba(28, 31, 28, 0.24);
+      --text: #151715;
+      --muted: #5f675f;
+      --quiet: #7c837b;
+      --accent: #202420;
+      --accent-2: #2b302b;
+      --shadow: 0 18px 42px rgba(30, 34, 30, 0.14);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% -12%, rgba(36, 40, 36, 0.06), transparent 33rem),
+        linear-gradient(180deg, #fafaf8 0%, var(--bg) 46rem);
+    }
+
+    .topbar,
+    .section-head,
+    .viewer-bar,
+    .thumb-strip,
+    .lightbox-bar {
+      background: rgba(250, 250, 248, 0.9);
+    }
+
+    .sidebar,
+    .details {
+      background: rgba(246, 247, 244, 0.82);
+    }
+
+    .viewer {
+      background:
+        linear-gradient(rgba(28, 31, 28, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(28, 31, 28, 0.035) 1px, transparent 1px),
+        var(--bg-soft);
+      background-size: 28px 28px;
+    }
+
+    .brand-mark {
+      color: var(--text);
+      background: linear-gradient(145deg, rgba(28, 31, 28, 0.1), rgba(255,255,255,0.72));
+    }
+
+    .search input,
+    .stat,
+    .info-card,
+    .metric,
+    .segmented,
+    .shot-thumb {
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .search input:focus {
+      border-color: rgba(28, 31, 28, 0.42);
+      box-shadow: 0 0 0 3px rgba(28, 31, 28, 0.08);
+    }
+
+    .image-shell {
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .comp-button:hover,
+    .comp-button:focus-visible,
+    .shot-thumb:hover,
+    .shot-thumb:focus-visible,
+    .segmented button[aria-pressed=true],
+    .icon-button:hover,
+    .icon-button:focus-visible {
+      color: var(--text);
+      border-color: rgba(28, 31, 28, 0.22);
+      background: rgba(28, 31, 28, 0.055);
+    }
+
+    .comp-button[aria-selected=true],
+    .shot-thumb[aria-selected=true] {
+      border-color: rgba(28, 31, 28, 0.32);
+      background: rgba(28, 31, 28, 0.08);
+    }
+
+    .count-pill {
+      background: rgba(28, 31, 28, 0.08);
+      color: var(--muted);
+    }
+
+    .pages-list a.source-url,
+    .notes-list a {
+      color: var(--accent);
+    }
+
+    .lightbox {
+      background: rgba(246, 247, 244, 0.94);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">PS</div><div><h1>Skills Catalog Comps</h1><div class="subtitle">Local screenshot index for catalog, skills, GPT, MCP, and toolkit references</div></div></div>
+      <label class="search"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input id="searchInput" type="search" autocomplete="off" placeholder="Filter comps, pages, sources, filenames"></label>
+      <div class="stats"><div class="stat"><strong>17</strong><span>sites</span></div><div class="stat"><strong>71</strong><span>shots</span></div><div class="stat"><strong>40</strong><span>desktop</span></div><div class="stat"><strong>31</strong><span>mobile</span></div></div>
+    </header>
+    <main class="workspace">
+      <aside class="sidebar" aria-label="Captured comp sites"><div class="section-head"><h2>Comps</h2><p>Select a source to review its desktop and mobile captures.</p></div><div id="emptyState" class="empty">No matching comps.</div><div id="compList" class="comp-list"></div></aside>
+      <section class="viewer" aria-label="Screenshot carousel"><div class="viewer-bar"><div class="shot-title"><strong id="shotName">Screenshot</strong><span id="shotMeta">Select a comp to begin.</span></div><div class="segmented" role="group" aria-label="Screenshot viewport filter"><button id="filterAllButton" type="button" aria-pressed="false">All</button><button id="filterDesktopButton" type="button" aria-pressed="true">Desktop</button><button id="filterMobileButton" type="button" aria-pressed="false">Mobile</button></div><div class="segmented" role="group" aria-label="Image fit"><button id="fitWidthButton" type="button" aria-pressed="true">Width</button><button id="fitHeightButton" type="button" aria-pressed="false">Height</button></div><div class="controls"><button id="prevButton" class="icon-button" type="button" title="Previous screenshot" aria-label="Previous screenshot"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"></path></svg></button><button id="nextButton" class="icon-button" type="button" title="Next screenshot" aria-label="Next screenshot"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"></path></svg></button><button id="openButton" class="icon-button" type="button" title="Open image overlay" aria-label="Open image overlay"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></button></div></div><div id="stage" class="stage"><div id="imageShell" class="image-shell"><img id="mainImage" class="screenshot" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Selected screenshot"></div></div><div id="thumbStrip" class="thumb-strip"></div></section>
+      <aside class="details" aria-label="Selected comp details"><div class="section-head"><h2>Reference Notes</h2><p>Captured source pages, counts, and current screenshot path.</p></div><div class="details-inner"><section class="info-card"><div id="detailKind" class="detail-kind">Captured website</div><h2 id="detailTitle" class="detail-title">Select a comp</h2><div id="detailCopy" class="detail-copy">Use the list on the left or the arrow keys to move through screenshots.</div><div class="detail-grid"><div class="metric"><strong id="metricTotal">0</strong><span>shots</span></div><div class="metric"><strong id="metricDesktop">0</strong><span>desktop</span></div><div class="metric"><strong id="metricMobile">0</strong><span>mobile</span></div></div></section><section class="info-card"><h3>Current Shot</h3><div id="currentShot" class="detail-copy">No screenshot selected.</div><code id="shotPath" class="shot-path"></code></section><section class="info-card"><h3>Source Pages</h3><ul id="pagesList" class="pages-list"></ul></section><section class="info-card"><h3>Capture Notes</h3><ul id="notesList" class="notes-list"></ul></section></div></aside>
+    </main>
+  </div>
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot overlay"><div class="lightbox-bar"><div id="lightboxTitle" class="lightbox-title"></div><button id="closeButton" class="icon-button" type="button" title="Close overlay" aria-label="Close overlay"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div><div class="lightbox-stage"><img id="lightboxImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Expanded screenshot"></div></div>
+  <script id="comps-data" type="application/json">[{"slug":"anthropic-agent-skills-docs","title":"Anthropic Agent Skills Docs","kind":"official skills docs","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview","title":"Agent Skills - Claude API Docs"},{"label":"skill-repo-detail","url":"https://github.com/anthropics/skills/blob/main/skills/pptx/SKILL.md","title":"skills/skills/pptx/SKILL.md at main · anthropics/skills · GitHub"}],"notes":["OK index: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview (HTTP 200) — Agent Skills - Claude API Docs","OK skill-repo-detail: https://github.com/anthropics/skills/blob/main/skills/pptx/SKILL.md (HTTP 200) — skills/skills/pptx/SKILL.md at main · anthropics/skills · GitHub","index: 16508 visible text chars, 185 links, 1 card-like elements.","skill-repo-detail: 8442 visible text chars, 137 links, 2 card-like elements."],"screenshots":[{"file":"index-desktop-full.png","src":"comps/anthropic-agent-skills-docs/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"skill-repo-detail-desktop-full.png","src":"comps/anthropic-agent-skills-docs/screenshots/skill-repo-detail-desktop-full.png","viewport":"desktop","page":"skill repo detail","retry":false},{"file":"index-mobile-full.png","src":"comps/anthropic-agent-skills-docs/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false},{"file":"skill-repo-detail-mobile-full.png","src":"comps/anthropic-agent-skills-docs/screenshots/skill-repo-detail-mobile-full.png","viewport":"mobile","page":"skill repo detail","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"awesome-skill","title":"Awesome Skill","kind":"agent skills catalog","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index-featured","url":"https://awesomeskill.ai/search?filter=featured","title":"Search Skills - Awesome Skills - Agent Skills Marketplace for Claude, Codex & ChatGPT"},{"label":"detail-browser-agent","url":"https://awesomeskill.ai/skill/vercel-labs-agent-browser-agent-browser","title":"agent-browser - Claude Skill - Awesome Skills - Agent Skills Marketplace for Claude, Codex & ChatGPT"}],"notes":["OK index-featured: https://awesomeskill.ai/search?filter=featured (HTTP 200) — Search Skills - Awesome Skills - Agent Skills Marketplace for Claude, Codex & ChatGPT","OK detail-browser-agent: https://awesomeskill.ai/skill/vercel-labs-agent-browser-agent-browser (HTTP 200) — agent-browser - Claude Skill - Awesome Skills - Agent Skills Marketplace for Claude, Codex & ChatGPT","index-featured: 0 visible text chars, 0 links, 0 card-like elements.","detail-browser-agent: 5371 visible text chars, 49 links, 5 card-like elements."],"screenshots":[{"file":"detail-browser-agent-desktop-full.png","src":"comps/awesome-skill/screenshots/detail-browser-agent-desktop-full.png","viewport":"desktop","page":"detail browser agent","retry":false},{"file":"index-featured-desktop-full.png","src":"comps/awesome-skill/screenshots/index-featured-desktop-full.png","viewport":"desktop","page":"index featured","retry":false},{"file":"detail-browser-agent-desktop-retry.png","src":"comps/awesome-skill/screenshots/detail-browser-agent-desktop-retry.png","viewport":"desktop","page":"detail browser agent","retry":true},{"file":"index-featured-desktop-retry.png","src":"comps/awesome-skill/screenshots/index-featured-desktop-retry.png","viewport":"desktop","page":"index featured","retry":true},{"file":"detail-browser-agent-mobile-full.png","src":"comps/awesome-skill/screenshots/detail-browser-agent-mobile-full.png","viewport":"mobile","page":"detail browser agent","retry":false},{"file":"index-featured-mobile-full.png","src":"comps/awesome-skill/screenshots/index-featured-mobile-full.png","viewport":"mobile","page":"index featured","retry":false}],"counts":{"total":6,"desktop":4,"mobile":2}},{"slug":"chatgpt-gpt-store","title":"ChatGPT Explore GPTs","kind":"official GPT catalog","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://chatgpt.com/gpts","title":"Explore GPTs"},{"label":"detail-canva","url":"https://chatgpt.com/g/g-alKfVrz9K-canva","title":"ChatGPT"}],"notes":["OK index: https://chatgpt.com/gpts (HTTP 200) — Explore GPTs","OK detail-canva: https://chatgpt.com/g/g-alKfVrz9K-canva (HTTP 200) — ChatGPT","index: 43 visible text chars, 1 links, 0 card-like elements.","detail-canva: 193 visible text chars, 4 links, 0 card-like elements."],"screenshots":[{"file":"detail-canva-desktop-full.png","src":"comps/chatgpt-gpt-store/screenshots/detail-canva-desktop-full.png","viewport":"desktop","page":"detail canva","retry":false},{"file":"index-desktop-full.png","src":"comps/chatgpt-gpt-store/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-canva-desktop-retry.png","src":"comps/chatgpt-gpt-store/screenshots/detail-canva-desktop-retry.png","viewport":"desktop","page":"detail canva","retry":true},{"file":"index-desktop-retry.png","src":"comps/chatgpt-gpt-store/screenshots/index-desktop-retry.png","viewport":"desktop","page":"index","retry":true},{"file":"detail-canva-mobile-full.png","src":"comps/chatgpt-gpt-store/screenshots/detail-canva-mobile-full.png","viewport":"mobile","page":"detail canva","retry":false},{"file":"index-mobile-full.png","src":"comps/chatgpt-gpt-store/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":6,"desktop":4,"mobile":2}},{"slug":"composio-toolkits","title":"Composio Toolkits","kind":"integration/toolkit catalog","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://composio.dev/toolkits","title":"Composio toolkits | MCP and API Integrations for AI Agents"},{"label":"detail-gmail","url":"https://composio.dev/toolkits/gmail","title":"Gmail MCP Integration for AI Agents | Composio"}],"notes":["OK index: https://composio.dev/toolkits (HTTP 200) — Composio toolkits | MCP and API Integrations for AI Agents","OK detail-gmail: https://composio.dev/toolkits/gmail (HTTP 200) — Gmail MCP Integration for AI Agents | Composio","index: 9594 visible text chars, 81 links, 0 card-like elements.","detail-gmail: 16470 visible text chars, 79 links, 0 card-like elements."],"screenshots":[{"file":"detail-gmail-desktop-full.png","src":"comps/composio-toolkits/screenshots/detail-gmail-desktop-full.png","viewport":"desktop","page":"detail gmail","retry":false},{"file":"index-desktop-full.png","src":"comps/composio-toolkits/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-gmail-mobile-full.png","src":"comps/composio-toolkits/screenshots/detail-gmail-mobile-full.png","viewport":"mobile","page":"detail gmail","retry":false},{"file":"index-mobile-full.png","src":"comps/composio-toolkits/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"docker-mcp-catalog","title":"Docker MCP Catalog Docs","kind":"official MCP catalog docs","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/","title":"Docker MCP Catalog | Docker Docs"}],"notes":["OK index: https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/ (HTTP 200) — Docker MCP Catalog | Docker Docs","index: 4986 visible text chars, 789 links, 2 card-like elements."],"screenshots":[{"file":"index-desktop-full.png","src":"comps/docker-mcp-catalog/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"index-mobile-full.png","src":"comps/docker-mcp-catalog/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":2,"desktop":1,"mobile":1}},{"slug":"glama-mcp","title":"Glama MCP Servers","kind":"MCP registry","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://glama.ai/mcp/servers","title":"Open-Source MCP Servers – 33,959 in the Glama Registry | Glama"},{"label":"detail-semgrep","url":"https://glama.ai/mcp/servers/semgrep/mcp","title":"Semgrep MCP Server by semgrep | Glama"}],"notes":["OK index: https://glama.ai/mcp/servers (HTTP 200) — Open-Source MCP Servers – 33,959 in the Glama Registry | Glama","OK detail-semgrep: https://glama.ai/mcp/servers/semgrep/mcp (HTTP 200) — Semgrep MCP Server by semgrep | Glama","index: 7704 visible text chars, 190 links, 20 card-like elements.","detail-semgrep: 14430 visible text chars, 230 links, 4 card-like elements."],"screenshots":[{"file":"detail-semgrep-desktop-full.png","src":"comps/glama-mcp/screenshots/detail-semgrep-desktop-full.png","viewport":"desktop","page":"detail semgrep","retry":false},{"file":"index-desktop-full.png","src":"comps/glama-mcp/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-semgrep-mobile-full.png","src":"comps/glama-mcp/screenshots/detail-semgrep-mobile-full.png","viewport":"mobile","page":"detail semgrep","retry":false},{"file":"index-mobile-full.png","src":"comps/glama-mcp/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"jeffreys-skills","title":"Jeffrey's Skills Directory Reference","kind":"reference skill catalog","captured":"2026-06-10","pages":[],"notes":[],"screenshots":[{"file":"01-skills-index-full.png","src":"comps/jeffreys-skills/screenshots/01-skills-index-full.png","viewport":"desktop","page":"skills index full","retry":false},{"file":"02-skills-index-annotated.png","src":"comps/jeffreys-skills/screenshots/02-skills-index-annotated.png","viewport":"desktop","page":"skills index annotated","retry":false},{"file":"03-skills-index-filter-or-search-state.png","src":"comps/jeffreys-skills/screenshots/03-skills-index-filter-or-search-state.png","viewport":"desktop","page":"skills index filter or search state","retry":false},{"file":"04-skill-detail-full.png","src":"comps/jeffreys-skills/screenshots/04-skill-detail-full.png","viewport":"desktop","page":"skill detail full","retry":false},{"file":"05-skill-detail-annotated.png","src":"comps/jeffreys-skills/screenshots/05-skill-detail-annotated.png","viewport":"desktop","page":"skill detail annotated","retry":false}],"counts":{"total":5,"desktop":5,"mobile":0}},{"slug":"mcp-so","title":"MCP.so","kind":"MCP registry","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://mcp.so/explore","title":"Explore MCP Servers and Clients"},{"label":"detail-in-parallel","url":"https://mcp.so/server/in-parallel","title":"In Parallel MCP Server"}],"notes":["OK index: https://mcp.so/explore (HTTP 200) — Explore MCP Servers and Clients","OK detail-in-parallel: https://mcp.so/server/in-parallel (HTTP 200) — In Parallel MCP Server","index: 11815 visible text chars, 658 links, 0 card-like elements.","detail-in-parallel: 4108 visible text chars, 646 links, 1 card-like elements."],"screenshots":[{"file":"detail-in-parallel-desktop-full.png","src":"comps/mcp-so/screenshots/detail-in-parallel-desktop-full.png","viewport":"desktop","page":"detail in parallel","retry":false},{"file":"index-desktop-full.png","src":"comps/mcp-so/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-in-parallel-mobile-full.png","src":"comps/mcp-so/screenshots/detail-in-parallel-mobile-full.png","viewport":"mobile","page":"detail in parallel","retry":false},{"file":"index-mobile-full.png","src":"comps/mcp-so/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"mcpservers-agent-skills","title":"MCP Servers Agent Skills Library","kind":"agent skills directory","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://mcpservers.org/agent-skills","title":"Agent Skills Library"},{"label":"author-anthropic","url":"https://mcpservers.org/agent-skills/author/anthropic","title":"Anthropic Skills | Agent Skills Library"}],"notes":["OK index: https://mcpservers.org/agent-skills (HTTP 200) — Agent Skills Library","OK author-anthropic: https://mcpservers.org/agent-skills/author/anthropic (HTTP 200) — Anthropic Skills | Agent Skills Library","index: 5856 visible text chars, 79 links, 42 card-like elements.","author-anthropic: 83591 visible text chars, 369 links, 353 card-like elements."],"screenshots":[{"file":"author-anthropic-desktop-full.png","src":"comps/mcpservers-agent-skills/screenshots/author-anthropic-desktop-full.png","viewport":"desktop","page":"author anthropic","retry":false},{"file":"index-desktop-full.png","src":"comps/mcpservers-agent-skills/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"author-anthropic-mobile-full.png","src":"comps/mcpservers-agent-skills/screenshots/author-anthropic-mobile-full.png","viewport":"mobile","page":"author anthropic","retry":false},{"file":"index-mobile-full.png","src":"comps/mcpservers-agent-skills/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"mintmcp","title":"MintMCP","kind":"MCP registry","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://www.mintmcp.com/servers","title":"Browse MCP Servers - MintMCP"},{"label":"detail-github","url":"https://www.mintmcp.com/servers/github","title":"GitHub MCP Server - MintMCP"}],"notes":["OK index: https://www.mintmcp.com/servers (HTTP 200) — Browse MCP Servers - MintMCP","OK detail-github: https://www.mintmcp.com/servers/github (HTTP 200) — GitHub MCP Server - MintMCP","index: 10049 visible text chars, 119 links, 77 card-like elements.","detail-github: 4870 visible text chars, 45 links, 43 card-like elements."],"screenshots":[{"file":"detail-github-desktop-full.png","src":"comps/mintmcp/screenshots/detail-github-desktop-full.png","viewport":"desktop","page":"detail github","retry":false},{"file":"index-desktop-full.png","src":"comps/mintmcp/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-github-mobile-full.png","src":"comps/mintmcp/screenshots/detail-github-mobile-full.png","viewport":"mobile","page":"detail github","retry":false},{"file":"index-mobile-full.png","src":"comps/mintmcp/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"official-mcp-registry","title":"Official MCP Registry","kind":"MCP registry","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://registry.modelcontextprotocol.io/","title":"Official MCP Registry"},{"label":"search","url":"https://registry.modelcontextprotocol.io/?q=github","title":"Official MCP Registry"}],"notes":["OK index: https://registry.modelcontextprotocol.io/ (HTTP 200) — Official MCP Registry","OK search: https://registry.modelcontextprotocol.io/?q=github (HTTP 200) — Official MCP Registry","index: 17327 visible text chars, 4 links, 0 card-like elements.","search: 18203 visible text chars, 4 links, 0 card-like elements."],"screenshots":[{"file":"index-desktop-full.png","src":"comps/official-mcp-registry/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"search-desktop-full.png","src":"comps/official-mcp-registry/screenshots/search-desktop-full.png","viewport":"desktop","page":"search","retry":false},{"file":"index-mobile-full.png","src":"comps/official-mcp-registry/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false},{"file":"search-mobile-full.png","src":"comps/official-mcp-registry/screenshots/search-mobile-full.png","viewport":"mobile","page":"search","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"officialskills","title":"Official Skills","kind":"agent skills publisher directory","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://officialskills.sh/","title":"officialskills.sh — Official Agent Skills Directory"},{"label":"publisher-microsoft","url":"https://officialskills.sh/microsoft/skills","title":"Microsoft — 133 Agent Skills | officialskills.sh"}],"notes":["OK index: https://officialskills.sh/ (HTTP 200) — officialskills.sh — Official Agent Skills Directory","OK publisher-microsoft: https://officialskills.sh/microsoft/skills (HTTP 200) — Microsoft — 133 Agent Skills | officialskills.sh","index: 67929 visible text chars, 618 links, 0 card-like elements.","publisher-microsoft: 15516 visible text chars, 142 links, 0 card-like elements."],"screenshots":[{"file":"index-desktop-full.png","src":"comps/officialskills/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"publisher-microsoft-desktop-full.png","src":"comps/officialskills/screenshots/publisher-microsoft-desktop-full.png","viewport":"desktop","page":"publisher microsoft","retry":false},{"file":"index-mobile-full.png","src":"comps/officialskills/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false},{"file":"publisher-microsoft-mobile-full.png","src":"comps/officialskills/screenshots/publisher-microsoft-mobile-full.png","viewport":"mobile","page":"publisher microsoft","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"openai-codex-skills-docs","title":"OpenAI Codex Agent Skills Docs","kind":"official skills docs","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://developers.openai.com/codex/skills","title":"Agent Skills – Codex | OpenAI Developers"}],"notes":["OK index: https://developers.openai.com/codex/skills (HTTP 200) — Agent Skills – Codex | OpenAI Developers","index: 7912 visible text chars, 465 links, 1 card-like elements."],"screenshots":[{"file":"index-desktop-full.png","src":"comps/openai-codex-skills-docs/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"index-mobile-full.png","src":"comps/openai-codex-skills-docs/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":2,"desktop":1,"mobile":1}},{"slug":"promptbase-agent-skills","title":"PromptBase Agent Skills","kind":"commercial agent skills marketplace","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://promptbase.com/agent-skills","title":"Agent Skills | SKILL.md for Claude, Cursor & ChatGPT"},{"label":"detail-seogeo","url":"https://promptbase.com/skill/seogeo-content-strategist-skill-pack","title":"SEOgeo Content Strategist Skill Pack Claude Skill | PromptBase"}],"notes":["OK index: https://promptbase.com/agent-skills (HTTP 200) — Agent Skills | SKILL.md for Claude, Cursor & ChatGPT","OK detail-seogeo: https://promptbase.com/skill/seogeo-content-strategist-skill-pack (HTTP 200) — SEOgeo Content Strategist Skill Pack Claude Skill | PromptBase","index: 5111 visible text chars, 207 links, 0 card-like elements.","detail-seogeo: 5943 visible text chars, 138 links, 0 card-like elements."],"screenshots":[{"file":"detail-seogeo-desktop-full.png","src":"comps/promptbase-agent-skills/screenshots/detail-seogeo-desktop-full.png","viewport":"desktop","page":"detail seogeo","retry":false},{"file":"index-desktop-full.png","src":"comps/promptbase-agent-skills/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-seogeo-mobile-full.png","src":"comps/promptbase-agent-skills/screenshots/detail-seogeo-mobile-full.png","viewport":"mobile","page":"detail seogeo","retry":false},{"file":"index-mobile-full.png","src":"comps/promptbase-agent-skills/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"pulsemcp","title":"PulseMCP","kind":"MCP registry","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://www.pulsemcp.com/servers","title":"MCP Server Directory: 17,760+ updated daily | PulseMCP"},{"label":"detail-time","url":"https://www.pulsemcp.com/servers/modelcontextprotocol-time","title":"Time MCP Server by Anthropic | PulseMCP"}],"notes":["OK index: https://www.pulsemcp.com/servers (HTTP 200) — MCP Server Directory: 17,760+ updated daily | PulseMCP","OK detail-time: https://www.pulsemcp.com/servers/modelcontextprotocol-time (HTTP 200) — Time MCP Server by Anthropic | PulseMCP","index: 10798 visible text chars, 291 links, 0 card-like elements.","detail-time: 1256 visible text chars, 35 links, 0 card-like elements."],"screenshots":[{"file":"detail-time-desktop-full.png","src":"comps/pulsemcp/screenshots/detail-time-desktop-full.png","viewport":"desktop","page":"detail time","retry":false},{"file":"index-desktop-full.png","src":"comps/pulsemcp/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-time-mobile-full.png","src":"comps/pulsemcp/screenshots/detail-time-mobile-full.png","viewport":"mobile","page":"detail time","retry":false},{"file":"index-mobile-full.png","src":"comps/pulsemcp/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}},{"slug":"skillsmp","title":"SkillsMP","kind":"agent skills marketplace","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://skillsmp.com/","title":"Agent Skills Marketplace - Claude, Codex & ChatGPT Skills | SkillsMP"},{"label":"search","url":"https://skillsmp.com/search","title":"Search 1.5M Agent Skills | SkillsMP"},{"label":"detail-frontend-design","url":"https://skillsmp.com/skills/anthropics-claude-code-plugins-frontend-design-skills-frontend-design-skill-md","title":"Frontend Design - Official Anthropic Agent Skill | SkillsMP"}],"notes":["OK index: https://skillsmp.com/ (HTTP 200) — Agent Skills Marketplace - Claude, Codex & ChatGPT Skills | SkillsMP","OK search: https://skillsmp.com/search (HTTP 200) — Search 1.5M Agent Skills | SkillsMP","OK detail-frontend-design: https://skillsmp.com/skills/anthropics-claude-code-plugins-frontend-design-skills-frontend-design-skill-md (HTTP 200) — Frontend Design - Official Anthropic Agent Skill | SkillsMP","index: 10122 visible text chars, 67 links, 59 card-like elements.","search: 4769 visible text chars, 48 links, 37 card-like elements.","detail-frontend-design: 8757 visible text chars, 40 links, 17 card-like elements."],"screenshots":[{"file":"detail-frontend-design-desktop-full.png","src":"comps/skillsmp/screenshots/detail-frontend-design-desktop-full.png","viewport":"desktop","page":"detail frontend design","retry":false},{"file":"index-desktop-full.png","src":"comps/skillsmp/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"search-desktop-full.png","src":"comps/skillsmp/screenshots/search-desktop-full.png","viewport":"desktop","page":"search","retry":false},{"file":"detail-frontend-design-mobile-full.png","src":"comps/skillsmp/screenshots/detail-frontend-design-mobile-full.png","viewport":"mobile","page":"detail frontend design","retry":false},{"file":"index-mobile-full.png","src":"comps/skillsmp/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false},{"file":"search-mobile-full.png","src":"comps/skillsmp/screenshots/search-mobile-full.png","viewport":"mobile","page":"search","retry":false}],"counts":{"total":6,"desktop":3,"mobile":3}},{"slug":"smithery","title":"Smithery","kind":"MCP registry","captured":"2026-06-10T15:08:07.288Z","pages":[{"label":"index","url":"https://smithery.ai/servers","title":"MCPs | Smithery"},{"label":"detail-exa","url":"https://smithery.ai/servers/exa","title":"Exa Search - MCP | Smithery"}],"notes":["OK index: https://smithery.ai/servers (HTTP 200) — MCPs | Smithery","OK detail-exa: https://smithery.ai/servers/exa (HTTP 200) — Exa Search - MCP | Smithery","index: 7160 visible text chars, 58 links, 52 card-like elements.","detail-exa: 2341 visible text chars, 28 links, 7 card-like elements."],"screenshots":[{"file":"detail-exa-desktop-full.png","src":"comps/smithery/screenshots/detail-exa-desktop-full.png","viewport":"desktop","page":"detail exa","retry":false},{"file":"index-desktop-full.png","src":"comps/smithery/screenshots/index-desktop-full.png","viewport":"desktop","page":"index","retry":false},{"file":"detail-exa-mobile-full.png","src":"comps/smithery/screenshots/detail-exa-mobile-full.png","viewport":"mobile","page":"detail exa","retry":false},{"file":"index-mobile-full.png","src":"comps/smithery/screenshots/index-mobile-full.png","viewport":"mobile","page":"index","retry":false}],"counts":{"total":4,"desktop":2,"mobile":2}}]</script>
+  <script>
+    var comps = JSON.parse(document.getElementById('comps-data').textContent);
+    var state = { compIndex: 0, shotIndex: 0, fit: 'width', query: '', viewport: 'desktop' };
+    var els = { search: byId('searchInput'), compList: byId('compList'), empty: byId('emptyState'), shotName: byId('shotName'), shotMeta: byId('shotMeta'), stage: byId('stage'), imageShell: byId('imageShell'), mainImage: byId('mainImage'), thumbStrip: byId('thumbStrip'), prev: byId('prevButton'), next: byId('nextButton'), open: byId('openButton'), fitWidth: byId('fitWidthButton'), fitHeight: byId('fitHeightButton'), detailKind: byId('detailKind'), detailTitle: byId('detailTitle'), detailCopy: byId('detailCopy'), metricTotal: byId('metricTotal'), metricDesktop: byId('metricDesktop'), metricMobile: byId('metricMobile'), currentShot: byId('currentShot'), shotPath: byId('shotPath'), pagesList: byId('pagesList'), notesList: byId('notesList'), lightbox: byId('lightbox'), lightboxImage: byId('lightboxImage'), lightboxTitle: byId('lightboxTitle'), close: byId('closeButton') };
+    function byId(id) { return document.getElementById(id); }
+    function activeComp() { return comps[state.compIndex] || comps[0]; }
+    function visibleShots() { var comp = activeComp(); var shots = state.viewport === 'all' ? comp.screenshots : comp.screenshots.filter(function(shot) { return shot.viewport === state.viewport; }); return shots.length ? shots : comp.screenshots; }
+    function activeShot() { var shots = visibleShots(); return shots[state.shotIndex] || shots[0]; }
+    function filteredComps() { var q = state.query.trim().toLowerCase(); if (!q) return comps; return comps.filter(function(comp) { return [comp.slug, comp.title, comp.kind, comp.captured].concat(comp.pages.flatMap(function(p) { return [p.label, p.url, p.title]; }), comp.notes, comp.screenshots.flatMap(function(s) { return [s.file, s.page, s.viewport]; })).join(' ').toLowerCase().includes(q); }); }
+    function makeText(tag, className, text) { var node = document.createElement(tag); if (className) node.className = className; node.textContent = text; return node; }
+    function makeLinkedText(text) { var span = document.createElement('span'); String(text).split(/(https?:\/\/[^\s)]+)/g).forEach(function(part) { if (/^https?:\/\//.test(part)) { var link = document.createElement('a'); link.href = part; link.target = '_blank'; link.rel = 'noreferrer'; link.textContent = part; span.appendChild(link); } else { span.appendChild(document.createTextNode(part)); } }); return span; }
+    function setActive(slug, shotIndex) { var idx = comps.findIndex(function(comp) { return comp.slug === slug; }); if (idx < 0) return; state.compIndex = idx; state.shotIndex = Math.max(0, Math.min(shotIndex || 0, comps[idx].screenshots.length - 1)); render(); }
+    function renderCompList() { var visible = filteredComps(); els.empty.style.display = visible.length ? 'none' : 'block'; els.compList.textContent = ''; visible.forEach(function(comp) { var first = comp.screenshots[0]; var btn = document.createElement('button'); btn.className = 'comp-button'; btn.type = 'button'; btn.setAttribute('aria-selected', comp.slug === activeComp().slug ? 'true' : 'false'); var crop = document.createElement('span'); crop.className = 'thumb-crop'; var img = document.createElement('img'); img.src = first.src; img.alt = ''; img.loading = 'lazy'; crop.appendChild(img); var meta = document.createElement('span'); meta.className = 'comp-meta'; var title = makeText('span', 'comp-title', ''); var titleText = makeText('span', '', comp.title); var count = makeText('span', 'count-pill', comp.counts.total); title.append(titleText, count); meta.append(title, makeText('span', 'comp-kind', comp.kind)); btn.append(crop, meta); btn.addEventListener('click', function() { setActive(comp.slug, 0); }); els.compList.appendChild(btn); }); }
+    function renderThumbs() { var shots = visibleShots(); els.thumbStrip.textContent = ''; shots.forEach(function(shot, index) { var btn = document.createElement('button'); btn.className = 'shot-thumb'; btn.type = 'button'; btn.setAttribute('aria-selected', index === state.shotIndex ? 'true' : 'false'); var img = document.createElement('img'); img.src = shot.src; img.alt = ''; img.loading = 'lazy'; var label = document.createElement('span'); label.append(makeText('strong', '', shot.page), document.createTextNode(shot.viewport + (shot.retry ? ' · retry' : ''))); btn.append(img, label); btn.addEventListener('click', function() { state.shotIndex = index; render(); }); els.thumbStrip.appendChild(btn); }); }
+    function renderDetails() { var comp = activeComp(); var shot = activeShot(); els.detailKind.textContent = comp.kind; els.detailTitle.textContent = comp.title; els.detailCopy.textContent = comp.captured ? 'Captured ' + comp.captured + '. ' + comp.slug : comp.slug; els.metricTotal.textContent = comp.counts.total; els.metricDesktop.textContent = comp.counts.desktop; els.metricMobile.textContent = comp.counts.mobile; els.currentShot.textContent = shot.page + ' · ' + shot.viewport + (shot.retry ? ' · retry capture' : ''); els.shotPath.textContent = '.resources/' + shot.src; els.pagesList.textContent = ''; if (comp.pages.length) { comp.pages.forEach(function(page) { var li = document.createElement('li'); var a = document.createElement('a'); a.href = page.url; a.target = '_blank'; a.rel = 'noreferrer'; a.textContent = page.label; var url = document.createElement('a'); url.href = page.url; url.target = '_blank'; url.rel = 'noreferrer'; url.textContent = page.url; url.className = 'source-url'; li.append(a, makeText('span', '', page.title || ''), url); els.pagesList.appendChild(li); }); } else { els.pagesList.appendChild(makeText('li', '', 'No source pages recorded in README.')); } els.notesList.textContent = ''; if (comp.notes.length) { comp.notes.forEach(function(note) { var li = document.createElement('li'); li.appendChild(makeLinkedText(note.replace(/^OK /, ''))); els.notesList.appendChild(li); }); } else { els.notesList.appendChild(makeText('li', '', 'No capture notes recorded.')); } }
+    function renderShot() { var comp = activeComp(); var shots = visibleShots(); if (state.shotIndex >= shots.length) state.shotIndex = 0; var shot = activeShot(); els.shotName.textContent = shot.page; els.shotMeta.textContent = comp.title + ' · ' + shot.file + ' · ' + (state.shotIndex + 1) + '/' + shots.length; els.mainImage.src = shot.src; els.mainImage.alt = comp.title + ': ' + shot.page + ' ' + shot.viewport + ' screenshot'; els.mainImage.classList.toggle('fit-height', state.fit === 'height'); els.imageShell.classList.toggle('mobile-mode', shot.viewport === 'mobile'); els.fitWidth.setAttribute('aria-pressed', state.fit === 'width' ? 'true' : 'false'); els.fitHeight.setAttribute('aria-pressed', state.fit === 'height' ? 'true' : 'false'); els.prev.disabled = shots.length < 2; els.next.disabled = shots.length < 2; els.stage.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
+    function render() { renderCompList(); renderShot(); renderThumbs(); renderDetails(); }
+    function step(delta) { var shots = visibleShots(); state.shotIndex = (state.shotIndex + delta + shots.length) % shots.length; render(); }
+    els.search.addEventListener('input', function() { state.query = els.search.value; var visible = filteredComps(); if (visible.length && !visible.some(function(comp) { return comp.slug === activeComp().slug; })) setActive(visible[0].slug, 0); else renderCompList(); });
+    els.prev.addEventListener('click', function() { step(-1); }); els.next.addEventListener('click', function() { step(1); }); els.fitWidth.addEventListener('click', function() { state.fit = 'width'; renderShot(); }); els.fitHeight.addEventListener('click', function() { state.fit = 'height'; renderShot(); });
+    els.open.addEventListener('click', function() { var comp = activeComp(); var shot = activeShot(); els.lightboxImage.src = shot.src; els.lightboxImage.alt = comp.title + ': ' + shot.page; els.lightboxTitle.textContent = comp.title + ' · ' + shot.file; els.lightbox.classList.add('open'); });
+    els.close.addEventListener('click', function() { els.lightbox.classList.remove('open'); }); els.lightbox.addEventListener('click', function(event) { if (event.target === els.lightbox) els.lightbox.classList.remove('open'); });
+    document.addEventListener('keydown', function(event) { if (event.key === 'ArrowLeft') step(-1); if (event.key === 'ArrowRight') step(1); if (event.key === 'Escape') els.lightbox.classList.remove('open'); });
+    render();
+  </script>
+  <script>
+    (function applyUxFixes() {
+      var searchInput = document.getElementById('searchInput');
+      var topbar = document.querySelector('.topbar');
+      var compList = document.getElementById('compList');
+      var thumbStrip = document.getElementById('thumbStrip');
+      var filterButtons = {
+        all: document.getElementById('filterAllButton'),
+        desktop: document.getElementById('filterDesktopButton'),
+        mobile: document.getElementById('filterMobileButton')
+      };
+
+      if (searchInput) {
+        searchInput.setAttribute('aria-label', 'Filter comps, pages, sources, and filenames');
+      }
+
+      function syncHeaderHeight() {
+        if (!topbar) return;
+        document.documentElement.style.setProperty('--topbar-h', topbar.offsetHeight + 'px');
+      }
+
+      function enhanceLabels() {
+        document.querySelectorAll('.comp-button').forEach(function(button) {
+          var title = button.querySelector('.comp-title span:first-child');
+          var count = button.querySelector('.count-pill');
+          var kind = button.querySelector('.comp-kind');
+          var label = 'Open ' + (title ? title.textContent : 'comp');
+          if (count) label += ', ' + count.textContent + ' screenshots';
+          if (kind) label += ', ' + kind.textContent;
+          button.setAttribute('aria-label', label);
+        });
+
+        document.querySelectorAll('.shot-thumb').forEach(function(button) {
+          var name = button.querySelector('strong');
+          var meta = button.querySelector('span');
+          button.setAttribute('aria-label', 'Show screenshot ' + (name ? name.textContent : '') + ', ' + (meta ? meta.textContent.replace((name ? name.textContent : ''), '').trim() : ''));
+        });
+      }
+
+      function syncViewportButtons() {
+        Object.keys(filterButtons).forEach(function(key) {
+          if (filterButtons[key]) {
+            filterButtons[key].setAttribute('aria-pressed', state.viewport === key ? 'true' : 'false');
+          }
+        });
+      }
+
+      Object.keys(filterButtons).forEach(function(key) {
+        if (!filterButtons[key]) return;
+        filterButtons[key].addEventListener('click', function() {
+          state.viewport = key;
+          state.shotIndex = 0;
+          render();
+          enhanceLabels();
+          syncViewportButtons();
+        });
+      });
+
+      syncHeaderHeight();
+      enhanceLabels();
+      syncViewportButtons();
+
+      if (window.ResizeObserver && topbar) {
+        new ResizeObserver(syncHeaderHeight).observe(topbar);
+      } else {
+        window.addEventListener('resize', syncHeaderHeight);
+      }
+
+      if (window.MutationObserver) {
+        if (compList) new MutationObserver(enhanceLabels).observe(compList, { childList: true, subtree: true });
+        if (thumbStrip) new MutationObserver(enhanceLabels).observe(thumbStrip, { childList: true, subtree: true });
+      }
+    }());
+  </script>
+</body>
+</html>

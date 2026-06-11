@@ -1,0 +1,555 @@
+{
+  "title": "Semgrep MCP Server by semgrep | Glama",
+  "url": "https://glama.ai/mcp/servers/semgrep/mcp",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Semgrep MCP Server"
+    },
+    {
+      "tag": "h2",
+      "text": "⚠️ The Semgrep MCP server has been moved from a standalone repo to the main semgrep repository! ⚠️"
+    },
+    {
+      "tag": "h1",
+      "text": "Semgrep MCP Server"
+    },
+    {
+      "tag": "h2",
+      "text": "Contents"
+    },
+    {
+      "tag": "h2",
+      "text": "Getting started"
+    },
+    {
+      "tag": "h3",
+      "text": "Cursor"
+    },
+    {
+      "tag": "h3",
+      "text": "ChatGPT"
+    },
+    {
+      "tag": "h3",
+      "text": "Hosted Server"
+    },
+    {
+      "tag": "h2",
+      "text": "Demo"
+    },
+    {
+      "tag": "h2",
+      "text": "API"
+    },
+    {
+      "tag": "h3",
+      "text": "Tools"
+    },
+    {
+      "tag": "h3",
+      "text": "Prompts"
+    },
+    {
+      "tag": "h3",
+      "text": "Resources"
+    },
+    {
+      "tag": "h2",
+      "text": "Usage"
+    },
+    {
+      "tag": "h3",
+      "text": "Standard Input/Output (stdio)"
+    },
+    {
+      "tag": "h3",
+      "text": "Streamable HTTP"
+    },
+    {
+      "tag": "h3",
+      "text": "Server-sent events (SSE)"
+    },
+    {
+      "tag": "h2",
+      "text": "Semgrep AppSec Platform"
+    },
+    {
+      "tag": "h2",
+      "text": "Integrations"
+    },
+    {
+      "tag": "h3",
+      "text": "Cursor IDE"
+    },
+    {
+      "tag": "h3",
+      "text": "VS Code / Copilot"
+    },
+    {
+      "tag": "h3",
+      "text": "Windsurf"
+    },
+    {
+      "tag": "h3",
+      "text": "Claude Desktop"
+    },
+    {
+      "tag": "h3",
+      "text": "Claude Code"
+    },
+    {
+      "tag": "h3",
+      "text": "OpenAI"
+    },
+    {
+      "tag": "h3",
+      "text": "Custom clients"
+    },
+    {
+      "tag": "h2",
+      "text": "Contributing, community, and running from source"
+    },
+    {
+      "tag": "h3",
+      "text": "Similar tools 🔍"
+    },
+    {
+      "tag": "h3",
+      "text": "Community projects 🌟"
+    },
+    {
+      "tag": "h3",
+      "text": "MCP server registries"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Menu",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Sign Up",
+      "type": "button"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search MCP servers, tools, and more",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Favorite",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Claim",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "What can you do with this server?",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Which integrations are available for this server?",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "How do I use Semgrep MCP Server?",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Install Server",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Try in Browser",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Report Issue",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "claim this server",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Yes",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "No",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp#main-content"
+    },
+    {
+      "text": "Glama",
+      "href": "https://glama.ai/"
+    },
+    {
+      "text": "Servers",
+      "href": "https://glama.ai/mcp/servers"
+    },
+    {
+      "text": "Connectors",
+      "href": "https://glama.ai/mcp/connectors"
+    },
+    {
+      "text": "Tools",
+      "href": "https://glama.ai/mcp/tools"
+    },
+    {
+      "text": "Clients",
+      "href": "https://glama.ai/mcp/clients"
+    },
+    {
+      "text": "Inspector",
+      "href": "https://glama.ai/mcp/inspector"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://glama.ai/pricing"
+    },
+    {
+      "text": "",
+      "href": "https://glama.ai/discord"
+    },
+    {
+      "text": "Glama",
+      "href": "https://glama.ai/"
+    },
+    {
+      "text": "MCP",
+      "href": "https://glama.ai/mcp"
+    },
+    {
+      "text": "Servers",
+      "href": "https://glama.ai/mcp/servers"
+    },
+    {
+      "text": "",
+      "href": "https://glama.ai/mcp"
+    },
+    {
+      "text": "en",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp#readme-md"
+    },
+    {
+      "text": "es",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp?locale=es-ES#readme-md"
+    },
+    {
+      "text": "ja",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp?locale=ja-JP#readme-md"
+    },
+    {
+      "text": "ko",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp?locale=ko-KR#readme-md"
+    },
+    {
+      "text": "zh",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp?locale=zh-CN#readme-md"
+    },
+    {
+      "text": "",
+      "href": "https://glama.ai/mcp/categories/code-analysis"
+    },
+    {
+      "text": "",
+      "href": "https://glama.ai/mcp/categories/security-and-iam"
+    },
+    {
+      "text": "",
+      "href": "https://glama.ai/mcp/categories/autonomous-agents"
+    },
+    {
+      "text": "semgrep",
+      "href": "https://glama.ai/mcp/servers?query=author%3Asemgrep"
+    },
+    {
+      "text": "Overview",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp"
+    },
+    {
+      "text": "Schema",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp/schema"
+    },
+    {
+      "text": "Related Servers",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp/related-servers"
+    },
+    {
+      "text": "Score",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp/score"
+    },
+    {
+      "text": "Discussions",
+      "href": "https://glama.ai/mcp/servers/semgrep/mcp/discussions"
+    },
+    {
+      "text": "Python",
+      "href": "https://glama.ai/mcp/servers?attributes=language%3Apython"
+    },
+    {
+      "text": "Hybrid",
+      "href": "https://glama.ai/mcp/servers?attributes=hosting%3Ahybrid"
+    },
+    {
+      "text": "Docker",
+      "href": "https://glama.ai/mcp/servers/integrations/docker"
+    },
+    {
+      "text": "Python",
+      "href": "https://glama.ai/mcp/servers/integrations/python"
+    },
+    {
+      "text": "Slack",
+      "href": "https://glama.ai/mcp/servers/integrations/slack"
+    },
+    {
+      "text": "step-by-step guide with screenshots",
+      "href": "https://glama.ai/blog/2025-07-08-how-to-install-and-use-mcp-servers"
+    },
+    {
+      "text": "main",
+      "href": "https://github.com/semgrep/semgrep/tree/develop/cli/src/semgrep/mcp"
+    },
+    {
+      "text": "semgrep",
+      "href": "https://github.com/semgrep/semgrep/tree/develop/cli/src/semgrep/mcp"
+    },
+    {
+      "text": "repository!",
+      "href": "https://github.com/semgrep/semgrep/tree/develop/cli/src/semgrep/mcp"
+    },
+    {
+      "text": "Semgrep",
+      "href": "https://semgrep.dev/"
+    },
+    {
+      "text": "vibe coding",
+      "href": "https://semgrep.dev/blog/2025/giving-appsec-a-seat-at-the-vibe-coding-table/"
+    },
+    {
+      "text": "Model Context Protocol (MCP)",
+      "href": "https://modelcontextprotocol.io/"
+    },
+    {
+      "text": "languages",
+      "href": "https://semgrep.dev/docs/supported-languages"
+    },
+    {
+      "text": "5,000 rules",
+      "href": "https://semgrep.dev/registry"
+    },
+    {
+      "text": "community Slack",
+      "href": "https://go.semgrep.dev/slack"
+    },
+    {
+      "text": "Semgrep MCP Server",
+      "href": "https://glama.ai/mcp/servers/stefanskiasan/semgrep-mcp-server"
+    },
+    {
+      "text": "Semgrep MCP Server",
+      "href": "https://github.com/semgrep/mcp/blob/main/#semgrep-mcp-server"
+    },
+    {
+      "text": "Contents",
+      "href": "https://github.com/semgrep/mcp/blob/main/#contents"
+    },
+    {
+      "text": "Getting started",
+      "href": "https://github.com/semgrep/mcp/blob/main/#getting-started"
+    },
+    {
+      "text": "Cursor",
+      "href": "https://github.com/semgrep/mcp/blob/main/#cursor"
+    },
+    {
+      "text": "ChatGPT",
+      "href": "https://github.com/semgrep/mcp/blob/main/#chatgpt"
+    },
+    {
+      "text": "Hosted Server",
+      "href": "https://github.com/semgrep/mcp/blob/main/#hosted-server"
+    },
+    {
+      "text": "Cursor",
+      "href": "https://github.com/semgrep/mcp/blob/main/#cursor-1"
+    }
+  ],
+  "text": "Skip to main content\nGlama\nMCP\nServers\nSemgrep MCP Server\nOfficial\nby semgrep\nClaim\nOverview\nSchema\nRelated Servers\nScore\nDiscussions\nPython\nHybrid\nWhat can you do with this server?\nWhich integrations are available for this server?\nHow do I use Semgrep MCP Server?\n⚠️ The Semgrep MCP server has been moved from a standalone repo to the main semgrep repository! ⚠️\n\nThis repository has been deprecated, and further updates to the Semgrep MCP server will be made via the official semgrep binary.\n\nSemgrep MCP Server\n\n        \n\nA Model Context Protocol (MCP) server for using Semgrep to scan code for security vulnerabilities. Secure your vibe coding! 😅\n\nModel Context Protocol (MCP) is a standardized API for LLMs, Agents, and IDEs like Cursor, VS Code, Windsurf, or anything that supports MCP, to get specialized help, get context, and harness the power of tools. Semgrep is a fast, deterministic static analysis tool that semantically understands many languages and comes with over 5,000 rules. 🛠️\n\nNOTE\n\nThis beta project is under active development. We would love your feedback, bug reports, feature requests, and code. Join the#mcp community Slack channel!\n\nRelated MCP server: Semgrep MCP Server\n\nContents\n\nSemgrep MCP Server\n\nContents\n\nGetting started\n\nCursor\n\nChatGPT\n\nHosted Server\n\nCursor\n\nDemo\n\nAPI\n\nTools\n\nScan Code\n\nUnderstand Code\n\nCloud Platform (login and Semgrep token required)\n\nMeta\n\nPrompts\n\nResources\n\nUsage\n\nStandard Input/Output (stdio)\n\nPython\n\nDocker\n\nStreamable HTTP\n\nPython\n\nDocker\n\nServer-sent events (SSE)\n\nPython\n\nDocker\n\nSemgrep AppSec Platform\n\nIntegrations\n\nCursor IDE\n\nVS Code / Copilot\n\nManual Configuration\n\nUsing Docker\n\nWindsurf\n\nClaude Desktop\n\nClaude Code\n\nOpenAI\n\nAgents SDK\n\nCustom clients\n\nExample Python SSE client\n\nContributing, community, and running from source\n\nSimilar tools 🔍\n\nCommunity projects 🌟\n\nMCP server registries\n\nGetting started\n\nRun the Python package as a CLI command using uv:\n\nuvx semgrep-mcp # see --help for more options\n\nOr, run as a Docker container:\n\ndocker run -i --rm ghcr.io/semgrep/mcp -t stdio\nCursor\n\nExample mcp.json\n\n{\n  \"mcpServers\": {\n    \"semgrep\": {\n      \"command\": \"uvx\",\n      \"args\": [\"semgrep-mcp\"],\n      \"env\": {\n        \"SEMGREP_APP_TOKEN\": \"<token>\"\n      }\n    }\n  }\n}\n\n\nAdd an instruction to your .cursor/rules to use automatically:\n\nAlways scan code generated using Semgrep for security vulnerabilities\nChatGPT\n\nGo to the Connector Settings page (direct link)\n\nName the connection Semgrep\n\nSet MCP Server URL to https://mcp.semgrep.ai/sse\n\nSet Authentication to No authentication\n\nCheck the I trust this application checkbox\n\nClick Create\n\nSee more details at the official docs.\n\nHosted Server\nWARNING\n\nmcp.semgrep.ai is an experimental server that may break unexpectedly. It will rapidly gain new functionality.🚀\n\nCursor\n\nCmd + Shift + J to open Cursor Settings\n\nSelect MCP Tools\n\nClick New MCP Server.\n\n{\n  \"mcpServers\": {\n    \"semgrep\": {\n      \"type\": \"streamable-http\",\n      \"url\": \"https://mcp.semgrep.ai/mcp\"\n    }\n  }\n}\nDemo\n\nAPI\nTools\n\nEnable LLMs to perform actions, make deterministic computations, and interact with external services.\n\nScan Code\n\nsecurity_check: Scan code for security vulnerabilities\n\nsemgrep_scan: Scan code files for security vulnerabilities with a given config string\n\nsemgrep_scan_with_custom_rule: Scan code files using a custom Semgrep rule\n\nUnderstand Code\n\nget_abstract_syntax_tree: Output the Abstract Syntax Tree (AST) of code\n\nCloud Platform (login and Semgrep token required)\n\nsemgrep_findings: Fetch Semgrep findings from the Semgrep AppSec Platform API\n\nMeta\n\nsupported_languages: Return the list of languages Semgrep supports\n\nsemgrep_rule_schema: Fetches the latest semgrep rule JSON Schema\n\nPrompts\n\nReusable prompts to standardize common LLM interactions.\n\nwrite_custom_semgrep_rule: Return a prompt to help write a Semgrep rule\n\nResources\n\nExpose data and content to LLMs\n\nsemgrep://rule/schema: Specification of the Semgrep rule YAML syntax using JSON schema\n\nsemgrep://rule/{rule_id}/yaml: Full Semgrep rule in YAML format from the Semgrep registry\n\nUsage\n\nThis Python package is published to PyPI as semgrep-mcp and can be installed and run with pip, pipx, uv, poetry, or any Python package manager.\n\n$ pipx install semgrep-mcp\n$ semgrep-mcp --help\n\nUsage: semgrep-mcp [OPTIONS]\n\n  Entry point for the MCP server\n\n  Supports both stdio and sse transports. For stdio, it will read from stdin\n  and write to stdout. For sse, it will start an HTTP server on port 8000.\n\nOptions:\n  -v, --version                Show version and exit.\n  -t, --transport [stdio|sse]  Transport protocol to use (stdio or sse)\n  -h, --help                   Show this message and exit.\nStandard Input/Output (stdio)\n\nThe stdio transport enables communication through standard input and output streams. This is particularly useful for local integrations and command-line tools. See the spec for more details.\n\nPython\nsemgrep-mcp\n\nBy default, the Python package will run in stdio mode. Because it's using the standard input and output streams, it will look like the tool is hanging without any output, but this is expected.\n\nDocker\n\nThis server is published to Github's Container Registry (ghcr.io/semgrep/mcp)\n\ndocker run -i --rm ghcr.io/semgrep/mcp -t stdio\n\nBy default, the Docker container is in SSE mode, so you will have to include -t stdio after the image name and run with -i to run in interactive mode.\n\nStreamable HTTP\n\nStreamable HTTP enables streaming responses over JSON RPC via HTTP POST requests. See the spec for more details.\n\nBy default, the server listens on 127.0.0.1:8000/mcp for client connections. To change any of this, set FASTMCP_* environment variables. The server must be running for clients to connect to it.\n\nPython\nsemgrep-mcp -t streamable-http\n\nBy default, the Python package will run in stdio mode, so you will have to include -t streamable-http.\n\nDocker\ndocker run -p 8000:0000 ghcr.io/semgrep/mcp\nServer-sent events (SSE)\nWARNING\n\nThe MCP communiity considers this a legacy transport portcol and is really intended for backwards compatibility.Streamable HTTP is the recommended replacement.\n\nSSE transport enables server-to-client streaming with Server-Send Events for client-to-server and server-to-client communication. See the spec for more details.\n\nBy default, the server listens on 127.0.0.1:8000/sse for client connections. To change any of this, set FASTMCP_* environment variables. The server must be running for clients to connect to it.\n\nPython\nsemgrep-mcp -t sse\n\nBy default, the Python package will run in stdio mode, so you will have to include -t sse.\n\nDocker\ndocker run -p 8000:0000 ghcr.io/semgrep/mcp -t sse\nSemgrep AppSec Platform\n\nOptionally, to connect to Semgrep AppSec Platform:\n\nLogin or sign up\n\nGenerate a token from Settings\n\nAdd the token to your environment variables:\n\nCLI (export SEMGREP_APP_TOKEN=<token>)\n\nDocker (docker run -e SEMGREP_APP_TOKEN=<token>)\n\nMCP config JSON\n\n    \"env\": {\n      \"SEMGREP_APP_TOKEN\": \"<token>\"\n    }\nTIP\n\nPleasereach out for support if needed. ☎️\n\nIntegrations\nCursor IDE\n\nAdd the following JSON block to your ~/.cursor/mcp.json global or .cursor/mcp.json project-specific configuration file:\n\n{\n  \"mcpServers\": {\n    \"semgrep\": {\n      \"command\": \"uvx\",\n      \"args\": [\"semgrep-mcp\"]\n    }\n  }\n}\n\nSee cursor docs for more info.\n\nVS Code / Copilot\n\nClick the install buttons at the top of this README for the quickest installation.\n\nManual Configuration\n\nAdd the following JSON block to your User Settings (JSON) file in VS Code. You can do this by pressing Ctrl + Shift + P and typing Preferences: Open User Settings (JSON).\n\n{\n  \"mcp\": {\n    \"servers\": {\n      \"semgrep\": {\n        \"command\": \"uvx\",\n        \"args\": [\"semgrep-mcp\"]\n      }\n    }\n  }\n}\n\nOptionally, you can add it to a file called .vscode/mcp.json in your workspace:\n\n{\n  \"servers\": {\n    \"semgrep\": {\n      \"command\": \"uvx\",\n        \"args\": [\"semgrep-mcp\"]\n    }\n  }\n}\nUsing Docker\n{\n  \"mcp\": {\n    \"servers\": {\n      \"semgrep\": {\n        \"command\": \"docker\",\n        \"args\": [\n          \"run\",\n          \"-i\",\n          \"--rm\",\n          \"ghcr.io/semgrep/mcp\",\n          \"-t\",\n          \"stdio\"\n        ]\n      }\n    }\n  }\n}\n\nSee VS Code docs for more info.\n\nWindsurf\n\nAdd the following JSON block to your ~/.codeium/windsurf/mcp_config.json file:\n\n{\n  \"mcpServers\": {\n    \"semgrep\": {\n      \"command\": \"uvx\",\n      \"args\": [\"semgrep-mcp\"]\n    }\n  }\n}\n\nSee Windsurf docs for more info.\n\nClaude Desktop\n\nHere is a short video showing Claude Desktop using this server to write a custom rule.\n\nAdd the following JSON block to your claude_desktop_config.json file:\n\n{\n  \"mcpServers\": {\n    \"semgrep\": {\n      \"command\": \"uvx\",\n      \"args\": [\"semgrep-mcp\"]\n    }\n  }\n}\n\nSee Anthropic docs for more info.\n\nClaude Code\nclaude mcp add semgrep uvx semgrep-mcp\n\nSee Claude Code docs for more info.\n\nOpenAI\n\nSee the offical docs:\n\nhttps://platform.openai.com/docs/mcp\n\nhttps://platform.openai.com/docs/guides/tools-remote-mcp\n\nAgents SDK\nasync with MCPServerStdio(\n    params={\n        \"command\": \"uvx\",\n        \"args\": [\"semgrep-mcp\"],\n    }\n) as server:\n    tools = await server.list_tools()\n\nSee OpenAI Agents SDK docs for more info.\n\nCustom clients\nExample Python SSE client\n\nSee a full example in examples/sse_client.py\n\nfrom mcp.client.session import ClientSession\nfrom mcp.client.sse import sse_client\n\n\nasync def main():\n    async with sse_client(\"http://localhost:8000/sse\") as (read_stream, write_stream):\n        async with ClientSession(read_stream, write_stream) as session:\n            await session.initialize()\n            results = await session.call_tool(\n                \"semgrep_scan\",\n                {\n                    \"code_files\": [\n                        {\n                            \"path\": \"hello_world.py\",\n                            \"content\": \"def hello(): print('Hello, World!')\",\n                        }\n                    ]\n                },\n            )\n            print(results)\nTIP\n\nSome client libraries want theURL: http://localhost:8000/sse and others only want the HOST: localhost:8000. Try out the URL in a web browser to confirm the server is running, and there are no network issues.\n\nSee official SDK docs for more info.\n\nContributing, community, and running from source\nNOTE\n\nWe love your feedback, bug reports, feature requests, and code. Join the#mcp community Slack channel!\n\nSee CONTRIBUTING.md for more info and details on how to run from the MCP server from source code.\n\nSimilar tools 🔍\n\nsemgrep-vscode - Official VS Code extension\n\nsemgrep-intellij - IntelliJ plugin\n\nCommunity projects 🌟\n\nsemgrep-rules - The official collection of Semgrep rules\n\nmcp-server-semgrep - Original inspiration written by Szowesgad and stefanskiasan\n\nMCP server registries\n\nGlama\n\nMCP.so\n\nMade with ❤️ by the Semgrep Team\n\nchart\nexamples\n.github\nimages\nscripts\nsrc\ntests\nCHANGELOG.md\nCODE_OF_CONDUCT.md\nCONTRIBUTING.md\nDockerfile\n.dockerignore\n.gitignore\n.gitmodules\nglama.json\nLICENSE\nMakefile\n.pre-commit-config.yaml\npyproject.toml\n.python-version\nREADME.md\nSECURITY.md\nuv.lock\nInstall Server\nA\nlicense - permissive license\nB\nquality\nF\nmaintenance\n\nHow are these scores calculated?\n\nMaintenance\n–\nMaintainers\n–\nResponse time\n–\nRelease cycle\n1\nReleases (12mo)\nIssues opened vs closed\nResources\nGitHub Repository\nNeed Help?\nReport Issue\nReddit Discussion\nRelated Servers\n\nUnclaimed servers have limited discoverability.\n\nLooking for Admin?\n\nIf you are the server author, claim this server to access and configure the admin panel.\n\nTools\nget_scan_resultsC\nget_scan_statusC\nget_supported_languagesC\nsemgrep_scanA\nstart_scanC\nstart_scan_from_contentC\nRelated MCP Servers\nMCP Server\nAutonomous Agents\nDeveloper Tools\nla-rebelion\nA\nlicense\n-\nquality\nD\nmaintenance\nMCP Server simplifies the implementation of the Model Context Protocol by providing a user-friendly API to create custom tools and manage server workflows efficiently.\nLast updated a year ago\n19\n4\nMIT\nSemgrep MCP Server\nCode Analysis\nDeveloper Tools\nSecurity\nstefanskiasan\nA\nlicense\n-\nquality\nD\nmaintenance\nEnables integration of Semgrep in development environments via the MCP protocol, supporting static code analysis, rule management, and scan result operations.\nLast updated a year ago\n2\nMIT\ncve-search_mcp\nSecurity\nOpen Data\nSearch\nroadwy\nA\nlicense\nB\nquality\nC\nmaintenance\nA Model Context Protocol (MCP) server for querying the CVE-Search API. This server provides comprehensive access to CVE-Search, browse vendor and product、get CVE per CVE-ID、get the last updated CVEs.\nLast updated 10 months ago\n6\n100\nMIT\nNmap MCP Server\nSecurity\nCommand Line\nOS Automation\nimjdl\nA\nlicense\nB\nquality\nC\nmaintenance\nA Model Control Protocol server that provides access to nmap network scanning functionality, allowing users to run customizable scans, store results, and analyze network security using AI prompts.\nLast updated a year ago\n3\n15\nMIT\n\nView all related MCP servers\n\nRelated MCP Connectors\nFrogeye Security Scanner\n\nZero-config MCP security scanner for AI-generated apps. 25K+ vulnerability patterns.\n\nhithereiamaliff-mcp-nextcloud\n\nA comprehensive Model Context Protocol (MCP) server that enables AI assistants to interact with yo…\n\nSmartBear MCP\n\nMCP server for AI access to SmartBear tools, including BugSnag, Reflect, Swagger, PactFlow, QTM4J.\n\nView all MCP Connectors\n\nAppeared in Searches\nLinux-compatible version of Cursor\nSemgrep static analysis tool\nServer Security Help and Guidance\nSecurity testing, penetration testing, and code auditing services\nCodeQL static analysis tool and semantic code analysis platform\nLatest Blog Posts\nLightport: Open-Sourcing Glama's AI Gateway\nBy \npunkpeye\n on April 27, 2026.\nopen source\nOpenAI\nTool Definition Quality Score (TDQS)\nBy \npunkpeye\n on April 3, 2026.\nmcp\nThe Hackers Who Tracked My Sleep Cycle\nBy \npunkpeye\n on March 26, 2026.\nsecurity\nMCP directory API\n\nWe provide all the information about MCP servers via our MCP API.\n\ncurl -X GET 'https://glama.ai/api/mcp/v1/servers/semgrep/mcp'\n\nIf you have feedback or need assistance with the MCP directory API, please join our Discord server\n\nWas this helpful?\nYes\nNo\nMCP\nMCP Servers\nMCP Connectors\nMCP Gateway\nMCP Hosting\nMCP Inspector\nMCP Clients\nMCP Tools\nAI\nChat\nAI Gateway\nAI Models\nPolicies\nTerms of Service\nPrivacy Policy\nVDP\nResources\nRelease Notes\nSupport\nPricing\nCareers\nBlog\nNewsletter\nGlama – all-in-one AI workspace.\nAll systems online",
+  "stats": {
+    "bodyTextLength": 14430,
+    "linkCount": 230,
+    "buttonCount": 35,
+    "inputCount": 1,
+    "cardishCount": 4,
+    "scrollHeight": 22963
+  }
+}

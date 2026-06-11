@@ -1,0 +1,287 @@
+{
+  "title": "Exa Search - MCP | Smithery",
+  "url": "https://smithery.ai/servers/exa",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Exa Search"
+    },
+    {
+      "tag": "h2",
+      "text": "Performance"
+    },
+    {
+      "tag": "h2",
+      "text": "Usage"
+    },
+    {
+      "tag": "h3",
+      "text": "Top Clients"
+    },
+    {
+      "tag": "h3",
+      "text": "Daily Sessions"
+    },
+    {
+      "tag": "h2",
+      "text": "Integrate"
+    },
+    {
+      "tag": "h3",
+      "text": "Resources"
+    },
+    {
+      "tag": "h3",
+      "text": "Company"
+    },
+    {
+      "tag": "h3",
+      "text": "Connect"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "input",
+      "role": "combobox",
+      "text": "Search MCPs...",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Publish",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "2",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "1",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "1",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "CLI",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "AI SDK",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "TypeScript\nPREVIEW",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "npm install -g smithery",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "smithery namespace create {your-namespace}",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "Light theme",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "System theme",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "Dark theme",
+      "type": "button"
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://smithery.ai/"
+    },
+    {
+      "text": "MCPs",
+      "href": "https://smithery.ai/servers"
+    },
+    {
+      "text": "Skills",
+      "href": "https://smithery.ai/skills"
+    },
+    {
+      "text": "Docs",
+      "href": "https://smithery.ai/docs"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://smithery.ai/pricing"
+    },
+    {
+      "text": "Login",
+      "href": "https://smithery.ai/login?redirect=%2Fservers%2Fexa"
+    },
+    {
+      "text": "",
+      "href": "https://smithery.ai/servers/exa"
+    },
+    {
+      "text": "",
+      "href": "https://smithery.ai/servers/exa#performance"
+    },
+    {
+      "text": "",
+      "href": "https://smithery.ai/servers/exa#usage"
+    },
+    {
+      "text": "",
+      "href": "https://smithery.ai/servers/exa#api"
+    },
+    {
+      "text": "2",
+      "href": "https://smithery.ai/servers/exa?capability=tools"
+    },
+    {
+      "text": "1",
+      "href": "https://smithery.ai/servers/exa?capability=resources"
+    },
+    {
+      "text": "1",
+      "href": "https://smithery.ai/servers/exa?capability=prompts"
+    },
+    {
+      "text": "github.com/exa-labs/exa-mcp-server",
+      "href": "https://github.com/exa-labs/exa-mcp-server"
+    },
+    {
+      "text": "exa.ai",
+      "href": "https://exa.ai/"
+    },
+    {
+      "text": "Smithery",
+      "href": "https://smithery.ai/docs/use/connect"
+    },
+    {
+      "text": "Create API key",
+      "href": "https://smithery.ai/account/api-keys"
+    },
+    {
+      "text": "Manage Connections",
+      "href": "https://smithery.ai/account/connect"
+    },
+    {
+      "text": "",
+      "href": "https://smithery.ai/"
+    },
+    {
+      "text": "Documentation",
+      "href": "https://smithery.ai/docs"
+    },
+    {
+      "text": "Privacy Policy",
+      "href": "https://smithery.ai/privacy"
+    },
+    {
+      "text": "System Status",
+      "href": "https://status.smithery.ai/"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://smithery.ai/pricing"
+    },
+    {
+      "text": "About",
+      "href": "https://smithery.ai/about"
+    },
+    {
+      "text": "Blog",
+      "href": "https://smithery.ai/blog"
+    },
+    {
+      "text": "",
+      "href": "https://x.com/SmitheryDotAi"
+    },
+    {
+      "text": "",
+      "href": "https://github.com/smithery-ai"
+    },
+    {
+      "text": "",
+      "href": "https://discord.gg/sKd9uycgH9"
+    }
+  ],
+  "text": "Exa Search\nexa\nlast deployed 13 days ago\nAdd to toolbox\n90/100\n23.3k calls\n99.82% uptime\n\nFast, intelligent web search and web crawling. Get fresh information about libraries, APIs, and SDKs.\n\n2\n1\n1\nweb_search_exa\nREAD-ONLY\n\nSearch the web for any topic and get clean, ready-to-use content.\n\nBest for: Finding current information, news, facts, people, companies, or answering questions about any topic.\nReturns: Clean text content from top search results.\n\nQuery tips:\ndescribe the ideal page, not keywords. \"blog post comparing React and Vue performance\" not \"React vs Vue\".\nUse category:people / category:company to search through Linkedin profiles / companies respectively.\nIf highlights are insufficient, follow up with web_fetch_exa on the best URLs.\n\nweb_fetch_exa\nREAD-ONLY\n\nRead a webpage's full content as clean markdown. Use after web_search_exa when highlights are insufficient or to read any URL.\n\nBest for: Extracting full content from known URLs. Batch multiple URLs in one call.\nReturns: Clean text content and metadata from the page(s).\n\nRepository\ngithub.com/exa-labs/exa-mcp-server\nHomepage\nexa.ai\nPublished\nDec 13, 2024\nLicense\nMIT\nTool Calls\n23,081\nPerformance\nTool\nCalls\nweb_search_exa\n20,612\nweb_fetch_exa\n2,590\ncrawling_exa\n93\nget_code_context_exa\n40\nsearch\n4\nweb-search-exa\n3\nweb_search_advanced_exa\n3\nget_summary\n1\ncompany_research_exa\n1\nTotal\n23,347\nUptime (30d)\n99.8%\nLatency (30d)\n143ms p50\nMay 11\nMay 21\nMay 29\nJun 10\n0ms\n150ms\n300ms\n450ms\n600ms\nUsage\nTop Clients\n1\nClaude Code\n13,401\n2\nCursor\n10,167\n3\nSmithery\n9,398\n4\nCodex\n9,046\n5\nM\nMCP Remote Test\n4,666\nTotal\n62,681\nDaily Sessions\nMay 11\nMay 23\nJun 1\nJun 10\n0\n2,500\n5,000\n7,500\n10,000\nIntegrate\n\nIntegrate this server via the CLI, MCP SDK, or AI SDK. Smithery handles OAuth, token refresh, and session management for you.\n\nCreate API key\nManage Connections\nCLI\nAI SDK\nTypeScript\nPREVIEW\n\n1. Install Smithery CLI\n\nnpm install -g smithery\n\n2. Create a namespace\n\nsmithery namespace create {your-namespace}\n\n3. Use this server\n\n# Add this server\nsmithery mcp add exa\n\n# List available tools\nsmithery tool list {connection}\n\n# Call a tool\nsmithery tool call {connection} {tool_name} '{\"key\": \"value\"}'\n\nGive agents more agency\n\nResources\nDocumentation\nPrivacy Policy\nSystem Status\nCompany\nPricing\nAbout\nBlog\nConnect\n\n© 2026 Smithery. All rights reserved.\n\nJun 1",
+  "stats": {
+    "bodyTextLength": 2341,
+    "linkCount": 28,
+    "buttonCount": 20,
+    "inputCount": 1,
+    "cardishCount": 7,
+    "scrollHeight": 4349
+  }
+}

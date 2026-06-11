@@ -1,0 +1,477 @@
+{
+  "title": "Agent Skills Marketplace - Claude, Codex & ChatGPT Skills | SkillsMP",
+  "url": "https://skillsmp.com/",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Skills \nMarketplace"
+    },
+    {
+      "tag": "h2",
+      "text": "Browse Agent Skills"
+    },
+    {
+      "tag": "h2",
+      "text": "Browse Agent Skills by Occupation"
+    },
+    {
+      "tag": "h3",
+      "text": "Computer and Mathematical Occupations"
+    },
+    {
+      "tag": "h3",
+      "text": "Business and Financial Operations Occupations"
+    },
+    {
+      "tag": "h3",
+      "text": "Arts, Design, Entertainment, Sports, and Media Occupations"
+    },
+    {
+      "tag": "h3",
+      "text": "Office and Administrative Support Occupations"
+    },
+    {
+      "tag": "h3",
+      "text": "Educational Instruction and Library Occupations"
+    },
+    {
+      "tag": "h3",
+      "text": "Life, Physical, and Social Science Occupations"
+    },
+    {
+      "tag": "h3",
+      "text": "Legal Occupations"
+    },
+    {
+      "tag": "h3",
+      "text": "Management Occupations"
+    },
+    {
+      "tag": "h2",
+      "text": "Browse by Category"
+    },
+    {
+      "tag": "h3",
+      "text": "Tools"
+    },
+    {
+      "tag": "h3",
+      "text": "Business"
+    },
+    {
+      "tag": "h3",
+      "text": "Development"
+    },
+    {
+      "tag": "h3",
+      "text": "Testing & Security"
+    },
+    {
+      "tag": "h3",
+      "text": "Data & AI"
+    },
+    {
+      "tag": "h3",
+      "text": "DevOps"
+    },
+    {
+      "tag": "h3",
+      "text": "Documentation"
+    },
+    {
+      "tag": "h3",
+      "text": "Content & Media"
+    },
+    {
+      "tag": "h3",
+      "text": "Research"
+    },
+    {
+      "tag": "h3",
+      "text": "Lifestyle"
+    },
+    {
+      "tag": "h3",
+      "text": "Databases"
+    },
+    {
+      "tag": "h3",
+      "text": "Blockchain"
+    },
+    {
+      "tag": "h2",
+      "text": "Explore the agent skills ecosystem by occupation and creator"
+    },
+    {
+      "tag": "h3",
+      "text": "Map a field"
+    },
+    {
+      "tag": "h3",
+      "text": "Follow creators"
+    },
+    {
+      "tag": "h3",
+      "text": "Search with sources"
+    },
+    {
+      "tag": "h2",
+      "text": "Frequently Asked Questions"
+    },
+    {
+      "tag": "h3",
+      "text": "What are agent skills?"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "EN",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle menu",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Dismiss banner",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Occupation",
+      "type": "button"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search 1640440 skills: try 'AI video', 'data analysis', 'code review'...",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "01\nWhat are agent skills?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "02\nHow do I install an agent skill?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "03\nAre these skills safe to use?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "04\nCan I use multiple skills together?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "05\nCan I create and share my own skills?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "06\nHow do skills differ from slash commands?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "07\nHow often are skills updated?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "08\nIs this website affiliated with Anthropic or OpenAI?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Scroll to top",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "href": "https://skillsmp.com/#main-content"
+    },
+    {
+      "text": "skills mp",
+      "href": "https://skillsmp.com/en"
+    },
+    {
+      "text": "Skills",
+      "href": "https://skillsmp.com/en/skills"
+    },
+    {
+      "text": "Creators",
+      "href": "https://skillsmp.com/en/creators"
+    },
+    {
+      "text": "Occupations",
+      "href": "https://skillsmp.com/en/occupations"
+    },
+    {
+      "text": "Docs",
+      "href": "https://skillsmp.com/en/docs"
+    },
+    {
+      "text": "Sign In",
+      "href": "https://skillsmp.com/auth/login"
+    },
+    {
+      "text": "Run any Skill in Manus with one click",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "Get Started",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "Search Skills",
+      "href": "https://skillsmp.com/search"
+    },
+    {
+      "text": "Browse Creators",
+      "href": "https://skillsmp.com/creators"
+    },
+    {
+      "text": "Explore Occupations",
+      "href": "https://skillsmp.com/occupations"
+    },
+    {
+      "text": "Search SkillsSearch 1,640,440 skills: try 'AI video', 'data analysis', 'code review'...",
+      "href": "https://skillsmp.com/search"
+    },
+    {
+      "text": "APIUse the same catalog through the APIConnect 1,640,440 public skills to your own search, analytics, or agent workflow with the REST API.AP",
+      "href": "https://skillsmp.com/docs/api"
+    },
+    {
+      "text": "Browse Creators",
+      "href": "https://skillsmp.com/creators"
+    },
+    {
+      "text": "Explore Occupations",
+      "href": "https://skillsmp.com/occupations"
+    },
+    {
+      "text": "frontend-design 129.8k anthropics/claude-code Create distinctive, production-grade frontend interfaces with high design quality. Use this sk",
+      "href": "https://skillsmp.com/skills/anthropics-claude-code-plugins-frontend-design-skills-frontend-design-skill-md"
+    },
+    {
+      "text": "skill-creator 144.7k anthropics/skills Create new skills, modify and improve existing skills, and measure skill performance. Use when users ",
+      "href": "https://skillsmp.com/skills/anthropics-skills-skills-skill-creator-skill-md"
+    },
+    {
+      "text": "ui-ux-pro-max 87.0k nextlevelbuilder/ui-ux-pro-max-skill UI/UX design intelligence for web and mobile. Includes 50+ styles, 161 color palett",
+      "href": "https://skillsmp.com/skills/nextlevelbuilder-ui-ux-pro-max-skill-claude-skills-ui-ux-pro-max-skill-md"
+    },
+    {
+      "text": "brainstorming 216.9k obra/superpowers You MUST use this before any creative work - creating features, building components, adding functional",
+      "href": "https://skillsmp.com/skills/obra-superpowers-skills-brainstorming-skill-md"
+    },
+    {
+      "text": "vercel-react-best-practices 27.5k vercel-labs/agent-skills React and Next.js performance optimization guidelines from Vercel Engineering. Th",
+      "href": "https://skillsmp.com/skills/vercel-labs-agent-skills-skills-react-best-practices-skill-md"
+    },
+    {
+      "text": "ppt-generation 70.4k bytedance/deer-flow Use this skill when the user requests to generate, create, or make presentations (PPT/PPTX). Create",
+      "href": "https://skillsmp.com/skills/bytedance-deer-flow-skills-public-ppt-generation-skill-md"
+    },
+    {
+      "text": "browser-use 97.0k browser-use/browser-use Automates browser interactions for web testing, form filling, screenshots, and data extraction. Us",
+      "href": "https://skillsmp.com/skills/browser-use-browser-use-skills-browser-use-skill-md"
+    },
+    {
+      "text": "docx 144.7k anthropics/skills Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Trig",
+      "href": "https://skillsmp.com/skills/anthropics-skills-skills-docx-skill-md"
+    },
+    {
+      "text": "code-reviewer 112.8k Shubhamsaboo/awesome-llm-apps Thorough code review with focus on security, performance, and best practices. Use when: r",
+      "href": "https://skillsmp.com/skills/shubhamsaboo-awesome-llm-apps-awesome-agent-skills-code-reviewer-skill-md"
+    },
+    {
+      "text": "Load More Skills",
+      "href": "https://skillsmp.com/search"
+    },
+    {
+      "text": "01 #01 Computer and Mathematical Occupations 1,253,982 skills",
+      "href": "https://skillsmp.com/occupations/computer-and-mathematical-occupations"
+    },
+    {
+      "text": "02 #02 Business and Financial Operations Occupations 187,818 skills",
+      "href": "https://skillsmp.com/occupations/business-and-financial-operations-occupations"
+    },
+    {
+      "text": "03 #03 Arts, Design, Entertainment, Sports, and Media Occupations 82,224 skills",
+      "href": "https://skillsmp.com/occupations/arts-design-entertainment-sports-and-media-occupations"
+    },
+    {
+      "text": "04 #04 Office and Administrative Support Occupations 43,525 skills",
+      "href": "https://skillsmp.com/occupations/office-and-administrative-support-occupations"
+    },
+    {
+      "text": "05 #05 Educational Instruction and Library Occupations 19,979 skills",
+      "href": "https://skillsmp.com/occupations/educational-instruction-and-library-occupations"
+    },
+    {
+      "text": "06 #06 Life, Physical, and Social Science Occupations 19,016 skills",
+      "href": "https://skillsmp.com/occupations/life-physical-and-social-science-occupations"
+    },
+    {
+      "text": "07 #07 Legal Occupations 17,778 skills",
+      "href": "https://skillsmp.com/occupations/legal-occupations"
+    },
+    {
+      "text": "08 #08 Management Occupations 12,388 skills",
+      "href": "https://skillsmp.com/occupations/management-occupations"
+    },
+    {
+      "text": "Explore Occupations & Job Skills",
+      "href": "https://skillsmp.com/occupations"
+    },
+    {
+      "text": "Tools 389,459 skills",
+      "href": "https://skillsmp.com/categories/tools"
+    },
+    {
+      "text": "Business 288,211 skills",
+      "href": "https://skillsmp.com/categories/business"
+    },
+    {
+      "text": "Development 231,072 skills",
+      "href": "https://skillsmp.com/categories/development"
+    },
+    {
+      "text": "Testing & Security 171,289 skills",
+      "href": "https://skillsmp.com/categories/testing-security"
+    },
+    {
+      "text": "Data & AI 152,905 skills",
+      "href": "https://skillsmp.com/categories/data-ai"
+    },
+    {
+      "text": "DevOps 130,953 skills",
+      "href": "https://skillsmp.com/categories/devops"
+    },
+    {
+      "text": "Documentation 111,444 skills",
+      "href": "https://skillsmp.com/categories/documentation"
+    },
+    {
+      "text": "Content & Media 99,842 skills",
+      "href": "https://skillsmp.com/categories/content-media"
+    },
+    {
+      "text": "Research 60,456 skills",
+      "href": "https://skillsmp.com/categories/research"
+    },
+    {
+      "text": "Lifestyle 21,747 skills",
+      "href": "https://skillsmp.com/categories/lifestyle"
+    },
+    {
+      "text": "Databases 18,763 skills",
+      "href": "https://skillsmp.com/categories/databases"
+    },
+    {
+      "text": "Blockchain 13,174 skills",
+      "href": "https://skillsmp.com/categories/blockchain"
+    },
+    {
+      "text": "View All Categories",
+      "href": "https://skillsmp.com/categories"
+    },
+    {
+      "text": "DEVELOPER ACCESS Use the same catalog through the API Connect 1.5M+ public skills to your own search, analytics, or agent workflow with the ",
+      "href": "https://skillsmp.com/docs/api"
+    }
+  ],
+  "text": "Skip to main content\nskills\nmp\nRun any Skill in Manus\nwith one click\nSKILLSMP / SKILLS MARKETPLACE\nSkills \nMarketplace\n\nDiscover open-source agent skills for Claude Code, Codex, ChatGPT, and any tool that uses SKILL.md.\n\nEnter through keywords, occupations, creators, and GitHub sources to see what kinds of skills are emerging across domains.\n\n1,640,440\nCollected SKILL.md files\nSearch Skills\nBrowse Creators\nExplore Occupations\nBrowse Agent Skills\nFilter by\nOccupation\nfrontend-design\n129.8k\nanthropics/claude-code\nCreate distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, or applications. Generates creative, polished code that avoids generic AI aesthetics.\n2025-11-12\nskill-creator\n144.7k\nanthropics/skills\nCreate new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.\n2026-04-20\nui-ux-pro-max\n87.0k\nnextlevelbuilder/ui-ux-pro-max-skill\nUI/UX design intelligence for web and mobile. Includes 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, and 25 chart types across 10 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, and check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, and mobile app. Elements: button, modal, navbar, sidebar, card, table, form, and chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, and flat design. Topics: color systems, accessibility, animation, layout, typography, font pairing, spacing, interaction states, shadow, and gradient. Integrations: shadcn/ui MCP for component search and examples.\n2026-03-10\nbrainstorming\n216.9k\nobra/superpowers\nYou MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.\n2026-03-25\nvercel-react-best-practices\n27.5k\nvercel-labs/agent-skills\nReact and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.\n2026-04-14\nppt-generation\n70.4k\nbytedance/deer-flow\nUse this skill when the user requests to generate, create, or make presentations (PPT/PPTX). Creates visually rich slides by generating images for each slide and composing them into a PowerPoint file.\n2026-03-16\nbrowser-use\n97.0k\nbrowser-use/browser-use\nAutomates browser interactions for web testing, form filling, screenshots, and data extraction. Use when the user needs to navigate websites, interact with web pages, fill forms, take screenshots, or extract information from web pages.\n2026-05-11\ndocx\n144.7k\nanthropics/skills\nUse this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.\n2026-02-25\ncode-reviewer\n112.8k\nShubhamsaboo/awesome-llm-apps\nThorough code review with focus on security, performance, and best practices. Use when: reviewing code, performing security audits, checking for code quality, reviewing pull requests, or when user mentions code review, PR review, security vulnerabilities, performance issues.\n2026-02-04\nLoad More Skills\n\n100% classified\n\nBrowse Agent Skills by Occupation\n\n23 major groups · 867 SOC occupations\n\n01\n#01\nComputer and Mathematical Occupations\n1,253,982\nskills\n02\n#02\nBusiness and Financial Operations Occupations\n187,818\nskills\n03\n#03\nArts, Design, Entertainment, Sports, and Media Occupations\n82,224\nskills\n04\n#04\nOffice and Administrative Support Occupations\n43,525\nskills\n05\n#05\nEducational Instruction and Library Occupations\n19,979\nskills\n06\n#06\nLife, Physical, and Social Science Occupations\n19,016\nskills\n07\n#07\nLegal Occupations\n17,778\nskills\n08\n#08\nManagement Occupations\n12,388\nskills\nExplore Occupations & Job Skills\n\n1.6M+\n\nBrowse by Category\n\nExplore agent skills organized by their primary use case\n\nTools\n389,459 skills\nBusiness\n288,211 skills\nDevelopment\n231,072 skills\nTesting & Security\n171,289 skills\nData & AI\n152,905 skills\nDevOps\n130,953 skills\nDocumentation\n111,444 skills\nContent & Media\n99,842 skills\nResearch\n60,456 skills\nLifestyle\n21,747 skills\nDatabases\n18,763 skills\nBlockchain\n13,174 skills\nView All Categories\n\nSKILLSMP / CREATORS AND OCCUPATION CATEGORIES\n\nExplore the agent skills ecosystem by occupation and creator\n\nSkillsMP is not just a keyword search box. It is an open map that organizes public skills by occupation, creator, and repository, helping you see which workflows, judgment criteria, and domain habits people are writing for AI agents.\n\nThen follow creators and GitHub repositories back to the source: compare the skills a team maintains, whether the repo is active, and how the README frames the work before you open, install, or reuse anything.\n\nUse it three ways: learn an unfamiliar field by occupation, study how creators organize skills, then use source context to decide what is worth opening or reusing.\n\nDEVELOPER ACCESS\n\nUse the same catalog through the API\n\nConnect 1.5M+ public skills to your own search, analytics, or agent workflow with the REST API.\n\nAPI DOCS\n01\nMap a field\n\nBrowse 23 occupation groups and 867 SOC roles to learn what skills exist in adjacent domains and how they break down real work.\n\nEXPLORE OCCUPATIONS\n02\nFollow creators\n\nUse creator and repository pages to inspect maintained skill collections, recent updates, and source context before trusting a result.\n\nBROWSE CREATORS\n03\nSearch with sources\n\nSearch 1.5M+ collected skills, then use occupation tags, creators, and GitHub source context to decide what is worth opening.\n\nSEARCH SKILLS\n\nStart with the occupation map, then follow creators and repositories back to real code. SkillsMP helps explain why a skill is worth opening, not only what it is named.\n\n1.5M+ SKILL.md\nGitHub source\n\n8 questions\n\nFrequently Asked Questions\n\nA practical guide to agent skills: what they are, how to inspect them, and how SkillsMP helps you explore the ecosystem.\n\n01\nWhat are agent skills?\nAgent skills are reusable instructions and supporting files that teach an AI assistant how to handle a specific kind of task. A skill usually starts with a SKILL.md file and may include scripts, templates, examples, or domain notes. SkillsMP collects public examples so you can study what people are turning into skills across different fields.\n02\nHow do I install an agent skill?\nOpen the skill source on GitHub and follow the repository instructions. In many setups, installation means copying the skill folder into the skills directory used by your assistant or plugin system. Always read the SKILL.md and any scripts before adding them to your environment.\n03\nAre these skills safe to use?\nSkillsMP indexes public GitHub repositories; it does not certify that every skill is safe or high quality. Treat community skills like any open-source code: inspect the source, review scripts and permissions, check recent activity, and only install what you understand.\n04\nCan I use multiple skills together?\nOften yes, depending on the AI assistant or plugin system you use. Skills work best when each one has a clear scope. If multiple skills overlap, review their instructions so they do not give conflicting guidance for the same task.\n05\nCan I create and share my own skills?\nYes. Start with a clear SKILL.md that explains when the skill should be used and what workflow it supports. Add scripts, templates, or examples only when they make the skill more useful. If you publish it in a public GitHub repository, SkillsMP may discover it through future indexing.\n06\nHow do skills differ from slash commands?\nSlash commands are usually triggered directly by the user. Skills are intended to be selected by the assistant when the context matches their description. In practice, commands are good for explicit actions, while skills are better for reusable domain knowledge, workflows, and task-specific guidance.\n07\nHow often are skills updated?\nSkillsMP syncs public GitHub sources regularly. Updates appear after the next indexing run, so the catalog can lag behind GitHub. Use each skill card and source repository to check the latest visible update time before relying on a skill.\n08\nIs this website affiliated with Anthropic or OpenAI?\nNo. SkillsMP is an independent community project. It aggregates public GitHub sources to make skill discovery easier, but official product documentation and official skills should be checked on the corresponding vendor sites.\n\nStill have questions about agent skills?\n\nRead Agent Skills Docs\nSkills Marketplace\n\nDiscover and explore AI skills built by the community.\n\nCOMMUNITY\nTwitter\nReddit\nRESOURCES\n📚\nSkills Docs\n📈\nInsights\n📄\nSkill Document\n📁\nOfficial Skills\n📄\nCodex Skills Docs\n📋\nAgent Skills Spec\nLEGAL\n📄\nAbout\n📋\nChangelog\n🔒\nPrivacy Policy\n📜\nTerms of Service\nScroll to top",
+  "stats": {
+    "bodyTextLength": 10122,
+    "linkCount": 67,
+    "buttonCount": 24,
+    "inputCount": 1,
+    "cardishCount": 59,
+    "scrollHeight": 10147
+  }
+}

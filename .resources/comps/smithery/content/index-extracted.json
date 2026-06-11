@@ -1,0 +1,537 @@
+{
+  "title": "MCPs | Smithery",
+  "url": "https://smithery.ai/servers",
+  "headings": [
+    {
+      "tag": "h3",
+      "text": "Filters"
+    },
+    {
+      "tag": "h3",
+      "text": "Advanced"
+    },
+    {
+      "tag": "h3",
+      "text": "Categories"
+    },
+    {
+      "tag": "h2",
+      "text": "FEATURED"
+    },
+    {
+      "tag": "h3",
+      "text": "Jina AI"
+    },
+    {
+      "tag": "h3",
+      "text": "Vercel Grep"
+    },
+    {
+      "tag": "h3",
+      "text": "AI Research Assistant"
+    },
+    {
+      "tag": "h3",
+      "text": "Exa Search"
+    },
+    {
+      "tag": "h3",
+      "text": "Gmail"
+    },
+    {
+      "tag": "h3",
+      "text": "Mesh MCP"
+    },
+    {
+      "tag": "h3",
+      "text": "Brave Search"
+    },
+    {
+      "tag": "h3",
+      "text": "Context7"
+    },
+    {
+      "tag": "h3",
+      "text": "Tavily"
+    },
+    {
+      "tag": "h3",
+      "text": "Parallel Web Search"
+    },
+    {
+      "tag": "h3",
+      "text": "Paradex MCP Server"
+    },
+    {
+      "tag": "h3",
+      "text": "GitHub"
+    },
+    {
+      "tag": "h3",
+      "text": "OneSignal"
+    },
+    {
+      "tag": "h3",
+      "text": "Agent News"
+    },
+    {
+      "tag": "h3",
+      "text": "Microsoft Learn MCP"
+    },
+    {
+      "tag": "h3",
+      "text": "OrgX"
+    },
+    {
+      "tag": "h3",
+      "text": "The Local Intel"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Sheets"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Calendar"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Tasks"
+    },
+    {
+      "tag": "h3",
+      "text": "Supabase"
+    },
+    {
+      "tag": "h3",
+      "text": "Reddit"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Drive"
+    },
+    {
+      "tag": "h2",
+      "text": "Featured"
+    },
+    {
+      "tag": "h3",
+      "text": "Jina AI"
+    },
+    {
+      "tag": "h3",
+      "text": "Vercel Grep"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "input",
+      "role": "combobox",
+      "text": "Search MCPs...",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Publish",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Namespace",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to toolbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "Light theme",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "System theme",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "Dark theme",
+      "type": "button"
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://smithery.ai/"
+    },
+    {
+      "text": "MCPs",
+      "href": "https://smithery.ai/servers"
+    },
+    {
+      "text": "Skills",
+      "href": "https://smithery.ai/skills"
+    },
+    {
+      "text": "Docs",
+      "href": "https://smithery.ai/docs"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://smithery.ai/pricing"
+    },
+    {
+      "text": "Login",
+      "href": "https://smithery.ai/login?redirect=%2Fservers"
+    },
+    {
+      "text": "Verified",
+      "href": "https://smithery.ai/servers?q=is%3Averified"
+    },
+    {
+      "text": "Smithery managed",
+      "href": "https://smithery.ai/servers?q=is%3Asmithery-managed"
+    },
+    {
+      "text": "My Servers",
+      "href": "https://smithery.ai/servers?q=owner%3Ame"
+    },
+    {
+      "text": "All",
+      "href": "https://smithery.ai/servers"
+    },
+    {
+      "text": "Web Search",
+      "href": "https://smithery.ai/servers?q=search%20the%20web%20for%20information"
+    },
+    {
+      "text": "Browser Automation",
+      "href": "https://smithery.ai/servers?q=automate%20and%20control%20web%20browsers"
+    },
+    {
+      "text": "Academic Research",
+      "href": "https://smithery.ai/servers?q=research%20papers%20citations%20and%20scholarly"
+    },
+    {
+      "text": "Finance",
+      "href": "https://smithery.ai/servers?q=financial%20data%20stocks%20and%20trading"
+    },
+    {
+      "text": "Reasoning",
+      "href": "https://smithery.ai/servers?q=thinking%20reasoning%20and%20problem%20solving"
+    },
+    {
+      "text": "Dev Tools",
+      "href": "https://smithery.ai/servers?q=software%20development%20and%20coding%20tools"
+    },
+    {
+      "text": "Jina AI jina · 5.71k uses AI-powered search and retrieval platform. Search the web, read page content, extract structured data, and ground A",
+      "href": "https://smithery.ai/servers/jina"
+    },
+    {
+      "text": "Vercel Grep vercel/grep · 1.94k uses Search millions of public GitHub repositories for real-world code patterns and API implementations. Fin",
+      "href": "https://smithery.ai/servers/vercel/grep"
+    },
+    {
+      "text": "AI Research Assistant hamid-vakilzadeh/mcpsemanticscholar · 18.21k uses The server provides immediate access to millions of academic papers ",
+      "href": "https://smithery.ai/servers/hamid-vakilzadeh/mcpsemanticscholar"
+    },
+    {
+      "text": "Exa Search exa · 23.77k uses Fast, intelligent web search and web crawling. Get fresh information about libraries, APIs, and SDKs. Add to to",
+      "href": "https://smithery.ai/servers/exa"
+    },
+    {
+      "text": "Gmail gmail · 36.06k uses Manage Gmail end-to-end: send, draft, reply, forward, and bulk-modify or delete messages and threads. Organize you",
+      "href": "https://smithery.ai/servers/gmail"
+    },
+    {
+      "text": "Mesh MCP clay-inc/clay-mcp · 20.22k uses Access your network seamlessly with a simple and efficient server. Leverage a variety of tools to e",
+      "href": "https://smithery.ai/servers/clay-inc/clay-mcp"
+    },
+    {
+      "text": "Brave Search brave · 12.85k uses Search the web with Brave's independent index — web, news, images, and videos. Bring your own subscription ",
+      "href": "https://smithery.ai/servers/brave"
+    },
+    {
+      "text": "Context7 upstash/context7-mcp · 7.08k uses Fetch up-to-date, version-specific documentation and code examples directly into your prompts. En",
+      "href": "https://smithery.ai/servers/upstash/context7-mcp"
+    },
+    {
+      "text": "Tavily Tavily · 4.89k uses Search the web with fast, accurate results optimized for AI. Get clean, structured answers with source URLs and r",
+      "href": "https://smithery.ai/servers/Tavily"
+    },
+    {
+      "text": "Parallel Web Search parallel/search · 3.46k uses Highest accuracy web search for AIs Add to toolbox",
+      "href": "https://smithery.ai/servers/parallel/search"
+    },
+    {
+      "text": "Paradex MCP Server tradeparadex/mcp-paradex-py · 4.74k uses MCP server for the Paradex perpetual futures trading platform. Retrieve market d",
+      "href": "https://smithery.ai/servers/tradeparadex/mcp-paradex-py"
+    },
+    {
+      "text": "GitHub github · 4.14k uses Connect your AI agents to GitHub — manage repos, issues, PRs, workflows, and more Add to toolbox",
+      "href": "https://smithery.ai/servers/github"
+    },
+    {
+      "text": "OneSignal onesignal/onesignal · 6.96k uses OneSignal is a customer engagement platform that lets you send targeted push notifications, email",
+      "href": "https://smithery.ai/servers/onesignal/onesignal"
+    },
+    {
+      "text": "Agent News theagenttimes/news · 5.83k uses Agent News from The Agent Times gives AI agents a verified, sourced, real-time intelligence layer",
+      "href": "https://smithery.ai/servers/theagenttimes/news"
+    },
+    {
+      "text": "Microsoft Learn MCP microsoft/learn_mcp · 3.48k uses The Microsoft Learn MCP Server is a remote MCP Server that enables clients like GitHub ",
+      "href": "https://smithery.ai/servers/microsoft/learn_mcp"
+    },
+    {
+      "text": "OrgX useorgx/orgx-mcp · 4.07k uses OrgX is coordination infrastructure for AI-native teams. It gives your LLM a persistent organizational la",
+      "href": "https://smithery.ai/servers/useorgx/orgx-mcp"
+    },
+    {
+      "text": "The Local Intel erik-7clt/local-intel · 3.61k uses text Agentic local business intelligence for Florida — 983 ZIPs, OSM POI layer, IRS incom",
+      "href": "https://smithery.ai/servers/erik-7clt/local-intel"
+    },
+    {
+      "text": "Google Sheets googlesheets · 47.73k uses Read, write, and format spreadsheet data. Manage sheets, run formulas, and collaborate on structure",
+      "href": "https://smithery.ai/servers/googlesheets"
+    },
+    {
+      "text": "Google Calendar googlecalendar · 10.99k uses Schedule events, check availability, and manage calendars. Create meetings, set reminders, and ",
+      "href": "https://smithery.ai/servers/googlecalendar"
+    },
+    {
+      "text": "Google Tasks googletasks · 14.11k uses Google Tasks provides a simple to-do list and task management system integrated into Gmail and Google",
+      "href": "https://smithery.ai/servers/googletasks"
+    },
+    {
+      "text": "Supabase Supabase · 3.55k uses Search the Supabase docs for up-to-date guidance and troubleshoot errors quickly. Manage organizations, proje",
+      "href": "https://smithery.ai/servers/Supabase"
+    },
+    {
+      "text": "Reddit reddit · 8.00k uses Reddit is a social news platform with user-driven communities (subreddits), offering content sharing, discussions",
+      "href": "https://smithery.ai/servers/reddit"
+    },
+    {
+      "text": "Google Drive googledrive · 4.31k uses Upload, organize, and share files in the cloud. Manage folders, set permissions, and search across sto",
+      "href": "https://smithery.ai/servers/googledrive"
+    },
+    {
+      "text": "Previous",
+      "href": "https://smithery.ai/servers#"
+    },
+    {
+      "text": "1",
+      "href": "https://smithery.ai/servers#"
+    },
+    {
+      "text": "2",
+      "href": "https://smithery.ai/servers#"
+    },
+    {
+      "text": "3",
+      "href": "https://smithery.ai/servers#"
+    },
+    {
+      "text": "24",
+      "href": "https://smithery.ai/servers#"
+    },
+    {
+      "text": "Next",
+      "href": "https://smithery.ai/servers#"
+    },
+    {
+      "text": "Jina AIjina· 5.71k usesAI-powered search and retrieval platform. Search the web, read page content, extract structured data, and ground AI r",
+      "href": "https://smithery.ai/servers/jina"
+    },
+    {
+      "text": "Vercel Grepvercel/grep· 1.94k usesSearch millions of public GitHub repositories for real-world code patterns and API implementations. Find p",
+      "href": "https://smithery.ai/servers/vercel/grep"
+    },
+    {
+      "text": "AI Research Assistanthamid-vakilzadeh/mcpsemanticscholar· 18.21k usesThe server provides immediate access to millions of academic papers thr",
+      "href": "https://smithery.ai/servers/hamid-vakilzadeh/mcpsemanticscholar"
+    },
+    {
+      "text": "",
+      "href": "https://smithery.ai/"
+    },
+    {
+      "text": "Documentation",
+      "href": "https://smithery.ai/docs"
+    }
+  ],
+  "text": "FEATURED\nJina AI\njina\n· 5.71k uses\n\nAI-powered search and retrieval platform. Search the web, read page content, extract structured data, and ground AI responses.\n\nAdd to toolbox\nVercel Grep\nvercel/grep\n· 1.94k uses\n\nSearch millions of public GitHub repositories for real-world code patterns and API implementations. Find production-ready examples of syntax, configurations, and library integrations to improve your development workflow. Discover exactly how other developers solve specific programming challenges using powerful literal and regular expression searches.\n\nAdd to toolbox\nAI Research Assistant\nhamid-vakilzadeh/mcpsemanticscholar\n· 18.21k uses\n\nThe server provides immediate access to millions of academic papers through Semantic Scholar and arXiv, enabling AI-powered research with comprehensive search, citation analysis, and full-text PDF extraction from multiple sources (arXiv and Wiley open-access). No API key is required.\n\nAdd to toolbox\n2,758 servers found (559ms)\nExa Search\nexa\n· 23.77k uses\n\nFast, intelligent web search and web crawling. Get fresh information about libraries, APIs, and SDKs.\n\nAdd to toolbox\nGmail\ngmail\n· 36.06k uses\n\nManage Gmail end-to-end: send, draft, reply, forward, and bulk-modify or delete messages and threads. Organize your inbox with labels, archiving, and trashing, and retrieve messages, attachments, and profile details on demand. Access and search contacts to autofill recipients and keep people data in sync.\n\nAdd to toolbox\nMesh MCP\nclay-inc/clay-mcp\n· 20.22k uses\n\nAccess your network seamlessly with a simple and efficient server. Leverage a variety of tools to enhance your applications and workflows. Start integrating with your existing systems effortlessly.\n\nAdd to toolbox\nBrave Search\nbrave\n· 12.85k uses\n\nSearch the web with Brave's independent index — web, news, images, and videos. Bring your own subscription token from the Brave Search API dashboard.\n\nAdd to toolbox\nContext7\nupstash/context7-mcp\n· 7.08k uses\n\nFetch up-to-date, version-specific documentation and code examples directly into your prompts. Enhance your coding experience by eliminating outdated information and hallucinated APIs. Simply add use context7 to your questions for accurate and relevant answers.\n\nAdd to toolbox\nTavily\nTavily\n· 4.89k uses\n\nSearch the web with fast, accurate results optimized for AI. Get clean, structured answers with source URLs and relevance scoring.\n\nAdd to toolbox\nParallel Web Search\nparallel/search\n· 3.46k uses\n\nHighest accuracy web search for AIs\n\nAdd to toolbox\nParadex MCP Server\ntradeparadex/mcp-paradex-py\n· 4.74k uses\n\nMCP server for the Paradex perpetual futures trading platform. Retrieve market data, manage trading accounts and vaults, place and manage orders, and monitor positions and balances.\n\nAdd to toolbox\nGitHub\ngithub\n· 4.14k uses\n\nConnect your AI agents to GitHub — manage repos, issues, PRs, workflows, and more\n\nAdd to toolbox\nOneSignal\nonesignal/onesignal\n· 6.96k uses\n\nOneSignal is a customer engagement platform that lets you send targeted push notifications, emails, SMS, and in-app messages, manage audiences, and track campaign performance. With the OneSignal MCP, manage your messaging directly from your AI assistant. Send push notifications, emails, and SMS by simply describing your audience and message. Check campaign delivery stats, build audience segments, manage templates, and handle user subscriptions all through conversation.\n\nAdd to toolbox\nAgent News\ntheagenttimes/news\n· 5.83k uses\n\nAgent News from The Agent Times gives AI agents a verified, sourced, real-time intelligence layer, that helps to save tokens, time and keep agents in the loop.\n\nAdd to toolbox\nMicrosoft Learn MCP\nmicrosoft/learn_mcp\n· 3.48k uses\n\nThe Microsoft Learn MCP Server is a remote MCP Server that enables clients like GitHub Copilot and other AI agents to bring trusted and up-to-date information directly from Microsoft's official documentation. It supports streamable http transport, which is lightweight for clients to use.\n\nAdd to toolbox\nOrgX\nuseorgx/orgx-mcp\n· 4.07k uses\n\nOrgX is coordination infrastructure for AI-native teams. It gives your LLM a persistent organizational layer: initiatives with milestones and tasks, human-in-the-loop decision workflows, specialist agent delegation, and cross-session memory that survives tool switching. What you can do with OrgX via MCP: Scaffold initiatives — decompose a goal into workstreams, milestones, and tasks in one call Manage decisions — create, review, approve, or reject decisions with audit trails Delegate to specialist agents — spawn tasks for domain agents (engineering, marketing, product, sales, operations, design) and monitor their progress Query organizational memory — search past decisions, artifacts, and learnings across initiatives Track progress — get initiative health, agent status, blockers, and morning briefs Plan and prioritize — score queues, get next-action recommendations, and run autonomous sessions with budget guardrails OrgX is built for solo founders and small teams who work across multiple AI tools and lose context between sessions. Instead of manually shuttling context between Claude, Cursor, and ChatGPT, OrgX holds the organizational graph so every tool sees the same state.\n\nAdd to toolbox\nThe Local Intel\nerik-7clt/local-intel\n· 3.61k uses\n\ntext Agentic local business intelligence for Florida — 983 ZIPs, OSM POI layer, IRS income data, sector gap analysis, and 500 oracle prompts. 20 MCP tools. LLMs pay $0.01–$0.05/call. Free discovery tier available. Built for autonomous agents and LLM pipelines. thelocalintel.com\n\nAdd to toolbox\nGoogle Sheets\ngooglesheets\n· 47.73k uses\n\nRead, write, and format spreadsheet data. Manage sheets, run formulas, and collaborate on structured data in real time.\n\nAdd to toolbox\nGoogle Calendar\ngooglecalendar\n· 10.99k uses\n\nSchedule events, check availability, and manage calendars. Create meetings, set reminders, and coordinate across time zones.\n\nAdd to toolbox\nGoogle Tasks\ngoogletasks\n· 14.11k uses\n\nGoogle Tasks provides a simple to-do list and task management system integrated into Gmail and Google Calendar for quick and easy tracking\n\nAdd to toolbox\nSupabase\nSupabase\n· 3.55k uses\n\nSearch the Supabase docs for up-to-date guidance and troubleshoot errors quickly. Manage organizations, projects, databases, and Edge Functions, including migrations, SQL, logs, advisors, keys, and type generation, in one flow. Create and manage development branches to iterate safely, confirm costs up front, and merge changes to production with confidence.\n\nAdd to toolbox\nReddit\nreddit\n· 8.00k uses\n\nReddit is a social news platform with user-driven communities (subreddits), offering content sharing, discussions, and viral marketing opportunities for brands\n\nAdd to toolbox\nGoogle Drive\ngoogledrive\n· 4.31k uses\n\nUpload, organize, and share files in the cloud. Manage folders, set permissions, and search across stored documents.\n\nAdd to toolbox\nPrevious\n1\n2\n3\nMore pages\n24\nNext\n\nGive agents more agency\n\nResources\nDocumentation\nPrivacy Policy\nSystem Status\nCompany\nPricing\nAbout\nBlog\nConnect\n\n© 2026 Smithery. All rights reserved.",
+  "stats": {
+    "bodyTextLength": 7160,
+    "linkCount": 58,
+    "buttonCount": 33,
+    "inputCount": 1,
+    "cardishCount": 52,
+    "scrollHeight": 3661
+  }
+}

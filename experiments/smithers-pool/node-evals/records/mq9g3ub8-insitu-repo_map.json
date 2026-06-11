@@ -1,0 +1,62 @@
+{
+  "kind": "node-eval",
+  "id": "mq9g3ub8-insitu-repo_map",
+  "project": "experiments/smithers-pool",
+  "workflowPath": "/Users/ben/code/poolside/skills/experiments/smithers-pool/example.workflow.tsx",
+  "nodeId": "repo_map",
+  "mode": "in-workflow",
+  "runId": "901f8e4a-b408-4bb4-b091-804bd8b590a9",
+  "trial": null,
+  "skill": "repo-map",
+  "grader": "skill-validator",
+  "status": "pass",
+  "score": 1,
+  "checks": [
+    {
+      "id": "artifact-exists",
+      "status": "pass",
+      "detail": "found and parsed .laguna/repo-map.json"
+    },
+    {
+      "id": "schema-valid",
+      "status": "pass",
+      "detail": "artifact matches repo-map.schema.json"
+    },
+    {
+      "id": "languages-evidenced",
+      "status": "pass",
+      "detail": "all 1 language claims cite an existing, extension-consistent evidence file"
+    },
+    {
+      "id": "frameworks-evidenced",
+      "status": "pass",
+      "detail": "no frameworks claimed (admissible for framework-free repos)"
+    },
+    {
+      "id": "entrypoints-exist",
+      "status": "pass",
+      "detail": "all 1 entrypoint paths exist in the workspace"
+    },
+    {
+      "id": "key-directories-exist",
+      "status": "pass",
+      "detail": "all 2 key directories exist in the workspace"
+    },
+    {
+      "id": "test-commands-supported",
+      "status": "pass",
+      "detail": "all 1 test commands are supported by repo files"
+    },
+    {
+      "id": "test-evidence-covered",
+      "status": "pass",
+      "detail": "the repo has test evidence and test_commands is non-empty"
+    }
+  ],
+  "durationMs": 33466,
+  "trajectoryUrl": "https://chat.poolsi.de/console/trajectory-viewer?agent_id=019dbc34-2f3c-7c81-8acb-b8c2ccfdd4bd&agent_session_id=019eb658-a8d1-7027-9f56-87619b9a6fd5",
+  "workspace": "/Users/ben/code/poolside/skills/experiments/smithers-pool/work/repo-fixture",
+  "agentName": null,
+  "gradedAtMs": 1781179199568,
+  "note": "workspace is shared across runs; grade reflects its current contents"
+}
