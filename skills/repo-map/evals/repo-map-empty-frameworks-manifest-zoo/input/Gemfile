@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+
+# Only development and linting gems
+gem 'rubocop', '~> 1.56'
+gem 'rubocop-performance', '~> 1.19'
+
+group :test do
+  gem 'minitest', '~> 5.20'
+end

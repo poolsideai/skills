@@ -1,8 +1,11 @@
 {
   "name": "skill-repo-map",
   "cases": [
-    "skills/repo-map/evals/repo-map-python-uv-service",
     "skills/repo-map/evals/repo-map-bun-cli-workspace",
-    "skills/repo-map/evals/repo-map-rust-decoy-readme"
+    "skills/repo-map/evals/repo-map-empty-frameworks-manifest-zoo",
+    "skills/repo-map/evals/repo-map-go-monorepo-multi-entrypoint",
+    "skills/repo-map/evals/repo-map-python-uv-service",
+    "skills/repo-map/evals/repo-map-rust-decoy-readme",
+    "skills/repo-map/evals/repo-map-stale-test-instructions"
   ]
 }

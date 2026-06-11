@@ -1,0 +1,58 @@
+{
+  "schema_version": "repo-map.v1",
+  "summary": "Platform Services is a Go monorepo containing three backend binaries: api-server (HTTP API gateway), worker (background job processor), and migrate (database schema migration tool). All three share internal/ packages for database access, configuration, and queue management. Tests are colocated with source (_test.go files) and run via a Makefile target that wraps go test with coverage flags.",
+  "languages": [
+    {
+      "name": "go",
+      "evidence": "cmd/api-server/main.go"
+    }
+  ],
+  "frameworks": [],
+  "entrypoints": [
+    {
+      "path": "cmd/api-server/main.go",
+      "description": "HTTP API server main; listens on :8080 (or PORT env), provides /health endpoint"
+    },
+    {
+      "path": "cmd/worker/main.go",
+      "description": "Background worker main; polls queue for tasks and executes them in a loop"
+    },
+    {
+      "path": "cmd/migrate/main.go",
+      "description": "Database migration CLI; subcommands up/down/status for schema management"
+    }
+  ],
+  "key_directories": [
+    {
+      "path": "cmd/api-server",
+      "role": "HTTP API gateway entrypoint"
+    },
+    {
+      "path": "cmd/worker",
+      "role": "background job processor entrypoint"
+    },
+    {
+      "path": "cmd/migrate",
+      "role": "database migration tool entrypoint"
+    },
+    {
+      "path": "internal/config",
+      "role": "shared configuration loading from environment variables"
+    },
+    {
+      "path": "internal/db",
+      "role": "shared database connection utilities"
+    },
+    {
+      "path": "internal/queue",
+      "role": "task queue abstraction for worker"
+    },
+    {
+      "path": "internal/migrations",
+      "role": "database schema migration logic"
+    }
+  ],
+  "test_commands": [
+    "make test"
+  ]
+}
