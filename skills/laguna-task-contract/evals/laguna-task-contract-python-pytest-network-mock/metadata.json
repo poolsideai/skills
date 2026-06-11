@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-python-pytest-network-mock",
+  "skill": "laguna-task-contract",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Task contract for a Python pytest network mock patch: single_file_patch with max_files_to_modify 1, Python-specific context (requirements.txt shows responses is available, pytest.ini defines test discovery), and pytest acceptance command 'pytest tests/api_client_test.py' (not bun). Probes non-JS ecosystem coverage and task_type-consistent modify bounds. Synthetic fixture; no customer data. Generated case."
+}

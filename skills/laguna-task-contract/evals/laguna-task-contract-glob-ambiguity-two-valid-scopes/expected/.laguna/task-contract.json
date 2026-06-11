@@ -1,0 +1,53 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Fix src/utils/string-util.ts sanitize function to handle empty input without crashing.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "bug-report.md",
+        "why": "describes the empty-input crash and reproduction steps"
+      },
+      {
+        "path": "trace-fragment.txt",
+        "why": "partial stack trace showing crash at util:17 in sanitize function"
+      },
+      {
+        "path": "src/utils/string-util.ts",
+        "why": "chosen target (line 17 in sanitize body; ambiguous with lib/utils/array-util.ts but API layer context in bug-report.md suggests string-util)"
+      }
+    ],
+    "commands": [],
+    "logs": ["trace-fragment.txt"]
+  },
+  "scope": {
+    "paths": ["src/utils/string-util.ts"],
+    "max_files_to_modify": 1
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": [
+      "change function signatures",
+      "modify unrelated functions",
+      "introduce dependencies"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "patch_apply",
+        "target_path": "src/utils/string-util.ts"
+      },
+      {
+        "type": "command",
+        "command": "node -e \"const {sanitize} = require('./src/utils/string-util.ts'); const r = sanitize(''); if (r !== '') throw new Error('expected empty string'); console.log('pass');\""
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

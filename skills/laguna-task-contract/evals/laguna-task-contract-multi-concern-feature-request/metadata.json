@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-multi-concern-feature-request",
+  "skill": "laguna-task-contract",
+  "bucket": "adversarial",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "fail"
+  },
+  "notes": "Multi-concern bundled request: a feature ask conflating input validation, error propagation, and documentation updates across three files (user.ts, server.ts, README.md). A faithful transcription produces a multi-concern goal triggering validator rejection; the correct outcome is rejection with decomposition proposal, not silent narrowing. Probes whether agents launder unbounded requests into fake-bounded contracts. Synthetic fixture; no customer data. Generated case."
+}

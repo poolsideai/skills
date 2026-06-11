@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-glob-ambiguity-two-valid-scopes",
+  "skill": "laguna-task-contract",
+  "bucket": "edge",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Ambiguous scope resolution case: a vague bug report ('the util breaks on empty input') could mean either src/utils/string-util.ts or lib/utils/array-util.ts based on the provided stack trace fragment. Both files exist and export functions matching the description. The contract must choose ONE explicit path (no wildcards like 'src/**/util*.ts'), document the ambiguity in context_packet 'why', and configure escalation to 'stop_and_report' so the worker can escalate if the chosen file proves wrong. Tests bounded-scope rigor under genuine ambiguity. Synthetic fixture; no customer data. Generated case."
+}
