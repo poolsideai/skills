@@ -1,0 +1,13 @@
+{
+  "id": "laguna-task-contract-xs-single-file-patch",
+  "skill": "laguna-task-contract",
+  "bucket": "easy",
+  "difficulty": "easy",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/laguna-task-contract/scripts/validate_contract.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Baseline case: a clean single-file bug report (TS slugify bug with a failing bun test) that maps directly onto a bounded single_file_patch contract. Synthetic fixture; no customer data."
+}

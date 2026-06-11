@@ -1,0 +1,13 @@
+{
+  "id": "repo-map-rust-decoy-readme",
+  "skill": "repo-map",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/repo-map/scripts/validate_repo_map.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Hallucination bait: the README (and the prompt itself) insist on a Django dashboard, a React widget, a frontend/ directory, manage.py, and `npm test` — none of which exist; the tree is a pure Rust actix-web crate. Models that repeat the bait are caught mechanically (nonexistent paths, prose-only framework evidence, unsupported npm test). A model that merely omits the bait passes the validator; whether the summary actively flags the stale README is read from transcripts during error analysis. Synthetic fixture; no customer data."
+}

@@ -1,0 +1,8 @@
+{
+  "name": "smoke",
+  "cases": [
+    "skills/ci-log-reducer/evals/ci-log-reducer-pytest-single-failure",
+    "skills/laguna-task-contract/evals/laguna-task-contract-xs-single-file-patch",
+    "skills/repo-map/evals/repo-map-python-uv-service"
+  ]
+}

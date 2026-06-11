@@ -1,0 +1,42 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "python -m pytest -q",
+  "failure_kind": "test_failure",
+  "summary": "Three pytest failures, all in auth/session lifecycle: (1) test_refresh_rotates_token — refresh returns the same access token instead of rotating it; (2) test_expired_session_is_rejected — /me returns 200 for a session expired past 86400s; (3) test_logout_clears_all_devices — /me returns 200 on a second device after logout_all. Token rotation and session invalidation both look broken, consistent with one regression in session/token revocation. 43 tests passed.",
+  "error_lines": [
+    {
+      "line": 13,
+      "text": "E       AssertionError: assert 'tok_8f3a91' != 'tok_8f3a91'"
+    },
+    {
+      "line": 23,
+      "text": "E       assert 200 == 401"
+    },
+    {
+      "line": 35,
+      "text": "E       assert 200 == 401"
+    },
+    {
+      "line": 40,
+      "text": "FAILED tests/test_auth.py::test_refresh_rotates_token - AssertionError: assert 'tok_8f3a91' != 'tok_8f3a91'"
+    },
+    {
+      "line": 41,
+      "text": "FAILED tests/test_sessions.py::test_expired_session_is_rejected - assert 200 == 401"
+    },
+    {
+      "line": 42,
+      "text": "FAILED tests/test_sessions.py::test_logout_clears_all_devices - assert 200 == 401"
+    },
+    {
+      "line": 43,
+      "text": "3 failed, 43 passed in 11.87s"
+    }
+  ],
+  "suggested_next_commands": [
+    "python -m pytest tests/test_auth.py::test_refresh_rotates_token tests/test_sessions.py -q",
+    "python -m pytest tests/test_sessions.py -q -x",
+    "grep -rn 'logout_all\\|rotate' src/auth/"
+  ]
+}

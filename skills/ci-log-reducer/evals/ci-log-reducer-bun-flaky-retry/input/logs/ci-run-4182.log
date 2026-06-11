@@ -1,0 +1,73 @@
+[ci] pipeline: pulse-dashboard / pr-2113 (run 4182)
+[ci] step: typecheck
+$ bun x tsc --noEmit
+[ci] typecheck ok in 6.3s
+[ci] step: test (attempt 1 of 2)
+$ bun test
+bun test v1.3.14 (5cce2dd1)
+
+src/api/client.test.ts:
+✓ ApiClient > builds request URLs from base config [1.02ms]
+✓ ApiClient > serializes query params deterministically [0.31ms]
+✓ ApiClient > propagates abort signals [0.44ms]
+✗ ApiClient > retries idempotent requests on 503 [5003.11ms]
+  error: Test "retries idempotent requests on 503" timed out after 5000ms
+✓ ApiClient > surfaces JSON parse errors [0.27ms]
+
+src/cache/lru.test.ts:
+✓ LruCache > stores and retrieves values [0.12ms]
+✓ LruCache > evicts least recently used entry at capacity [0.42ms]
+✗ LruCache > updates recency on get [0.18ms]
+  error: expect(received).toBe(expected)
+  Expected: "beta"
+  Received: "alpha"
+      at <anonymous> (src/cache/lru.test.ts:58:29)
+✓ LruCache > clears all entries [0.09ms]
+
+src/format/relative-time.test.ts:
+✓ relativeTime > formats seconds [0.08ms]
+✓ relativeTime > formats hours [0.05ms]
+✓ relativeTime > formats days [0.06ms]
+✓ relativeTime > clamps future timestamps [0.07ms]
+✓ relativeTime > handles invalid dates [0.05ms]
+✓ relativeTime > respects locale overrides [0.11ms]
+✓ relativeTime > is pure for fixed clock [0.04ms]
+
+ 14 pass
+ 2 fail
+Ran 16 tests across 3 files. [5.31s]
+[ci] step failed with exit code 1; retrying (attempt 2 of 2)
+$ bun test
+bun test v1.3.14 (5cce2dd1)
+
+src/api/client.test.ts:
+✓ ApiClient > builds request URLs from base config [0.98ms]
+✓ ApiClient > serializes query params deterministically [0.30ms]
+✓ ApiClient > propagates abort signals [0.41ms]
+✓ ApiClient > retries idempotent requests on 503 [212.44ms]
+✓ ApiClient > surfaces JSON parse errors [0.26ms]
+
+src/cache/lru.test.ts:
+✓ LruCache > stores and retrieves values [0.11ms]
+✓ LruCache > evicts least recently used entry at capacity [0.40ms]
+✗ LruCache > updates recency on get [0.20ms]
+  error: expect(received).toBe(expected)
+  Expected: "beta"
+  Received: "alpha"
+      at <anonymous> (src/cache/lru.test.ts:58:29)
+✓ LruCache > clears all entries [0.10ms]
+
+src/format/relative-time.test.ts:
+✓ relativeTime > formats seconds [0.07ms]
+✓ relativeTime > formats hours [0.05ms]
+✓ relativeTime > formats days [0.05ms]
+✓ relativeTime > clamps future timestamps [0.06ms]
+✓ relativeTime > handles invalid dates [0.05ms]
+✓ relativeTime > respects locale overrides [0.10ms]
+✓ relativeTime > is pure for fixed clock [0.04ms]
+
+ 15 pass
+ 1 fail
+Ran 16 tests across 3 files. [0.84s]
+[ci] step failed after 2 attempts (final exit code 1)
+[ci] pipeline failed: step "test" exited with code 1

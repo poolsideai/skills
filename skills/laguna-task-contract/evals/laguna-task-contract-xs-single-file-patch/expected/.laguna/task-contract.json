@@ -1,0 +1,39 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Fix the duplicate-separator bug in src/slugify.ts so that the collapse test in test/slugify.test.ts passes.",
+  "context_packet": {
+    "files": [
+      { "path": "src/slugify.ts", "why": "contains the buggy one-for-one separator replacement" },
+      { "path": "test/slugify.test.ts", "why": "failing test defining the expected slug format" },
+      { "path": "bug-report.md", "why": "failing command and observed vs expected output" }
+    ],
+    "commands": ["bun test test/slugify.test.ts"],
+    "logs": []
+  },
+  "scope": {
+    "paths": ["src/slugify.ts"],
+    "max_files_to_modify": 1
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": [
+      "modify test/slugify.test.ts",
+      "change unrelated behavior",
+      "perform broad refactors",
+      "invent unavailable files"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      { "type": "test_result", "command": "bun test test/slugify.test.ts" },
+      { "type": "patch_apply", "target_path": "src/slugify.ts" }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

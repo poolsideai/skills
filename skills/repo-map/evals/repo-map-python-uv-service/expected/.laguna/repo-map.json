@@ -1,0 +1,39 @@
+{
+  "schema_version": "repo-map.v1",
+  "summary": "shortlinks is a small internal URL shortener service: a FastAPI HTTP API for creating and resolving short link codes, backed by an in-memory store (a Redis adapter is mentioned as planned but does not exist yet). Python project managed with uv/pyproject.toml; tests run with pytest.",
+  "languages": [
+    {
+      "name": "python",
+      "evidence": "src/shortlinks/main.py"
+    }
+  ],
+  "frameworks": [
+    {
+      "name": "fastapi",
+      "evidence": "pyproject.toml"
+    },
+    {
+      "name": "pydantic",
+      "evidence": "pyproject.toml"
+    }
+  ],
+  "entrypoints": [
+    {
+      "path": "src/shortlinks/main.py",
+      "description": "FastAPI application object; served via `uv run uvicorn shortlinks.main:app`"
+    }
+  ],
+  "key_directories": [
+    {
+      "path": "src/shortlinks",
+      "role": "application source: API routes (main.py) and the in-memory link store (store.py)"
+    },
+    {
+      "path": "tests",
+      "role": "pytest suite (testpaths configured in pyproject.toml)"
+    }
+  ],
+  "test_commands": [
+    "uv run pytest -q"
+  ]
+}

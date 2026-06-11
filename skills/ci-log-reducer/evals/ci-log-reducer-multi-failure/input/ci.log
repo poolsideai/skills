@@ -1,0 +1,44 @@
+[ci] job: backend-tests (python 3.12.6)
+[ci] step: run pytest
++ python -m pytest -q
+.................F........F...............F..                           [100%]
+=================================== FAILURES ===================================
+__________________________ test_refresh_rotates_token __________________________
+
+    def test_refresh_rotates_token(client, frozen_clock):
+        first = client.login("ada@example.test", "pw")
+        frozen_clock.advance(seconds=3600)
+        second = client.refresh(first.refresh_token)
+>       assert second.access_token != first.access_token
+E       AssertionError: assert 'tok_8f3a91' != 'tok_8f3a91'
+
+tests/test_auth.py:74: AssertionError
+______________________ test_expired_session_is_rejected _______________________
+
+    def test_expired_session_is_rejected(client, frozen_clock):
+        session = client.login("ada@example.test", "pw")
+        frozen_clock.advance(seconds=86401)
+        resp = client.get("/me", session=session)
+>       assert resp.status_code == 401
+E       assert 200 == 401
+E        +  where 200 = <Response [200]>.status_code
+
+tests/test_sessions.py:31: AssertionError
+________________________ test_logout_clears_all_devices ________________________
+
+    def test_logout_clears_all_devices(client):
+        s1 = client.login("ada@example.test", "pw", device="laptop")
+        s2 = client.login("ada@example.test", "pw", device="phone")
+        client.logout_all(s1)
+        resp = client.get("/me", session=s2)
+>       assert resp.status_code == 401
+E       assert 200 == 401
+E        +  where 200 = <Response [200]>.status_code
+
+tests/test_sessions.py:58: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_auth.py::test_refresh_rotates_token - AssertionError: assert 'tok_8f3a91' != 'tok_8f3a91'
+FAILED tests/test_sessions.py::test_expired_session_is_rejected - assert 200 == 401
+FAILED tests/test_sessions.py::test_logout_clears_all_devices - assert 200 == 401
+3 failed, 43 passed in 11.87s
+[ci] step "run pytest" exited with code 1

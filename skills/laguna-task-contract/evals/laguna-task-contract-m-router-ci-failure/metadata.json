@@ -1,0 +1,13 @@
+{
+  "id": "laguna-task-contract-m-router-ci-failure",
+  "skill": "laguna-task-contract",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/laguna-task-contract/scripts/validate_contract.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Router case probing decomposition sanity: a red-CI request plus a closed five-skill menu must become a router contract whose first delegation is a bounded read-only log_reduction task for XS.2 (chosen skill in candidates, task_type matches the chosen skill, max_files_to_modify 0, escalation_required stop condition). Synthetic fixture."
+}

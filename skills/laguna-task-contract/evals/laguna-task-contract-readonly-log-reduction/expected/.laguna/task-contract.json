@@ -1,0 +1,40 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "log_reduction",
+  "goal": "Reduce ci.log to a structured failure summary at .laguna/ci-log-summary.json without modifying any repository file.",
+  "context_packet": {
+    "files": [
+      { "path": "ci.log", "why": "full log of the failing go-checks run" },
+      { "path": "request.md", "why": "the ask plus the code-freeze constraint" }
+    ],
+    "commands": ["go test ./..."],
+    "logs": ["ci.log"]
+  },
+  "scope": {
+    "paths": ["ci.log"],
+    "max_files_to_modify": 0
+  },
+  "constraints": {
+    "output_format": "json",
+    "artifact_path": ".laguna/ci-log-summary.json",
+    "must_not": [
+      "modify repository files",
+      "invent log lines or commands",
+      "suggest networked or destructive commands"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "schema",
+        "schema_path": ".poolside/skills/ci-log-reducer/schemas/ci-log-summary.schema.json"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

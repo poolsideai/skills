@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/skills/ci-log-reducer/ci-log-summary.schema.json",
+  "title": "ci-log-summary.v1",
+  "description": "Structured failure summary of a single CI log, written by the ci-log-reducer skill to .laguna/ci-log-summary.json at the workspace root. Every cited line must exist in the analyzed log and carry its verbatim text; the validator (scripts/validate_log_summary.ts) enforces this mechanically.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "ci-log-summary.v1",
+      "description": "Contract identifier; always the literal string \"ci-log-summary.v1\"."
+    },
+    "log_file": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Workspace-relative path of the CI log that was analyzed (e.g. \"ci.log\" or \"logs/ci-run-4182.log\"). Must resolve to a file inside the workspace."
+    },
+    "failing_command": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The command that actually failed. Must be supported by evidence: it appears in the log itself or in the CI job metadata (ci-job.json), never invented."
+    },
+    "failure_kind": {
+      "type": "string",
+      "enum": ["test_failure", "build_error", "lint_error", "infra_error", "other"],
+      "description": "Coarse classification of the failure."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 600,
+      "description": "What failed and why, in plain language. Covers every distinct failure when there are several."
+    },
+    "error_lines": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "description": "The decisive error lines, cited from the log. Each entry pairs a 1-based line number with the verbatim text of that line.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "line": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based line number in log_file."
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The exact text of that line, copied verbatim from the log (trailing whitespace insignificant)."
+          }
+        },
+        "required": ["line", "text"],
+        "additionalProperties": false
+      }
+    },
+    "suggested_next_commands": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "description": "Safe, local commands a developer should run next to reproduce or narrow the failure. No network access (installs, fetches, pushes) and nothing destructive (deletions, hard resets, sudo).",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "log_file",
+    "failing_command",
+    "failure_kind",
+    "summary",
+    "error_lines",
+    "suggested_next_commands"
+  ],
+  "additionalProperties": false
+}

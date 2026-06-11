@@ -1,0 +1,13 @@
+{
+  "id": "laguna-task-contract-readonly-log-reduction",
+  "skill": "laguna-task-contract",
+  "bucket": "edge",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/laguna-task-contract/scripts/validate_contract.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Boundary case: a code-frozen repo forces the contract's zero-modification edge — task_type log_reduction with max_files_to_modify 0, json output with artifact_path, and a schema-type acceptance check (no command to run). Models tend to default to patch-shaped contracts; this case probes the read-only end of the schema. Synthetic fixture."
+}

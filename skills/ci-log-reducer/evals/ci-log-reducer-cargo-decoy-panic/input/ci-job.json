@@ -1,0 +1,5 @@
+{
+  "job": "rust-tests",
+  "command": "cargo test --workspace -- --nocapture",
+  "exit_code": 101
+}

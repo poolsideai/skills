@@ -1,0 +1,13 @@
+[package]
+name = "imgcache"
+version = "0.7.1"
+edition = "2021"
+description = "Thumbnail caching proxy"
+
+[dependencies]
+actix-web = "4"
+serde = { version = "1", features = ["derive"] }
+sha2 = "0.10"
+
+[dev-dependencies]
+actix-rt = "2"
