@@ -1,0 +1,30 @@
+##[section]Starting: validate-migrations
+==============================================================================
+Task         : PowerShell
+Description  : Run a PowerShell script on Windows, macOS, or Linux
+Version      : 2.198.0
+Author       : Microsoft Corporation
+==============================================================================
+##[command]"C:/Program Files/PowerShell/7/pwsh.exe" -NoLogo -NoProfile -NonInteractive -Command ". 'D:/a/_temp/a8f9c2d1-3b4e-5678-9abc-def012345678.ps1'"
+PowerShell 7.3.4
+##[section]Invoking Pester tests
+Invoking Pester with path: ./Tests
+Output format: NUnitXml
+Output file: TestResults.xml
+##[command]pwsh -Command Invoke-Pester -Path ./Tests -OutputFormat NUnitXml -OutputFile TestResults.xml
+Import-Module: The specified module 'SqlServerHelper' was not loaded because no valid module file was found in any module directory.
+At D:/a/1/s/Tests/Invoke-MigrationTests.ps1:4 char:1
++ Import-Module SqlServerHelper
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (SqlServerHelper:String) [Import-Module], FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+
+Invoke-Pester: Cannot validate argument on parameter 'Path'. The argument "./Tests" does not exist. Supply an argument that exists and then try the command again.
+At line:1 char:33
++ ... -Command Invoke-Pester -Path ./Tests -OutputFormat NUnitXml -OutputF ...
++                                  ~~~~~~~
+    + CategoryInfo          : InvalidData: (:) [Invoke-Pester], ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationError,Invoke-Pester
+
+##[error]PowerShell exited with code '1'.
+##[section]Finishing: validate-migrations

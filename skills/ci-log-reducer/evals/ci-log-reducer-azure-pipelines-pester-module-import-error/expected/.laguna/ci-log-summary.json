@@ -1,0 +1,22 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "pwsh -Command Invoke-Pester -Path ./Tests -OutputFormat NUnitXml -OutputFile TestResults.xml",
+  "failure_kind": "infra_error",
+  "summary": "PowerShell module import failure prevents Pester tests from running. Import-Module cannot find SqlServerHelper module (FileNotFoundException at Tests/Invoke-MigrationTests.ps1:4). The test framework never executes because the required module is missing from the environment. Zero tests ran.",
+  "error_lines": [
+    { "line": 15, "text": "Import-Module: The specified module 'SqlServerHelper' was not loaded because no valid module file was found in any module directory." },
+    { "line": 16, "text": "At D:/a/1/s/Tests/Invoke-MigrationTests.ps1:4 char:1" },
+    { "line": 17, "text": "+ Import-Module SqlServerHelper" },
+    { "line": 18, "text": "+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" },
+    { "line": 19, "text": "    + CategoryInfo          : ResourceUnavailable: (SqlServerHelper:String) [Import-Module], FileNotFoundException" },
+    { "line": 20, "text": "    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand" },
+    { "line": 29, "text": "##[error]PowerShell exited with code '1'." }
+  ],
+  "suggested_next_commands": [
+    "pwsh -Command Get-Module -ListAvailable",
+    "pwsh -Command Get-Module -ListAvailable -Name SqlServerHelper",
+    "pwsh -Command \"$env:PSModulePath -split ';'\"",
+    "cat Tests/Invoke-MigrationTests.ps1"
+  ]
+}

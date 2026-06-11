@@ -1,0 +1,37 @@
+INFO: Analyzed 12 targets (0 packages loaded, 0 targets configured).
+INFO: Found 12 test targets...
+INFO: Elapsed time: 2.145s, Critical Path: 0.82s
+INFO: 48 processes: 12 internal, 36 linux-sandbox.
+INFO: Build completed successfully, 48 total actions
+//core:unit_tests PASSED in 1.2s
+//utils:string_utils_test PASSED in 0.8s
+//utils:date_utils_test PASSED in 0.6s
+//db:connection_pool_test PASSED in 1.4s
+//db:migration_test PASSED in 2.1s
+//auth:token_validator_test PASSED in 1.0s
+//auth:session_manager_test PASSED in 0.9s
+WARNING: Remote fetch for https://maven.example.com/repository/dependency-1.2.3.jar timed out after 5000ms, retrying (attempt 1/3)
+WARNING: Remote fetch for https://maven.example.com/repository/dependency-1.2.3.jar timed out after 5000ms, retrying (attempt 2/3)
+INFO: Remote fetch for https://maven.example.com/repository/dependency-1.2.3.jar succeeded on attempt 3
+//api:unit_tests PASSED in 1.6s
+//api:controller_tests PASSED in 1.3s
+//api:integration_tests FAILED in 3.8s
+/workspace/.bazel/execroot/myproject/bazel-out/k8-fastbuild/testlogs/api/integration_tests/test.log
+//metrics:collector_test PASSED in 0.7s
+//metrics:aggregator_test PASSED in 1.1s
+Executed 12 out of 12 tests: 11 tests pass and 1 fails locally.
+INFO: Build completed, 1 test FAILED, 48 total actions
+================================================================================
+Failing test details:
+//api:integration_tests
+Test output:
+JUnit4 running com.example.api.integration.CheckoutFlowTest
+Starting test: testCheckoutWithExpiredPaymentMethod
+.
+Failure in testCheckoutWithExpiredPaymentMethod:
+java.lang.AssertionError: Expected payment status to be DECLINED but was PENDING
+at org.junit.Assert.fail(Assert.java:89)
+at com.example.api.integration.CheckoutFlowTest.testCheckoutWithExpiredPaymentMethod(CheckoutFlowTest.java:142)
+Test testCheckoutWithExpiredPaymentMethod FAILED
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+================================================================================

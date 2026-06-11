@@ -1,0 +1,21 @@
+{
+  "id": "ci-log-reducer-azure-pipelines-pester-module-import-error",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ci-log-reducer/scripts/validate_log_summary.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Azure Pipelines PowerShell Pester run fails during module import (SqlServerHelper module not found) before any tests execute; no test failures because the test framework never runs. failure_kind is infra_error since the issue is environment setup, not test logic or code under test. Synthetic fixture; no customer data. Generated case."
+}

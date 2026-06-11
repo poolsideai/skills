@@ -1,0 +1,5 @@
+{
+  "job": "bazel-test-all",
+  "command": "bazel test //...",
+  "exit_code": 1
+}

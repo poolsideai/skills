@@ -1,6 +1,8 @@
 {
   "name": "skill-ci-log-reducer",
   "cases": [
+    "skills/ci-log-reducer/evals/ci-log-reducer-azure-pipelines-pester-module-import-error",
+    "skills/ci-log-reducer/evals/ci-log-reducer-bazel-java-flaky-retry-decoy",
     "skills/ci-log-reducer/evals/ci-log-reducer-buildkite-pnpm-monorepo",
     "skills/ci-log-reducer/evals/ci-log-reducer-bun-flaky-retry",
     "skills/ci-log-reducer/evals/ci-log-reducer-cargo-decoy-panic",

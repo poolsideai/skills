@@ -1,0 +1,21 @@
+{
+  "id": "ci-log-reducer-bazel-java-flaky-retry-decoy",
+  "skill": "ci-log-reducer",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ci-log-reducer/scripts/validate_log_summary.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Bazel test log with a retried network fetch (decoy: succeeds on retry, NOT the failure). Real failure is a single JUnit assertion in //api:integration_tests. Tests agent's ability to distinguish passing tests with noisy retry output from actual test failures. Synthetic fixture; no customer data. Generated case."
+}
