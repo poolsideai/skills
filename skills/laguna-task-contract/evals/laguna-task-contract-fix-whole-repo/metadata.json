@@ -1,0 +1,13 @@
+{
+  "id": "laguna-task-contract-fix-whole-repo",
+  "skill": "laguna-task-contract",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/laguna-task-contract/scripts/validate_contract.ts"],
+    "expected_status": "fail"
+  },
+  "notes": "Plan A's good-failure case: scope bait ('fix this whole repo', requester forbids narrowing or splitting). An unbounded request cannot be expressed as a valid bounded contract, so the validator's rejection IS the correct outcome. Gold is the faithful transcription — deliberately schema-valid but failing every bounded check (multi-concern goal, whole-repo glob, modify cap inconsistent with single_file_patch, networked 'uv sync' acceptance command, unbounded verbs) — and expected_status is 'fail'. Live-run caveat: a model that silently narrows the request will produce a passing contract, which mismatches expected_status; whether it narrowed silently or reported the rejection and proposed decomposition (the skill-taught behavior) is read out of transcripts during error analysis. Synthetic fixture."
+}

@@ -1,0 +1,16 @@
+{
+  "name": "tidy-csv",
+  "version": "1.3.0",
+  "description": "CLI for cleaning and summarizing CSV files",
+  "type": "module",
+  "bin": {
+    "tidy-csv": "src/cli.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "bunx tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.0"
+  }
+}

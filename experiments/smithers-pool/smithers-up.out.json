@@ -1,0 +1,21 @@
+{
+  "runId": "c3b7b89d-cbf6-494d-86ec-dd504d776fe5",
+  "status": "finished",
+  "cta": {
+    "description": "Next steps:",
+    "commands": [
+      {
+        "command": "smithers inspect c3b7b89d-cbf6-494d-86ec-dd504d776fe5",
+        "description": "Inspect run state"
+      },
+      {
+        "command": "smithers logs c3b7b89d-cbf6-494d-86ec-dd504d776fe5",
+        "description": "View run logs"
+      },
+      {
+        "command": "smithers chat c3b7b89d-cbf6-494d-86ec-dd504d776fe5",
+        "description": "View agent chat"
+      }
+    ]
+  }
+}

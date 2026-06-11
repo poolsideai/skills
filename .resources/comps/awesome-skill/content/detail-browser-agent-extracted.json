@@ -1,0 +1,279 @@
+{
+  "title": "agent-browser - Claude Skill - Awesome Skills - Agent Skills Marketplace for Claude, Codex & ChatGPT",
+  "url": "https://awesomeskill.ai/skill/vercel-labs-agent-browser-agent-browser",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "agent-browser"
+    },
+    {
+      "tag": "h3",
+      "text": "Security Assessment"
+    },
+    {
+      "tag": "h3",
+      "text": "About agent-browser"
+    },
+    {
+      "tag": "h3",
+      "text": "FAQ"
+    },
+    {
+      "tag": "h2",
+      "text": "All Files"
+    },
+    {
+      "tag": "h3",
+      "text": "Install agent-browser"
+    },
+    {
+      "tag": "h3",
+      "text": "Related Skills"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle navigation menu",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Details",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "SKILL.md",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Download ZIP",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Git Clone",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Download ZIP",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "Awesome Skills",
+      "href": "https://awesomeskill.ai/"
+    },
+    {
+      "text": "Search",
+      "href": "https://awesomeskill.ai/search"
+    },
+    {
+      "text": "Category",
+      "href": "https://awesomeskill.ai/category"
+    },
+    {
+      "text": "Tag",
+      "href": "https://awesomeskill.ai/tag"
+    },
+    {
+      "text": "Blog",
+      "href": "https://awesomeskill.ai/blog"
+    },
+    {
+      "text": "Awesome Skills",
+      "href": "https://awesomeskill.ai/"
+    },
+    {
+      "text": "Back to Skills",
+      "href": "https://awesomeskill.ai/"
+    },
+    {
+      "text": "Productivity & Workflow",
+      "href": "https://awesomeskill.ai/category/productivity-workflow"
+    },
+    {
+      "text": "Testing & QA",
+      "href": "https://awesomeskill.ai/category/testing-qa"
+    },
+    {
+      "text": "#web-scraping",
+      "href": "https://awesomeskill.ai/tag/web-scraping"
+    },
+    {
+      "text": "#cli",
+      "href": "https://awesomeskill.ai/tag/cli"
+    },
+    {
+      "text": "#testing",
+      "href": "https://awesomeskill.ai/tag/testing"
+    },
+    {
+      "text": "#browser-automation",
+      "href": "https://awesomeskill.ai/tag/browser-automation"
+    },
+    {
+      "text": "#javascript",
+      "href": "https://awesomeskill.ai/tag/javascript"
+    },
+    {
+      "text": "#automation",
+      "href": "https://awesomeskill.ai/tag/automation"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/references/session-management.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/templates/capture-workflow.sh"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/references/authentication.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/references/commands.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/references/snapshot-refs.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/templates/form-automation.sh"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/references/profiling.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/references/video-recording.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/SKILL.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/references/proxy-support.md"
+    },
+    {
+      "text": "View",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/templates/authenticated-session.sh"
+    },
+    {
+      "text": "Download ZIP",
+      "href": "https://cdn.awesomeskill.ai/skills/vercel-labs-agent-browser-agent-browser/vercel-labs-agent-browser-agent-browser.zip"
+    },
+    {
+      "text": "vercel-labs/agent-browser",
+      "href": "https://github.com/vercel-labs/agent-browser/tree/main/skills/agent-browser"
+    },
+    {
+      "text": "mom-test 1,254",
+      "href": "https://awesomeskill.ai/skill/wondelai-skills-mom-test"
+    },
+    {
+      "text": "ux-copy 20,028",
+      "href": "https://awesomeskill.ai/skill/anthropics-knowledge-work-plugins-ux-copy"
+    },
+    {
+      "text": "engineering-skills 17,711",
+      "href": "https://awesomeskill.ai/skill/alirezarezvani-claude-skills-engineering-skills"
+    },
+    {
+      "text": "streaming 16",
+      "href": "https://awesomeskill.ai/skill/assistant-ui-skills-streaming"
+    },
+    {
+      "text": "Awesome Skills",
+      "href": "https://awesomeskill.ai/"
+    },
+    {
+      "text": "Search",
+      "href": "https://awesomeskill.ai/search"
+    },
+    {
+      "text": "Category",
+      "href": "https://awesomeskill.ai/category"
+    },
+    {
+      "text": "Tag",
+      "href": "https://awesomeskill.ai/tag"
+    },
+    {
+      "text": "Blog",
+      "href": "https://awesomeskill.ai/blog"
+    },
+    {
+      "text": "Claude Skill Docs",
+      "href": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/"
+    },
+    {
+      "text": "Antigravity Skills Docs",
+      "href": "https://antigravity.google/docs/skills"
+    },
+    {
+      "text": "Claude Code",
+      "href": "https://claude.com/product/claude-code"
+    },
+    {
+      "text": "OpenCode",
+      "href": "https://opencode.ai/"
+    },
+    {
+      "text": "Cursor",
+      "href": "https://cursor.com/"
+    },
+    {
+      "text": "Codex",
+      "href": "https://openai.com/codex"
+    },
+    {
+      "text": "Antigravity",
+      "href": "https://antigravity.google/"
+    },
+    {
+      "text": "Privacy Policy",
+      "href": "https://awesomeskill.ai/privacy"
+    },
+    {
+      "text": "Terms of Service",
+      "href": "https://awesomeskill.ai/terms"
+    },
+    {
+      "text": "Sitemap",
+      "href": "https://awesomeskill.ai/sitemap.xml"
+    },
+    {
+      "text": "Privacy Policy",
+      "href": "https://awesomeskill.ai/privacy"
+    },
+    {
+      "text": "Terms",
+      "href": "https://awesomeskill.ai/terms"
+    }
+  ],
+  "text": "Toggle navigation menu\nAwesome Skills\nBack to Skills\nagent-browser\n\nBrowser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, testing web apps, or automating any browser task. Triggers include requests to \"open a website\", \"fill out a form\", \"click a button\", \"take a screenshot\", \"scrape data from a page\", \"test this web app\", \"login to a site\", \"automate browser actions\", or any task requiring programmatic web interaction.\n\n28,079\nstars\n1,699\nforks\nUpdated 4/8/2026\nProductivity & Workflow\nTesting & QA\n#web-scraping\n#cli\n#testing\n#browser-automation\n#javascript\n#automation\nDetails\nSKILL.md\nSecurity Assessment\nLow Risk\n(85/100)\n\nDetected risks:\n\nSecret Exposure([SKILL.md] API_KEY=)\nSecurity Score\n85/100\nAbout agent-browser\n\nThe agent-browser skill provides a browser automation CLI designed for AI agents to interact with websites. It allows users to automate various browser tasks such as navigating pages, filling out forms, clicking buttons, taking screenshots, scraping data, and testing web applications. The skill is particularly useful for automating repetitive browser tasks or for AI-driven agents that need to perform tasks in a browser without manual intervention. By leveraging direct control over Chrome/Chromium via the Chrome DevTools Protocol (CDP), the agent-browser enables programmatic web interaction with minimal setup or dependencies.\n\nThe main features of the agent-browser skill include the ability to open websites, take snapshots of page elements, interact with elements like filling forms or clicking buttons, and take screenshots or capture data from web pages. It supports command chaining, allowing multiple commands to be executed in sequence efficiently. The skill offers several methods for handling authentication, including importing authentication states from the user’s browser, reusing Chrome profiles, and using persistent profiles for recurring tasks. It also supports session management through session names that automatically save and restore cookies and localStorage data. This makes it a powerful tool for automating both simple and complex web interactions in a seamless manner.\n\nThis skill is ideal for developers, QA engineers, and automation enthusiasts who need to streamline their browser interactions. It’s particularly useful for tasks that involve form submissions, web scraping, web testing, or logging into websites. Whether you're working on automating user behavior testing, scraping data from dynamic websites, or performing repetitive tasks like logging into web apps, agent-browser provides an efficient and flexible solution.\n\nFAQ\nHow do I install the agent-browser skill?\n\nYou can install the agent-browser skill via several methods: `npm i -g agent-browser`, `brew install agent-browser`, or `cargo install agent-browser`. After installation, run `agent-browser install` to download Chrome.\n\nCan I use agent-browser with existing Chrome or Brave installations?\n\nYes, agent-browser can automatically detect existing Chrome, Brave, Playwright, and Puppeteer installations, so you don't need to install a separate browser if you already have one of these installed.\n\nHow does session management work in agent-browser?\n\nAgent-browser supports session management through session names, which allow automatic saving and restoring of cookies and localStorage data. This means you can save the authentication state of a session and use it in future runs without needing to log in again.\n\nWhat authentication methods are supported?\n\nAgent-browser supports multiple authentication methods including importing auth from the user’s browser, reusing Chrome profiles, using persistent profiles for recurring tasks, and storing session data in an auth vault for easy retrieval.\n\nAre there any limitations on using agent-browser with different websites?\n\nThere are no inherent limitations in the agent-browser skill for interacting with websites. However, some websites may have additional protections like CAPTCHA or advanced anti-bot measures that could prevent automated interactions. These require additional handling or workarounds.\n\nAll Files\n11 files\nreferences/session-management.md\n4.2 KB\nView\ntemplates/capture-workflow.sh\n1.8 KB\nView\nreferences/authentication.md\n8.2 KB\nView\nreferences/commands.md\n11.2 KB\nView\nreferences/snapshot-refs.md\n5.2 KB\nView\ntemplates/form-automation.sh\n1.8 KB\nView\nreferences/profiling.md\n3.3 KB\nView\nreferences/video-recording.md\n3.5 KB\nView\nSKILL.md\n33.2 KB\nView\nreferences/proxy-support.md\n4.9 KB\nView\ntemplates/authenticated-session.sh\n3.6 KB\nView\nInstall agent-browser\nDownload ZIP\nGit Clone\nDownload and extract the skill files to your .claude/skills/ directory.\nDownload ZIP\n\nQuick Setup:\n\nCopy the skill folder to .claude/skills/\nClaude will automatically detect and use the skill\n\nRepository\n\nvercel-labs/agent-browser\nRelated Skills\n\nmom-test\n\n1,254\n\nux-copy\n\n20,028\n\nengineering-skills\n\n17,711\n\nstreaming\n\n16\n\nAwesome Skills\n\nDiscover Open-Source Agent Skills for AI Coding Assistants\n\nPRODUCT\nSearch\nCategory\nTag\nBlog\nRESOURCES\nClaude Skill Docs\nAntigravity Skills Docs\nTOOLS\nClaude Code\nOpenCode\nCursor\nCodex\nAntigravity\nCOMPANY\nPrivacy Policy\nTerms of Service\nSitemap\n\n©2026 Awesome Skills. All rights reserved.\n\nPrivacy Policy\nTerms",
+  "stats": {
+    "bodyTextLength": 5371,
+    "linkCount": 49,
+    "buttonCount": 6,
+    "inputCount": 0,
+    "cardishCount": 5,
+    "scrollHeight": 5913
+  }
+}

@@ -1,0 +1,573 @@
+{
+  "title": "Agent Skills – Codex | OpenAI Developers",
+  "url": "https://developers.openai.com/codex/skills",
+  "headings": [
+    {
+      "tag": "h2",
+      "text": "Search the Codex docs"
+    },
+    {
+      "tag": "h3",
+      "text": "Suggested"
+    },
+    {
+      "tag": "h3",
+      "text": "Suggested"
+    },
+    {
+      "tag": "h3",
+      "text": "Get started"
+    },
+    {
+      "tag": "h3",
+      "text": "Core concepts"
+    },
+    {
+      "tag": "h3",
+      "text": "Agents SDK"
+    },
+    {
+      "tag": "h3",
+      "text": "Tools"
+    },
+    {
+      "tag": "h3",
+      "text": "Run and scale"
+    },
+    {
+      "tag": "h3",
+      "text": "Evaluation"
+    },
+    {
+      "tag": "h3",
+      "text": "Realtime and audio"
+    },
+    {
+      "tag": "h3",
+      "text": "Specialized models"
+    },
+    {
+      "tag": "h3",
+      "text": "Going live"
+    },
+    {
+      "tag": "h3",
+      "text": "Legacy APIs"
+    },
+    {
+      "tag": "h3",
+      "text": "Resources"
+    },
+    {
+      "tag": "h3",
+      "text": "Getting Started"
+    },
+    {
+      "tag": "h3",
+      "text": "Using Codex"
+    },
+    {
+      "tag": "h3",
+      "text": "Configuration"
+    },
+    {
+      "tag": "h3",
+      "text": "Administration"
+    },
+    {
+      "tag": "h3",
+      "text": "Automation"
+    },
+    {
+      "tag": "h3",
+      "text": "Learn"
+    },
+    {
+      "tag": "h3",
+      "text": "Releases"
+    },
+    {
+      "tag": "h3",
+      "text": "Core Concepts"
+    },
+    {
+      "tag": "h3",
+      "text": "Plan"
+    },
+    {
+      "tag": "h3",
+      "text": "Build"
+    },
+    {
+      "tag": "h3",
+      "text": "Deploy"
+    },
+    {
+      "tag": "h3",
+      "text": "Conversion apps"
+    },
+    {
+      "tag": "h3",
+      "text": "Guides"
+    },
+    {
+      "tag": "h3",
+      "text": "Resources"
+    },
+    {
+      "tag": "h3",
+      "text": "Guides"
+    },
+    {
+      "tag": "h3",
+      "text": "File Upload"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Start searching",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Search the Codex docs",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle menu",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Start searching",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "worktrees",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "mcp",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "noninteractive",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "sandbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "API",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "API Reference",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "Codex",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "ChatGPT",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "tab",
+      "text": "Resources",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle light and dark theme",
+      "type": "button"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Start searching",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "worktrees",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "mcp",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "noninteractive",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "sandbox",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Docs",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Use cases",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Apps SDK",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Commerce",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Ads",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Showcase",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Blog",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Cookbook",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Learn",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Community",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy Page",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy Page",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to how codex uses skills",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to create a skill",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy code to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy code to clipboard",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to where to save skills",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to distribute skills with plugins",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Copy link to install curated skills for local use",
+      "type": "button"
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://developers.openai.com/"
+    },
+    {
+      "text": "Home",
+      "href": "https://developers.openai.com/"
+    },
+    {
+      "text": "API",
+      "href": "https://developers.openai.com/api"
+    },
+    {
+      "text": "Docs Guides and concepts for the OpenAI API",
+      "href": "https://developers.openai.com/api/docs"
+    },
+    {
+      "text": "API reference Endpoints, parameters, and responses",
+      "href": "https://developers.openai.com/api/reference/overview"
+    },
+    {
+      "text": "Codex",
+      "href": "https://developers.openai.com/codex"
+    },
+    {
+      "text": "Docs Guides, concepts, and product docs for Codex",
+      "href": "https://developers.openai.com/codex"
+    },
+    {
+      "text": "Use cases Example workflows and tasks teams hand to Codex",
+      "href": "https://developers.openai.com/codex/use-cases"
+    },
+    {
+      "text": "ChatGPT",
+      "href": "https://developers.openai.com/chatgpt"
+    },
+    {
+      "text": "Apps SDK Build apps to extend ChatGPT",
+      "href": "https://developers.openai.com/apps-sdk"
+    },
+    {
+      "text": "Commerce Build commerce flows in ChatGPT",
+      "href": "https://developers.openai.com/commerce"
+    },
+    {
+      "text": "Ads Publish and measure ads in ChatGPT",
+      "href": "https://developers.openai.com/ads"
+    },
+    {
+      "text": "Resources",
+      "href": "https://developers.openai.com/learn"
+    },
+    {
+      "text": "Showcase Demo apps to get inspired",
+      "href": "https://developers.openai.com/showcase"
+    },
+    {
+      "text": "Blog Learnings and experiences from developers",
+      "href": "https://developers.openai.com/blog"
+    },
+    {
+      "text": "Cookbook Notebook examples for building with OpenAI models",
+      "href": "https://developers.openai.com/cookbook"
+    },
+    {
+      "text": "Learn Docs, videos, and demo apps for building with OpenAI",
+      "href": "https://developers.openai.com/learn"
+    },
+    {
+      "text": "Community Programs, meetups, and support for builders",
+      "href": "https://developers.openai.com/community"
+    },
+    {
+      "text": "API Dashboard",
+      "href": "https://platform.openai.com/login"
+    },
+    {
+      "text": "Overview",
+      "href": "https://developers.openai.com/api/docs"
+    },
+    {
+      "text": "Quickstart",
+      "href": "https://developers.openai.com/api/docs/quickstart"
+    },
+    {
+      "text": "Models",
+      "href": "https://developers.openai.com/api/docs/models"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://developers.openai.com/api/docs/pricing"
+    },
+    {
+      "text": "SDKs and CLI",
+      "href": "https://developers.openai.com/api/docs/libraries"
+    },
+    {
+      "text": "OpenAI SDK",
+      "href": "https://developers.openai.com/api/docs/libraries"
+    },
+    {
+      "text": "Agents SDK",
+      "href": "https://developers.openai.com/api/docs/guides/agents"
+    },
+    {
+      "text": "OpenAI CLI",
+      "href": "https://developers.openai.com/api/docs/libraries/openai-cli"
+    },
+    {
+      "text": "Latest: GPT-5.5",
+      "href": "https://developers.openai.com/api/docs/guides/latest-model"
+    },
+    {
+      "text": "Prompt guidance",
+      "href": "https://developers.openai.com/api/docs/guides/prompt-guidance"
+    },
+    {
+      "text": "Text generation",
+      "href": "https://developers.openai.com/api/docs/guides/text"
+    },
+    {
+      "text": "Code generation",
+      "href": "https://developers.openai.com/api/docs/guides/code-generation"
+    },
+    {
+      "text": "Images and vision",
+      "href": "https://developers.openai.com/api/docs/guides/images-vision"
+    },
+    {
+      "text": "Audio and speech",
+      "href": "https://developers.openai.com/api/docs/guides/audio"
+    },
+    {
+      "text": "Structured output",
+      "href": "https://developers.openai.com/api/docs/guides/structured-outputs"
+    },
+    {
+      "text": "Function calling",
+      "href": "https://developers.openai.com/api/docs/guides/function-calling"
+    },
+    {
+      "text": "Responses API",
+      "href": "https://developers.openai.com/api/docs/guides/migrate-to-responses"
+    },
+    {
+      "text": "Using tools",
+      "href": "https://developers.openai.com/api/docs/guides/tools"
+    },
+    {
+      "text": "Overview",
+      "href": "https://developers.openai.com/api/docs/guides/agents"
+    },
+    {
+      "text": "Quickstart",
+      "href": "https://developers.openai.com/api/docs/guides/agents/quickstart"
+    },
+    {
+      "text": "Agent definitions",
+      "href": "https://developers.openai.com/api/docs/guides/agents/define-agents"
+    },
+    {
+      "text": "Models and providers",
+      "href": "https://developers.openai.com/api/docs/guides/agents/models"
+    },
+    {
+      "text": "Running agents",
+      "href": "https://developers.openai.com/api/docs/guides/agents/running-agents"
+    },
+    {
+      "text": "Sandbox agents",
+      "href": "https://developers.openai.com/api/docs/guides/agents/sandboxes"
+    },
+    {
+      "text": "Orchestration",
+      "href": "https://developers.openai.com/api/docs/guides/agents/orchestration"
+    },
+    {
+      "text": "Guardrails",
+      "href": "https://developers.openai.com/api/docs/guides/agents/guardrails-approvals"
+    },
+    {
+      "text": "Results and state",
+      "href": "https://developers.openai.com/api/docs/guides/agents/results"
+    },
+    {
+      "text": "Integrations and observability",
+      "href": "https://developers.openai.com/api/docs/guides/agents/integrations-observability"
+    },
+    {
+      "text": "Evaluate agent workflows",
+      "href": "https://developers.openai.com/api/docs/guides/agent-evals"
+    },
+    {
+      "text": "Voice agents",
+      "href": "https://developers.openai.com/api/docs/guides/voice-agents"
+    },
+    {
+      "text": "Overview",
+      "href": "https://developers.openai.com/api/docs/guides/chatkit"
+    }
+  ],
+  "text": "Primary navigation\nAPI\nAPI Reference\nCodex\nChatGPT\nResources\nSearch docs\nSuggested\nworktrees\nmcp\nnoninteractive\nsandbox\nDocs\nUse cases\nGetting Started\nOverview\nQuickstart\nExplore use cases\nMigrate\nPricing\nConcepts\nUsing Codex\nApp\nIDE Extension\nCLI\nWeb\nIntegrations\nCodex Security\nConfiguration\nConfig File\nPermissions\nSpeed\nRules\nHooks\nAGENTS.md\nMCP\nPlugins\nSites\nSkills\nSubagents\nAdministration\nAuthentication\nAgent approvals & security\nRemote connections\nDeployment\nEnterprise\nWindows\nAutomation\nNon-interactive Mode\nCodex SDK\nApp Server\nMCP Server\nGitHub Action\nLearn\nBest practices\nVideos\nCommunity\nBlog\nCookbooks\nBuilding AI Teams\nReleases\nChangelog\nFeature Maturity\nOpen Source\nAPI Dashboard\nAgent Skills\n\nGive Codex new capabilities and expertise\n\nCopy Page\n\nUse agent skills to extend Codex with task-specific capabilities. A skill packages instructions, resources, and optional scripts so Codex can follow a workflow reliably. Skills build on the open agent skills standard.\n\nSkills are the authoring format for reusable workflows. Plugins are the installable distribution unit for reusable skills and apps in Codex. Use skills to design the workflow itself, then package it as a plugin when you want other developers to install it.\n\nSkills are available in the Codex CLI, IDE extension, and Codex app.\n\nSkills use progressive disclosure to manage context efficiently: Codex starts with each skill’s name, description, and file path. Codex loads the full SKILL.md instructions only when it decides to use a skill.\n\nCodex includes an initial list of available skills in context so it can choose the right skill for a task. To avoid crowding out the rest of the prompt, this list is capped at roughly 2% of the model’s context window, or 8,000 characters when the context window is unknown. If many skills are installed, Codex shortens skill descriptions first. For very large skill sets, some skills may be omitted from the initial list, and Codex will show a warning.\n\nThis budget applies only to the initial skills list. When Codex selects a skill, it still reads the full SKILL.md instructions for that skill.\n\nA skill is a directory with a SKILL.md file plus optional scripts and references. The SKILL.md file must include name and description.\n\nmy-skill/\nSKILL.md\nRequired: instructions + metadata\nscripts/\nOptional: executable code\nreferences/\nOptional: documentation\nassets/\nOptional: templates, resources\nagents/\nopenai.yaml\nOptional: appearance and dependencies\nHow Codex uses skills\n\nCodex can activate skills in two ways:\n\nExplicit invocation: Include the skill directly in your prompt. In CLI/IDE, run /skills or type $ to mention a skill.\nImplicit invocation: Codex can choose a skill when your task matches the skill description.\n\nBecause implicit matching depends on description, write concise descriptions with clear scope and boundaries. Front-load the key use case and trigger words so Codex can still match the skill if descriptions are shortened.\n\nCreate a skill\n\nUse the built-in creator first:\n\n$skill-creator\n\nThe creator asks what the skill does, when it should trigger, and whether it should stay instruction-only or include scripts. Instruction-only is the default.\n\nYou can also create a skill manually by creating a folder with a SKILL.md file:\n\n---\nname: skill-name\ndescription: Explain exactly when this skill should and should not trigger.\n---\n\nSkill instructions for Codex to follow.\n\nCodex detects skill changes automatically. If an update doesn’t appear, restart Codex.\n\nWhere to save skills\n\nCodex reads skills from repository, user, admin, and system locations. For repositories, Codex scans .agents/skills in every directory from your current working directory up to the repository root. If two skills share the same name, Codex doesn’t merge them; both can appear in skill selectors.\n\nSkill Scope\tLocation\tSuggested use\nREPO\t$CWD/.agents/skills\nCurrent working directory: where you launch Codex.\tIf you’re in a repository or code environment, teams can check in skills relevant to a working folder. For example, skills only relevant to a microservice or a module.\nREPO\t$CWD/../.agents/skills\nA folder above CWD when you launch Codex inside a Git repository.\tIf you’re in a repository with nested folders, organizations can check in skills relevant to a shared area in a parent folder.\nREPO\t$REPO_ROOT/.agents/skills\nThe topmost root folder when you launch Codex inside a Git repository.\tIf you’re in a repository with nested folders, organizations can check in skills relevant to everyone using the repository. These serve as root skills available to any subfolder in the repository.\nUSER\t$HOME/.agents/skills\nAny skills checked into the user’s personal folder.\tUse to curate skills relevant to a user that apply to any repository the user may work in.\nADMIN\t/etc/codex/skills\nAny skills checked into the machine or container in a shared, system location.\tUse for SDK scripts, automation, and for checking in default admin skills available to each user on the machine.\nSYSTEM\tBundled with Codex by OpenAI.\tUseful skills relevant to a broad audience such as the skill-creator and plan skills. Available to everyone when they start Codex.\n\nCodex supports symlinked skill folders and follows the symlink target when scanning these locations.\n\nThese locations are for authoring and local discovery. When you want to distribute reusable skills beyond a single repo, or optionally bundle them with app integrations, use plugins.\n\nDistribute skills with plugins\n\nDirect skill folders are best for local authoring and repo-scoped workflows. If you want to distribute a reusable skill, bundle two or more skills together, or ship a skill alongside an app integration, package them as a plugin.\n\nPlugins can include one or more skills. They can also optionally bundle app mappings, MCP server configuration, and presentation assets in a single package.\n\nInstall curated skills for local use\n\nTo add curated skills beyond the built-ins for your own local Codex setup, use $skill-installer. For example, to install the $linear skill:\n\n$skill-installer linear\n\nYou can also prompt the installer to download skills from other repositories. Codex detects newly installed skills automatically; if one doesn’t appear, restart Codex.\n\nUse this for local setup and experimentation. For reusable distribution of your own skills, prefer plugins.\n\nEnable or disable skills\n\nUse [[skills.config]] entries in ~/.codex/config.toml to disable a skill without deleting it:\n\n[[skills.config]]\npath = \"/path/to/skill/SKILL.md\"\nenabled = false\n\nRestart Codex after changing ~/.codex/config.toml.\n\nOptional metadata\n\nAdd agents/openai.yaml to configure UI metadata in the Codex app, to set invocation policy, and to declare tool dependencies for a more seamless experience with using the skill.\n\ninterface:\n  display_name: \"Optional user-facing name\"\n  short_description: \"Optional user-facing description\"\n  icon_small: \"./assets/small-logo.svg\"\n  icon_large: \"./assets/large-logo.png\"\n  brand_color: \"#3B82F6\"\n  default_prompt: \"Optional surrounding prompt to use the skill with\"\n\npolicy:\n  allow_implicit_invocation: false\n\ndependencies:\n  tools:\n    - type: \"mcp\"\n      value: \"openaiDeveloperDocs\"\n      description: \"OpenAI Docs MCP server\"\n      transport: \"streamable_http\"\n      url: \"https://developers.openai.com/mcp\"\n\nallow_implicit_invocation (default: true): When false, Codex won’t implicitly invoke the skill based on user prompt; explicit $skill invocation still works.\n\nBest practices\nKeep each skill focused on one job.\nPrefer instructions over scripts unless you need deterministic behavior or external tooling.\nWrite imperative steps with explicit inputs and outputs.\nTest prompts against the skill description to confirm the right trigger behavior.\n\nFor more examples, see github.com/openai/skills and the agent skills specification.\n\nAsk AI\nDocs agent\n\nLoading docs agent...",
+  "stats": {
+    "bodyTextLength": 7912,
+    "linkCount": 465,
+    "buttonCount": 47,
+    "inputCount": 2,
+    "cardishCount": 1,
+    "scrollHeight": 844
+  }
+}

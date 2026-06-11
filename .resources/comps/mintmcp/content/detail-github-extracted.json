@@ -1,0 +1,559 @@
+{
+  "title": "GitHub MCP Server - MintMCP",
+  "url": "https://www.mintmcp.com/servers/github",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "GitHub MCP server"
+    },
+    {
+      "tag": "h2",
+      "text": "Tools included with GitHub MCP"
+    },
+    {
+      "tag": "h3",
+      "text": "add_comment_to_pending_review"
+    },
+    {
+      "tag": "h3",
+      "text": "add_issue_comment"
+    },
+    {
+      "tag": "h3",
+      "text": "add_reply_to_pull_request_comment"
+    },
+    {
+      "tag": "h3",
+      "text": "assign_copilot_to_issue"
+    },
+    {
+      "tag": "h3",
+      "text": "create_branch"
+    },
+    {
+      "tag": "h3",
+      "text": "create_or_update_file"
+    },
+    {
+      "tag": "h3",
+      "text": "create_pull_request"
+    },
+    {
+      "tag": "h3",
+      "text": "create_repository"
+    },
+    {
+      "tag": "h3",
+      "text": "delete_file"
+    },
+    {
+      "tag": "h3",
+      "text": "fork_repository"
+    },
+    {
+      "tag": "h3",
+      "text": "get_commit"
+    },
+    {
+      "tag": "h3",
+      "text": "get_file_contents"
+    },
+    {
+      "tag": "h3",
+      "text": "get_label"
+    },
+    {
+      "tag": "h3",
+      "text": "get_latest_release"
+    },
+    {
+      "tag": "h3",
+      "text": "get_me"
+    },
+    {
+      "tag": "h3",
+      "text": "get_release_by_tag"
+    },
+    {
+      "tag": "h3",
+      "text": "get_tag"
+    },
+    {
+      "tag": "h3",
+      "text": "get_team_members"
+    },
+    {
+      "tag": "h3",
+      "text": "get_teams"
+    },
+    {
+      "tag": "h3",
+      "text": "issue_read"
+    },
+    {
+      "tag": "h2",
+      "text": "Works with every major client"
+    },
+    {
+      "tag": "h2",
+      "text": "Why MintMCP gateway"
+    },
+    {
+      "tag": "h2",
+      "text": "FAQs"
+    },
+    {
+      "tag": "h3",
+      "text": "Is this secure?"
+    },
+    {
+      "tag": "h3",
+      "text": "What can I use it with?"
+    },
+    {
+      "tag": "h3",
+      "text": "How can I get started?"
+    },
+    {
+      "tag": "h3",
+      "text": "What is MCP?"
+    },
+    {
+      "tag": "h3",
+      "text": "How can I grant or revoke access to an MCP?"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Customise",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Reject All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Accept All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Close",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Show more",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Necessary",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Functional",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Functional",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Analytics",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Analytics",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Performance",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Advertisement",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Advertisement",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Uncategorised",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Uncategorised",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Reject All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Save My Preferences",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Accept All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Platform",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Resources",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Company",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Sign In",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Get started",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Get started",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle menu",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Try it now",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Is this secure?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "What can I use it with?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "How can I get started?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "What is MCP?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "How can I grant or revoke access to an MCP?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "How can I see how MCPs are used?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Do users have to enter tokens manually?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Can I configure MCP access by roles?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Can I customize VMCPs for my team?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Can I deploy custom MCP servers?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "How do I set up Okta SAML SSO?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "How are MCP schema updates handled?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Can I audit tool-level access across teams?",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Try it now",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://www.cookieyes.com/product/cookie-consent/?ref=cypbcyb&utm_source=cookie-banner&utm_medium=fl-branding"
+    },
+    {
+      "text": "",
+      "href": "https://www.cookieyes.com/product/cookie-consent/?ref=cypbcyb&utm_source=cookie-banner&utm_medium=sl-branding"
+    },
+    {
+      "text": "MintMCP",
+      "href": "https://www.mintmcp.com/"
+    },
+    {
+      "text": "Home",
+      "href": "https://www.mintmcp.com/"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://www.mintmcp.com/pricing"
+    },
+    {
+      "text": "Trust",
+      "href": "https://trust.mintmcp.com/"
+    },
+    {
+      "text": "Sign In",
+      "href": "https://app.mintmcp.com/"
+    },
+    {
+      "text": "Get started",
+      "href": "https://app.mintmcp.com/sign-up"
+    },
+    {
+      "text": "Get started",
+      "href": "https://app.mintmcp.com/sign-up"
+    },
+    {
+      "text": "ALL SERVERS",
+      "href": "https://www.mintmcp.com/servers"
+    },
+    {
+      "text": "Try it now",
+      "href": "https://app.mintmcp.com/sign-up"
+    },
+    {
+      "text": "Documentation",
+      "href": "https://github.com/github/github-mcp-server"
+    },
+    {
+      "text": "Need something custom?",
+      "href": "https://www.mintmcp.com/#get-started-form"
+    },
+    {
+      "text": "Try it now",
+      "href": "https://app.mintmcp.com/sign-up"
+    },
+    {
+      "text": "MCP Gateway",
+      "href": "https://www.mintmcp.com/mcp-gateway"
+    },
+    {
+      "text": "Agent Monitor",
+      "href": "https://www.mintmcp.com/agent-monitor"
+    },
+    {
+      "text": "Documentation",
+      "href": "https://www.mintmcp.com/docs/intro"
+    },
+    {
+      "text": "Resources",
+      "href": "https://www.mintmcp.com/resources"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://www.mintmcp.com/pricing"
+    },
+    {
+      "text": "Gmail MCP",
+      "href": "https://www.mintmcp.com/gmail"
+    },
+    {
+      "text": "Outlook MCP",
+      "href": "https://www.mintmcp.com/outlook"
+    },
+    {
+      "text": "Google Calendar MCP",
+      "href": "https://www.mintmcp.com/google-calendar"
+    },
+    {
+      "text": "Outlook Calendar MCP",
+      "href": "https://www.mintmcp.com/outlook-calendar"
+    },
+    {
+      "text": "Linear MCP",
+      "href": "https://www.mintmcp.com/linear"
+    },
+    {
+      "text": "Notion MCP",
+      "href": "https://www.mintmcp.com/notion"
+    },
+    {
+      "text": "Databases",
+      "href": "https://www.mintmcp.com/database"
+    },
+    {
+      "text": "Snowflake MCP",
+      "href": "https://www.mintmcp.com/snowflake"
+    },
+    {
+      "text": "Elasticsearch MCP",
+      "href": "https://www.mintmcp.com/elasticsearch"
+    },
+    {
+      "text": "Salesforce MCP",
+      "href": "https://www.mintmcp.com/chatgpt-custom-gpt/salesforce"
+    },
+    {
+      "text": "See all →",
+      "href": "https://www.mintmcp.com/servers"
+    },
+    {
+      "text": "Jobs",
+      "href": "https://www.mintmcp.com/hiring"
+    },
+    {
+      "text": "About us",
+      "href": "https://www.mintmcp.com/about"
+    },
+    {
+      "text": "Events",
+      "href": "https://lu.ma/mintMCP"
+    },
+    {
+      "text": "Blog",
+      "href": "https://www.mintmcp.com/blog"
+    },
+    {
+      "text": "Contact",
+      "href": "https://www.mintmcp.com/contact"
+    },
+    {
+      "text": "Terms",
+      "href": "https://www.mintmcp.com/terms"
+    },
+    {
+      "text": "Privacy",
+      "href": "https://www.mintmcp.com/privacy"
+    },
+    {
+      "text": "Trust Center",
+      "href": "https://trust.mintmcp.com/"
+    },
+    {
+      "text": "Github",
+      "href": "https://github.com/mintmcp"
+    },
+    {
+      "text": "LinkedIn",
+      "href": "https://linkedin.com/company/lutra-ai"
+    },
+    {
+      "text": "X",
+      "href": "https://x.com/mintmcp_ai"
+    },
+    {
+      "text": "",
+      "href": "https://aaif.io/"
+    },
+    {
+      "text": "",
+      "href": "https://trust.mintmcp.com/"
+    },
+    {
+      "text": "",
+      "href": "https://trust.mintmcp.com/"
+    },
+    {
+      "text": "",
+      "href": "https://trust.mintmcp.com/"
+    }
+  ],
+  "text": "MintMCP\nGet started\nALL SERVERS\n GitHub MCP server\n\nConnect AI assistants to GitHub - manage repos, issues, PRs, and workflows through natural language. Connect your AI agents to GitHub with enterprise-grade governance, observability, and control through MintMCP Gateway.\n\nTry it now\n\nNo sales call needed!\n\nDocumentation\nTools included with GitHub MCP\nadd_comment_to_pending_review\n\nAdd review comment to the requester's latest pending pull request review. A pending review needs to already exist to ...\n\nadd_issue_comment\n\nAdd a comment to a specific issue in a GitHub repository. Use this tool to add comments to pull requests as well (in ...\n\nadd_reply_to_pull_request_comment\n\nAdd a reply to an existing pull request comment. This creates a new comment that is linked as a reply to the specifie...\n\nassign_copilot_to_issue\n\nAssign Copilot to a specific issue in a GitHub repository. This tool can help with the following outcomes: - a Pull ...\n\ncreate_branch\n\nCreate a new branch in a GitHub repository\n\ncreate_or_update_file\n\nCreate or update a single file in a GitHub repository. If updating, you should provide the SHA of the file you want ...\n\ncreate_pull_request\n\nCreate a new pull request in a GitHub repository.\n\ncreate_repository\n\nCreate a new GitHub repository in your account or specified organization\n\ndelete_file\n\nDelete a file from a GitHub repository\n\nfork_repository\n\nFork a GitHub repository to your account or specified organization\n\nget_commit\n\nGet details for a commit from a GitHub repository\n\nget_file_contents\n\nGet the contents of a file or directory from a GitHub repository\n\nget_label\n\nGet a specific label from a repository.\n\nget_latest_release\n\nGet the latest release in a GitHub repository\n\nget_me\n\nGet details of the authenticated GitHub user. Use this when a request is about the user's own profile for GitHub. Or ...\n\nget_release_by_tag\n\nGet a specific release by its tag name in a GitHub repository\n\nget_tag\n\nGet details about a specific git tag in a GitHub repository\n\nget_team_members\n\nGet member usernames of a specific team in an organization. Limited to organizations accessible with current credentials\n\nget_teams\n\nGet details of the teams the user is a member of. Limited to organizations accessible with current credentials\n\nissue_read\n\nGet information about a specific issue in a GitHub repository.\n\nShowing 20 of 41 tools\n\nWorks with every major client\nClaude\nChatGPT\nCopilot\nCursor\nGemini\nGoose\nLibreChat\nOpen WebUI\nWindsurf\nNeed something custom?\nWhy MintMCP gateway\nCentralized governance\n\nUnified authentication, audit logging, and rate control for all GitHub MCP connections.\n\nOne-click deployment\n\nInstantly enable GitHub MCP for AI teams via MintMCP's standardized gateway without manual server setup.\n\nOAuth + SSO enforcement\n\nAutomatic enterprise authentication wrapping for GitHub MCP endpoints.\n\nHost stdio servers on MintMCP instead of running locally\n\nContainerized servers become accessible to clients like ChatGPT without local installations. Better risk management and security posture without requiring users to run servers on their machines.\n\nObservability and control\n\nReal-time dashboards for monitoring usage, detecting anomalies, and maintaining SLA compliance.\n\nEnterprise hardening\n\nHigh availability, security, and compliance alignment transform MCP from developer utility to production-grade infrastructure.\n\nSupports shared and per-user auth\n\nFlexibility to configure service accounts at the admin level or enable individual OAuth flows. Secrets remain protected while users gain access, with centralized revocation capabilities.\n\nGranular tool access control\n\nConfigure tool access by role. For example, enable read-only operations and exclude write tools like create and delete.\n\nFAQs\nIs this secure?\n\nYes. MintMCP Gateway is SOC 2 compliant and uses OAuth-based authentication for all GitHub MCP interactions.\n\nWhat can I use it with?\nHow can I get started?\nWhat is MCP?\nHow can I grant or revoke access to an MCP?\nHow can I see how MCPs are used?\nDo users have to enter tokens manually?\nCan I configure MCP access by roles?\nCan I customize VMCPs for my team?\nCan I deploy custom MCP servers?\nHow do I set up Okta SAML SSO?\nHow are MCP schema updates handled?\nCan I audit tool-level access across teams?\nReady to connect GitHub to your AI agents?\n\nJoin enterprises that trust MintMCP Gateway to manage their GitHub AI integrations securely and efficiently.\n\nTry it now\n\nNo sales call needed!\n\nMintMCP\n© 2026, all rights reserved\nPRODUCT\nMCP Gateway\nAgent Monitor\nDocumentation\nResources\nPricing\nINTEGRATIONS\nGmail MCP\nOutlook MCP\nGoogle Calendar MCP\nOutlook Calendar MCP\nLinear MCP\nNotion MCP\nDatabases\nSnowflake MCP\nElasticsearch MCP\nSalesforce MCP\nSee all →\nCOMPANY\nJobs\nAbout us\nEvents\nBlog\nContact\nTerms\nPrivacy\nTrust Center\nFOLLOW US HERE\nGithub\nLinkedIn\nX\nPROUD MEMBER OF\nENTERPRISE-READY",
+  "stats": {
+    "bodyTextLength": 4870,
+    "linkCount": 45,
+    "buttonCount": 36,
+    "inputCount": 4,
+    "cardishCount": 43,
+    "scrollHeight": 10311
+  }
+}

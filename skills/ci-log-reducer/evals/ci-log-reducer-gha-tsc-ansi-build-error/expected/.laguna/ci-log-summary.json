@@ -1,0 +1,30 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "npx tsc --noEmit",
+  "failure_kind": "build_error",
+  "summary": "tsc --noEmit reports 3 type errors. In src/api/handler.ts line 42: argument type 'string | undefined' is not assignable to parameter of type 'string' (TS2345). In src/models/user.ts line 15: Type 'number' not assignable to type 'string' (TS2322); and line 68: property 'createdAt' does not exist on type 'UserRecord' (TS2339).",
+  "error_lines": [
+    {
+      "line": 15,
+      "text": "src/api/handler.ts(42,17): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'."
+    },
+    {
+      "line": 17,
+      "text": "src/models/user.ts(15,5): error TS2322: Type 'number' is not assignable to type 'string'."
+    },
+    {
+      "line": 18,
+      "text": "src/models/user.ts(68,12): error TS2339: Property 'createdAt' does not exist on type 'UserRecord'."
+    },
+    {
+      "line": 20,
+      "text": "Found 3 errors."
+    }
+  ],
+  "suggested_next_commands": [
+    "./node_modules/.bin/tsc --noEmit",
+    "grep -rn 'createdAt' src/models/",
+    "grep -rn 'UserRecord' src/models/"
+  ]
+}

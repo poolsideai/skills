@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/skills/workspace-inventory/workspace-inventory.schema.json",
+  "title": "workspace-inventory.v1",
+  "description": "Top-level inventory of a workspace directory, written by the workspace-inventory skill to .laguna/workspace-inventory.json. Records every top-level entry with its name, kind (file or directory), and recursive file count for directories, plus a total_files count. All counts and paths are mechanically checkable against the real filesystem tree.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "workspace-inventory.v1",
+      "description": "Contract identifier; always the literal string \"workspace-inventory.v1\"."
+    },
+    "total_files": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of regular files (not directories, not symlinks) in the workspace, recursively, excluding the .laguna/ directory itself."
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 0,
+      "description": "One record per top-level entry in the workspace root (excluding .laguna/). Sorted lexicographically by name.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Entry name (basename only, no path separators)."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["file", "directory"],
+            "description": "Whether this entry is a regular file or a directory. Symlinks are not listed."
+          },
+          "file_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "For directories: the total number of regular files contained recursively inside this directory. Omitted (or null) for file entries."
+          }
+        },
+        "required": ["name", "kind"],
+        "if": {
+          "properties": { "kind": { "const": "directory" } },
+          "required": ["kind"]
+        },
+        "then": {
+          "required": ["name", "kind", "file_count"]
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schema_version", "total_files", "entries"],
+  "additionalProperties": false
+}

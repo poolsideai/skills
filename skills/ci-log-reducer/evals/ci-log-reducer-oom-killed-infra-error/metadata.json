@@ -1,0 +1,21 @@
+{
+  "id": "ci-log-reducer-oom-killed-infra-error",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ci-log-reducer/scripts/validate_log_summary.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Test runner killed mid-run by OOM killer (exit code 137, bare 'Killed' line, SIGKILL message); no test-failure summary in the log. Correct answer is failure_kind infra_error attributing failure to memory exhaustion, not a code bug."
+}

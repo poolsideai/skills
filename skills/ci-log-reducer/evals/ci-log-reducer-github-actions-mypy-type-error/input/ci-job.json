@@ -1,0 +1,5 @@
+{
+  "job": "type-check",
+  "command": "mypy src/",
+  "exit_code": 1
+}

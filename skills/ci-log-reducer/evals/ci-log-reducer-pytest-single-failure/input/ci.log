@@ -1,0 +1,24 @@
+2026-06-09T14:02:08Z [runner] Job: unit-tests
+2026-06-09T14:02:08Z [runner] Runner image: ubuntu-24.04
+2026-06-09T14:02:08Z [runner] Checkout: octoturb/retryd @ 7f3c2a1
+2026-06-09T14:02:09Z [runner] step: Install dependencies
++ uv sync --frozen
+Resolved 38 packages in 412ms
+Installed 38 packages in 1.04s
+2026-06-09T14:02:11Z [runner] step: Run unit tests
++ uv run pytest -q
+............................F.......                                    [100%]
+=================================== FAILURES ===================================
+______________________ test_parse_retry_config_defaults _______________________
+
+    def test_parse_retry_config_defaults():
+        cfg = parse_retry_config({})
+>       assert cfg.max_retries == 3
+E       assert 5 == 3
+E        +  where 5 = RetryConfig(max_retries=5, backoff_ms=200).max_retries
+
+tests/test_retry_config.py:41: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_retry_config.py::test_parse_retry_config_defaults - assert 5 == 3
+1 failed, 35 passed in 4.21s
+2026-06-09T14:02:18Z [runner] Process completed with exit code 1.

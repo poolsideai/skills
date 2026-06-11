@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/skills/laguna-task-contract/router-contract.schema.json",
+  "title": "router-contract.v1",
+  "description": "A constrained routing decision for Laguna M.1 acting as a router/planner, written by the laguna-task-contract skill to .laguna/router-contract.json at the workspace root. M.1 produces skill calls and bounded task contracts — never free-form plans or recursive delegation. Each delegations[].task_contract must itself validate against task-contract.schema.json; that cross-schema rule is enforced by the validator (scripts/validate_contract.ts), not by a $ref, because the skill's zero-dependency schema interpreter does not dereference $ref.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "router-contract.v1",
+      "description": "Contract identifier; always the literal string \"router-contract.v1\"."
+    },
+    "model_mode": {
+      "const": "laguna_m_router",
+      "description": "Always \"laguna_m_router\": this contract is produced by Laguna M.1 as a constrained router. Worker contracts belong in task-contract.v1."
+    },
+    "user_goal": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "The user's request, condensed but faithful. This field may contain unbounded language (it is the user's words); the bounded-contract rules apply to the delegated goals, not here."
+    },
+    "candidate_skills": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "description": "The closed menu of skills the router chose among. Routing is a choice from this list, not open space.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+        "minLength": 1
+      }
+    },
+    "routing_decision": {
+      "type": "object",
+      "properties": {
+        "chosen_skill": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+          "description": "Exactly one skill, taken from candidate_skills (the validator enforces membership)."
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "One or two sentences grounding the choice in the request's evidence."
+        }
+      },
+      "required": ["chosen_skill", "reason"],
+      "additionalProperties": false
+    },
+    "delegations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "Bounded work orders handed to XS.2 workers. No recursion: a delegation embeds a task contract, and task contracts cannot contain delegations.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "worker_model": {
+            "const": "laguna_xs",
+            "description": "Delegations always target Laguna XS.2 as the bounded worker."
+          },
+          "task_contract": {
+            "type": "object",
+            "description": "A complete task-contract.v1 object (see task-contract.schema.json). The validator validates each embedded contract against that schema and applies the same bounded-contract rules to it."
+          }
+        },
+        "required": ["worker_model", "task_contract"],
+        "additionalProperties": false
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "When the routed work is finished or abandoned. Must include both \"validator_passed\" (the success exit) and \"escalation_required\" (the explicit failure-is-acceptable exit); the validator enforces this.",
+      "items": {
+        "type": "string",
+        "enum": ["schema_valid", "validator_passed", "max_repairs_exhausted", "escalation_required"]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "model_mode",
+    "user_goal",
+    "candidate_skills",
+    "routing_decision",
+    "delegations",
+    "stop_conditions"
+  ],
+  "additionalProperties": false
+}

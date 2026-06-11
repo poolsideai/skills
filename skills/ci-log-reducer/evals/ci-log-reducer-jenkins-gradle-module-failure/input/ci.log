@@ -1,0 +1,67 @@
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on jenkins-agent-01 in /var/lib/jenkins/workspace/payments-platform
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+Checking out git https://github.com/example/payments-platform.git
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build & Test)
+[Pipeline] sh
++ ./gradlew clean test --continue
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :api-gateway:compileJava
+> Task :api-gateway:processResources
+> Task :api-gateway:classes
+> Task :api-gateway:compileTestJava
+> Task :api-gateway:processTestResources
+> Task :api-gateway:testClasses
+> Task :api-gateway:test
+BUILD SUCCESSFUL: api-gateway tests passed (12 tests)
+> Task :auth-service:compileJava
+> Task :auth-service:processResources
+> Task :auth-service:classes
+> Task :auth-service:compileTestJava
+> Task :auth-service:processTestResources
+> Task :auth-service:testClasses
+> Task :auth-service:test
+BUILD SUCCESSFUL: auth-service tests passed (8 tests)
+> Task :payments-service:compileJava
+> Task :payments-service:processResources
+> Task :payments-service:classes
+> Task :payments-service:compileTestJava
+> Task :payments-service:processTestResources
+> Task :payments-service:testClasses
+> Task :payments-service:test
+
+PaymentProcessorTest > shouldRefundPartialPaymentWhenAmountExceedsBalance FAILED
+    java.lang.AssertionError: expected:<200> but was:<402>
+        at org.junit.Assert.failNotEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.example.payments.PaymentProcessorTest.shouldRefundPartialPaymentWhenAmountExceedsBalance(PaymentProcessorTest.java:87)
+
+1 test completed, 1 failed
+
+> Task :payments-service:test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':payments-service:test'.
+> There were failing tests. See the report at: file:///var/lib/jenkins/workspace/payments-platform/payments-service/build/reports/tests/test/index.html
+
+* Try:
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get a Gradle build scan.
+
+BUILD FAILED in 1m 34s
+5 actionable tasks: 5 executed
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1

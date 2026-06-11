@@ -1,0 +1,21 @@
+{
+  "id": "repo-map-empty-frameworks-manifest-zoo",
+  "skill": "repo-map",
+  "bucket": "edge",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/repo-map/scripts/validate_repo_map.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Edge case: multiple language manifests (package.json, requirements.txt, Cargo.toml, go.mod, Gemfile) present but all contain only dev dependencies, linters, and build tools\u2014no production frameworks. Tests that agent correctly reads manifests directly, distinguishes development tools from frameworks, and emits frameworks: [] rather than padding with build tools or hallucinating frameworks. Multi-language repository with entrypoints in each language but zero framework integration. Synthetic fixture; no customer data. Generated case."
+}

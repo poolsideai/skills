@@ -1,0 +1,19 @@
+{
+  "name": "polyglot-demos",
+  "version": "0.1.0",
+  "description": "Multi-language hello world demonstrations with linting",
+  "type": "module",
+  "scripts": {
+    "test": "bun test src/typescript/**/*.test.ts",
+    "lint": "eslint src/typescript && prettier --check src/typescript",
+    "format": "prettier --write src/typescript"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.2.0"
+  }
+}

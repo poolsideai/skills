@@ -1,0 +1,61 @@
+{
+  "schema_version": "router-contract.v1",
+  "model_mode": "laguna_m_router",
+  "user_goal": "CI on pulse-api main is red; the failing run's log is at ci.log. Determine what is actually failing and produce something structured the team can act on, before anyone changes code.",
+  "candidate_skills": [
+    "repo-map",
+    "ci-log-reducer",
+    "stack-trace-router",
+    "single-file-patch",
+    "regression-test-generator"
+  ],
+  "routing_decision": {
+    "chosen_skill": "ci-log-reducer",
+    "reason": "The request asks why CI is red and the evidence is a single failing run log; reducing ci.log to a structured failure summary is the prerequisite for any code change."
+  },
+  "delegations": [
+    {
+      "worker_model": "laguna_xs",
+      "task_contract": {
+        "schema_version": "task-contract.v1",
+        "model_mode": "laguna_xs_worker",
+        "task_type": "log_reduction",
+        "goal": "Reduce ci.log to a structured failure summary written to .laguna/ci-log-summary.json.",
+        "context_packet": {
+          "files": [
+            { "path": "ci.log", "why": "full log of the failing CI run" }
+          ],
+          "commands": ["uv run pytest -q"],
+          "logs": ["ci.log"]
+        },
+        "scope": {
+          "paths": ["ci.log"],
+          "max_files_to_modify": 0
+        },
+        "constraints": {
+          "output_format": "json",
+          "artifact_path": ".laguna/ci-log-summary.json",
+          "must_not": [
+            "modify repository files",
+            "invent log lines or commands",
+            "suggest networked or destructive commands"
+          ]
+        },
+        "acceptance": {
+          "checks": [
+            {
+              "type": "schema",
+              "schema_path": ".poolside/skills/ci-log-reducer/schemas/ci-log-summary.schema.json"
+            }
+          ]
+        },
+        "repair_policy": {
+          "max_repairs": 1,
+          "return_only_corrected_output": true
+        },
+        "escalation": "route_to_m1"
+      }
+    }
+  ],
+  "stop_conditions": ["schema_valid", "validator_passed", "escalation_required"]
+}

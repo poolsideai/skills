@@ -1,0 +1,5 @@
+{
+  "job": "test",
+  "command": "go test -v -count=1 ./...",
+  "exit_code": 137
+}

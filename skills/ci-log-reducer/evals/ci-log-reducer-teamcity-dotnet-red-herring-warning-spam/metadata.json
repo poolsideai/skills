@@ -1,0 +1,21 @@
+{
+  "id": "ci-log-reducer-teamcity-dotnet-red-herring-warning-spam",
+  "skill": "ci-log-reducer",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ci-log-reducer/scripts/validate_log_summary.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "TeamCity log format with ##teamcity[...] service messages; .NET/xUnit test framework. Adversarial red-herring spam: Namespace.Tests.LegacyClientTests passes but emits 180 lines of 'WARNING: method X is deprecated' to stdout, flooding the log with WARNING keywords. The actual failure is Namespace.Tests.PaymentProcessorTests.ProcessRefund with an assertion error 200 lines later. Tests noise filtering and correct identification of the authoritative failure despite keyword-heavy decoys. Synthetic fixture; no customer data. Generated case."
+}

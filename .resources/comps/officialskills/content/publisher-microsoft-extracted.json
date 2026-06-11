@@ -1,0 +1,241 @@
+{
+  "title": "Microsoft — 133 Agent Skills | officialskills.sh",
+  "url": "https://officialskills.sh/microsoft/skills",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Microsoft"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Dismiss sponsor banner",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Feedback",
+      "type": "button"
+    }
+  ],
+  "links": [
+    {
+      "text": "Sponsor officialskills.sh and get featured on the platform →",
+      "href": "https://sponsors.voltagent.dev/#officialskills.sh"
+    },
+    {
+      "text": "officialskills.sh",
+      "href": "https://officialskills.sh/"
+    },
+    {
+      "text": "About",
+      "href": "https://officialskills.sh/about"
+    },
+    {
+      "text": "—",
+      "href": "https://github.com/VoltAgent/awesome-agent-skills"
+    },
+    {
+      "text": "Sign in",
+      "href": "https://officialskills.sh/auth"
+    },
+    {
+      "text": "Back to skills",
+      "href": "https://officialskills.sh/"
+    },
+    {
+      "text": "1 agent-framework-azure-ai-py Python SDK for building persistent agents on Azure AI Foundry.",
+      "href": "https://officialskills.sh/microsoft/skills/agent-framework-azure-ai-py"
+    },
+    {
+      "text": "2 agents-v2-py Deploys container-based agents to Azure AI Foundry using `ImageBasedHostedAgentDefinition` from the Azure AI Projects SDK.",
+      "href": "https://officialskills.sh/microsoft/skills/agents-v2-py"
+    },
+    {
+      "text": "3 azure-ai-anomalydetector-java Azure AI Anomaly Detector SDK for Java lets you detect anomalies in time-series data using univariate or mul",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-anomalydetector-java"
+    },
+    {
+      "text": "4 azure-ai-contentsafety-java Java SDK for Azure AI Content Safety.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-contentsafety-java"
+    },
+    {
+      "text": "5 azure-ai-contentsafety-py Azure AI Content Safety SDK for Python connects to Microsoft's content moderation API to analyze text and images",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-contentsafety-py"
+    },
+    {
+      "text": "6 azure-ai-contentsafety-ts Analyzes text and images for harmful content using Azure AI Content Safety.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-contentsafety-ts"
+    },
+    {
+      "text": "7 azure-ai-contentunderstanding-py Azure AI Content Understanding SDK for Python.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-contentunderstanding-py"
+    },
+    {
+      "text": "8 azure-ai-document-intelligence-ts Azure AI Document Intelligence TypeScript SDK wraps the Azure Document Intelligence REST API for extract",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-document-intelligence-ts"
+    },
+    {
+      "text": "9 azure-ai-document-intelligence-dotnet Azure AI Document Intelligence SDK for .",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-document-intelligence-dotnet"
+    },
+    {
+      "text": "10 azure-ai-formrecognizer-java Azure AI Document Intelligence (Form Recognizer) SDK for Java lets you extract structured data from document",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-formrecognizer-java"
+    },
+    {
+      "text": "11 azure-ai-ml-py Azure Machine Learning SDK v2 for Python (azure-ai-ml) lets you manage ML resources on Azure programmatically.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-ml-py"
+    },
+    {
+      "text": "12 azure-ai-openai-dotnet Azure.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-openai-dotnet"
+    },
+    {
+      "text": "13 azure-ai-projects-dotnet Azure.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-projects-dotnet"
+    },
+    {
+      "text": "14 azure-ai-textanalytics-py Azure AI Text Analytics SDK for Python wraps the Azure AI Language service REST API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-textanalytics-py"
+    },
+    {
+      "text": "15 azure-ai-transcription-py Azure AI Transcription SDK for Python wraps the Azure Cognitive Services speech-to-text API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-transcription-py"
+    },
+    {
+      "text": "16 azure-ai-projects-ts TypeScript SDK for Azure AI Foundry that provides access to agents, connections, deployments, datasets, indexes, and",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-projects-ts"
+    },
+    {
+      "text": "17 azure-ai-projects-java Java SDK for Azure AI Foundry that manages project resources like connections, datasets, indexes, and evaluations ",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-projects-java"
+    },
+    {
+      "text": "18 azure-ai-projects-py Python SDK for building AI applications on Microsoft Azure Foundry.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-projects-py"
+    },
+    {
+      "text": "19 azure-ai-translation-text-py Azure AI Text Translation SDK for Python wraps the Azure Translator REST API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-translation-text-py"
+    },
+    {
+      "text": "20 azure-ai-translation-document-py Azure AI Document Translation SDK for Python handles batch translation of documents across formats like ",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-translation-document-py"
+    },
+    {
+      "text": "21 azure-ai-translation-ts Azure AI Translation SDK for TypeScript wraps the Azure Translator REST API into typed clients for both real-time",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-translation-ts"
+    },
+    {
+      "text": "22 azure-ai-vision-imageanalysis-java Java SDK for Azure AI Vision Image Analysis.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-vision-imageanalysis-java"
+    },
+    {
+      "text": "23 azure-ai-vision-imageanalysis-py Azure AI Vision Image Analysis SDK for Python wraps the Azure AI Vision 4.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-vision-imageanalysis-py"
+    },
+    {
+      "text": "24 azure-ai-voicelive-java Java SDK for Azure AI VoiceLive.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-voicelive-java"
+    },
+    {
+      "text": "25 azure-ai-voicelive-dotnet Azure AI Voice Live SDK for .",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-voicelive-dotnet"
+    },
+    {
+      "text": "26 azure-ai-voicelive-py Python SDK for building real-time voice AI applications over WebSocket connections with Azure AI.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-voicelive-py"
+    },
+    {
+      "text": "27 azure-ai-voicelive-ts Azure AI Voice Live SDK for JavaScript and TypeScript.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-ai-voicelive-ts"
+    },
+    {
+      "text": "28 azure-appconfiguration-java Java client library for Azure App Configuration, a managed service that centralizes key-value settings, featu",
+      "href": "https://officialskills.sh/microsoft/skills/azure-appconfiguration-java"
+    },
+    {
+      "text": "29 azure-appconfiguration-py Azure App Configuration SDK for Python provides a client for reading and writing key-value settings, feature fl",
+      "href": "https://officialskills.sh/microsoft/skills/azure-appconfiguration-py"
+    },
+    {
+      "text": "30 azure-appconfiguration-ts Azure App Configuration SDK for TypeScript provides programmatic access to Azure App Configuration, a managed s",
+      "href": "https://officialskills.sh/microsoft/skills/azure-appconfiguration-ts"
+    },
+    {
+      "text": "31 azure-communication-chat-java Java SDK for Azure Communication Services Chat.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-communication-chat-java"
+    },
+    {
+      "text": "32 azure-communication-callautomation-java Java SDK for Azure Communication Services Call Automation.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-communication-callautomation-java"
+    },
+    {
+      "text": "33 azure-communication-common-java Shared Java library for authenticating with Azure Communication Services.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-communication-common-java"
+    },
+    {
+      "text": "34 azure-communication-callingserver-java Legacy Java SDK for Azure Communication Services call management, now deprecated in favor of azure",
+      "href": "https://officialskills.sh/microsoft/skills/azure-communication-callingserver-java"
+    },
+    {
+      "text": "35 azure-communication-sms-java Wraps the Azure Communication Services SMS Java SDK to send text messages to one or more recipients.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-communication-sms-java"
+    },
+    {
+      "text": "36 azure-compute-batch-java Java client library for Azure Batch, a managed service that runs large-scale parallel and HPC workloads.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-compute-batch-java"
+    },
+    {
+      "text": "37 azure-containerregistry-py Python SDK for Azure Container Registry.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-containerregistry-py"
+    },
+    {
+      "text": "38 azure-cosmos-db-py Guides Python and FastAPI code toward production-ready Azure Cosmos DB NoSQL integrations.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-cosmos-db-py"
+    },
+    {
+      "text": "39 azure-cosmos-rust Rust client library for Azure Cosmos DB's NoSQL API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-cosmos-rust"
+    },
+    {
+      "text": "40 azure-cosmos-py Python client library for Azure Cosmos DB's NoSQL API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-cosmos-py"
+    },
+    {
+      "text": "41 azure-cosmos-java Azure Cosmos DB SDK for Java provides a client library for interacting with Cosmos DB's NoSQL API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-cosmos-java"
+    },
+    {
+      "text": "42 azure-data-tables-java Java SDK for Azure Table Storage and Cosmos DB Table API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-data-tables-java"
+    },
+    {
+      "text": "43 azure-cosmos-ts The official TypeScript/JavaScript SDK for Azure Cosmos DB NoSQL API data plane operations.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-cosmos-ts"
+    },
+    {
+      "text": "44 azure-data-tables-py Azure Data Tables SDK for Python provides access to Azure Storage Tables and Cosmos DB Table API.",
+      "href": "https://officialskills.sh/microsoft/skills/azure-data-tables-py"
+    }
+  ],
+  "text": "Sponsor officialskills.sh and get featured on the platform\n→\nofficialskills.sh\n—\nBack to skills\nMicrosoft\n\n133 skills available\n\n1\nagent-framework-azure-ai-py\n\nPython SDK for building persistent agents on Azure AI Foundry.\n\n2\nagents-v2-py\n\nDeploys container-based agents to Azure AI Foundry using `ImageBasedHostedAgentDefinition` from the Azure AI Projects SDK.\n\n3\nazure-ai-anomalydetector-java\n\nAzure AI Anomaly Detector SDK for Java lets you detect anomalies in time-series data using univariate or multivariate analysis.\n\n4\nazure-ai-contentsafety-java\n\nJava SDK for Azure AI Content Safety.\n\n5\nazure-ai-contentsafety-py\n\nAzure AI Content Safety SDK for Python connects to Microsoft's content moderation API to analyze text and images for harmful content.\n\n6\nazure-ai-contentsafety-ts\n\nAnalyzes text and images for harmful content using Azure AI Content Safety.\n\n7\nazure-ai-contentunderstanding-py\n\nAzure AI Content Understanding SDK for Python.\n\n8\nazure-ai-document-intelligence-ts\n\nAzure AI Document Intelligence TypeScript SDK wraps the Azure Document Intelligence REST API for extracting structured data from documents.\n\n9\nazure-ai-document-intelligence-dotnet\n\nAzure AI Document Intelligence SDK for .\n\n10\nazure-ai-formrecognizer-java\n\nAzure AI Document Intelligence (Form Recognizer) SDK for Java lets you extract structured data from documents using prebuilt models for receipts, invoices, IDs, and tax forms, or custom models you train on your own data.\n\n11\nazure-ai-ml-py\n\nAzure Machine Learning SDK v2 for Python (azure-ai-ml) lets you manage ML resources on Azure programmatically.\n\n12\nazure-ai-openai-dotnet\n\nAzure.\n\n13\nazure-ai-projects-dotnet\n\nAzure.\n\n14\nazure-ai-textanalytics-py\n\nAzure AI Text Analytics SDK for Python wraps the Azure AI Language service REST API.\n\n15\nazure-ai-transcription-py\n\nAzure AI Transcription SDK for Python wraps the Azure Cognitive Services speech-to-text API.\n\n16\nazure-ai-projects-ts\n\nTypeScript SDK for Azure AI Foundry that provides access to agents, connections, deployments, datasets, indexes, and evaluations through a single project client.\n\n17\nazure-ai-projects-java\n\nJava SDK for Azure AI Foundry that manages project resources like connections, datasets, indexes, and evaluations through a typed client hierarchy.\n\n18\nazure-ai-projects-py\n\nPython SDK for building AI applications on Microsoft Azure Foundry.\n\n19\nazure-ai-translation-text-py\n\nAzure AI Text Translation SDK for Python wraps the Azure Translator REST API.\n\n20\nazure-ai-translation-document-py\n\nAzure AI Document Translation SDK for Python handles batch translation of documents across formats like Word, PDF, Excel, and PowerPoint while preserving the original layout and formatting.\n\n21\nazure-ai-translation-ts\n\nAzure AI Translation SDK for TypeScript wraps the Azure Translator REST API into typed clients for both real-time text translation and async batch document translation.\n\n22\nazure-ai-vision-imageanalysis-java\n\nJava SDK for Azure AI Vision Image Analysis.\n\n23\nazure-ai-vision-imageanalysis-py\n\nAzure AI Vision Image Analysis SDK for Python wraps the Azure AI Vision 4.\n\n24\nazure-ai-voicelive-java\n\nJava SDK for Azure AI VoiceLive.\n\n25\nazure-ai-voicelive-dotnet\n\nAzure AI Voice Live SDK for .\n\n26\nazure-ai-voicelive-py\n\nPython SDK for building real-time voice AI applications over WebSocket connections with Azure AI.\n\n27\nazure-ai-voicelive-ts\n\nAzure AI Voice Live SDK for JavaScript and TypeScript.\n\n28\nazure-appconfiguration-java\n\nJava client library for Azure App Configuration, a managed service that centralizes key-value settings, feature flags, and configuration snapshots.\n\n29\nazure-appconfiguration-py\n\nAzure App Configuration SDK for Python provides a client for reading and writing key-value settings, feature flags, and labeled configurations stored in Azure App Configuration.\n\n30\nazure-appconfiguration-ts\n\nAzure App Configuration SDK for TypeScript provides programmatic access to Azure App Configuration, a managed service for centralizing application settings and feature flags.\n\n31\nazure-communication-chat-java\n\nJava SDK for Azure Communication Services Chat.\n\n32\nazure-communication-callautomation-java\n\nJava SDK for Azure Communication Services Call Automation.\n\n33\nazure-communication-common-java\n\nShared Java library for authenticating with Azure Communication Services.\n\n34\nazure-communication-callingserver-java\n\nLegacy Java SDK for Azure Communication Services call management, now deprecated in favor of azure-communication-callautomation.\n\n35\nazure-communication-sms-java\n\nWraps the Azure Communication Services SMS Java SDK to send text messages to one or more recipients.\n\n36\nazure-compute-batch-java\n\nJava client library for Azure Batch, a managed service that runs large-scale parallel and HPC workloads.\n\n37\nazure-containerregistry-py\n\nPython SDK for Azure Container Registry.\n\n38\nazure-cosmos-db-py\n\nGuides Python and FastAPI code toward production-ready Azure Cosmos DB NoSQL integrations.\n\n39\nazure-cosmos-rust\n\nRust client library for Azure Cosmos DB's NoSQL API.\n\n40\nazure-cosmos-py\n\nPython client library for Azure Cosmos DB's NoSQL API.\n\n41\nazure-cosmos-java\n\nAzure Cosmos DB SDK for Java provides a client library for interacting with Cosmos DB's NoSQL API.\n\n42\nazure-data-tables-java\n\nJava SDK for Azure Table Storage and Cosmos DB Table API.\n\n43\nazure-cosmos-ts\n\nThe official TypeScript/JavaScript SDK for Azure Cosmos DB NoSQL API data plane operations.\n\n44\nazure-data-tables-py\n\nAzure Data Tables SDK for Python provides access to Azure Storage Tables and Cosmos DB Table API.\n\n45\nazure-eventgrid-dotnet\n\nClient library for publishing and consuming events with Azure Event Grid in .\n\n46\nazure-eventgrid-java\n\nAzure Event Grid SDK for Java lets you publish and receive events using Azure Event Grid topics and namespaces.\n\n47\nazure-eventgrid-py\n\nAzure Event Grid SDK for Python.\n\n48\nazure-eventhub-rust\n\nRust client library for Azure Event Hubs.\n\n49\nazure-eventhub-py\n\nAzure Event Hubs SDK for Python.\n\n50\nazure-eventhub-dotnet\n\nAzure.\n\n51\nazure-eventhub-ts\n\nAzure Event Hubs SDK for TypeScript wraps the @azure/event-hubs package to send and receive events at scale.\n\n52\nazure-identity-dotnet\n\nAzure Identity is the authentication library for .\n\n53\nazure-identity-java\n\nAzure Identity library for Java handles authentication between Java applications and Azure services using Microsoft Entra ID.\n\n54\nazure-identity-py\n\nPython library for authenticating to Azure services using Microsoft Entra ID.\n\n55\nazure-eventhub-java\n\nJava SDK for Azure Event Hubs.\n\n56\nazure-identity-rust\n\nAzure Identity SDK for Rust provides credential types for authenticating with Microsoft Entra ID.\n\n57\nazure-keyvault-certificates-rust\n\nAzure Key Vault Certificates SDK for Rust.\n\n58\nazure-identity-ts\n\nHandles authentication to Azure services in TypeScript/JavaScript applications using the @azure/identity package.\n\n59\nazure-keyvault-keys-rust\n\nAzure Key Vault Keys SDK for Rust provides a client library for creating, managing, and using cryptographic keys stored in Azure Key Vault.\n\n60\nazure-keyvault-keys-ts\n\nManages cryptographic keys in Azure Key Vault from TypeScript/Node.\n\n61\nazure-keyvault-py\n\nAzure Key Vault SDK for Python provides access to Azure Key Vault's secrets, cryptographic keys, and certificate management through three separate clients: SecretClient, KeyClient, and CertificateClient.\n\n62\nazure-keyvault-secrets-rust\n\nAzure Key Vault Secrets SDK for Rust.\n\n63\nazure-keyvault-secrets-ts\n\nWraps the Azure Key Vault Secrets SDK for JavaScript, giving TypeScript applications a typed interface for storing, retrieving, and rotating secrets and cryptographic keys in Azure.\n\n64\nazure-maps-search-dotnet\n\nAzure Maps SDK for .\n\n65\nazure-messaging-webpubsub-java\n\nJava SDK for Azure Web PubSub, a managed service that handles WebSocket connections at scale.\n\n66\nazure-messaging-webpubsubservice-py\n\nAzure Web PubSub Service SDK for Python.\n\n67\nazure-mgmt-apicenter-py\n\nPython SDK for Azure API Center, a service that manages API inventory and governance across an organization.\n\n68\nazure-mgmt-apicenter-dotnet\n\nAzure.\n\n69\nazure-mgmt-apimanagement-py\n\nPython SDK for managing Azure API Management resources.\n\n70\nazure-mgmt-apimanagement-dotnet\n\nManagement plane SDK for Azure API Management in .\n\n71\nazure-mgmt-applicationinsights-dotnet\n\nAzure Resource Manager SDK for .\n\n72\nazure-mgmt-arizeaiobservabilityeval-dotnet\n\nAzure Resource Manager SDK for managing Arize AI Observability and Evaluation organizations in .\n\n73\nazure-mgmt-botservice-dotnet\n\nManagement plane SDK for Azure Bot Service in .\n\n74\nazure-mgmt-botservice-py\n\nAzure Bot Service Management SDK for Python lets you create, configure, and manage Azure Bot Service resources programmatically.\n\n75\nazure-mgmt-fabric-py\n\nPython SDK for managing Microsoft Fabric capacities via the Azure Resource Manager API.\n\n76\nazure-mgmt-fabric-dotnet\n\nAzure.\n\n77\nazure-mgmt-mongodbatlas-dotnet\n\nAzure.\n\n78\nazure-mgmt-weightsandbiases-dotnet\n\nAzure Resource Manager SDK for .\n\n79\nazure-microsoft-playwright-testing-ts\n\nRuns Playwright tests on cloud-hosted browsers through Azure Playwright Workspaces.\n\n80\nazure-monitor-opentelemetry-exporter-java\n\nJava library for exporting OpenTelemetry traces, metrics, and logs to Azure Monitor and Application Insights.\n\n81\nazure-monitor-ingestion-py\n\nAzure Monitor Ingestion SDK for Python sends custom log data to a Log Analytics workspace via the Logs Ingestion API.\n\n82\nazure-monitor-ingestion-java\n\nJava client library for sending custom logs to Azure Monitor using the Logs Ingestion API.\n\n83\nazure-monitor-opentelemetry-exporter-py\n\nLow-level Python exporter that sends OpenTelemetry traces, metrics, and logs to Azure Application Insights.\n\n84\nazure-monitor-query-java\n\nJava SDK for querying Azure Monitor data.\n\n85\nazure-monitor-opentelemetry-ts\n\nInstruments Node.\n\n86\nazure-postgres-ts\n\nConnects Node.\n\n87\nazure-monitor-opentelemetry-py\n\nAzure Monitor OpenTelemetry Distro connects Python applications to Azure Application Insights with a single function call.\n\n88\nazure-resource-manager-cosmosdb-dotnet\n\nAzure.\n\n89\nazure-monitor-query-py\n\nAzure Monitor Query SDK for Python wraps the LogsQueryClient and MetricsQueryClient APIs for querying Log Analytics workspaces using Kusto queries and pulling Azure Monitor metrics.\n\n90\nazure-resource-manager-mysql-dotnet\n\nAzure Resource Manager SDK for .\n\n91\nazure-resource-manager-durabletask-dotnet\n\nManagement plane SDK for Azure Durable Task Scheduler in .\n\n92\nazure-resource-manager-playwright-dotnet\n\nManagement plane SDK for Azure's Microsoft Playwright Testing service, written for .\n\n93\nazure-resource-manager-postgresql-dotnet\n\nAzure Resource Manager SDK for .\n\n94\nazure-resource-manager-redis-dotnet\n\nAzure.\n\n95\nazure-resource-manager-sql-dotnet\n\nManagement plane SDK for Azure SQL in .\n\n96\nazure-search-documents-dotnet\n\nAzure.\n\n97\nazure-search-documents-py\n\nAzure AI Search SDK for Python.\n\n98\nazure-security-keyvault-keys-dotnet\n\nAzure.\n\n99\nazure-search-documents-ts\n\nAzure AI Search SDK for TypeScript (@azure/search-documents) lets you create and manage search indexes, upload documents, and run full-text, vector, hybrid, and semantic searches against Azure AI Search.\n\n100\nazure-security-keyvault-keys-java\n\nJava SDK for managing cryptographic keys in Azure Key Vault and Managed HSM.\n\n101\nazure-security-keyvault-secrets-java\n\nJava SDK for Azure Key Vault's secrets API.\n\n102\nazure-servicebus-dotnet\n\nAzure.\n\n103\nazure-servicebus-py\n\nAzure Service Bus SDK for Python.\n\n104\nazure-servicebus-ts\n\nWraps the Azure Service Bus JavaScript SDK to send and receive messages using queues, topics, and subscriptions.\n\n105\nazure-speech-to-text-rest-py\n\nTranscribes short audio files (up to 60 seconds) using Azure's Speech to Text REST API in Python.\n\n106\nazure-storage-blob-java\n\nJava SDK for Azure Blob Storage.\n\n107\nazure-storage-blob-py\n\nPython client library for Azure Blob Storage.\n\n108\nazure-storage-blob-rust\n\nRust client library for Azure Blob Storage.\n\n109\nazure-storage-blob-ts\n\nAzure Blob Storage TypeScript/JavaScript SDK for working with blobs and containers.\n\n110\nazure-storage-file-share-py\n\nPython SDK for Azure Storage File Share, covering SMB file shares, directories, and file operations in the cloud.\n\n111\nazure-storage-file-datalake-py\n\nPython SDK for Azure Data Lake Storage Gen2, which provides a hierarchical file system built on Azure Blob Storage.\n\n112\nazure-storage-file-share-ts\n\nSDK for managing Azure File Share resources over SMB using TypeScript or JavaScript.\n\n113\nazure-storage-queue-py\n\nAzure Queue Storage SDK for Python wraps the Azure Queue Storage REST API for sending, receiving, and managing messages in cloud queues.\n\n114\nazure-storage-queue-ts\n\nAzure Queue Storage SDK for TypeScript and JavaScript.\n\n115\nazure-web-pubsub-ts\n\nAzure Web PubSub skill covers both server-side management and client-side connection for real-time WebSocket messaging on Azure.\n\n116\ncloud-solution-architect\n\nTurns the agent into a Cloud Solution Architect trained on Azure Architecture Center guidance.\n\n117\ncontinual-learning\n\nA guide for building persistent memory into AI coding agents.\n\n118\ncopilot-sdk\n\nThe GitHub Copilot SDK lets you build applications that programmatically interact with GitHub Copilot.\n\n119\nfastapi-router-py\n\nGenerates FastAPI router files with CRUD endpoints, authentication dependencies, and typed response models.\n\n120\ngithub-issue-creator\n\nConverts messy input — error logs, voice dictations, raw notes, screenshots — into structured GitHub issues following a consistent markdown template.\n\n121\nfrontend-design-review\n\nReviews UI implementations against three quality pillars (Frictionless, Quality Craft, Trustworthy) and design system specs, or builds production-grade frontend interfaces from scratch with a defined aesthetic direction.\n\n122\nentra-agent-id\n\nMicrosoft Entra Agent ID lets you create and manage OAuth2-capable identities for AI agents using Microsoft Graph beta API.\n\n123\nfrontend-ui-dark-ts\n\nA React UI starter built around a dark color system, glassmorphism utility classes, and Framer Motion animation variants.\n\n124\nm365-agents-dotnet\n\nMicrosoft 365 Agents SDK for .\n\n125\nm365-agents-py\n\nPython SDK for building agents that run in Microsoft Teams, Microsoft 365, and Copilot Studio.\n\n126\nmcp-builder\n\nA guide for building MCP (Model Context Protocol) servers that let LLMs interact with external APIs and services.\n\n127\npodcast-generation\n\nConnects a React frontend to a Python FastAPI backend over WebSocket to generate spoken audio from text using Azure OpenAI's GPT Realtime Mini model.\n\n128\npydantic-models-py\n\nGenerates Pydantic v2 model sets following a multi-model pattern with Base, Create, Update, Response, and InDB variants.\n\n129\nreact-flow-node-ts\n\nGenerates React Flow node components with TypeScript types and Zustand store integration.\n\n130\nm365-agents-ts\n\nMicrosoft 365 Agents SDK for TypeScript/Node.\n\n131\nmicrosoft-azure-webjobs-extensions-authentication-events-dotnet\n\nAzure Functions extension for handling Microsoft Entra ID custom authentication events.\n\n132\nskill-creator\n\nA guide for building modular skills that extend AI agent capabilities, focused on Azure SDKs and Microsoft Foundry services.\n\n133\nzustand-store-ts\n\nGenerates Zustand stores with TypeScript types, subscribeWithSelector middleware, and a clear split between state interfaces and action interfaces.\n\nMaintained by VoltAgent team\nofficialskills.sh\n— Agent skills by official dev teams. No AI-generated filler.\nTerms\nPrivacy\nFeedback",
+  "stats": {
+    "bodyTextLength": 15516,
+    "linkCount": 142,
+    "buttonCount": 3,
+    "inputCount": 0,
+    "cardishCount": 0,
+    "scrollHeight": 9598
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "job": "pnpm-monorepo-test",
+  "command": "pnpm -r test",
+  "exit_code": 1
+}

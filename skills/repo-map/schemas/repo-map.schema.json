@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/skills/repo-map/repo-map.schema.json",
+  "title": "repo-map.v1",
+  "description": "Evidence-backed structural map of one repository, written by the repo-map skill to .laguna/repo-map.json at the workspace root. Every claim is mechanically checkable: language and framework claims cite an evidence file that exists in the workspace, every entrypoint and key directory path must exist, and every test command must be supported by repo files. The validator (scripts/validate_repo_map.ts) enforces all of this.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "repo-map.v1",
+      "description": "Contract identifier; always the literal string \"repo-map.v1\"."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "What this repository is and does, in plain language. Describe only what the files in the tree support; never repeat documentation claims that the tree contradicts."
+    },
+    "languages": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "Programming/markup languages actually present in the tree, most significant first. Each claim cites one evidence file written in that language.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9+#-]+$",
+            "description": "Lowercase language name (e.g. \"python\", \"typescript\", \"rust\", \"go\", \"shell\"). Must be a language the validator knows; see scripts/validate_repo_map.ts KNOWN_LANGUAGES."
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace-relative path of one representative source file in this language. Must exist, and its extension (or basename) must match the named language."
+          }
+        },
+        "required": ["name", "evidence"],
+        "additionalProperties": false
+      }
+    },
+    "frameworks": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 15,
+      "description": "Frameworks and major libraries the repo actually depends on. Evidence must be a dependency manifest or framework config file (package.json, pyproject.toml, Cargo.toml, go.mod, requirements*.txt, *.config.*, ...) that names the framework — never prose like a README. An empty array is correct for framework-free repos.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "Framework or library name as it appears in the manifest (e.g. \"fastapi\", \"actix-web\", \"react\")."
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace-relative path of the manifest/config file that declares this dependency. Must exist, be a recognized manifest kind, and contain the framework name."
+          }
+        },
+        "required": ["name", "evidence"],
+        "additionalProperties": false
+      }
+    },
+    "entrypoints": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "Where execution starts: CLI mains, server app objects, exported binaries. Every path must be an existing file in the workspace.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace-relative path of the entrypoint file. Must exist."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "What this entrypoint is and how it is invoked (e.g. \"CLI main; package.json bin 'tidy-csv'\")."
+          }
+        },
+        "required": ["path", "description"],
+        "additionalProperties": false
+      }
+    },
+    "key_directories": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 15,
+      "description": "The directories someone must know to navigate the repo, each with its role. Every path must be an existing directory in the workspace.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace-relative directory path (no trailing slash). Must exist and be a directory."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "What lives there (e.g. \"application source\", \"integration tests\")."
+          }
+        },
+        "required": ["path", "role"],
+        "additionalProperties": false
+      }
+    },
+    "test_commands": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 5,
+      "description": "Commands that run the repo's tests, each supported by repo files: a pytest command requires pytest config or test_*.py files, \"cargo test\" requires Cargo.toml, \"bun test\" requires *.test.* files or a package.json test script, and so on. Empty only when the repo genuinely has no test evidence.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "summary",
+    "languages",
+    "frameworks",
+    "entrypoints",
+    "key_directories",
+    "test_commands"
+  ],
+  "additionalProperties": false
+}

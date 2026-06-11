@@ -1,0 +1,6 @@
+TypeError: Cannot read property 'length' of undefined
+    at Object.sanitize (util:17:28)
+    at processInput (handler.ts:89:31)
+    at ApiController.handle (controller.ts:45:19)
+
+Note: line numbers approximate due to source map gaps; util file path not fully resolved in production bundle

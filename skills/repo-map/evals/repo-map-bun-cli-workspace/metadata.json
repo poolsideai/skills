@@ -1,0 +1,13 @@
+{
+  "id": "repo-map-bun-cli-workspace",
+  "skill": "repo-map",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/repo-map/scripts/validate_repo_map.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Realistic mixed-content case: a TypeScript/bun CLI with a second language (bash release script), a framework-free dependency picture (frameworks must be the empty array, not padded), a bin-declared entrypoint, and tests colocated with source rather than under tests/. Synthetic fixture; no customer data."
+}

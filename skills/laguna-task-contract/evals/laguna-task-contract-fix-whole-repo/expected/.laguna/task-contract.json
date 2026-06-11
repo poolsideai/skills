@@ -1,0 +1,33 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Fix the whole repo: resolve every TODO, refactor the messy modules, and make all tests pass.",
+  "context_packet": {
+    "files": [
+      { "path": "request.md", "why": "the cleanup request, verbatim" },
+      { "path": "src/report_utils.py", "why": "messy helper module with TODOs" },
+      { "path": "src/legacy_export.py", "why": "legacy module slated for cleanup" }
+    ],
+    "commands": ["uv run pytest -q"],
+    "logs": []
+  },
+  "scope": {
+    "paths": ["**/*"],
+    "max_files_to_modify": 2
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": ["break the public API"]
+  },
+  "acceptance": {
+    "checks": [
+      { "type": "command", "command": "uv sync && uv run pytest -q" }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

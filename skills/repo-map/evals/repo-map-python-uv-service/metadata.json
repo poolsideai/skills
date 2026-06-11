@@ -1,0 +1,13 @@
+{
+  "id": "repo-map-python-uv-service",
+  "skill": "repo-map",
+  "bucket": "easy",
+  "difficulty": "easy",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/repo-map/scripts/validate_repo_map.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Baseline case: small synthetic Python/uv FastAPI service with a clean src layout, pyproject-declared frameworks (fastapi, pydantic), and a pytest suite. Everything the map needs is directly observable. Synthetic fixture; no customer data."
+}

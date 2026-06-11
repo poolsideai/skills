@@ -1,0 +1,110 @@
+[ci] job: rust-tests (linux-x86_64, rustc 1.87.0)
+[ci] step: cargo test
+$ cargo test --workspace -- --nocapture
+    Updating crates.io index (cached mirror)
+   Compiling proc-macro2 v1.0.86
+   Compiling unicode-ident v1.0.13
+   Compiling quote v1.0.37
+   Compiling syn v2.0.79
+   Compiling serde v1.0.210
+   Compiling serde_derive v1.0.210
+   Compiling serde_json v1.0.128
+   Compiling itoa v1.0.11
+   Compiling ryu v1.0.18
+   Compiling memchr v2.7.4
+   Compiling once_cell v1.20.2
+   Compiling tracing-core v0.1.32
+   Compiling tracing v0.1.40
+   Compiling thiserror v1.0.64
+   Compiling thiserror-impl v1.0.64
+   Compiling rand_core v0.6.4
+   Compiling rand v0.8.5
+   Compiling parking_lot_core v0.9.10
+   Compiling parking_lot v0.12.3
+   Compiling smallvec v1.13.2
+   Compiling hashbrown v0.14.5
+   Compiling indexmap v2.5.0
+   Compiling toml_datetime v0.6.8
+   Compiling toml_edit v0.22.20
+   Compiling toml v0.8.19
+   Compiling gateway v0.4.2 (/work/crates/gateway)
+warning: use of deprecated method `storage::redis::Connection::get`: use `typed_get` instead
+   --> crates/storage/src/redis.rs:114:28
+    |
+114 |         let raw = conn.get(key)?;
+    |                        ^^^
+    |
+    = note: `#[warn(deprecated)]` on by default
+   Compiling storage v0.4.2 (/work/crates/storage)
+warning: `storage` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 41.22s
+     Running unittests src/lib.rs (target/debug/deps/gateway-3f9ac41b2d77e10c)
+
+running 18 tests
+ERROR gateway::upstream: connection refused (upstream=db-primary, simulated outage for test)
+ERROR gateway::upstream: connection refused (upstream=db-primary, simulated outage for test)
+ERROR gateway::upstream: circuit breaker opened after 3 consecutive failures (simulated)
+test upstream::tests::logs_connection_errors_and_opens_breaker ... ok
+test upstream::tests::breaker_half_opens_after_cooldown ... ok
+test upstream::tests::retries_idempotent_requests_with_backoff ... ok
+test routing::tests::matches_longest_prefix ... ok
+test routing::tests::rejects_unknown_host ... ok
+test routing::tests::preserves_query_strings ... ok
+test middleware::tests::strips_hop_by_hop_headers ... ok
+test middleware::tests::adds_request_id ... ok
+test middleware::tests::propagates_trace_context ... ok
+test config::tests::loads_minimal_config ... ok
+test config::tests::rejects_duplicate_routes ... ok
+test config::tests::env_overrides_take_precedence ... ok
+test health::tests::reports_degraded_when_breaker_open ... ok
+test health::tests::reports_ok_when_idle ... ok
+test shutdown::tests::drains_inflight_requests ... ok
+test shutdown::tests::caps_drain_at_deadline ... ok
+test metrics::tests::counts_requests_by_route ... ok
+test metrics::tests::histograms_use_fixed_buckets ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.81s
+
+     Running unittests src/lib.rs (target/debug/deps/storage-91c0fe2ab64d83aa)
+
+running 23 tests
+test keys::tests::namespaces_are_prefix_free ... ok
+test keys::tests::serializes_composite_keys ... ok
+test keys::tests::rejects_empty_namespace ... ok
+test redis::tests::reconnects_after_timeout ... ok
+test redis::tests::pipelines_batch_writes ... ok
+test redis::tests::deprecated_get_still_reads ... ok
+test snapshot::tests::roundtrips_empty_state ... ok
+test snapshot::tests::roundtrips_dense_state ... ok
+test snapshot::tests::skips_corrupt_trailer ... ok
+test wal::tests::appends_are_ordered ... ok
+test wal::tests::replay_is_idempotent ... ok
+test wal::tests::truncates_torn_tail ... ok
+test config::tests::loads_defaults ... ok
+test config::tests::parses_backoff_ms ... ok
+test config::tests::parses_max_retries ... FAILED
+test config::tests::rejects_negative_backoff ... ok
+test config::tests::env_overrides_apply ... ok
+test compaction::tests::merges_adjacent_segments ... ok
+test compaction::tests::respects_min_segment_size ... ok
+test compaction::tests::preserves_tombstones ... ok
+test iter::tests::scans_in_key_order ... ok
+test iter::tests::seek_is_inclusive ... ok
+test iter::tests::empty_range_yields_nothing ... ok
+
+failures:
+
+---- config::tests::parses_max_retries stdout ----
+thread 'config::tests::parses_max_retries' panicked at crates/storage/src/config.rs:88:9:
+assertion `left == right` failed
+  left: 5
+ right: 3
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+failures:
+    config::tests::parses_max_retries
+
+test result: FAILED. 22 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+error: test failed, to rerun pass `-p storage --lib`
+[ci] Process completed with exit code 101.

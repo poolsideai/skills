@@ -1,0 +1,185 @@
+[2024-01-15 14:32:18] ##teamcity[progressMessage 'Starting test discovery']
+[2024-01-15 14:32:19] Test run for /workspace/PaymentService.Tests/bin/Debug/net8.0/PaymentService.Tests.dll (.NETCoreApp,Version=v8.0)
+[2024-01-15 14:32:19] Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (x64)
+[2024-01-15 14:32:19] Copyright (c) Microsoft Corporation.  All rights reserved.
+[2024-01-15 14:32:19] 
+[2024-01-15 14:32:20] Starting test execution, please wait...
+[2024-01-15 14:32:20] A total of 1 test files matched the specified pattern.
+[2024-01-15 14:32:20] ##teamcity[testSuiteStarted name='PaymentService.Tests']
+[2024-01-15 14:32:21] ##teamcity[testStarted name='Namespace.Tests.ValidationTests.ValidateEmail' captureStandardOutput='true']
+[2024-01-15 14:32:21] ##teamcity[testFinished name='Namespace.Tests.ValidationTests.ValidateEmail' duration='42']
+[2024-01-15 14:32:21] ##teamcity[testStarted name='Namespace.Tests.ValidationTests.ValidatePhone' captureStandardOutput='true']
+[2024-01-15 14:32:21] ##teamcity[testFinished name='Namespace.Tests.ValidationTests.ValidatePhone' duration='38']
+[2024-01-15 14:32:21] ##teamcity[testStarted name='Namespace.Tests.LegacyClientTests.ConnectToLegacyEndpoint' captureStandardOutput='true']
+[2024-01-15 14:32:21] WARNING: LegacyClient.Connect() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetTimeout() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableRetry() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetMaxRetries() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetConnectionState() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.IsConnected() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.Disconnect() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ResetConnection() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetLastError() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ClearError() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.LogMessage() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetLogLevel() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetLogLevel() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableDebug() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableDebug() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetVersion() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetBuildDate() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.CheckCompatibility() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.UpgradeConnection() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DowngradeConnection() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SendHeartbeat() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ReceiveHeartbeat() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetHeartbeatInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetHeartbeatInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableCompression() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableCompression() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetCompressionRatio() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetCompressionLevel() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetCompressionLevel() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableEncryption() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableEncryption() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetEncryptionKey() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetEncryptionKey() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.RotateEncryptionKey() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ValidateEncryption() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SendRequest() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ReceiveResponse() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SendBatch() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ReceiveBatch() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetBatchSize() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetBatchSize() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.FlushBatch() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.CancelBatch() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetBatchStatus() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetBatchTimeout() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetBatchTimeout() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableBatchMode() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableBatchMode() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.IsBatchMode() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.CreateSession() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.CloseSession() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetSessionId() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetSessionId() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ValidateSession() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.RefreshSession() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetSessionExpiry() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetSessionExpiry() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableSessionPersistence() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableSessionPersistence() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SaveSession() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.LoadSession() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DeleteSession() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ListSessions() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ClearSessions() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetSessionCount() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetMaxSessions() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetMaxSessions() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableCache() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableCache() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ClearCache() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetCacheSize() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetCacheSize() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetCacheHitRatio() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetCacheExpiry() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetCacheExpiry() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.IsCacheEnabled() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.PurgeCache() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.OptimizeCache() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableMetrics() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableMetrics() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetMetrics() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ResetMetrics() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ExportMetrics() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetMetricsInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetMetricsInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableTracing() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableTracing() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetTraces() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ClearTraces() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ExportTraces() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetTraceLevel() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetTraceLevel() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableProfiling() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableProfiling() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetProfilingData() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ResetProfilingData() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ExportProfilingData() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetProfilingInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetProfilingInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableHealthCheck() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableHealthCheck() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetHealthStatus() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetHealthCheckInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetHealthCheckInterval() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableAutoReconnect() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableAutoReconnect() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetReconnectDelay() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetReconnectDelay() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetMaxReconnectAttempts() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetMaxReconnectAttempts() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableCircuitBreaker() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableCircuitBreaker() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetCircuitBreakerState() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ResetCircuitBreaker() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetCircuitBreakerThreshold() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetCircuitBreakerThreshold() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableRateLimiting() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableRateLimiting() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetRateLimit() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetRateLimit() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetRateLimitRemaining() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ResetRateLimit() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableThrottling() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableThrottling() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetThrottleRate() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetThrottleRate() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableBackoff() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableBackoff() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetBackoffStrategy() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetBackoffStrategy() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetInitialBackoff() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetInitialBackoff() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetMaxBackoff() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetMaxBackoff() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetBackoffMultiplier() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetBackoffMultiplier() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableJitter() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableJitter() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetJitterRange() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetJitterRange() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableLoadBalancing() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableLoadBalancing() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetLoadBalancingStrategy() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetLoadBalancingStrategy() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.AddEndpoint() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.RemoveEndpoint() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.ListEndpoints() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetActiveEndpoint() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetActiveEndpoint() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.EnableFailover() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.DisableFailover() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.SetFailoverTimeout() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetFailoverTimeout() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.TriggerFailover() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] WARNING: LegacyClient.GetFailoverStatus() is deprecated and will be removed in v3.0
+[2024-01-15 14:32:21] ##teamcity[testFinished name='Namespace.Tests.LegacyClientTests.ConnectToLegacyEndpoint' duration='156']
+[2024-01-15 14:32:21] ##teamcity[testStarted name='Namespace.Tests.AuthenticationTests.ValidateToken' captureStandardOutput='true']
+[2024-01-15 14:32:21] ##teamcity[testFinished name='Namespace.Tests.AuthenticationTests.ValidateToken' duration='29']
+[2024-01-15 14:32:21] ##teamcity[testStarted name='Namespace.Tests.AuthenticationTests.RefreshExpiredToken' captureStandardOutput='true']
+[2024-01-15 14:32:21] ##teamcity[testFinished name='Namespace.Tests.AuthenticationTests.RefreshExpiredToken' duration='35']
+[2024-01-15 14:32:22] ##teamcity[testStarted name='Namespace.Tests.PaymentProcessorTests.ProcessPayment' captureStandardOutput='true']
+[2024-01-15 14:32:22] ##teamcity[testFinished name='Namespace.Tests.PaymentProcessorTests.ProcessPayment' duration='47']
+[2024-01-15 14:32:22] ##teamcity[testStarted name='Namespace.Tests.PaymentProcessorTests.ProcessRefund' captureStandardOutput='true']
+[2024-01-15 14:32:22] ##teamcity[testFailed name='Namespace.Tests.PaymentProcessorTests.ProcessRefund' message='Assert.Equal() Failure: Values differ' details='Expected: completed|nActual:   pending|n   at PaymentService.Tests.PaymentProcessorTests.ProcessRefund() in /workspace/PaymentService.Tests/PaymentProcessorTests.cs:line 78']
+[2024-01-15 14:32:22] ##teamcity[testFinished name='Namespace.Tests.PaymentProcessorTests.ProcessRefund' duration='52']
+[2024-01-15 14:32:22] ##teamcity[testStarted name='Namespace.Tests.PaymentProcessorTests.CancelPayment' captureStandardOutput='true']
+[2024-01-15 14:32:22] ##teamcity[testFinished name='Namespace.Tests.PaymentProcessorTests.CancelPayment' duration='41']
+[2024-01-15 14:32:22] ##teamcity[testSuiteFinished name='PaymentService.Tests']
+[2024-01-15 14:32:22] 
+[2024-01-15 14:32:22] Failed!  - Failed:     1, Passed:     8, Skipped:     0, Total:     9, Duration: 1.8s
+[2024-01-15 14:32:22] ##teamcity[buildProblem description='Test(s) failed' identity='dotnet-test-failure']
+[2024-01-15 14:32:22] Process exited with code 1

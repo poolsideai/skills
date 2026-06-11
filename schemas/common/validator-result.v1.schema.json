@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/common/validator-result.v1.schema.json",
+  "title": "validator-result.v1",
+  "description": "Machine-readable result emitted by every per-case validator. Written as JSON to the path given by the validator's --out argument (argv contract: <cmd> --case <case_dir> --workspace <workspace_dir> --out <result_path>). Embedded verbatim into run-manifest.v0 by the harness. Its repair_feedback drives the repair loop and must be derived only from failed checks and schema errors.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "validator-result.v1",
+      "description": "Contract identifier; always the literal string \"validator-result.v1\"."
+    },
+    "case_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Eval case id this result grades; kebab-case, prefixed with the skill name (matches the case's metadata.json id)."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pass", "fail", "error"],
+      "description": "Overall verdict. \"pass\"/\"fail\" are graded outcomes; \"error\" means the validator itself could not complete (timeout, missing path, crash)."
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Scalar quality score in [0, 1]. For binary validators use 1.0 on pass, 0.0 on fail."
+    },
+    "checks": {
+      "type": "array",
+      "description": "Individual named checks the validator ran. Empty only when status is \"error\".",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Stable kebab-case identifier of the check (stable across runs so failures can be aggregated)."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pass", "fail"],
+            "description": "Outcome of this individual check."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation of what was checked and, on failure, what was wrong."
+          }
+        },
+        "required": ["id", "status", "detail"],
+        "additionalProperties": false
+      }
+    },
+    "repair_feedback": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Actionable feedback strings for the model's repair loop, derived only from failed checks and schema errors. Empty when status is \"pass\"."
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Wall-clock validator runtime in milliseconds."
+    }
+  },
+  "required": [
+    "schema_version",
+    "case_id",
+    "status",
+    "score",
+    "checks",
+    "repair_feedback",
+    "duration_ms"
+  ],
+  "additionalProperties": false
+}

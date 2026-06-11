@@ -1,0 +1,24 @@
+{
+  "name": "first-bundle",
+  "cases": [
+    "skills/ci-log-reducer/evals/ci-log-reducer-pytest-single-failure",
+    "skills/ci-log-reducer/evals/ci-log-reducer-bun-flaky-retry",
+    "skills/ci-log-reducer/evals/ci-log-reducer-cargo-decoy-panic",
+    "skills/ci-log-reducer/evals/ci-log-reducer-multi-failure",
+    "skills/ci-log-reducer/evals/ci-log-reducer-gha-eslint-lint-error",
+    "skills/ci-log-reducer/evals/ci-log-reducer-gha-tsc-ansi-build-error",
+    "skills/ci-log-reducer/evals/ci-log-reducer-gitlab-go-test-failure",
+    "skills/ci-log-reducer/evals/ci-log-reducer-oom-killed-infra-error",
+    "skills/ci-log-reducer/evals/ci-log-reducer-jenkins-gradle-module-failure",
+    "skills/ci-log-reducer/evals/ci-log-reducer-success-epilogue-decoy",
+    "skills/ci-log-reducer/evals/ci-log-reducer-truncated-log-no-summary",
+    "skills/ci-log-reducer/evals/ci-log-reducer-buildkite-pnpm-monorepo",
+    "skills/laguna-task-contract/evals/laguna-task-contract-xs-single-file-patch",
+    "skills/laguna-task-contract/evals/laguna-task-contract-m-router-ci-failure",
+    "skills/laguna-task-contract/evals/laguna-task-contract-fix-whole-repo",
+    "skills/laguna-task-contract/evals/laguna-task-contract-readonly-log-reduction",
+    "skills/repo-map/evals/repo-map-python-uv-service",
+    "skills/repo-map/evals/repo-map-bun-cli-workspace",
+    "skills/repo-map/evals/repo-map-rust-decoy-readme"
+  ]
+}

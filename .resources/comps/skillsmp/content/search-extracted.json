@@ -1,0 +1,423 @@
+{
+  "title": "Search 1.5M Agent Skills | SkillsMP",
+  "url": "https://skillsmp.com/search",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Browse Agent Skills"
+    },
+    {
+      "tag": "h2",
+      "text": "Skills Marketplace"
+    },
+    {
+      "tag": "h3",
+      "text": "COMMUNITY"
+    },
+    {
+      "tag": "h3",
+      "text": "RESOURCES"
+    },
+    {
+      "tag": "h3",
+      "text": "LEGAL"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "EN",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle menu",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Dismiss banner",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Occupation",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "Stars",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "radio",
+      "text": "Recent",
+      "type": "button"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search 1640440 skills: try 'AI video', 'data analysis', 'code review'...",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add to favorites",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Scroll to top",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "href": "https://skillsmp.com/search#main-content"
+    },
+    {
+      "text": "skills mp",
+      "href": "https://skillsmp.com/en"
+    },
+    {
+      "text": "Skills",
+      "href": "https://skillsmp.com/en/skills"
+    },
+    {
+      "text": "Creators",
+      "href": "https://skillsmp.com/en/creators"
+    },
+    {
+      "text": "Occupations",
+      "href": "https://skillsmp.com/en/occupations"
+    },
+    {
+      "text": "Docs",
+      "href": "https://skillsmp.com/en/docs"
+    },
+    {
+      "text": "Sign In",
+      "href": "https://skillsmp.com/auth/login"
+    },
+    {
+      "text": "Run any Skill in Manus with one click",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "Get Started",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    },
+    {
+      "text": "Home",
+      "href": "https://skillsmp.com/en"
+    },
+    {
+      "text": "agent-transcript 376.6k openclaw/openclaw Add a redacted agent transcript section to GitHub PR or issue bodies during OpenClaw agent-created",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-agent-transcript-skill-md"
+    },
+    {
+      "text": "autoreview 376.6k openclaw/openclaw Auto Review closeout. Codex review is the default when no engine is set and is the recommended reviewer.",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-autoreview-skill-md"
+    },
+    {
+      "text": "channel-message-flows 376.6k openclaw/openclaw Use when previewing local channel message flow fixtures. 2026-05-19",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-channel-message-flows-skill-md"
+    },
+    {
+      "text": "clawdtributor 376.6k openclaw/openclaw Use for OpenClaw clawtributors PR/issue triage: Discrawl discovery, live-open rechecks, deep review, ",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-clawdtributor-skill-md"
+    },
+    {
+      "text": "clawsweeper 376.6k openclaw/openclaw Use for all ClawSweeper work: OpenClaw issue/PR sweep reports, commit-review reports, repair jobs, clou",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-clawsweeper-skill-md"
+    },
+    {
+      "text": "control-ui-e2e 376.6k openclaw/openclaw Use when testing, fixing, or extending the OpenClaw Control UI GUI with Vitest + Playwright end-to-e",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-control-ui-e2e-skill-md"
+    },
+    {
+      "text": "crabbox 376.6k openclaw/openclaw Use the Crabbox wrapper for OpenClaw remote validation across Linux, macOS, Windows, and WSL2, including de",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-crabbox-skill-md"
+    },
+    {
+      "text": "discord-clawd 376.6k openclaw/openclaw Use to talk to the Discord-backed OpenClaw agent/session; not for archive search. 2026-04-27",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-discord-clawd-skill-md"
+    },
+    {
+      "text": "discrawl 376.6k openclaw/openclaw Discord archive: search, sync freshness, DMs, summaries, TUI, repo/release work. 2026-05-29",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-discrawl-skill-md"
+    },
+    {
+      "text": "gitcrawl 376.6k openclaw/openclaw GitHub archive: issue/PR search, sync freshness, duplicate clusters, gh-shim PR status, and Gitcrawl repo ",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-gitcrawl-skill-md"
+    },
+    {
+      "text": "graincrawl 376.6k openclaw/openclaw Granola archive: search, sync freshness, notes, transcripts, panels, SQL counts, and Graincrawl repo wor",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-graincrawl-skill-md"
+    },
+    {
+      "text": "notcrawl 376.6k openclaw/openclaw Notion archive: search, sync freshness, pages/databases, Markdown exports, SQL counts, and Notcrawl repo w",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-notcrawl-skill-md"
+    },
+    {
+      "text": "openclaw-changelog-update 376.6k openclaw/openclaw Regenerate OpenClaw release changelog sections from git history before beta or stable rel",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-changelog-update-skill-md"
+    },
+    {
+      "text": "openclaw-debugging 376.6k openclaw/openclaw Debug OpenClaw model, provider, tool-surface, code-mode, streaming, and live/Crabbox behavior by",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-debugging-skill-md"
+    },
+    {
+      "text": "openclaw-docker-e2e-authoring 376.6k openclaw/openclaw Author OpenClaw Docker E2E and live provider Docker lanes. 2026-05-18",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-docker-e2e-authoring-skill-md"
+    },
+    {
+      "text": "openclaw-ghsa-maintainer 376.6k openclaw/openclaw Inspect, patch, validate, publish, or confirm OpenClaw GHSA security advisories and privat",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-ghsa-maintainer-skill-md"
+    },
+    {
+      "text": "openclaw-landable-bug-sweep 376.6k openclaw/openclaw Find or repair small high-confidence non-SDK-boundary OpenClaw bugfix PRs until five ar",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-landable-bug-sweep-skill-md"
+    },
+    {
+      "text": "openclaw-parallels-smoke 376.6k openclaw/openclaw Run, rerun, debug, or interpret OpenClaw Parallels install, onboarding, gateway smoke, and",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-parallels-smoke-skill-md"
+    },
+    {
+      "text": "openclaw-pr-maintainer 376.6k openclaw/openclaw Use immediately for any pasted OpenClaw GitHub issue or PR URL/number, and for OpenClaw issu",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-pr-maintainer-skill-md"
+    },
+    {
+      "text": "openclaw-qa-testing 376.6k openclaw/openclaw Run, watch, debug, extend, or explain OpenClaw qa-lab and qa-channel scenarios, artifacts, and ",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-qa-testing-skill-md"
+    },
+    {
+      "text": "openclaw-refactor-docs 376.6k openclaw/openclaw Refactor an existing OpenClaw docs page with source-audited preservation, restructuring, and",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-refactor-docs-skill-md"
+    },
+    {
+      "text": "openclaw-secret-scanning-maintainer 376.6k openclaw/openclaw Triage, redact, clean up, and resolve OpenClaw GitHub Secret Scanning alerts in",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-secret-scanning-maintainer-skill-md"
+    },
+    {
+      "text": "openclaw-small-bugfix-sweep 376.6k openclaw/openclaw Fix only small, high-certainty OpenClaw bugs from a pasted issue/PR list after deep cod",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-small-bugfix-sweep-skill-md"
+    },
+    {
+      "text": "openclaw-test-heap-leaks 376.6k openclaw/openclaw Investigate OpenClaw pnpm test memory growth, Vitest OOMs, RSS spikes, and heap snapshot d",
+      "href": "https://skillsmp.com/skills/openclaw-openclaw-agents-skills-openclaw-test-heap-leaks-skill-md"
+    },
+    {
+      "text": "Twitter",
+      "href": "https://x.com/God_I_13"
+    },
+    {
+      "text": "Reddit",
+      "href": "https://www.reddit.com/user/TingXuSuan/"
+    },
+    {
+      "text": "📚 Skills Docs",
+      "href": "https://skillsmp.com/en/docs"
+    },
+    {
+      "text": "📈 Insights",
+      "href": "https://skillsmp.com/en/timeline"
+    },
+    {
+      "text": "📄 Skill Document",
+      "href": "https://code.claude.com/docs/en/skills"
+    },
+    {
+      "text": "📁 Official Skills",
+      "href": "https://github.com/anthropics/skills"
+    },
+    {
+      "text": "📄 Codex Skills Docs",
+      "href": "https://github.com/openai/codex/blob/main/docs/skills.md"
+    },
+    {
+      "text": "📋 Agent Skills Spec",
+      "href": "https://agentskills.io/"
+    },
+    {
+      "text": "📄 About",
+      "href": "https://skillsmp.com/en/about"
+    },
+    {
+      "text": "📋 Changelog",
+      "href": "https://skillsmp.com/en/changelog"
+    },
+    {
+      "text": "🔒 Privacy Policy",
+      "href": "https://skillsmp.com/en/privacy"
+    },
+    {
+      "text": "📜 Terms of Service",
+      "href": "https://skillsmp.com/en/terms"
+    },
+    {
+      "text": "",
+      "href": "https://manus.im/features/agent-skills?utm_source=nav_skillsmp"
+    }
+  ],
+  "text": "Skip to main content\nskills\nmp\nRun any Skill in Manus\nwith one click\nHome\nSearch\nBrowse Agent Skills\nFilter by\nOccupation\nSort by\nStars\nRecent\nagent-transcript\n376.6k\nopenclaw/openclaw\nAdd a redacted agent transcript section to GitHub PR or issue bodies during OpenClaw agent-created PR/issue workflows.\n2026-05-26\nautoreview\n376.6k\nopenclaw/openclaw\nAuto Review closeout. Codex review is the default when no engine is set and is the recommended reviewer.\n2026-06-02\nchannel-message-flows\n376.6k\nopenclaw/openclaw\nUse when previewing local channel message flow fixtures.\n2026-05-19\nclawdtributor\n376.6k\nopenclaw/openclaw\nUse for OpenClaw clawtributors PR/issue triage: Discrawl discovery, live-open rechecks, deep review, topic grouping, and compact @handle/LOC/type/blast/verification summaries.\n2026-05-28\nclawsweeper\n376.6k\nopenclaw/openclaw\nUse for all ClawSweeper work: OpenClaw issue/PR sweep reports, commit-review reports, repair jobs, cloud fix PRs, @clawsweeper maintainer mention commands, trusted ClawSweeper-reviewed autofix/automerge, GitHub Actions monitoring, permissions, gates, and manual backfills.\n2026-05-09\ncontrol-ui-e2e\n376.6k\nopenclaw/openclaw\nUse when testing, fixing, or extending the OpenClaw Control UI GUI with Vitest + Playwright end-to-end checks, mocked Gateway WebSocket flows, mocked dashboard runs, screenshots/videos, or agent-verifiable browser proof.\n2026-05-23\ncrabbox\n376.6k\nopenclaw/openclaw\nUse the Crabbox wrapper for OpenClaw remote validation across Linux, macOS, Windows, and WSL2, including delegated Blacksmith Testbox proof. Report the actual provider and id.\n2026-05-31\ndiscord-clawd\n376.6k\nopenclaw/openclaw\nUse to talk to the Discord-backed OpenClaw agent/session; not for archive search.\n2026-04-27\ndiscrawl\n376.6k\nopenclaw/openclaw\nDiscord archive: search, sync freshness, DMs, summaries, TUI, repo/release work.\n2026-05-29\ngitcrawl\n376.6k\nopenclaw/openclaw\nGitHub archive: issue/PR search, sync freshness, duplicate clusters, gh-shim PR status, and Gitcrawl repo work.\n2026-05-17\ngraincrawl\n376.6k\nopenclaw/openclaw\nGranola archive: search, sync freshness, notes, transcripts, panels, SQL counts, and Graincrawl repo work.\n2026-05-17\nnotcrawl\n376.6k\nopenclaw/openclaw\nNotion archive: search, sync freshness, pages/databases, Markdown exports, SQL counts, and Notcrawl repo work.\n2026-05-17\nopenclaw-changelog-update\n376.6k\nopenclaw/openclaw\nRegenerate OpenClaw release changelog sections from git history before beta or stable releases.\n2026-05-30\nopenclaw-debugging\n376.6k\nopenclaw/openclaw\nDebug OpenClaw model, provider, tool-surface, code-mode, streaming, and live/Crabbox behavior by choosing the right logs, probes, and proof path before changing code.\n2026-05-13\nopenclaw-docker-e2e-authoring\n376.6k\nopenclaw/openclaw\nAuthor OpenClaw Docker E2E and live provider Docker lanes.\n2026-05-18\nopenclaw-ghsa-maintainer\n376.6k\nopenclaw/openclaw\nInspect, patch, validate, publish, or confirm OpenClaw GHSA security advisories and private-fork state.\n2026-05-28\nopenclaw-landable-bug-sweep\n376.6k\nopenclaw/openclaw\nFind or repair small high-confidence non-SDK-boundary OpenClaw bugfix PRs until five are landable.\n2026-05-25\nopenclaw-parallels-smoke\n376.6k\nopenclaw/openclaw\nRun, rerun, debug, or interpret OpenClaw Parallels install, onboarding, gateway smoke, and upgrade checks.\n2026-05-24\nopenclaw-pr-maintainer\n376.6k\nopenclaw/openclaw\nUse immediately for any pasted OpenClaw GitHub issue or PR URL/number, and for OpenClaw issue/PR review, triage, duplicate search, opener identity/who wrote it, author account age/activity, comments, labels, close, land, or maintainer evidence checks.\n2026-05-31\nopenclaw-qa-testing\n376.6k\nopenclaw/openclaw\nRun, watch, debug, extend, or explain OpenClaw qa-lab and qa-channel scenarios, artifacts, and live lanes.\n2026-05-13\nopenclaw-refactor-docs\n376.6k\nopenclaw/openclaw\nRefactor an existing OpenClaw docs page with source-audited preservation, restructuring, and verification.\n2026-05-11\nopenclaw-secret-scanning-maintainer\n376.6k\nopenclaw/openclaw\nTriage, redact, clean up, and resolve OpenClaw GitHub Secret Scanning alerts in issues or PRs.\n2026-05-31\nopenclaw-small-bugfix-sweep\n376.6k\nopenclaw/openclaw\nFix only small, high-certainty OpenClaw bugs from a pasted issue/PR list after deep code review.\n2026-05-09\nopenclaw-test-heap-leaks\n376.6k\nopenclaw/openclaw\nInvestigate OpenClaw pnpm test memory growth, Vitest OOMs, RSS spikes, and heap snapshot deltas.\n2026-05-01\nSkills Marketplace\n\nDiscover and explore AI skills built by the community.\n\nCOMMUNITY\nTwitter\nReddit\nRESOURCES\n📚\nSkills Docs\n📈\nInsights\n📄\nSkill Document\n📁\nOfficial Skills\n📄\nCodex Skills Docs\n📋\nAgent Skills Spec\nLEGAL\n📄\nAbout\n📋\nChangelog\n🔒\nPrivacy Policy\n📜\nTerms of Service\nScroll to top",
+  "stats": {
+    "bodyTextLength": 4769,
+    "linkCount": 48,
+    "buttonCount": 33,
+    "inputCount": 1,
+    "cardishCount": 37,
+    "scrollHeight": 5995
+  }
+}

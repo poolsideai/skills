@@ -1,0 +1,471 @@
+{
+  "title": "officialskills.sh — Official Agent Skills Directory",
+  "url": "https://officialskills.sh/",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Official\nAgent Skills"
+    },
+    {
+      "tag": "h3",
+      "text": "Quick Stats"
+    },
+    {
+      "tag": "h2",
+      "text": "Find Skills"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Dismiss sponsor banner",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Publishers",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Publishers",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "addyosmani",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "anthropics",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "apollographql",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "auth0",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "better-auth",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "binance",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "brave",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "browserbase",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "callstackincubator",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "clickhouse",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "cloudflare",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "coderabbitai",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "coinbase",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "composiohq",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "datadog-labs",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "duckdb",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "expo",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "fal-ai-community",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "figma",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "firebase",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "firecrawl",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "flutter",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "garrytan",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "getsentry",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "google-gemini",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "google-labs-code",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "googleworkspace",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "greensock",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Show 20 more",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "All\n577",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "infrastructure\n146",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "development\n97",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "ai-tools\n77",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "workflows\n61",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "security\n63",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "data\n56",
+      "type": "button"
+    }
+  ],
+  "links": [
+    {
+      "text": "Sponsor officialskills.sh and get featured on the platform →",
+      "href": "https://sponsors.voltagent.dev/#officialskills.sh"
+    },
+    {
+      "text": "officialskills.sh",
+      "href": "https://officialskills.sh/"
+    },
+    {
+      "text": "About",
+      "href": "https://officialskills.sh/about"
+    },
+    {
+      "text": "—",
+      "href": "https://github.com/VoltAgent/awesome-agent-skills"
+    },
+    {
+      "text": "Sign in",
+      "href": "https://officialskills.sh/auth"
+    },
+    {
+      "text": "Browse Official Skills ↓",
+      "href": "https://officialskills.sh/#find-skills"
+    },
+    {
+      "text": "microsoft",
+      "href": "https://officialskills.sh/microsoft/skills"
+    },
+    {
+      "text": "openai",
+      "href": "https://officialskills.sh/openai/skills"
+    },
+    {
+      "text": "getsentry",
+      "href": "https://officialskills.sh/getsentry/skills"
+    },
+    {
+      "text": "garrytan",
+      "href": "https://officialskills.sh/garrytan/skills"
+    },
+    {
+      "text": "flutter",
+      "href": "https://officialskills.sh/flutter/skills"
+    },
+    {
+      "text": "trailofbits",
+      "href": "https://officialskills.sh/trailofbits/skills"
+    },
+    {
+      "text": "anthropics",
+      "href": "https://officialskills.sh/anthropics/skills"
+    },
+    {
+      "text": "googleworkspace",
+      "href": "https://officialskills.sh/googleworkspace/skills"
+    },
+    {
+      "text": "fal-ai-community",
+      "href": "https://officialskills.sh/fal-ai-community/skills"
+    },
+    {
+      "text": "auth0",
+      "href": "https://officialskills.sh/auth0/skills"
+    },
+    {
+      "text": "apollographql",
+      "href": "https://officialskills.sh/apollographql/skills"
+    },
+    {
+      "text": "huggingface",
+      "href": "https://officialskills.sh/huggingface/skills"
+    },
+    {
+      "text": "WordPress",
+      "href": "https://officialskills.sh/WordPress/skills"
+    },
+    {
+      "text": "firebase",
+      "href": "https://officialskills.sh/firebase/skills"
+    },
+    {
+      "text": "netlify",
+      "href": "https://officialskills.sh/netlify/skills"
+    },
+    {
+      "text": "brave",
+      "href": "https://officialskills.sh/brave/skills"
+    },
+    {
+      "text": "microsoft",
+      "href": "https://officialskills.sh/microsoft/skills"
+    },
+    {
+      "text": "openai",
+      "href": "https://officialskills.sh/openai/skills"
+    },
+    {
+      "text": "getsentry",
+      "href": "https://officialskills.sh/getsentry/skills"
+    },
+    {
+      "text": "garrytan",
+      "href": "https://officialskills.sh/garrytan/skills"
+    },
+    {
+      "text": "flutter",
+      "href": "https://officialskills.sh/flutter/skills"
+    },
+    {
+      "text": "trailofbits",
+      "href": "https://officialskills.sh/trailofbits/skills"
+    },
+    {
+      "text": "anthropics",
+      "href": "https://officialskills.sh/anthropics/skills"
+    },
+    {
+      "text": "googleworkspace",
+      "href": "https://officialskills.sh/googleworkspace/skills"
+    },
+    {
+      "text": "fal-ai-community",
+      "href": "https://officialskills.sh/fal-ai-community/skills"
+    },
+    {
+      "text": "auth0",
+      "href": "https://officialskills.sh/auth0/skills"
+    },
+    {
+      "text": "apollographql",
+      "href": "https://officialskills.sh/apollographql/skills"
+    },
+    {
+      "text": "huggingface",
+      "href": "https://officialskills.sh/huggingface/skills"
+    },
+    {
+      "text": "WordPress",
+      "href": "https://officialskills.sh/WordPress/skills"
+    },
+    {
+      "text": "firebase",
+      "href": "https://officialskills.sh/firebase/skills"
+    },
+    {
+      "text": "netlify",
+      "href": "https://officialskills.sh/netlify/skills"
+    },
+    {
+      "text": "brave",
+      "href": "https://officialskills.sh/brave/skills"
+    },
+    {
+      "text": "1 accessibility Audits and improves web accessibility against WCAG 2.",
+      "href": "https://officialskills.sh/addyosmani/skills/accessibility"
+    },
+    {
+      "text": "2 agent-framework-azure-ai-py Python SDK for building persistent agents on Azure AI Foundry.",
+      "href": "https://officialskills.sh/microsoft/skills/agent-framework-azure-ai-py"
+    },
+    {
+      "text": "3 agents-sdk Build stateful AI agents on Cloudflare Workers with persistent SQLite-backed state, WebSocket connections, scheduled tasks, and",
+      "href": "https://officialskills.sh/cloudflare/skills/agents-sdk"
+    },
+    {
+      "text": "4 agents-v2-py Deploys container-based agents to Azure AI Foundry using `ImageBasedHostedAgentDefinition` from the Azure AI Projects SDK.",
+      "href": "https://officialskills.sh/microsoft/skills/agents-v2-py"
+    },
+    {
+      "text": "5 algorithmic-art Generates algorithmic and generative art using p5.",
+      "href": "https://officialskills.sh/anthropics/skills/algorithmic-art"
+    },
+    {
+      "text": "6 android-native-dev A reference guide for Android native development covering Kotlin/Compose patterns, Material Design 3 specs, Gradle proj",
+      "href": "https://officialskills.sh/MiniMax-AI/skills/android-native-dev"
+    },
+    {
+      "text": "7 answers Provides AI-generated answers grounded in live web search results through Brave's OpenAI-compatible chat completions endpoint.",
+      "href": "https://officialskills.sh/brave/skills/answers"
+    },
+    {
+      "text": "8 apollo-client A guide for building React applications with Apollo Client 4.",
+      "href": "https://officialskills.sh/apollographql/skills/apollo-client"
+    },
+    {
+      "text": "9 apollo-connectors Helps integrate REST APIs into GraphQL supergraphs using Apollo Connectors with @source and @connect directives.",
+      "href": "https://officialskills.sh/apollographql/skills/apollo-connectors"
+    },
+    {
+      "text": "10 apollo-federation Helps you write Apollo Federation 2.",
+      "href": "https://officialskills.sh/apollographql/skills/apollo-federation"
+    },
+    {
+      "text": "11 apollo-kotlin A GraphQL client for Android, JVM, and Kotlin Multiplatform projects.",
+      "href": "https://officialskills.sh/apollographql/skills/apollo-kotlin"
+    },
+    {
+      "text": "12 apollo-mcp-server Connects AI agents to GraphQL APIs through the Model Context Protocol.",
+      "href": "https://officialskills.sh/apollographql/skills/apollo-mcp-server"
+    }
+  ],
+  "text": "Sponsor officialskills.sh and get featured on the platform\n→\nofficialskills.sh\n—\nOfficial\nAgent Skills\n\nOfficial skills from the dev teams of software vendors,\nplus handpicked & community-adopted skills.\n\nBrowse Official Skills\n↓\nSKILLS BY DEV TEAMS OF:\nmicrosoft\nopenai\ngetsentry\ngarrytan\nflutter\ntrailofbits\nanthropics\ngoogleworkspace\nfal-ai-community\nauth0\napollographql\nhuggingface\nWordPress\nfirebase\nnetlify\nbrave\nmicrosoft\nopenai\ngetsentry\ngarrytan\nflutter\ntrailofbits\nanthropics\ngoogleworkspace\nfal-ai-community\nauth0\napollographql\nhuggingface\nWordPress\nfirebase\nnetlify\nbrave\nFind Skills\nPublishers\nAll\n577\ninfrastructure\n146\ndevelopment\n97\nai-tools\n77\nworkflows\n61\nsecurity\n63\ndata\n56\ndesign\n37\ndocs\n19\ntesting\n21\n1\naccessibility\n\nAudits and improves web accessibility against WCAG 2.\n\n2\nagent-framework-azure-ai-py\n\nPython SDK for building persistent agents on Azure AI Foundry.\n\n3\nagents-sdk\n\nBuild stateful AI agents on Cloudflare Workers with persistent SQLite-backed state, WebSocket connections, scheduled tasks, and durable workflows.\n\n4\nagents-v2-py\n\nDeploys container-based agents to Azure AI Foundry using `ImageBasedHostedAgentDefinition` from the Azure AI Projects SDK.\n\n5\nalgorithmic-art\n\nGenerates algorithmic and generative art using p5.\n\n6\nandroid-native-dev\n\nA reference guide for Android native development covering Kotlin/Compose patterns, Material Design 3 specs, Gradle project setup, and build troubleshooting.\n\n7\nanswers\n\nProvides AI-generated answers grounded in live web search results through Brave's OpenAI-compatible chat completions endpoint.\n\n8\napollo-client\n\nA guide for building React applications with Apollo Client 4.\n\n9\napollo-connectors\n\nHelps integrate REST APIs into GraphQL supergraphs using Apollo Connectors with @source and @connect directives.\n\n10\napollo-federation\n\nHelps you write Apollo Federation 2.\n\n11\napollo-kotlin\n\nA GraphQL client for Android, JVM, and Kotlin Multiplatform projects.\n\n12\napollo-mcp-server\n\nConnects AI agents to GraphQL APIs through the Model Context Protocol.\n\n13\napollo-router\n\nA version-aware configuration generator for Apollo Router, the Rust-based graph router that sits in front of federated GraphQL subgraphs.\n\n14\napollo-router-plugin-creator\n\nGuides you through writing native Rust plugins for Apollo Router.\n\n15\napollo-server\n\nBuild GraphQL servers using Apollo Server 5.\n\n16\nask-questions-if-underspecified\n\nGuides an AI agent to pause and ask clarifying questions when a request has ambiguous objectives, unclear scope, or missing constraints.\n\n17\naspnet-core\n\nCovers ASP.\n\n18\natlas-stream-processing\n\nManages MongoDB Atlas Stream Processing pipelines through the MongoDB MCP Server.\n\n19\nattach-db\n\nAttaches a DuckDB database file to your current project session.\n\n20\naudit-context-building\n\nA structured analysis skill for the pre-audit phase of code review.\n\n21\nauth0-android\n\nAdds authentication to native Android apps using the Auth0 SDK.\n\n22\nauth0-angular\n\nAdds authentication to Angular apps using the @auth0/auth0-angular SDK.\n\n23\nauth0-aspnetcore-api\n\nAdds JWT access token validation to ASP.\n\n24\nauth0-express\n\nAdds session-based authentication to Express.\n\n25\nauth0-fastify\n\nAdds session-based authentication to Fastify web applications using the @auth0/auth0-fastify SDK.\n\n26\nauth0-fastify-api\n\nSecures Fastify API endpoints with JWT Bearer token validation through Auth0.\n\n27\nauth0-mfa\n\nAdds Multi-Factor Authentication to Auth0-powered apps.\n\n28\nauth0-migration\n\nGuides migration of users and authentication flows from existing providers like Firebase, Cognito, Supabase, or Clerk to Auth0.\n\n29\nauth0-nextjs\n\nAdds authentication to Next.\n\n30\nauth0-nuxt\n\nAdds Auth0 authentication to Nuxt 3/4 apps using server-side encrypted cookie sessions.\n\n31\nauth0-quickstart\n\nDetects your project's framework (React, Next.\n\n32\nauth0-react\n\nAdds authentication to React single-page applications using the @auth0/auth0-react SDK.\n\n33\nauth0-react-native\n\nAdds authentication to React Native and Expo mobile apps using the react-native-auth0 SDK.\n\n34\nauth0-vue\n\nAdds authentication to Vue.\n\n35\nauthenticate-wallet\n\nHandles sign-in for the Coinbase payments wallet using a two-step email OTP flow.\n\n36\nautofix\n\nFetches unresolved CodeRabbit review comments from your GitHub PR and applies fixes interactively or in batch.\n\n37\nautoplan\n\nRuns CEO, design, and engineering review skills on a plan file in sequence, making intermediate decisions automatically using six built-in principles.\n\n38\nazure-ai-anomalydetector-java\n\nAzure AI Anomaly Detector SDK for Java lets you detect anomalies in time-series data using univariate or multivariate analysis.\n\n39\nazure-ai-contentsafety-java\n\nJava SDK for Azure AI Content Safety.\n\n40\nazure-ai-contentsafety-py\n\nAzure AI Content Safety SDK for Python connects to Microsoft's content moderation API to analyze text and images for harmful content.\n\n41\nazure-ai-contentsafety-ts\n\nAnalyzes text and images for harmful content using Azure AI Content Safety.\n\n42\nazure-ai-contentunderstanding-py\n\nAzure AI Content Understanding SDK for Python.\n\n43\nazure-ai-document-intelligence-dotnet\n\nAzure AI Document Intelligence SDK for .\n\n44\nazure-ai-document-intelligence-ts\n\nAzure AI Document Intelligence TypeScript SDK wraps the Azure Document Intelligence REST API for extracting structured data from documents.\n\n45\nazure-ai-formrecognizer-java\n\nAzure AI Document Intelligence (Form Recognizer) SDK for Java lets you extract structured data from documents using prebuilt models for receipts, invoices, IDs, and tax forms, or custom models you train on your own data.\n\n46\nazure-ai-ml-py\n\nAzure Machine Learning SDK v2 for Python (azure-ai-ml) lets you manage ML resources on Azure programmatically.\n\n47\nazure-ai-openai-dotnet\n\nAzure.\n\n48\nazure-ai-projects-dotnet\n\nAzure.\n\n49\nazure-ai-projects-java\n\nJava SDK for Azure AI Foundry that manages project resources like connections, datasets, indexes, and evaluations through a typed client hierarchy.\n\n50\nazure-ai-projects-py\n\nPython SDK for building AI applications on Microsoft Azure Foundry.\n\n51\nazure-ai-projects-ts\n\nTypeScript SDK for Azure AI Foundry that provides access to agents, connections, deployments, datasets, indexes, and evaluations through a single project client.\n\n52\nazure-ai-textanalytics-py\n\nAzure AI Text Analytics SDK for Python wraps the Azure AI Language service REST API.\n\n53\nazure-ai-transcription-py\n\nAzure AI Transcription SDK for Python wraps the Azure Cognitive Services speech-to-text API.\n\n54\nazure-ai-translation-document-py\n\nAzure AI Document Translation SDK for Python handles batch translation of documents across formats like Word, PDF, Excel, and PowerPoint while preserving the original layout and formatting.\n\n55\nazure-ai-translation-text-py\n\nAzure AI Text Translation SDK for Python wraps the Azure Translator REST API.\n\n56\nazure-ai-translation-ts\n\nAzure AI Translation SDK for TypeScript wraps the Azure Translator REST API into typed clients for both real-time text translation and async batch document translation.\n\n57\nazure-ai-vision-imageanalysis-java\n\nJava SDK for Azure AI Vision Image Analysis.\n\n58\nazure-ai-vision-imageanalysis-py\n\nAzure AI Vision Image Analysis SDK for Python wraps the Azure AI Vision 4.\n\n59\nazure-ai-voicelive-dotnet\n\nAzure AI Voice Live SDK for .\n\n60\nazure-ai-voicelive-java\n\nJava SDK for Azure AI VoiceLive.\n\n61\nazure-ai-voicelive-py\n\nPython SDK for building real-time voice AI applications over WebSocket connections with Azure AI.\n\n62\nazure-ai-voicelive-ts\n\nAzure AI Voice Live SDK for JavaScript and TypeScript.\n\n63\nazure-appconfiguration-java\n\nJava client library for Azure App Configuration, a managed service that centralizes key-value settings, feature flags, and configuration snapshots.\n\n64\nazure-appconfiguration-py\n\nAzure App Configuration SDK for Python provides a client for reading and writing key-value settings, feature flags, and labeled configurations stored in Azure App Configuration.\n\n65\nazure-appconfiguration-ts\n\nAzure App Configuration SDK for TypeScript provides programmatic access to Azure App Configuration, a managed service for centralizing application settings and feature flags.\n\n66\nazure-communication-callautomation-java\n\nJava SDK for Azure Communication Services Call Automation.\n\n67\nazure-communication-callingserver-java\n\nLegacy Java SDK for Azure Communication Services call management, now deprecated in favor of azure-communication-callautomation.\n\n68\nazure-communication-chat-java\n\nJava SDK for Azure Communication Services Chat.\n\n69\nazure-communication-common-java\n\nShared Java library for authenticating with Azure Communication Services.\n\n70\nazure-communication-sms-java\n\nWraps the Azure Communication Services SMS Java SDK to send text messages to one or more recipients.\n\n71\nazure-compute-batch-java\n\nJava client library for Azure Batch, a managed service that runs large-scale parallel and HPC workloads.\n\n72\nazure-containerregistry-py\n\nPython SDK for Azure Container Registry.\n\n73\nazure-cosmos-db-py\n\nGuides Python and FastAPI code toward production-ready Azure Cosmos DB NoSQL integrations.\n\n74\nazure-cosmos-java\n\nAzure Cosmos DB SDK for Java provides a client library for interacting with Cosmos DB's NoSQL API.\n\n75\nazure-cosmos-py\n\nPython client library for Azure Cosmos DB's NoSQL API.\n\n76\nazure-cosmos-rust\n\nRust client library for Azure Cosmos DB's NoSQL API.\n\n77\nazure-cosmos-ts\n\nThe official TypeScript/JavaScript SDK for Azure Cosmos DB NoSQL API data plane operations.\n\n78\nazure-data-tables-java\n\nJava SDK for Azure Table Storage and Cosmos DB Table API.\n\n79\nazure-data-tables-py\n\nAzure Data Tables SDK for Python provides access to Azure Storage Tables and Cosmos DB Table API.\n\n80\nazure-eventgrid-dotnet\n\nClient library for publishing and consuming events with Azure Event Grid in .\n\n81\nazure-eventgrid-java\n\nAzure Event Grid SDK for Java lets you publish and receive events using Azure Event Grid topics and namespaces.\n\n82\nazure-eventgrid-py\n\nAzure Event Grid SDK for Python.\n\n83\nazure-eventhub-dotnet\n\nAzure.\n\n84\nazure-eventhub-java\n\nJava SDK for Azure Event Hubs.\n\n85\nazure-eventhub-py\n\nAzure Event Hubs SDK for Python.\n\n86\nazure-eventhub-rust\n\nRust client library for Azure Event Hubs.\n\n87\nazure-eventhub-ts\n\nAzure Event Hubs SDK for TypeScript wraps the @azure/event-hubs package to send and receive events at scale.\n\n88\nazure-identity-dotnet\n\nAzure Identity is the authentication library for .\n\n89\nazure-identity-java\n\nAzure Identity library for Java handles authentication between Java applications and Azure services using Microsoft Entra ID.\n\n90\nazure-identity-py\n\nPython library for authenticating to Azure services using Microsoft Entra ID.\n\n91\nazure-identity-rust\n\nAzure Identity SDK for Rust provides credential types for authenticating with Microsoft Entra ID.\n\n92\nazure-identity-ts\n\nHandles authentication to Azure services in TypeScript/JavaScript applications using the @azure/identity package.\n\n93\nazure-keyvault-certificates-rust\n\nAzure Key Vault Certificates SDK for Rust.\n\n94\nazure-keyvault-keys-rust\n\nAzure Key Vault Keys SDK for Rust provides a client library for creating, managing, and using cryptographic keys stored in Azure Key Vault.\n\n95\nazure-keyvault-keys-ts\n\nManages cryptographic keys in Azure Key Vault from TypeScript/Node.\n\n96\nazure-keyvault-py\n\nAzure Key Vault SDK for Python provides access to Azure Key Vault's secrets, cryptographic keys, and certificate management through three separate clients: SecretClient, KeyClient, and CertificateClient.\n\n97\nazure-keyvault-secrets-rust\n\nAzure Key Vault Secrets SDK for Rust.\n\n98\nazure-keyvault-secrets-ts\n\nWraps the Azure Key Vault Secrets SDK for JavaScript, giving TypeScript applications a typed interface for storing, retrieving, and rotating secrets and cryptographic keys in Azure.\n\n99\nazure-maps-search-dotnet\n\nAzure Maps SDK for .\n\n100\nazure-messaging-webpubsub-java\n\nJava SDK for Azure Web PubSub, a managed service that handles WebSocket connections at scale.\n\n101\nazure-messaging-webpubsubservice-py\n\nAzure Web PubSub Service SDK for Python.\n\n102\nazure-mgmt-apicenter-dotnet\n\nAzure.\n\n103\nazure-mgmt-apicenter-py\n\nPython SDK for Azure API Center, a service that manages API inventory and governance across an organization.\n\n104\nazure-mgmt-apimanagement-dotnet\n\nManagement plane SDK for Azure API Management in .\n\n105\nazure-mgmt-apimanagement-py\n\nPython SDK for managing Azure API Management resources.\n\n106\nazure-mgmt-applicationinsights-dotnet\n\nAzure Resource Manager SDK for .\n\n107\nazure-mgmt-arizeaiobservabilityeval-dotnet\n\nAzure Resource Manager SDK for managing Arize AI Observability and Evaluation organizations in .\n\n108\nazure-mgmt-botservice-dotnet\n\nManagement plane SDK for Azure Bot Service in .\n\n109\nazure-mgmt-botservice-py\n\nAzure Bot Service Management SDK for Python lets you create, configure, and manage Azure Bot Service resources programmatically.\n\n110\nazure-mgmt-fabric-dotnet\n\nAzure.\n\n111\nazure-mgmt-fabric-py\n\nPython SDK for managing Microsoft Fabric capacities via the Azure Resource Manager API.\n\n112\nazure-mgmt-mongodbatlas-dotnet\n\nAzure.\n\n113\nazure-mgmt-weightsandbiases-dotnet\n\nAzure Resource Manager SDK for .\n\n114\nazure-microsoft-playwright-testing-ts\n\nRuns Playwright tests on cloud-hosted browsers through Azure Playwright Workspaces.\n\n115\nazure-monitor-ingestion-java\n\nJava client library for sending custom logs to Azure Monitor using the Logs Ingestion API.\n\n116\nazure-monitor-ingestion-py\n\nAzure Monitor Ingestion SDK for Python sends custom log data to a Log Analytics workspace via the Logs Ingestion API.\n\n117\nazure-monitor-opentelemetry-exporter-java\n\nJava library for exporting OpenTelemetry traces, metrics, and logs to Azure Monitor and Application Insights.\n\n118\nazure-monitor-opentelemetry-exporter-py\n\nLow-level Python exporter that sends OpenTelemetry traces, metrics, and logs to Azure Application Insights.\n\n119\nazure-monitor-opentelemetry-py\n\nAzure Monitor OpenTelemetry Distro connects Python applications to Azure Application Insights with a single function call.\n\n120\nazure-monitor-opentelemetry-ts\n\nInstruments Node.\n\n121\nazure-monitor-query-java\n\nJava SDK for querying Azure Monitor data.\n\n122\nazure-monitor-query-py\n\nAzure Monitor Query SDK for Python wraps the LogsQueryClient and MetricsQueryClient APIs for querying Log Analytics workspaces using Kusto queries and pulling Azure Monitor metrics.\n\n123\nazure-postgres-ts\n\nConnects Node.\n\n124\nazure-resource-manager-cosmosdb-dotnet\n\nAzure.\n\n125\nazure-resource-manager-durabletask-dotnet\n\nManagement plane SDK for Azure Durable Task Scheduler in .\n\n126\nazure-resource-manager-mysql-dotnet\n\nAzure Resource Manager SDK for .\n\n127\nazure-resource-manager-playwright-dotnet\n\nManagement plane SDK for Azure's Microsoft Playwright Testing service, written for .\n\n128\nazure-resource-manager-postgresql-dotnet\n\nAzure Resource Manager SDK for .\n\n129\nazure-resource-manager-redis-dotnet\n\nAzure.\n\n130\nazure-resource-manager-sql-dotnet\n\nManagement plane SDK for Azure SQL in .\n\n131\nazure-search-documents-dotnet\n\nAzure.\n\n132\nazure-search-documents-py\n\nAzure AI Search SDK for Python.\n\n133\nazure-search-documents-ts\n\nAzure AI Search SDK for TypeScript (@azure/search-documents) lets you create and manage search indexes, upload documents, and run full-text, vector, hybrid, and semantic searches against Azure AI Search.\n\n134\nazure-security-keyvault-keys-dotnet\n\nAzure.\n\n135\nazure-security-keyvault-keys-java\n\nJava SDK for managing cryptographic keys in Azure Key Vault and Managed HSM.\n\n136\nazure-security-keyvault-secrets-java\n\nJava SDK for Azure Key Vault's secrets API.\n\n137\nazure-servicebus-dotnet\n\nAzure.\n\n138\nazure-servicebus-py\n\nAzure Service Bus SDK for Python.\n\n139\nazure-servicebus-ts\n\nWraps the Azure Service Bus JavaScript SDK to send and receive messages using queues, topics, and subscriptions.\n\n140\nazure-speech-to-text-rest-py\n\nTranscribes short audio files (up to 60 seconds) using Azure's Speech to Text REST API in Python.\n\n141\nazure-storage-blob-java\n\nJava SDK for Azure Blob Storage.\n\n142\nazure-storage-blob-py\n\nPython client library for Azure Blob Storage.\n\n143\nazure-storage-blob-rust\n\nRust client library for Azure Blob Storage.\n\n144\nazure-storage-blob-ts\n\nAzure Blob Storage TypeScript/JavaScript SDK for working with blobs and containers.\n\n145\nazure-storage-file-datalake-py\n\nPython SDK for Azure Data Lake Storage Gen2, which provides a hierarchical file system built on Azure Blob Storage.\n\n146\nazure-storage-file-share-py\n\nPython SDK for Azure Storage File Share, covering SMB file shares, directories, and file operations in the cloud.\n\n147\nazure-storage-file-share-ts\n\nSDK for managing Azure File Share resources over SMB using TypeScript or JavaScript.\n\n148\nazure-storage-queue-py\n\nAzure Queue Storage SDK for Python wraps the Azure Queue Storage REST API for sending, receiving, and managing messages in cloud queues.\n\n149\nazure-storage-queue-ts\n\nAzure Queue Storage SDK for TypeScript and JavaScript.\n\n150\nazure-verified-modules\n\nAzure Verified Modules (AVM) skill covers the mandatory and recommended requirements for building Terraform modules that meet AVM certification standards.\n\n151\nazure-web-pubsub-ts\n\nAzure Web PubSub skill covers both server-side management and client-side connection for real-time WebSocket messaging on Azure.\n\n152\nbenchmark\n\nMeasures web page performance by collecting real PerformanceAPI data from a running browser session.\n\n153\nbest-practices\n\nA checklist of modern web development standards covering HTTPS, CSP headers, input sanitization, deprecated API avoidance, and HTML validity.\n\n154\nbest-practices\n\nCovers Better Auth server and client setup, including database adapter configuration, session management, plugin integration, and environment variable handling.\n\n155\nbrand-guidelines\n\nApplies Anthropic's official brand colors and typography to documents and presentations.\n\n156\nbrowse\n\nA headless Chromium controller for testing and verifying web apps.\n\n157\nbrowser\n\nAutomates web browser interactions through natural language CLI commands.\n\n158\nbrowserbase-cli\n\nA CLI wrapper around the Browserbase platform.\n\n159\nbuilding-native-ui\n\nA guide for building native iOS and Android UIs with Expo Router.\n\n160\nbuilding-secure-contracts\n\nA collection of 11 skills for smart contract security across Algorand, Cairo, Cosmos, Solana, Substrate, and TON.\n\n161\nburpsuite-project-parser\n\nSearches and extracts data from Burp Suite project files (.\n\n162\nbx\n\nA CLI tool for web search built for AI agents.\n\n163\ncanary\n\nCanary monitors a live app after a deploy by checking pages for console errors, performance regressions, and load failures.\n\n164\ncanvas-design\n\nGenerates original visual art and design artifacts as .\n\n165\ncareful\n\nAdds safety guardrails to bash commands by intercepting destructive operations before they run.\n\n166\nchatgpt-apps\n\nScaffolds and refactors ChatGPT Apps SDK applications that combine an MCP server with a widget UI.\n\n167\nchdb-datastore\n\nDrop-in pandas replacement with ClickHouse performance across 16+ data sources and 10+ file formats.\n\n168\nchdb-sql\n\nIn-process ClickHouse SQL engine for Python — query files, databases, and cloud storage without a server.\n\n169\nclaimable-postgres\n\nProvisions temporary Postgres databases instantly via Neon's Claimable Postgres service.\n\n170\nclaude-in-chrome-troubleshooting\n\nDiagnoses and fixes connectivity failures between the Claude in Chrome MCP extension and Claude Code CLI on macOS.\n\n171\nclickhouse-architecture-advisor\n\nDesigns ClickHouse architectures and translates best practices into workload-specific decisions.\n\n172\nclickhouse-best-practices\n\nA set of 28 validated rules for ClickHouse covering schema design, query optimization, and data ingestion.\n\n173\nclickhousectl-cloud-deploy\n\nDeploys to ClickHouse Cloud and migrates from local setups using clickhousectl.\n\n174\nclickhousectl-local-dev\n\nSpins up a local ClickHouse development environment from zero using clickhousectl.\n\n175\ncloud-solution-architect\n\nTurns the agent into a Cloud Solution Architect trained on Azure Architecture Center guidance.\n\n176\ncloudflare\n\nComprehensive Cloudflare platform skill covering Workers, Pages, storage, AI, networking, security, and IaC.\n\n177\ncloudflare-deploy\n\nDeploys applications and infrastructure to Cloudflare's platform, covering Workers, Pages, D1, R2, KV, Durable Objects, AI services, and more.\n\n178\ncloudflare-email-service\n\nSend transactional email and route inbound mail with Cloudflare Email Sending and Email Routing.\n\n179\ncode-review\n\nRuns AI-powered code reviews through the CodeRabbit CLI.\n\n180\ncodex\n\nWraps the OpenAI Codex CLI to provide three code analysis modes: a structured diff review with a pass/fail gate, an adversarial challenge that searches for edge cases and failure paths, and a consult mode for open-ended questions with session continuity across turns.\n\n181\ncomposio\n\nComposio connects AI agents and apps to 1000+ external services like Gmail, Slack, GitHub, and Notion.\n\n182\nconstant-time-analysis\n\nDetects timing side-channel vulnerabilities in cryptographic code across 12 languages.\n\n183\ncontent-experimentation-best-practices\n\nCovers experiment design, statistical analysis, and CMS-managed variant setup for content A/B and multivariate testing.\n\n184\ncontent-modeling-best-practices\n\nStructured guidance for designing content schemas in Sanity and other headless CMSes.\n\n185\ncontinual-learning\n\nA guide for building persistent memory into AI coding agents.\n\n186\ncookie-sync\n\nExports cookies from your local Chrome browser into a Browserbase persistent context.\n\n187\ncopilot-sdk\n\nThe GitHub Copilot SDK lets you build applications that programmatically interact with GitHub Copilot.\n\n188\ncore-web-vitals\n\nDiagnoses and fixes Core Web Vitals issues across LCP, INP, and CLS.\n\n189\ncreate-auth\n\nScaffolds authentication into TypeScript/JavaScript apps using Better Auth.\n\n190\ncreate-voltagent\n\nCreates new VoltAgent AI agent projects via a CLI command or manual setup.\n\n191\ncrypto-market-rank\n\nQueries Binance Web3 APIs for crypto market rankings across BSC, Base, and Solana.\n\n192\ncso\n\nRuns a multi-phase security audit across a codebase.\n\n193\nculture-index\n\nInterprets Culture Index behavioral assessments for individuals and teams.\n\n194\ndd-apm\n\nLets you query Datadog APM data from your editor.\n\n195\ndd-docs\n\nLooks up Datadog documentation by fetching the LLM-optimized index at docs.\n\n196\ndd-llmo-eval-bootstrap\n\nAnalyzes production LLM traces from Datadog and generates ready-to-use evaluator code using the Datadog Evals SDK.\n\n197\ndd-llmo-eval-trace-rca\n\nPerforms root cause analysis on production LLM application traces by using eval judge verdicts as diagnostic signal.\n\n198\ndd-llmo-experiment-analyzer\n\nAnalyzes LLM experiment results from Datadog, supporting single or comparative experiments in exploratory or Q&A modes.\n\n199\ndd-logs\n\nSearches, filters, and archives Datadog logs through the Pup CLI.\n\n200\ndd-monitors\n\nManages Datadog monitors through the pup CLI.\n\n201\ndd-pup\n\nA Rust-based CLI called pup that talks to the Datadog API.\n\n202\ndesign-consultation\n\nRuns a design consultation session to build a complete design system from scratch.\n\n203\ndesign-md\n\nAnalyzes screens in a Stitch project and writes a DESIGN.\n\n204\ndesign-review\n\nAudits a live site for visual problems — spacing inconsistencies, hierarchy failures, typography issues, AI-generated layout patterns, and sluggish interactions.\n\n205\ndevelop-web-game\n\nA development workflow for building HTML/JS web games with Codex.\n\n206\ndeveloping-genkit-dart\n\nGenerates code and documentation for the Genkit Dart SDK.\n\n207\ndeveloping-genkit-go\n\nA Go SDK for building AI-powered applications with Genkit.\n\n208\ndeveloping-genkit-js\n\nHelps you build AI-powered apps with Firebase Genkit in Node.\n\n209\ndifferential-review\n\nRuns security-focused differential reviews on PRs, commits, and diffs.\n\n210\ndoc\n\nHandles reading, creating, and editing .\n\n211\ndoc-coauthoring\n\nA structured workflow for co-authoring documents with Claude.\n\n212\ndocument-release\n\nRuns after code ships to bring all project documentation in sync with what actually changed.\n\n213\ndocx\n\nHandles .\n\n214\nduckdb-docs\n\nSearches DuckDB and DuckLake documentation and blog posts using full-text BM25 search against a locally cached index.\n\n215\ndurable-objects\n\nDurable Objects are Cloudflare's primitive for stateful, coordinated logic at the edge.\n\n216\ndwarf-expert\n\nAdds deep knowledge of the DWARF debug format (versions 3-5) to an agent.\n\n217\nemailAndPassword\n\nHandles email/password authentication for Better Auth, covering sign-up, sign-in, email verification, password reset flows, and password hashing configuration.\n\n218\nenhance-prompt\n\nRewrites rough or vague UI generation prompts into structured, detailed prompts optimized for Stitch.\n\n219\nentra-agent-id\n\nMicrosoft Entra Agent ID lets you create and manage OAuth2-capable identities for AI agents using Microsoft Graph beta API.\n\n220\nentry-point-analyzer\n\nAnalyzes smart contract codebases to map all state-changing entry points for security audits.\n\n221\nexplain-error\n\nExplains Better Auth error codes and messages in plain English, lists common causes, and generates error handling code with user-friendly messages and retry logic.\n\n222\nexpo-api-routes\n\nAPI routes in Expo Router let you run server-side code alongside your mobile and web app, using the same file-based routing convention.\n\n223\nexpo-cicd-workflows\n\nHelps write and validate EAS workflow YAML files for Expo projects.\n\n224\nexpo-deployment\n\nHandles deploying Expo apps to iOS App Store, Google Play Store, and web hosting using EAS (Expo Application Services).\n\n225\nexpo-dev-client\n\nexpo-dev-client lets you build custom Expo development clients that include native code not supported by standard Expo Go.\n\n226\nexpo-tailwind-setup\n\nConfigures Tailwind CSS v4 in an Expo project using react-native-css and NativeWind v5.\n\n227\nexpo-ui-jetpack-compose\n\n@expo/ui/jetpack-compose lets you use native Android Jetpack Compose components and Material Design 3 modifiers directly in a React Native/Expo app.\n\n228\nexpo-ui-swift-ui\n\n@expo/ui/swift-ui lets you use native SwiftUI views and modifiers directly in a React Native app.\n\n229\nfal-3d\n\nGenerates 3D models in GLB, OBJ, or PLY format from text descriptions or reference images using fal.\n\n230\nfal-audio\n\nConverts text to speech and transcribes audio to text using fal.\n\n231\nfal-generate\n\nGenerates images and videos from text prompts using fal.\n\n232\nfal-image-edit\n\nEdits images through fal.\n\n233\nfal-kling-o3\n\nGenerates images and videos using Kling O3 models through the fal.\n\n234\nfal-lip-sync\n\nGenerates talking head videos from a portrait image and audio or text input.\n\n235\nfal-platform\n\nGives you access to fal.\n\n236\nfal-realtime\n\nGenerates images in under a second using fal.\n\n237\nfal-restore\n\nRestores and fixes image quality using AI.\n\n238\nfal-train\n\nTrains custom LoRA models on fal.\n\n239\nfal-tryon\n\nTransfers clothing onto person photos using fal.\n\n240\nfal-upscale\n\nUpscales images and videos using fal.\n\n241\nfal-video-edit\n\nEdits existing videos through AI models on fal.\n\n242\nfal-vision\n\nAnalyzes images through fal.\n\n243\nfal-workflow\n\nGenerates production-ready fal.\n\n244\nfastapi-router-py\n\nGenerates FastAPI router files with CRUD endpoints, authentication dependencies, and typed response models.\n\n245\nfetch\n\nFetches HTML, JSON, headers, and status codes from URLs through the Browserbase API without spinning up a full browser session.\n\n246\nfigma\n\nConnects Claude to the Figma MCP server so it can fetch design context, screenshots, variables, and assets from Figma nodes.\n\n247\nfigma-code-connect-components\n\nConnects Figma design components to their code implementations using Figma's Code Connect feature.\n\n248\nfigma-code-connect-components\n\nMaps Figma design components to their code counterparts using Figma's Code Connect feature.\n\n249\nfigma-create-design-system-rules\n\nGenerates project-specific design system rules for AI coding agents to follow when implementing Figma designs.\n\n250\nfigma-create-design-system-rules\n\nGenerates project-specific design system rules for AI coding agents like Claude Code, Cursor, and Codex CLI.\n\n251\nfigma-create-new-file\n\nCreates a new blank Figma or FigJam file in the user's drafts folder.\n\n252\nfigma-create-new-file\n\nCreates a new blank Figma or FigJam file in the user's drafts folder.\n\n253\nfigma-generate-design\n\nTranslates application pages, views, and multi-section layouts into Figma screens by composing design system component instances and tokens.\n\n254\nfigma-generate-design\n\nTranslates application pages, views, and multi-section layouts into Figma by discovering and reusing published design system components, variables, and styles.\n\n255\nfigma-generate-library\n\nBuilds or updates a design system in Figma by working through a structured sequence: discovery, variable collections, component libraries, and validation.\n\n256\nfigma-generate-library\n\nGuides an AI agent through building a complete Figma design system from a codebase.\n\n257\nfigma-implement-design\n\nTranslates Figma designs into production-ready code with pixel-perfect accuracy.\n\n258\nfigma-implement-design\n\nTranslates Figma designs into production-ready code with pixel-perfect visual parity.\n\n259\nfigma-use\n\nA prerequisite skill that must be loaded before every `use_figma` tool call.\n\n260\nfigma-use\n\nA mandatory prerequisite skill for the `use_figma` MCP tool.\n\n261\nfirebase-ai-logic-basics\n\nIntegrates Firebase AI Logic into web and mobile apps so you can call Gemini models directly from client-side code without managing a backend.\n\n262\nfirebase-apk-scanner\n\nScans Android APKs for Firebase security misconfigurations by decompiling the app, extracting Firebase configuration, and actively testing endpoints for vulnerabilities.\n\n263\nfirebase-app-hosting-basics\n\nDeploys and manages full-stack web apps (Next.\n\n264\nfirebase-auth-basics\n\nGuides setup and usage of Firebase Authentication, covering sign-in providers like Google, email/password, phone, and anonymous auth.\n\n265\nfirebase-basics\n\nHandles the full Firebase setup and day-to-day workflow: CLI installation, authentication, project creation, and running commands.\n\n266\nfirebase-data-connect-basics\n\nHelps you build and deploy Firebase Data Connect backends backed by Cloud SQL for PostgreSQL.\n\n267\nfirebase-firestore-enterprise-native-mode\n\nGuides you through setting up and using Firestore Enterprise Native Mode.\n\n268\nfirebase-firestore-standard\n\nA complete guide for Cloud Firestore Standard Edition covering provisioning, security rules, SDK usage, and indexing.\n\n269\nfirebase-hosting-basics\n\nDeploys static websites, single-page apps, and simple microservices to Firebase's global CDN.\n\n270\nfirebase-security-rules-auditor\n\nAudits Firestore security rules by scoring them on a 1-5 scale and flagging specific vulnerabilities.\n\n271\nfirecrawl-build\n\nIntegrate Firecrawl into application code for web search, scraping, structured extraction, and browser interaction.\n\n272\nfirecrawl-build-interact\n\nIntegrate Firecrawl `/interact` for multi-step browser flows: clicks, form fills, pagination, and auth-aware navigation.\n\n273\nfirecrawl-build-onboarding\n\nSet up Firecrawl credentials and SDK in a project, including API key configuration and first integration.\n\n274\nfirecrawl-build-scrape\n\nIntegrate Firecrawl `/scrape` for single-page extraction to markdown, HTML, links, screenshots, or structured output.\n\n275\nfirecrawl-build-search\n\nIntegrate Firecrawl `/search` in product code and agents — discover URLs from a query and optionally hydrate content.\n\n276\nflutter-adding-home-screen-widgets\n\nAdds home screen widgets to Flutter apps on both Android and iOS.\n\n277\nflutter-animating-apps\n\nImplements animated effects, transitions, and motion in Flutter apps.\n\n278\nflutter-architecting-apps\n\nGuides you through structuring a Flutter app using a layered architecture with UI, Logic, and Data layers.\n\n279\nflutter-building-forms\n\nBuilds Flutter forms with validation and user input handling.\n\n280\nflutter-building-layouts\n\nHelps build and fix Flutter layouts using the constraint system, Row, Column, Stack, and related widgets.\n\n281\nflutter-building-plugins\n\nGuides you through creating Flutter plugins that bridge Dart code with platform-specific native APIs.\n\n282\nflutter-caching-data\n\nImplements caching strategies for Flutter apps, covering offline-first data sync, local persistence with SQLite and Hive, image and scroll caching, and FlutterEngine pre-warming on Android.\n\n283\nflutter-embedding-native-views\n\nEmbeds native Android, iOS, and macOS views directly into Flutter widget trees.\n\n284\nflutter-handling-concurrency\n\nRuns heavy computations in background Dart isolates so the Flutter UI stays responsive.\n\n285\nflutter-handling-http-and-json\n\nHandles HTTP requests and JSON serialization in Flutter apps.\n\n286\nflutter-implementing-navigation-and-routing\n\nHandles routing, navigation, and deep linking in Flutter apps.\n\n287\nflutter-improving-accessibility\n\nConfigures Flutter apps to work with screen readers and other assistive technologies.\n\n288\nflutter-interoperating-with-native-apis\n\nBridges Flutter apps with native platform APIs on Android, iOS, and the web.\n\n289\nflutter-localizing-apps\n\nConfigures a Flutter app for multiple languages and regions using ARB resource files and the gen-l10n tool.\n\n290\nflutter-managing-state\n\nHelps manage both local widget state and shared application state in Flutter apps.\n\n291\nflutter-reducing-app-size\n\nMeasures and optimizes Flutter app bundle sizes for deployment.\n\n292\nflutter-setting-up-on-linux\n\nWalks through setting up a Linux machine for Flutter desktop development.\n\n293\nflutter-setting-up-on-macos\n\nWalks through setting up a macOS machine for Flutter development, covering Xcode installation, CocoaPods configuration, and environment validation.\n\n294\nflutter-setting-up-on-windows\n\nWalks through setting up a Windows machine for Flutter development, covering SDK installation, PATH configuration, Visual Studio C++ workload setup, and platform-specific steps for both Windows desktop and Android targets.\n\n295\nflutter-testing-apps\n\nImplements unit, widget, and integration tests for Flutter apps.\n\n296\nflutter-theming-apps\n\nCustomizes Flutter app appearance through the theming system.\n\n297\nflutter-working-with-databases\n\nGuides you through building a structured data layer in Flutter apps using SQLite and other local databases.\n\n298\nfreeze\n\nRestricts Claude's Edit and Write operations to a single directory for the duration of a session.\n\n299\nfrontend-design\n\nA skill for building frontend interfaces with intentional aesthetic direction.\n\n300\nfrontend-design-review\n\nReviews UI implementations against three quality pillars (Frictionless, Quality Craft, Trustworthy) and design system specs, or builds production-grade frontend interfaces from scratch with a defined aesthetic direction.\n\n301\nfrontend-dev\n\nBuilds complete frontend pages by combining UI design, scroll animations, AI-generated media assets, and copywriting into a single workflow.\n\n302\nfrontend-skill\n\nA set of design rules for Claude that enforces composition-first frontend work: full-bleed heroes, brand-first hierarchy, cardless layouts, and intentional motion.\n\n303\nfrontend-ui-dark-ts\n\nA React UI starter built around a dark color system, glassmorphism utility classes, and Framer Motion animation variants.\n\n304\nfullstack-dev\n\nA workflow guide for building full-stack applications, covering backend architecture, frontend-backend integration, auth, real-time features, and production hardening.\n\n305\nfunctions\n\nDeploys browser automation scripts as serverless cloud functions on Browserbase.\n\n306\nfund\n\nAdds USDC to a Coinbase-powered wallet through Coinbase Onramp.\n\n307\ngemini-api-dev\n\nCovers building applications with the Gemini API across Python, JavaScript/TypeScript, Go, and Java.\n\n308\ngemini-interactions-api\n\nA unified API for calling Gemini models and agents from Python and TypeScript.\n\n309\ngemini-live-api-dev\n\nCovers building real-time, bidirectional streaming apps with the Gemini Live API over WebSockets.\n\n310\ngh-address-comments\n\nReads open PR comments and review threads on the current branch using the gh CLI, then helps you address selected ones.\n\n311\ngh-fix-ci\n\nDebugs failing GitHub Actions checks on a PR using the `gh` CLI.\n\n312\ngif-sticker-maker\n\nTakes a photo of a person, pet, object, or logo and generates 4 animated GIF stickers in Funko Pop / Pop Mart figurine style.\n\n313\ngithub\n\nProvides patterns for working with GitHub via the gh CLI, covering pull request creation, stacked PR workflows, squash merges, rebasing, and repository automation.\n\n314\ngithub-issue-creator\n\nConverts messy input — error logs, voice dictations, raw notes, screenshots — into structured GitHub issues following a consistent markdown template.\n\n315\ngraphql-operations\n\nA guide for writing GraphQL queries, mutations, and subscriptions that follow established conventions.\n\n316\ngraphql-schema\n\nA reference guide for designing GraphQL schemas that are clean, evolvable, and client-friendly.\n\n317\ngsap-core\n\nGSAP Core is the base animation engine for the GreenSock Animation Platform.\n\n318\ngsap-frameworks\n\nHandles GSAP animation setup and teardown for Vue, Nuxt, Svelte, and SvelteKit.\n\n319\ngsap-performance\n\nGuides GSAP animation optimization for consistent 60fps output.\n\n320\ngsap-plugins\n\nA collection of GSAP plugins covering scroll animation, layout transitions, drag interactions, SVG drawing and morphing, text splitting, physics, and custom easing.\n\n321\ngsap-react\n\nCovers GSAP animation setup in React and Next.\n\n322\ngsap-scrolltrigger\n\nScrollTrigger is a GSAP plugin that links animations to scroll position.\n\n323\ngsap-timeline\n\nGSAP Timeline is a sequencing layer on top of GSAP that lets you coordinate multiple tweens in order, in parallel, or at precise offsets using a position parameter.\n\n324\ngsap-utils\n\ngsap.\n\n325\ngstack-upgrade\n\nUpgrades gstack to the latest version.\n\n326\nguard\n\nGuard mode combines two safety layers: destructive command warnings (rm -rf, DROP TABLE, force-push) and directory-scoped edit restrictions.\n\n327\ngws-admin-reports\n\nWraps the Google Workspace Admin SDK Reports API to pull audit logs and usage statistics from a command line.\n\n328\ngws-calendar\n\nA CLI skill for the Google Calendar API.\n\n329\ngws-chat\n\nManages Google Chat spaces, messages, memberships, and media through the `gws` CLI.\n\n330\ngws-classroom\n\nManages Google Classroom courses, rosters, coursework, and invitations via the `gws` CLI.\n\n331\ngws-docs\n\nReads and writes Google Docs through the gws CLI.\n\n332\ngws-drive\n\nA CLI wrapper around the Google Drive v3 API.\n\n333\ngws-events\n\nManages event subscriptions for Google Workspace resources.\n\n334\ngws-forms\n\nA CLI skill for interacting with Google Forms via the `gws` command-line tool.\n\n335\ngws-gmail\n\nA CLI skill for Gmail that lets agents send, read, reply to, forward, and manage email through the Google Workspace CLI.\n\n336\ngws-keep\n\nManages Google Keep notes via the command line using the gws CLI.\n\n337\ngws-modelarmor\n\nGoogle Model Armor filters user-generated prompts and model responses for safety using configurable templates.\n\n338\ngws-people\n\nManages Google Contacts and contact groups through the People API.\n\n339\ngws-shared\n\nShared foundation for the gws CLI that covers OAuth and service account authentication, global output flags, and common request patterns across all Google Workspace services.\n\n340\ngws-sheets\n\nReads and writes Google Sheets spreadsheets via the Sheets v4 API.\n\n341\ngws-slides\n\nReads and writes Google Slides presentations via the `gws` CLI.\n\n342\ngws-tasks\n\nManages Google Tasks through the `gws` CLI.\n\n343\ngws-workflow\n\nA cross-service workflow layer for Google Workspace that ties together Calendar, Gmail, Tasks, Drive, and Chat through a unified CLI.\n\n344\nhf-cli\n\nThe `hf` CLI manages Hugging Face Hub repositories, models, datasets, and Spaces from the terminal.\n\n345\nhugging-face-dataset-viewer\n\nRead-only API client for the Hugging Face Dataset Viewer.\n\n346\nhugging-face-datasets\n\nManages datasets on the Hugging Face Hub.\n\n347\nhugging-face-evaluation\n\nAdds and manages evaluation results in Hugging Face model cards using the model-index metadata format.\n\n348\nhugging-face-jobs\n\nRuns Python workloads on Hugging Face managed infrastructure — CPUs, GPUs, or TPUs — without any local setup.\n\n349\nhugging-face-model-trainer\n\nTrains and fine-tunes language models on Hugging Face's cloud GPU infrastructure using TRL.\n\n350\nhugging-face-paper-pages\n\nFetches and parses Hugging Face paper pages using arXiv IDs or HF paper URLs.\n\n351\nhugging-face-paper-publisher\n\nPublishes and manages research papers on the Hugging Face Hub.\n\n352\nhugging-face-tool-builder\n\nBuilds reusable command-line scripts that interact with the Hugging Face API to fetch, filter, and process models, datasets, spaces, and papers.\n\n353\nhugging-face-trackio\n\nTrackio is an experiment tracking library for ML training.\n\n354\nhugging-face-vision-trainer\n\nTrains and fine-tunes vision models on Hugging Face Jobs cloud GPUs, covering object detection (D-FINE, RT-DETR v2, DETR, YOLOS), image classification (timm models including MobileNetV3, ResNet, ViT), and SAM/SAM2 segmentation.\n\n355\nhuggingface-gradio\n\nGradio is a Python library for building web-based UIs for machine learning models and data tools.\n\n356\nimagegen\n\nGenerates and edits raster images inside a Codex session.\n\n357\nimages-search\n\nSearches for images using the Brave Search API.\n\n358\ninsecure-defaults\n\nDetects fail-open security vulnerabilities where applications run insecurely due to missing or weak configuration.\n\n359\ninstall-duckdb\n\nInstalls or updates DuckDB extensions from the core registry or community repositories.\n\n360\ninternal-comms\n\nWrites internal communications in company-specific formats.\n\n361\ninvestigate\n\nA structured debugging workflow that enforces root cause analysis before any fix is applied.\n\n362\nios-application-dev\n\nA reference guide for building iOS apps with UIKit, SnapKit, and SwiftUI.\n\n363\njupyter-notebook\n\nScaffolds and edits Jupyter notebooks for experiments and tutorials using a helper script and bundled templates.\n\n364\nknowledge-capture\n\nConverts chat conversations and discussions into structured Notion pages.\n\n365\nland-and-deploy\n\nPicks up where /ship leaves off.\n\n366\nlinear\n\nConnects to Linear via MCP to read, create, and update issues, projects, and team workflows.\n\n367\nllm-context\n\nReturns pre-extracted web content (text, tables, code blocks) from Brave Search, ranked by relevance and ready for LLM consumption.\n\n368\nlocal-descriptions\n\nFetches AI-generated text descriptions for points of interest (POIs) using the Brave Search API.\n\n369\nlocal-pois\n\nRetrieves detailed local business and point-of-interest information through the Brave Search API.\n\n370\nm365-agents-dotnet\n\nMicrosoft 365 Agents SDK for .\n\n371\nm365-agents-py\n\nPython SDK for building agents that run in Microsoft Teams, Microsoft 365, and Copilot Studio.\n\n372\nm365-agents-ts\n\nMicrosoft 365 Agents SDK for TypeScript/Node.\n\n373\nmcp-builder\n\nA development guide for building MCP (Model Context Protocol) servers that connect LLMs to external APIs and services.\n\n374\nmcp-builder\n\nA guide for building MCP (Model Context Protocol) servers that let LLMs interact with external APIs and services.\n\n375\nmeeting-intelligence\n\nPrepares meeting materials by pulling context from Notion pages, layering in Claude's research and industry knowledge, then generating two documents: an internal pre-read for attendees and an external-facing agenda.\n\n376\nmeme-rush\n\nMeme Rush tracks meme token launches across Pump.\n\n377\nmicrosoft-azure-webjobs-extensions-authentication-events-dotnet\n\nAzure Functions extension for handling Microsoft Entra ID custom authentication events.\n\n378\nminimax-docx\n\nCreates, edits, and formats DOCX files using OpenXML SDK (.\n\n379\nminimax-pdf\n\nGenerates print-ready PDFs through three routes: creating documents from scratch with a token-based design system, filling form fields in existing PDFs, and reformatting existing documents into styled output.\n\n380\nminimax-xlsx\n\nHandles Excel and CSV/TSV files through direct XML manipulation rather than library round-trips.\n\n381\nmodern-python\n\nConfigures Python projects with uv, ruff, and ty — the modern replacements for pip, flake8/black, and mypy.\n\n382\nmonetize-service\n\nScaffolds an Express server that charges USDC per request using the x402 payment protocol.\n\n383\nmongodb-connection\n\nConfigures MongoDB client connections across supported driver languages.\n\n384\nmongodb-mcp-setup\n\nWalks through configuring the MongoDB MCP server authentication.\n\n385\nmongodb-natural-language-querying\n\nGenerates read-only MongoDB find queries and aggregation pipelines from natural language requests.\n\n386\nmongodb-query-optimizer\n\nDiagnoses slow MongoDB queries and recommends indexes based on explain plans, existing collection indexes, and Atlas Performance Advisor output.\n\n387\nmongodb-schema-design\n\nA collection of MongoDB schema design patterns and anti-patterns from MongoDB, covering embed-vs-reference decisions, the 16MB document limit, schema validation, and 11 data modeling patterns like bucket, polymorphic, and time series.\n\n388\nmongodb-search-and-ai\n\nHelps MongoDB users pick between Atlas Search, Vector Search, and Hybrid Search, then build the indexes and aggregation pipelines to match.\n\n389\nnative-data-fetching\n\nCovers network requests and data fetching in Expo and React Native apps.\n\n390\nneon-postgres\n\nNeon is a serverless Postgres platform with autoscaling, database branching, and scale-to-zero.\n\n391\nneon-postgres-egress-optimizer\n\nDiagnoses and fixes Postgres query patterns that cause excessive data transfer from a database to an application.\n\n392\nnetlify-ai-gateway\n\nNetlify AI Gateway is a proxy layer that routes requests to AI models from OpenAI, Anthropic, and Google through Netlify's infrastructure.\n\n393\nnetlify-blobs\n\nNetlify Blobs is zero-config object storage built into the Netlify platform.\n\n394\nnetlify-caching\n\nControls how Netlify's CDN caches responses from functions, edge functions, and static assets.\n\n395\nnetlify-cli-and-deploy\n\nCovers the Netlify CLI for site setup, deployment, and local development.\n\n396\nnetlify-config\n\nCovers the complete netlify.\n\n397\nnetlify-database\n\nNetlify DB provisions a managed Neon Postgres database for Netlify projects without requiring a separate Neon account.\n\n398\nnetlify-deploy\n\nDeploys web projects to Netlify using the Netlify CLI.\n\n399\nnetlify-deploy\n\nDeploys web projects to Netlify using the Netlify CLI via npx.\n\n400\nnetlify-edge-functions\n\nNetlify Edge Functions run on a globally distributed Deno runtime, executing code at the network edge closest to each user.\n\n401\nnetlify-forms\n\nNetlify Forms collects HTML form submissions without any server-side code.\n\n402\nnetlify-frameworks\n\nCovers how to deploy web frameworks on Netlify, including Vite/React, Astro, TanStack Start, Next.\n\n403\nnetlify-functions\n\nNetlify Functions lets you write serverless functions that run on Netlify's infrastructure.\n\n404\nnetlify-image-cdn\n\nNetlify Image CDN is a built-in image transformation endpoint available on every Netlify site.\n\n405\nnew-terraform-provider\n\nScaffolds a new Terraform provider project using the Plugin Framework.\n\n406\nnews-search\n\nSearches Brave's news index and returns articles with titles, URLs, descriptions, ages, and thumbnails.\n\n407\nnext-best-practices\n\nA skill for writing and reviewing Next.\n\n408\nnext-cache-components\n\nNext.\n\n409\nnext-upgrade\n\nUpgrades a Next.\n\n410\nnotion-knowledge-capture\n\nConverts conversations, chat threads, and meeting notes into structured Notion pages.\n\n411\nnotion-meeting-intelligence\n\nPulls context from Notion pages, drafts agendas and pre-reads, and enriches meeting materials with Codex research.\n\n412\nnotion-research-documentation\n\nSearches across Notion pages, pulls relevant content, and produces structured output: briefs, summaries, comparisons, or full reports with citations linking back to source pages.\n\n413\nnotion-spec-to-implementation\n\nReads a Notion spec page and produces a linked implementation plan, task list, and progress tracking setup directly in Notion.\n\n414\noffice-hours\n\nA two-mode office hours simulation that saves a design document.\n\n415\nopenai-docs\n\nFetches and surfaces current OpenAI developer documentation through an MCP server, covering the Chat Completions API, Responses API, Realtime API, Agents SDK, and related products.\n\n416\norganization\n\nThe Better Auth organization plugin adds multi-tenant support to your auth setup.\n\n417\npay-for-service\n\nCalls paid API endpoints that use the x402 protocol, automatically handling USDC payments on Base.\n\n418\npdf\n\nHandles PDF operations in code: reading, writing, merging, splitting, rotating, watermarking, encrypting, extracting text and tables, OCR on scanned pages, and creating new PDFs from scratch.\n\n419\npdf\n\nGuides Claude through reading, generating, and validating PDF files.\n\n420\nperformance\n\nAudits web performance against Lighthouse metrics and a fixed resource budget, then returns concrete fixes for loading, rendering, and runtime bottlenecks.\n\n421\nplan-ceo-review\n\nReviews development plans from a CEO/founder perspective before implementation.\n\n422\nplan-design-review\n\nReviews UI/UX design decisions in a plan file before implementation.\n\n423\nplan-eng-review\n\nRuns an engineering manager-style review on a plan before coding starts.\n\n424\nplaywright\n\nAutomates a real browser from the terminal using playwright-cli.\n\n425\nplaywright-interactive\n\nRuns a persistent Playwright session inside a js_repl kernel to debug web and Electron apps without restarting the browser between iterations.\n\n426\npodcast-generation\n\nConnects a React frontend to a Python FastAPI backend over WebSocket to generate spoken audio from text using Azure OpenAI's GPT Realtime Mini model.\n\n427\npostgres-best-practices\n\nA collection of Postgres optimization rules organized by impact, covering query performance, connection management, RLS, schema design, and concurrency.\n\n428\npptx\n\nHandles everything involving .\n\n429\npptx-generator\n\nGenerates, edits, and reads PowerPoint files using PptxGenJS and markitdown.\n\n430\nproperty-based-testing\n\nGuides property-based testing across Python, JavaScript, Rust, and Solidity/Vyper.\n\n431\nprovider-actions\n\nA guide for implementing Terraform Provider Actions using the Plugin Framework.\n\n432\nprovider-resources\n\nImplements Terraform Provider resources and data sources using the Plugin Framework.\n\n433\nprovider-test-patterns\n\nPatterns for writing Terraform provider acceptance tests using terraform-plugin-testing with the Plugin Framework.\n\n434\nproviders\n\nDisplays configuration details and setup instructions for Better Auth authentication providers.\n\n435\npydantic-models-py\n\nGenerates Pydantic v2 model sets following a multi-model pattern with Base, Create, Update, Response, and InDB variants.\n\n436\nqa\n\nA QA skill that runs browser-based testing on web applications, finds bugs, and fixes them in source code.\n\n437\nqa-only\n\nRuns a structured QA pass on a web application and produces a report with a health score, screenshots, and reproduction steps.\n\n438\nquery\n\nRuns SQL queries against DuckDB databases or files like CSV and Parquet.\n\n439\nquery-address-info\n\nFetches all token holdings for a given wallet address on a specified blockchain.\n\n440\nquery-onchain-data\n\nQueries decoded onchain data on Base (events, transactions, blocks) through the CDP SQL API using x402 micropayments.\n\n441\nquery-token-audit\n\nQueries the Binance Web3 token security API to audit a contract address before trading.\n\n442\nquery-token-info\n\nQueries token data from Binance Web3 APIs across BSC, Base, and Solana.\n\n443\nreact-components\n\nConverts Stitch design screens into modular React components with TypeScript interfaces.\n\n444\nreact-flow-node-ts\n\nGenerates React Flow node components with TypeScript types and Zustand store integration.\n\n445\nreact-native-best-practices\n\nA performance optimization guide for React Native apps, based on Callstack's Ultimate Guide to React Native Optimization.\n\n446\nread-file\n\nReads and explores data files in CSV, JSON, Parquet, Avro, Excel, spatial, and other formats using DuckDB.\n\n447\nread-memories\n\nSearches past Claude Code session logs using DuckDB to recover context from previous conversations.\n\n448\nrefactor-module\n\nTransforms monolithic Terraform configurations into reusable modules following HashiCorp's module design principles.\n\n449\nremotion\n\nTurns Stitch project screens into walkthrough videos using Remotion.\n\n450\nremotion\n\nRemotion is a framework for creating videos programmatically using React.\n\n451\nrender-deploy\n\nDeploys applications to Render by analyzing the codebase, generating a render.\n\n452\nreplicate\n\nReplicate lets you run AI models via API, including image generation, language models, and other ML tasks.\n\n453\nresearch-documentation\n\nSearches your Notion workspace, pulls content from relevant pages, and writes structured research documents back into Notion.\n\n454\nretro\n\nRuns a weekly engineering retrospective by analyzing git history, commit patterns, and code quality signals.\n\n455\nreview\n\nPre-landing PR review that analyzes a branch's diff against the base branch.\n\n456\nrover\n\nCLI tool for managing GraphQL schemas in Apollo GraphOS.\n\n457\nrun-acceptance-tests\n\nRuns acceptance tests for Terraform providers using Go's test runner.\n\n458\nrust-best-practices\n\nA set of Rust coding guidelines drawn from Apollo GraphQL's internal handbook.\n\n459\nsandbox-sdk\n\nBuild sandboxed applications for secure code execution on Cloudflare Workers using the Sandbox SDK.\n\n460\nsanity-best-practices\n\nBest practices and integration guides for Sanity development, maintained by the Sanity team.\n\n461\nscreenshot\n\nCaptures screenshots at the OS level across macOS, Linux, and Windows.\n\n462\nsearch\n\nSearches the web via the Browserbase API and returns structured results with titles, URLs, authors, and publication dates.\n\n463\nsearch-for-service\n\nSearches and browses the x402 bazaar marketplace to find paid API services.\n\n464\nsecurity-best-practices\n\nReviews Python, JavaScript/TypeScript, and Go codebases for security vulnerabilities using language- and framework-specific guidance.\n\n465\nsecurity-ownership-map\n\nAnalyzes git history to build a bipartite graph of people and files, then computes bus factor, sensitive-code ownership, and co-change clusters.\n\n466\nsecurity-threat-model\n\nPerforms AppSec-grade threat modeling on a specific repository or code path.\n\n467\nsemgrep-rule-creator\n\nCreates custom Semgrep rules for detecting security vulnerabilities and code patterns.\n\n468\nsemgrep-rule-variant-creator\n\nTakes an existing Semgrep rule and ports it to one or more target languages.\n\n469\nsend-usdc\n\nSends USDC to any Ethereum address or ENS name on Base.\n\n470\nsentry\n\nConnects to the Sentry API to read production error data.\n\n471\nsentry-android-sdk\n\nFull Sentry SDK setup for Android — error monitoring, tracing, profiling, session replay, and logging.\n\n472\nsentry-browser-sdk\n\nFull Sentry SDK setup for browser JavaScript — error monitoring, tracing, session replay, and logging.\n\n473\nsentry-cloudflare-sdk\n\nFull Sentry SDK setup for Cloudflare Workers and Pages, including Durable Objects, Queues, Workflows, and Hono.\n\n474\nsentry-cocoa-sdk\n\nFull Sentry SDK setup for Apple platforms — iOS, macOS, tvOS, watchOS, and visionOS.\n\n475\nsentry-code-review\n\nReview code changes using Sentry issue and trace context from the current branch or a specific PR.\n\n476\nsentry-create-alert\n\nCreate Sentry alerts and workflow automations with email, Slack, PagerDuty, Discord, and more.\n\n477\nsentry-dotnet-sdk\n\nFull Sentry SDK setup for .NET — covers ASP.NET Core, MAUI, WPF, WinForms, Blazor, Azure Functions, and more.\n\n478\nsentry-elixir-sdk\n\nFull Sentry SDK setup for Elixir, Phoenix, Plug, LiveView, Oban, and Quantum applications.\n\n479\nsentry-feature-setup\n\nConfigure Sentry features beyond basic SDK setup: AI monitoring, OpenTelemetry pipelines, and alerts.\n\n480\nsentry-fix-issues\n\nFind and fix Sentry issues with full error context — stack traces, breadcrumbs, traces, and tags via MCP.\n\n481\nsentry-flutter-sdk\n\nFull Sentry SDK setup for Flutter and Dart across Android, iOS, macOS, Linux, Windows, and Web.\n\n482\nsentry-go-sdk\n\nFull Sentry SDK setup for Go — net/http, Gin, Echo, Fiber, FastHTTP, Iris, and Negroni.\n\n483\nsentry-nestjs-sdk\n\nFull Sentry SDK setup for NestJS with Express or Fastify, GraphQL, microservices, WebSockets, and background jobs.\n\n484\nsentry-nextjs-sdk\n\nFull Sentry SDK setup for Next.js 13+ — App Router and Pages Router, with tracing, replay, and AI monitoring.\n\n485\nsentry-node-sdk\n\nFull Sentry SDK setup for Node.js, Bun, and Deno server-side runtimes.\n\n486\nsentry-otel-exporter-setup\n\nConfigure the OpenTelemetry Collector with the Sentry Exporter for multi-project routing and traces/logs.\n\n487\nsentry-php-sdk\n\nFull Sentry SDK setup for PHP — plain PHP, Laravel, and Symfony applications.\n\n488\nsentry-pr-code-review\n\nReview PR comments from Seer Bug Prediction and Sentry feedback, and act on the findings.\n\n489\nsentry-python-sdk\n\nFull Sentry SDK setup for Python — Django, Flask, FastAPI, Celery, Starlette, AIOHTTP, Tornado, and more.\n\n490\nsentry-react-native-sdk\n\nFull Sentry SDK setup for React Native and Expo (managed, bare, and vanilla React Native).\n\n491\nsentry-react-sdk\n\nFull Sentry SDK setup for React — React Router v5-v7, TanStack Router, Redux, Vite, and webpack.\n\n492\nsentry-ruby-sdk\n\nFull Sentry SDK setup for Ruby — Rails, Sinatra, Rack, Sidekiq, and Resque, plus migrations from other providers.\n\n493\nsentry-sdk-setup\n\nSet up Sentry in any language or framework — detects platform and routes to the right SDK skill.\n\n494\nsentry-sdk-skill-creator\n\nCreate a new Sentry SDK skill bundle for a platform, with wizard flow and feature reference files.\n\n495\nsentry-sdk-upgrade\n\nUpgrade the Sentry JavaScript SDK across major versions — migrate APIs and resolve breaking changes.\n\n496\nsentry-setup-ai-monitoring\n\nSet up Sentry AI Agent Monitoring for OpenAI, Anthropic, Vercel AI, LangChain, Google GenAI, and Pydantic AI.\n\n497\nsentry-svelte-sdk\n\nFull Sentry SDK setup for Svelte and SvelteKit — error monitoring, tracing, session replay, and logging.\n\n498\nsentry-workflow\n\nEnd-to-end Sentry workflow — fix production issues and review code with Sentry context in one flow.\n\n499\nseo\n\nApplies technical SEO, on-page optimization, and structured data based on Lighthouse audits and Google Search guidelines.\n\n500\nseo-aeo-best-practices\n\nCovers SEO and AEO implementation across metadata, Open Graph tags, sitemaps, robots.\n\n501\nsetup-browser-cookies\n\nImports cookies from an installed Chromium browser into a headless Playwright session.\n\n502\nsetup-deploy\n\nDetects your deployment platform (Fly.\n\n503\nshadcn-ui\n\nA skill for working with shadcn/ui, a set of copy-paste React components built on Radix UI and Tailwind CSS.\n\n504\nshader-dev\n\nA GLSL shader skill covering 36 techniques for real-time visual effects in ShaderToy-compatible code.\n\n505\nsharp-edges\n\nEvaluates whether APIs, configurations, and interfaces are resistant to developer misuse.\n\n506\nship\n\nRuns the full ship workflow from a feature branch in one command.\n\n507\nskill-creator\n\nA skill for building, testing, and refining other skills.\n\n508\nskill-creator\n\nA guide for creating and structuring Agent Skills focused on Apollo GraphQL and GraphQL development.\n\n509\nskill-creator\n\nA guide for building modular skills that extend AI agent capabilities, focused on Azure SDKs and Microsoft Foundry services.\n\n510\nslack-gif-creator\n\nCreates animated GIFs sized and optimized for Slack, either as emoji (128x128) or message attachments (480x480).\n\n511\nslides\n\nBuilds and edits PowerPoint decks (.\n\n512\nsora\n\nGenerates and manages Sora video jobs from text prompts.\n\n513\nspec-to-code-compliance\n\nVerifies that a smart contract codebase implements exactly what its specification documents describe.\n\n514\nspec-to-implementation\n\nReads a spec page in Notion, extracts requirements, and creates a linked implementation plan with individual tasks in your task database.\n\n515\nspeech\n\nGenerates spoken audio from text using the OpenAI Audio API.\n\n516\nspellcheck\n\nChecks a search query for spelling errors and returns corrected alternatives.\n\n517\nspot\n\nBinance Spot connects to the Binance REST API to place and manage spot orders, query market data, and retrieve account information.\n\n518\nspreadsheet\n\nHandles spreadsheet creation, editing, and analysis for .\n\n519\nstatic-analysis\n\nStatic analysis toolkit combining CodeQL, Semgrep, and SARIF parsing for security vulnerability detection.\n\n520\nstitch-loop\n\nA skill that teaches agents to build multi-page websites using Stitch through a self-sustaining loop.\n\n521\nstripe-best-practices\n\nGuides decisions when building Stripe integrations — which API to use (Checkout Sessions vs PaymentIntents vs Setup Intents), how to configure Connect platforms with Accounts v2, and how to set up billing, Treasury financial accounts, and embedded payment UIs.\n\n522\nsuggest\n\nProvides query autocomplete suggestions through the Brave Search API.\n\n523\ntemplate\n\nA starter scaffold for building new agent skills.\n\n524\nterraform-search-import\n\nDiscovers existing cloud resources using declarative Terraform Search queries and bulk imports them into Terraform state.\n\n525\nterraform-stacks\n\nTerraform Stacks adds a configuration layer above traditional Terraform modules for managing infrastructure across multiple environments, regions, and cloud accounts.\n\n526\nterraform-style-guide\n\nGenerates Terraform HCL code following HashiCorp's official style conventions.\n\n527\nterraform-test\n\nTerraform's built-in testing framework for writing and running tests against Terraform configurations.\n\n528\ntesting-handbook-skills\n\nA meta-skill that reads the Trail of Bits Application Security Testing Handbook and generates Claude Code skills from it.\n\n529\ntheme-factory\n\nTheme Factory provides 10 pre-built color and font themes for styling artifacts like slides, docs, reports, and HTML pages.\n\n530\ntinybird-best-practices\n\nEncodes Tinybird file format rules, SQL constraints, and optimization patterns for datasources, pipes, endpoints, materialized views, and deduplication.\n\n531\ntinybird-cli-guidelines\n\nCovers the Tinybird CLI (tb) for local development, deployments, data operations, and workspace management.\n\n532\ntinybird-python-sdk-guidelines\n\nProvides coding guidelines for the tinybird-sdk Python package.\n\n533\ntinybird-typescript-sdk-guidelines\n\nGuidelines for using the @tinybirdco/sdk package to define Tinybird datasources, pipes, and queries in TypeScript with full type inference.\n\n534\ntrade\n\nSwaps and trades tokens on the Base network using the CDP Swap API.\n\n535\ntrading-signal\n\nFetches on-chain Smart Money trading signals from Binance Web3, covering buy/sell direction, trigger price, current price, max gain percentage, and exit rate for tokens on Solana and BSC.\n\n536\ntranscribe\n\nTranscribes audio files to text using OpenAI's transcription models.\n\n537\ntransformers.js\n\nTransformers.\n\n538\ntwoFactor\n\nAdds two-factor authentication to Better Auth apps via TOTP authenticator apps, email/SMS OTP codes, and backup codes.\n\n539\ntypefully\n\nTypefully is a social media drafting and scheduling tool.\n\n540\nui-test\n\nRuns adversarial UI tests in a real browser by analyzing git diffs or exploring an app freely.\n\n541\nunfreeze\n\nClears the directory restriction set by /freeze, restoring edit access to all directories in the current session.\n\n542\nupgrade-stripe\n\nHandles the process of upgrading Stripe API versions, server-side SDKs, Stripe.\n\n543\nupgrading-expo\n\nGuides upgrading Expo SDK versions step by step, from running install and fix commands to handling breaking changes, deprecated packages, and native cache clearing.\n\n544\nupgrading-react-native\n\nHandles React Native version upgrades end-to-end: fetching template diffs from rn-diff-purge, updating package.\n\n545\nuse-dom\n\nexpo/use-dom lets you run React web components inside a webview on iOS and Android while rendering them natively on web.\n\n546\nvariant-analysis\n\nVariant analysis skill for finding similar vulnerabilities across a codebase after an initial bug is identified.\n\n547\nvercel-deploy\n\nDeploys projects to Vercel from within an agent session.\n\n548\nvertex-ai-api-dev\n\nGuides development with the Gemini API on Google Cloud Vertex AI using the Gen AI SDK.\n\n549\nvideos-search\n\nSearches for videos across the web using the Brave Search API.\n\n550\nvoltagent-best-practices\n\nReference guide for VoltAgent architectural patterns and conventions.\n\n551\nvoltagent-core-reference\n\nReference skill for the VoltAgent class in @voltagent/core.\n\n552\nvoltagent-docs-bundle\n\nReads VoltAgent documentation bundled inside node_modules/@voltagent/core/docs.\n\n553\nweb-artifacts-builder\n\nBuilds multi-component HTML artifacts for claude.\n\n554\nweb-perf\n\nAudits web page performance using Chrome DevTools MCP.\n\n555\nweb-quality-audit\n\nRuns a web quality audit across performance, accessibility, SEO, and best practices based on Google Lighthouse checks.\n\n556\nweb-search\n\nSearches the web using Brave's Search API and returns ranked results with snippets, URLs, and thumbnails.\n\n557\nwebapp-testing\n\nAutomates interaction with local web applications using Python Playwright.\n\n558\nwinui-app\n\nScaffolds, develops, and maintains WinUI 3 desktop applications using C#, the Windows App SDK, and CommunityToolkit components.\n\n559\nwordpress-router\n\nClassifies a WordPress codebase at the start of a task and routes to the correct workflow or skill.\n\n560\nworkers-best-practices\n\nReviews and authors Cloudflare Workers code against production best practices, including wrangler.jsonc and common anti-patterns.\n\n561\nwp-abilities-api\n\nCovers the WordPress Abilities API introduced in WP 6.\n\n562\nwp-block-development\n\nCovers the full lifecycle of WordPress Gutenberg block development: creating and registering blocks, editing block.\n\n563\nwp-block-themes\n\nCovers WordPress block theme development: editing theme.\n\n564\nwp-interactivity-api\n\nHandles WordPress Interactivity API development and debugging.\n\n565\nwp-performance\n\nA backend-only agent skill for diagnosing and fixing WordPress performance problems.\n\n566\nwp-phpstan\n\nConfigures and runs PHPStan static analysis in WordPress codebases.\n\n567\nwp-playground\n\nwp-playground runs disposable WordPress instances in the browser or locally via CLI, using WebAssembly and SQLite.\n\n568\nwp-plugin-development\n\nGuides development of WordPress plugins from initial architecture through release packaging.\n\n569\nwp-project-triage\n\nInspects a WordPress repository and outputs a structured JSON report describing the project kind, tooling, tests, and version hints.\n\n570\nwp-rest-api\n\nHandles everything related to the WordPress REST API layer: registering custom routes and controller classes, validating request arguments with JSON Schema, managing authentication with nonces or application passwords, and exposing custom post types and taxonomies via REST endpoints.\n\n571\nwp-wpcli-and-ops\n\nHandles WordPress operational tasks via WP-CLI: database exports and imports, URL and domain migrations with search-replace, plugin and theme management, cron inspection, cache flushing, and multisite operations.\n\n572\nwpds\n\nAssists with building UI components and interfaces using the WordPress Design System (WPDS).\n\n573\nwrangler\n\nWrangler is the CLI for Cloudflare Workers.\n\n574\nx402\n\nLets you discover and call paid API endpoints using the x402 payment protocol.\n\n575\nxlsx\n\nReads, writes, and edits Excel and tabular files (.\n\n576\nyeet\n\nAutomates the full Git workflow from staging to pull request in a single command using the GitHub CLI.\n\n577\nzustand-store-ts\n\nGenerates Zustand stores with TypeScript types, subscribeWithSelector middleware, and a clear split between state interfaces and action interfaces.\n\nMaintained by VoltAgent team\nofficialskills.sh\n— Agent skills by official dev teams. No AI-generated filler.\nTerms\nPrivacy\nFeedback",
+  "stats": {
+    "bodyTextLength": 67929,
+    "linkCount": 618,
+    "buttonCount": 44,
+    "inputCount": 1,
+    "cardishCount": 0,
+    "scrollHeight": 2097
+  }
+}

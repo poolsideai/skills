@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>laguna-task-contract - Poolside Skills</title>
+    <meta
+      name="description"
+      content="A Poolside skill detail page prototype for laguna-task-contract."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Poolside Skills home">
+        <span class="brand-mark">ps</span>
+        <span>Poolside Skills</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html#catalog">Catalog</a>
+        <a href="workflows.html">Workflows</a>
+        <a href="index.html#evals">Evals</a>
+        <a href="https://github.com/poolsideai/skills">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="detail-main">
+      <a class="back-link" href="index.html">Back to catalog</a>
+
+      <section class="detail-layout">
+        <article class="detail-panel">
+          <div class="detail-kicker">Public draft</div>
+          <div class="detail-title-row">
+            <h1>laguna-task-contract</h1>
+            <span>Poolside</span>
+          </div>
+          <p class="lead">
+            Turn an open-ended user or orchestrator request into a compact,
+            model-specific task contract for Laguna XS.2 workers or Laguna M.1
+            routers.
+          </p>
+
+          <dl class="meta-strip">
+            <div>
+              <dt>Difficulty</dt>
+              <dd>Intermediate</dd>
+            </div>
+            <div>
+              <dt>Category</dt>
+              <dd>Agent workflow</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>Verified draft</dd>
+            </div>
+            <div>
+              <dt>Tokens</dt>
+              <dd>6.2k</dd>
+            </div>
+          </dl>
+
+          <section class="detail-section">
+            <h2>Works with</h2>
+            <div class="tags">
+              <span>Laguna XS.2</span>
+              <span>Laguna M.1</span>
+              <span>pool exec</span>
+              <span>JSON schema</span>
+              <span>patch validators</span>
+            </div>
+          </section>
+
+          <section class="contract-demo" aria-labelledby="demo-title">
+            <div class="demo-header">
+              <h2 id="demo-title">Contract preview</h2>
+              <span>XS worker mode</span>
+            </div>
+            <pre><code>model_mode: laguna_xs_worker
+task_type: single_file_patch
+goal: Fix the failing parser edge case in one file.
+constraints:
+  max_files_to_modify: 1
+  output_format: unified_diff
+validator:
+  type: command
+  command: pnpm test parser-edge-case
+repair_policy:
+  max_repairs: 1
+  return_only_corrected_output: true</code></pre>
+          </section>
+
+          <section class="detail-section">
+            <h2>Use when</h2>
+            <ul class="plain-list">
+              <li>
+                A task needs to be handed to Laguna XS.2 as a narrow worker.
+              </li>
+              <li>
+                A router needs to choose between repo-map, CI log reduction,
+                patching, or review skills.
+              </li>
+              <li>
+                The output needs schema, patch, command, or test validation
+                before it is trusted.
+              </li>
+            </ul>
+          </section>
+
+          <section class="detail-section">
+            <h2>Validation</h2>
+            <div class="validation-grid">
+              <div>
+                <strong>Schema</strong
+                ><span
+                  >Contract validates against the task or router schema.</span
+                >
+              </div>
+              <div>
+                <strong>Scope</strong
+                ><span
+                  >XS contracts cannot request broad planning or multi-file
+                  refactors.</span
+                >
+              </div>
+              <div>
+                <strong>Repair</strong
+                ><span
+                  >Invalid output gets one bounded correction attempt.</span
+                >
+              </div>
+              <div>
+                <strong>Escalation</strong
+                ><span
+                  >Failures report the blocking evidence instead of continuing
+                  loosely.</span
+                >
+              </div>
+            </div>
+          </section>
+        </article>
+
+        <aside class="side-panel" aria-label="Skill actions and metadata">
+          <div class="action-block primary-action">
+            <h2>Use this skill</h2>
+            <p>
+              Start from source or copy the install path once the repo structure
+              lands.
+            </p>
+            <a
+              class="button primary"
+              href="https://github.com/poolsideai/skills"
+              >View source</a
+            >
+            <button class="button secondary" type="button">
+              Copy install command
+            </button>
+          </div>
+
+          <div class="action-block">
+            <h2>Eval status</h2>
+            <ul class="status-list">
+              <li><span></span> Schema validity: 97%</li>
+              <li><span></span> Validator lift: +18%</li>
+              <li><span></span> Instruction violations: 2%</li>
+            </ul>
+          </div>
+
+          <div class="action-block">
+            <h2>Recommended files</h2>
+            <a href="#">SKILL.md</a>
+            <a href="#">schemas/task-contract.schema.json</a>
+            <a href="#">scripts/validate_contract.py</a>
+            <a href="#">evals/cases/xs_single_file_patch_001</a>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Poolside Skills</strong>
+        <p>Static catalog prototype for GitHub Pages.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="https://github.com/poolsideai/skills">Source</a>
+        <a href="index.html#catalog">Catalog</a>
+        <a href="index.html#evals">Evals</a>
+      </nav>
+    </footer>
+  </body>
+</html>

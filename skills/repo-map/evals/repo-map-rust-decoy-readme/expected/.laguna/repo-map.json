@@ -1,0 +1,39 @@
+{
+  "schema_version": "repo-map.v1",
+  "summary": "imgcache is a Rust thumbnail caching proxy: an actix-web HTTP service storing thumbnails in a bounded in-memory map keyed by SHA-256 content hash. The README's claims about a Django admin dashboard, a React widget, and a frontend/ directory are stale — no such files exist in the tree; the repo is Rust-only and tests run with cargo.",
+  "languages": [
+    {
+      "name": "rust",
+      "evidence": "src/main.rs"
+    }
+  ],
+  "frameworks": [
+    {
+      "name": "actix-web",
+      "evidence": "Cargo.toml"
+    },
+    {
+      "name": "serde",
+      "evidence": "Cargo.toml"
+    }
+  ],
+  "entrypoints": [
+    {
+      "path": "src/main.rs",
+      "description": "Binary main; starts the actix-web server on 127.0.0.1:8080 with the /healthz and /thumb routes"
+    }
+  ],
+  "key_directories": [
+    {
+      "path": "src",
+      "role": "service source: HTTP handlers (handlers.rs) and the bounded in-memory store (cache.rs)"
+    },
+    {
+      "path": "tests",
+      "role": "cargo integration tests pinning wire formats"
+    }
+  ],
+  "test_commands": [
+    "cargo test"
+  ]
+}

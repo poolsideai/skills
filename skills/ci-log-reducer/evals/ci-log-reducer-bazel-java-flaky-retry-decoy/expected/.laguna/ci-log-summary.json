@@ -1,0 +1,18 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "build.log",
+  "failing_command": "bazel test //...",
+  "failure_kind": "test_failure",
+  "summary": "//api:integration_tests failed. JUnit test com.example.api.integration.CheckoutFlowTest.testCheckoutWithExpiredPaymentMethod failed with assertion error: expected payment status DECLINED but got PENDING at CheckoutFlowTest.java:142. All other 11 test targets passed. The earlier network fetch retry warning is unrelated; the fetch succeeded on attempt 3.",
+  "error_lines": [
+    { "line": 18, "text": "//api:integration_tests FAILED in 3.8s" },
+    { "line": 22, "text": "Executed 12 out of 12 tests: 11 tests pass and 1 fails locally." },
+    { "line": 23, "text": "INFO: Build completed, 1 test FAILED, 48 total actions" },
+    { "line": 32, "text": "java.lang.AssertionError: Expected payment status to be DECLINED but was PENDING" }
+  ],
+  "suggested_next_commands": [
+    "bazel test //api:integration_tests --test_output=all",
+    "bazel test //api:integration_tests --test_filter=CheckoutFlowTest.testCheckoutWithExpiredPaymentMethod",
+    "cat bazel-testlogs/api/integration_tests/test.log"
+  ]
+}

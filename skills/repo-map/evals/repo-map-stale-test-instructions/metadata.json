@@ -1,0 +1,21 @@
+{
+  "id": "repo-map-stale-test-instructions",
+  "skill": "repo-map",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/repo-map/scripts/validate_repo_map.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Adversarial case testing test command validation when documentation and package.json scripts are stale: a TypeScript/Node.js project where package.json declares 'test: jest' and the README describes jest configuration in detail, but the tree contains zero test files (*.test.*, *.spec.*, __tests__/) and no jest.config.*. All tests were removed in a refactor but docs were not updated. The correct map must recognize that the test command is unsupported (no test files means jest cannot run), emit test_commands: [], and note in summary that documented tests do not exist. Models that trust README prose or package.json script presence alone will cite 'npm test' and fail validation. Synthetic fixture; no customer data. Generated case."
+}

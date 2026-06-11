@@ -1,0 +1,5 @@
+{
+  "job": "integration-tests",
+  "command": "uv run pytest tests/integration/ -q --tb=short",
+  "exit_code": 1
+}

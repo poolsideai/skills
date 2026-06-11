@@ -1,0 +1,26 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "uv run pytest -q",
+  "failure_kind": "test_failure",
+  "summary": "One pytest test failed: tests/test_retry_config.py::test_parse_retry_config_defaults asserts that parse_retry_config({}) defaults max_retries to 3, but RetryConfig now defaults to max_retries=5. Either the default changed intentionally and the test is stale, or the default regressed. 35 other tests passed.",
+  "error_lines": [
+    {
+      "line": 17,
+      "text": "E       assert 5 == 3"
+    },
+    {
+      "line": 22,
+      "text": "FAILED tests/test_retry_config.py::test_parse_retry_config_defaults - assert 5 == 3"
+    },
+    {
+      "line": 23,
+      "text": "1 failed, 35 passed in 4.21s"
+    }
+  ],
+  "suggested_next_commands": [
+    "uv run pytest tests/test_retry_config.py::test_parse_retry_config_defaults -q",
+    "uv run pytest tests/test_retry_config.py -q",
+    "grep -rn 'max_retries' src/ tests/test_retry_config.py"
+  ]
+}

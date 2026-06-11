@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laguna Eval Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eff1ec; --card: #fcfcfa; --border: #d8dbd2; --text: #1b1f1e; --muted: #5d655f;
+    --pass: #1a7f37; --pass-bg: #e7f2e9; --fail: #b3261e; --fail-bg: #faebe9;
+    --defer: #8a6d00; --defer-bg: #faf3da; --error: #b45309; --error-bg: #f9efe2;
+    --accent: #0f5e55; --accent-bg: #e2efe9; --chip: #e9ebe4;
+    --tool: #3b6ea5; --thought: #7a5ea8;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 14px/1.5 "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  button { font: inherit; cursor: pointer; }
+  .mono { font-family: var(--mono); font-size: 12.5px; }
+
+  header { position: sticky; top: 0; z-index: 20; background: var(--card);
+           border-bottom: 1px solid var(--border); padding: 8px 16px;
+           display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  header h1 { font-size: 15px; margin: 0 8px 0 0; }
+  header select, header input { padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px;
+           background: var(--card); font: inherit; }
+  #counter { margin-left: auto; color: var(--muted); white-space: nowrap; }
+  #counter b { color: var(--text); }
+  .demo-banner { background: var(--defer-bg); color: var(--defer); border: 1px solid #e8d48b;
+                 border-radius: 6px; padding: 2px 10px; font-weight: 600; }
+
+  main { display: grid; grid-template-columns: 280px minmax(0, 1fr) minmax(320px, 0.4fr); gap: 18px;
+         margin: 16px 18px 150px; }
+  #sidebar { min-width: 0; position: sticky; top: 64px; align-self: start;
+             max-height: calc(100vh - 220px); overflow: auto; background: var(--card);
+             border: 1px solid var(--border); border-radius: 8px; padding: 6px; }
+  #sidebar details { margin-bottom: 2px; }
+  #sidebar summary { cursor: pointer; font-size: 12px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: .04em; color: var(--muted); padding: 6px 8px; position: sticky; top: 0;
+             background: var(--card); }
+  #sidebar summary .gcount { font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .nav-row { display: flex; align-items: center; gap: 7px; padding: 4px 8px; border-radius: 6px;
+             cursor: pointer; font-size: 12.5px; }
+  .nav-row:hover { background: var(--chip); }
+  .nav-row.active { background: var(--accent-bg); }
+  .nav-row .dot { flex: 0 0 8px; height: 8px; border-radius: 50%; background: #c3cad4; }
+  .nav-row .dot.pass { background: var(--pass); } .nav-row .dot.fail { background: var(--fail); }
+  .nav-row .dot.defer { background: #d4af37; }
+  .nav-row .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+             font-family: var(--mono); font-size: 11.5px; }
+  .nav-row .vd { flex: none; font-size: 10px; font-weight: 700; }
+  .nav-row .vd.PASS { color: var(--pass); } .nav-row .vd.FAIL { color: var(--fail); }
+  .nav-row .vd.ERROR { color: var(--error); }
+  @media (max-width: 1100px) { #sidebar { display: none; } main { grid-template-columns: minmax(0, 1fr); }
+             #trajectory-col { position: static; max-height: none; } }
+  #trace-col { min-width: 0; }
+  /* Trajectory lives in its own sticky right column (reference, never graded) — scrolls
+     independently like the sidebar; on narrow screens it falls back inline below the content. */
+  #trajectory-col { min-width: 0; position: sticky; top: 64px; align-self: start;
+             max-height: calc(100vh - 220px); overflow: auto; }
+  #trajectory-col .card { margin-bottom: 0; }
+  /* JSON reads as JSON here: no wrapping, scroll horizontally instead (overrides the global
+     pre-wrap, which stays correct for prose blocks elsewhere). */
+  #trajectory-col pre { white-space: pre; }
+  #traj-empty { color: var(--muted); padding: 10px 4px; }
+
+  .cmp { display: grid; grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr); margin-top: 6px; }
+  .cmp.hide-gold { grid-template-columns: 200px minmax(0, 1fr); }
+  .cmp.hide-gold > .g { display: none; }
+  .cmp-head { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted);
+              font-weight: 600; padding: 6px 10px; border-bottom: 2px solid var(--border); }
+  .cmp-key { font-family: var(--mono); font-size: 12px; font-weight: 600; color: #3c4a44;
+             padding: 8px 10px; border-bottom: 1px solid #e7e9e2; overflow-wrap: anywhere; }
+  .cmp-cell { padding: 8px 10px; border-bottom: 1px solid #e7e9e2; min-width: 0;
+              font-size: 13px; overflow-wrap: anywhere; }
+  .cmp-cell.g { border-left: 1px dashed var(--border); }
+  .cmp-cell.g.same { opacity: .5; }
+  /* diff: amber on the MODEL side only — the gold column stays neutral reference */
+  .cmp-key.diff { background: #fbf6e3; border-left: 3px solid #d4af37; padding-left: 7px; }
+  .cmp-cell.m.diff { background: #fbf6e3; }
+  /* validator failure: red, outranks diff */
+  .cmp-key.verr { background: var(--fail-bg); border-left: 3px solid var(--fail); padding-left: 7px; }
+  .cmp-cell.m.verr { background: var(--fail-bg); }
+  .field-err { color: var(--fail); font-size: 12px; font-weight: 600; margin-top: 6px; }
+  .kv-table tr.bad td { background: #fdecea; }
+  .kv-table tr.bad td:first-child { box-shadow: inset 3px 0 0 var(--fail); }
+  .cmp-missing { color: var(--fail); font-weight: 600; font-size: 12px; }
+
+  .judge-box { background: var(--accent-bg); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0;
+               padding: 10px 14px; margin: 10px 0; }
+  .judge-meta { color: var(--muted); font-size: 12px; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+          padding: 14px 16px; margin-bottom: 14px; overflow-wrap: anywhere; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em;
+             color: var(--muted); margin: 0 0 10px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .badge { background: var(--chip); border-radius: 999px; padding: 2px 10px; font-size: 12.5px;
+           white-space: nowrap; }
+  .badge.big { font-size: 15px; font-weight: 700; background: none; padding-left: 0; }
+  .badge.pass  { background: var(--pass-bg); color: var(--pass); font-weight: 600; }
+  .badge.fail  { background: var(--fail-bg); color: var(--fail); font-weight: 600; }
+  .badge.error { background: var(--error-bg); color: var(--error); font-weight: 600; }
+  .badge.arm-with { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+  .badge.demo { background: var(--defer-bg); color: var(--defer); font-weight: 700; }
+
+  pre { background: #f3f5f8; border: 1px solid var(--border); border-radius: 8px;
+        padding: 10px 12px; overflow: auto; max-height: 420px; margin: 8px 0;
+        font-family: var(--mono); font-size: 12.5px; line-height: 1.45; white-space: pre-wrap; }
+  .json-key { color: #0b57d0; } .json-str { color: #1a7f37; } .json-num { color: #c25e00; }
+  .json-lit { color: #7a5ea8; }
+
+  .check { display: flex; gap: 10px; padding: 6px 10px; border-left: 4px solid var(--border);
+           background: #fafbfc; border-radius: 0 6px 6px 0; margin: 4px 0; }
+  .check.pass { border-left-color: var(--pass); }
+  .check.fail { border-left-color: var(--fail); background: var(--fail-bg); }
+  .check .cid { font-family: var(--mono); font-size: 12px; min-width: 200px; font-weight: 600; }
+  .repair { background: var(--defer-bg); border-radius: 6px; padding: 8px 12px; margin-top: 8px; }
+  .repair li { margin: 2px 0; }
+
+  .step { border-left: 4px solid var(--border); margin: 6px 0; padding: 4px 10px;
+          background: #fafbfc; border-radius: 0 6px 6px 0; }
+  .step.toolCall, .step.tool_call { border-left-color: var(--tool); }
+  .step.thought, .step.message { border-left-color: var(--thought); }
+  .step summary { cursor: pointer; font-family: var(--mono); font-size: 12.5px; font-weight: 600; }
+  details.section > summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted);
+          text-transform: uppercase; letter-spacing: .04em; }
+
+  .md p { margin: 8px 0; } .md h1,.md h2,.md h3 { font-size: 15px; margin: 12px 0 4px; }
+  .md code { background: #f0f2f5; border-radius: 4px; padding: 1px 5px; font-family: var(--mono); font-size: 12.5px; }
+  .md pre code { background: none; padding: 0; }
+  .md ul { margin: 4px 0; padding-left: 22px; }
+
+  .file-head { display: flex; gap: 8px; align-items: center; font-family: var(--mono);
+               font-size: 12.5px; font-weight: 600; margin-top: 8px; }
+  .missing-note { color: var(--fail); font-weight: 600; }
+
+  .verdict-banner { padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-bottom: 14px;
+               border: 1px solid; font-weight: 500; }
+  .verdict-banner.pass { background: var(--pass-bg); border-color: #bfe3c8; color: var(--pass); }
+  .verdict-banner.fail { background: var(--fail-bg); border-color: #f2c4c0; color: var(--fail); }
+  .verdict-banner.error { background: var(--error-bg); border-color: #eccaa8; color: var(--error); }
+  .verdict-banner code { font-family: var(--mono); font-size: 12.5px; }
+
+  .info { cursor: help; color: var(--muted); font-size: 10px; border: 1px solid var(--border);
+          border-radius: 50%; padding: 0 4.5px; margin-left: 6px; font-style: normal;
+          display: inline-block; line-height: 14px; vertical-align: 1px; }
+
+  .kv-row { display: flex; gap: 10px; padding: 5px 8px; border-left: 3px solid var(--border);
+            background: #fafbfc; border-radius: 0 6px 6px 0; margin: 3px 0; }
+  .kv-row.diff { border-left-color: #d4af37; background: #fffdf2; }
+  .kv-key { font-family: var(--mono); font-size: 12px; font-weight: 600; flex: 0 0 170px;
+            color: #41506b; overflow-wrap: anywhere; }
+  .kv-val { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; }
+  .kv-val .kv-row { margin: 2px 0; }
+  .kv-table { border-collapse: collapse; width: 100%; margin: 2px 0; }
+  .kv-table th, .kv-table td { border: 1px solid var(--border); padding: 3px 8px; text-align: left;
+            vertical-align: top; font-family: var(--mono); font-size: 11.5px; }
+  .kv-table th { background: #f0f2f5; font-family: inherit; font-size: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { background: var(--chip); border-radius: 4px; padding: 1px 7px; font-family: var(--mono); font-size: 11.5px; }
+  .diff-mark { color: #8a6d00; font-size: 10px; font-weight: 700; margin-left: 6px; }
+  details.raw-json > summary { cursor: pointer; color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+  footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; background: var(--card);
+           border-top: 1px solid var(--border); padding: 10px 16px;
+           display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  footer .nav { display: flex; gap: 6px; }
+  footer button { border: 1px solid var(--border); border-radius: 8px; background: var(--card); padding: 8px 14px; }
+  #btn-pass { background: var(--pass); border-color: var(--pass); color: #fff; font-weight: 700; font-size: 15px; }
+  #btn-fail { background: var(--fail); border-color: var(--fail); color: #fff; font-weight: 700; font-size: 15px; }
+  #btn-defer { background: var(--defer-bg); border-color: #e8d48b; color: var(--defer); font-weight: 600; }
+  footer button.selected { outline: 3px solid var(--accent); outline-offset: 1px; }
+  #notes { flex: 1; min-width: 240px; padding: 8px 10px; border: 1px solid var(--border);
+           border-radius: 8px; font: inherit; resize: vertical; min-height: 38px; max-height: 110px; }
+  #save-status { color: var(--muted); font-size: 12.5px; min-width: 110px; }
+  #save-status.err { color: var(--fail); font-weight: 600; }
+  .kbd-hint { color: var(--muted); font-size: 11.5px; width: 100%; }
+  kbd { background: var(--chip); border: 1px solid var(--border); border-bottom-width: 2px;
+        border-radius: 4px; padding: 0 5px; font-family: var(--mono); font-size: 11px; }
+  #empty { text-align: center; color: var(--muted); padding: 60px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Laguna Eval Review</h1>
+  <span id="demo-banner" class="demo-banner" hidden>DEMO TRACES — synthetic, not real runs</span>
+  <select id="f-skill" title="Filter by skill"><option value="">all skills</option></select>
+  <select id="f-arm" title="Filter by arm"><option value="">all arms</option></select>
+  <select id="f-verdict" title="Filter by graded verdict">
+    <option value="">all verdicts</option><option value="PASS">graded PASS</option>
+    <option value="FAIL">graded FAIL</option><option value="ERROR">validator ERROR</option>
+  </select>
+  <select id="f-label" title="Filter by review label">
+    <option value="">all labels</option><option value="unlabeled">unlabeled</option>
+    <option value="pass">labeled pass</option><option value="fail">labeled fail</option>
+    <option value="defer">deferred</option>
+  </select>
+  <input id="jump" list="trace-ids" placeholder="jump to trace id…" size="26">
+  <datalist id="trace-ids"></datalist>
+  <button id="toggle-ref" title="Toggle the gold reference column (R)">Gold: on</button>
+  <span id="counter">–</span>
+</header>
+
+<main>
+  <nav id="sidebar" aria-label="All runs"></nav>
+  <div id="trace-col"><div id="empty">Loading traces…</div></div>
+  <aside id="trajectory-col" aria-label="Trajectory"></aside>
+</main>
+
+<footer>
+  <div class="nav">
+    <button id="btn-prev" title="Previous (←)">←</button>
+    <button id="btn-next" title="Next (→)">→</button>
+  </div>
+  <button id="btn-pass" title="Pass (1)">Pass</button>
+  <button id="btn-fail" title="Fail (2)">Fail</button>
+  <button id="btn-defer" title="Defer (D)">Defer</button>
+  <button id="btn-undo" title="Undo last action (U)">Undo</button>
+  <textarea id="notes" placeholder="Notes — what went wrong (or right)? Auto-saves."></textarea>
+  <span id="save-status"></span>
+  <span class="kbd-hint">
+    <kbd>←</kbd><kbd>→</kbd> navigate · <kbd>1</kbd> pass · <kbd>2</kbd> fail · <kbd>D</kbd> defer ·
+    <kbd>U</kbd> undo · <kbd>R</kbd> gold column · <kbd>⌘S</kbd> save · <kbd>⌘⏎</kbd> save + next
+  </span>
+</footer>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const state = { traces: [], labels: {}, view: [], cursor: 0, undo: [], notesTimer: null,
+                showGold: true, version: { traces: null, labels: null } };
+
+// ------------------------------------------------------------- rendering
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function highlightJSON(text) { // operates on already-escaped text
+  return text.replace(/("(?:\\.|[^"\\])*")(\s*:)?|\b(-?\d+\.?\d*(?:[eE][+-]?\d+)?)\b|\b(true|false|null)\b/g,
+    (m, str, colon, num, lit) => {
+      if (str) return `<span class="${colon ? "json-key" : "json-str"}">${str}</span>${colon || ""}`;
+      if (num) return `<span class="json-num">${num}</span>`;
+      return `<span class="json-lit">${lit}</span>`;
+    });
+}
+function prettyBlock(content) { // JSON gets pretty-print + highlight; other text plain
+  try {
+    const pretty = JSON.stringify(JSON.parse(content), null, 2);
+    return `<pre>${highlightJSON(esc(pretty))}</pre>`;
+  } catch { return `<pre>${esc(content)}</pre>`; }
+}
+function mdLite(src) { // escape FIRST, then re-introduce limited markup. No raw HTML, no images.
+  const out = [];
+  const lines = String(src).split("\n");
+  let inCode = false, code = [], inList = false;
+  const inline = (s) => esc(s)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+    .replace(/(^|\s)\*([^*\s][^*]*)\*/g, "$1<i>$2</i>")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  const closeList = () => { if (inList) { out.push("</ul>"); inList = false; } };
+  for (const line of lines) {
+    if (line.trim().startsWith("```")) {
+      if (inCode) { out.push(`<pre><code>${esc(code.join("\n"))}</code></pre>`); code = []; }
+      inCode = !inCode; continue;
+    }
+    if (inCode) { code.push(line); continue; }
+    const h = line.match(/^(#{1,3})\s+(.*)/);
+    if (h) { closeList(); out.push(`<h${h[1].length + 1}>${inline(h[2])}</h${h[1].length + 1}>`); continue; }
+    const li = line.match(/^\s*[-*]\s+(.*)/);
+    if (li) { if (!inList) { out.push("<ul>"); inList = true; } out.push(`<li>${inline(li[1])}</li>`); continue; }
+    closeList();
+    if (line.trim() === "") continue;
+    out.push(`<p>${inline(line)}</p>`);
+  }
+  if (inCode && code.length) out.push(`<pre><code>${esc(code.join("\n"))}</code></pre>`);
+  closeList();
+  return `<div class="md">${out.join("")}</div>`;
+}
+
+const INFO = {
+  output: "The file(s) the model was asked to write to a fixed workspace path — the skill's output contract. This is the main thing you are judging. Rendered field-by-field; ≠ gold marks fields that differ from the gold example (different is not necessarily wrong — gold is one acceptable answer, not the only one). Raw JSON is behind the toggle.",
+  validator: "Deterministic TypeScript checks run by the harness with bun — NO model or LLM judge is involved. Each check is a mechanical rule (file exists, schema valid, cited lines verbatim…). The run is graded by comparing the validator's status to the case's expected status.",
+  final: "The model's last message in the run, parsed from pool's NLJSON output stream.",
+  prompt: "The exact prompt sent to pool exec via --prompt-file. Identical across arms of the same case.",
+  trajectory: "Every event pool recorded: reasoning, tool calls and their results. Context for understanding HOW the model worked — never used for grading.",
+  stderr: "pool's stderr for this run (harness/CLI noise, not model output).",
+  debt: "The harness's own confession list: every fragile mechanism this run depended on (hidden flags, undocumented file layouts, disabled sandbox…). It says nothing about model quality — it tells you how reproducible/trustworthy the MEASUREMENT is, and which hardening PR the evidence justifies next.",
+  command: "The exact pool exec command line this run executed.",
+  reference: "The case's gold expected/ artifacts: one known-good example answer, used for validator replay. A reference for comparison — not the only acceptable answer.",
+  graded: "graded = does the validator's status match the case's expected status? Good-failure cases EXPECT the validator to fail, so validator:fail can be graded PASS.",
+  judge: "Second opinion from an external LLM judge called via OpenRouter — deliberately NOT a Laguna or Poolside model, and independent of the deterministic validator. It reads the task, the model's artifact, the gold reference, and the validator findings, then articulates what should have happened. UNVALIDATED grader: calibrate it against your human Pass/Fail labels before trusting its verdicts (eval methodology, error-analysis-first).",
+  activation: "Did the model formally invoke the `skill` tool? Parsed from the NLJSON stream. A model can also read skill files directly without formal activation — check the trajectory.",
+};
+function info(key) { return `<span class="info" title="${esc(INFO[key])}">i</span>`; }
+
+function verdict(t) {
+  const status = t.validator && t.validator.status;
+  if (status === "error") return "ERROR";
+  if (t.graded_pass === true || (status && t.expected_status && status === t.expected_status)) return "PASS";
+  if (status) return "FAIL";
+  return "—";
+}
+function fmtMs(ms) { return ms == null ? "—" : ms >= 1000 ? (ms / 1000).toFixed(1) + "s" : ms + "ms"; }
+
+function renderBadges(t) {
+  const v = verdict(t);
+  const vClass = v === "PASS" ? "pass" : v === "FAIL" ? "fail" : v === "ERROR" ? "error" : "";
+  const tokens = t.model_facts && t.model_facts.tokens
+    ? `${t.model_facts.tokens.input ?? "?"}→${t.model_facts.tokens.output ?? "?"} tok` : null;
+  const armClass = /(^|_)with_skill$/.test(t.arm || "") ? "arm-with" : "";
+  const parts = [
+    `<span class="badge big mono">${esc(t.case_id || "?")}</span>`,
+    t.demo ? `<span class="badge demo">DEMO</span>` : "",
+    `<span class="badge ${armClass}">${esc(t.arm || "?")}</span>`,
+    `<span class="badge ${vClass}" title="${esc(INFO.graded)}">graded ${v}</span>`,
+    t.validator ? `<span class="badge" title="${esc(INFO.validator)}">validator: ${esc(t.validator.status)} (expected ${esc(t.expected_status ?? "?")})</span>` : `<span class="badge error">no validator result</span>`,
+    `<span class="badge">skill: ${esc(t.skill ?? "?")}</span>`,
+    t.bucket ? `<span class="badge">${esc(t.bucket)} · ${esc(t.difficulty ?? "?")}</span>` : "",
+    `<span class="badge" title="${esc(INFO.activation)}">activation: ${esc(t.activation ?? "?")}</span>`,
+    `<span class="badge">exit ${t.exit_code ?? "—"}${t.timed_out ? " · TIMEOUT" : ""}</span>`,
+    `<span class="badge">${fmtMs(t.duration_ms)}</span>`,
+    tokens ? `<span class="badge">${esc(tokens)}</span>` : "",
+    `<span class="badge mono">${esc(t.agent_name ?? "?")}</span>`,
+    t.pool_version ? `<span class="badge">pool ${esc(t.pool_version)}</span>` : "",
+    (t.harness_debt || []).length ? `<span class="badge">debt ×${t.harness_debt.length}</span>` : "",
+  ];
+  return `<div class="card"><div class="badges">${parts.filter(Boolean).join("")}</div></div>`;
+}
+
+function renderValue(val, opts = {}) {
+  if (val === null || val === undefined) return "<i>null</i>";
+  if (Array.isArray(val)) {
+    if (!val.length) return "<i>empty list</i>";
+    if (val.every((x) => typeof x !== "object" || x === null))
+      return `<div class="chips">${val.map((x) => `<span class="chip">${esc(String(x))}</span>`).join("")}</div>`;
+    if (val.every((x) => x && typeof x === "object" && !Array.isArray(x))) {
+      const cols = [...new Set(val.flatMap((o) => Object.keys(o)))].slice(0, 6);
+      return `<table class="kv-table"><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr>` +
+        val.map((o) => {
+          const bad = opts.badLines && o.line !== undefined && opts.badLines.has(String(o.line));
+          return `<tr${bad ? ' class="bad" title="named in a failed validator check"' : ""}>${cols.map((c) =>
+            `<td>${esc(typeof o[c] === "object" && o[c] !== null ? JSON.stringify(o[c]) : String(o[c] ?? ""))}</td>`).join("")}</tr>`;
+        }).join("") +
+        `</table>`;
+    }
+    return `<pre>${esc(JSON.stringify(val, null, 2))}</pre>`;
+  }
+  if (typeof val === "object")
+    return Object.entries(val).map(([k, v]) =>
+      `<div class="kv-row"><span class="kv-key">${esc(k)}</span><span class="kv-val">${renderValue(v)}</span></div>`).join("");
+  return esc(String(val));
+}
+
+function humanArtifact(content, goldContent) {
+  let obj;
+  try { obj = JSON.parse(content); } catch { return `<pre>${esc(content)}</pre>`; }
+  if (!obj || typeof obj !== "object" || Array.isArray(obj)) return prettyBlock(content);
+  let gold = null;
+  try { gold = goldContent ? JSON.parse(goldContent) : null; } catch { /* no diff marks */ }
+  const rows = Object.entries(obj).map(([k, v]) => {
+    const differs = gold && typeof gold === "object" && !Array.isArray(gold)
+      && JSON.stringify(gold[k]) !== JSON.stringify(v);
+    return `<div class="kv-row${differs ? " diff" : ""}"><span class="kv-key">${esc(k)}${differs
+      ? `<span class="diff-mark" title="Differs from the gold expected/ artifact — not necessarily wrong; gold is one acceptable answer.">≠ gold</span>` : ""}</span><span class="kv-val">${renderValue(v)}</span></div>`;
+  }).join("");
+  return `${rows}<details class="raw-json"><summary>raw JSON</summary>${prettyBlock(content)}</details>`;
+}
+
+function verdictBanner(t) {
+  const v = t.validator;
+  if (!v) return `<div class="verdict-banner error">No validator result was produced for this run.</div>`;
+  const checks = v.checks || [];
+  const failed = checks.filter((c) => c.status !== "pass");
+  const expectNote = t.expected_status === "fail"
+    ? " (good-failure case: the validator is EXPECTED to reject this)" : "";
+  if (verdict(t) === "PASS")
+    return `<div class="verdict-banner pass">PASS — validator returned <code>${esc(v.status)}</code> as expected${expectNote}${failed.length ? `; ${failed.length} check(s) failed as designed` : `; all ${checks.length} checks passed`}.</div>`;
+  if (v.status === "error")
+    return `<div class="verdict-banner error">ERROR — the validator crashed or its result was invalid; this run is ungraded. ${esc((v.repair_feedback || [])[0] || "")}</div>`;
+  const first = failed[0];
+  return `<div class="verdict-banner fail">FAILED ${failed.length} of ${checks.length} checks${expectNote} — <code>${esc(first ? first.id : "?")}</code>: ${esc(first ? first.detail || "" : "")}${failed.length > 1 ? ` (+${failed.length - 1} more below)` : ""}</div>`;
+}
+
+function tryParse(text) {
+  try { const v = JSON.parse(text); return v && typeof v === "object" && !Array.isArray(v) ? v : null; }
+  catch { return null; }
+}
+
+function checksForField(key, failedChecks) {
+  const kt = key.toLowerCase().split(/[_\-\s]+/).filter(Boolean);
+  const need = Math.min(2, kt.length);
+  return failedChecks.filter((c) => {
+    const ct = String(c.id || "").toLowerCase().split(/[_\-\s]+/).filter(Boolean);
+    return kt.filter((t) => ct.includes(t)).length >= need;
+  });
+}
+
+function renderComparison(modelText, goldText, modelMissing, failedChecks) {
+  const model = modelMissing ? null : tryParse(modelText);
+  const gold = tryParse(goldText);
+  if (!gold || (!model && !modelMissing)) {  // no structured pair -> single-column fallback
+    return modelMissing
+      ? `<div class="cmp-missing">MISSING — model never wrote the contract path</div>`
+      : humanArtifact(modelText, goldText);
+  }
+  const keys = [...new Set([...Object.keys(model || {}), ...Object.keys(gold)])];
+  const goldCls = state.showGold ? "" : " hide-gold";
+  const head = `<div class="cmp-head">field</div><div class="cmp-head">model output</div><div class="cmp-head g">gold reference${info("reference")}</div>`;
+  const rows = keys.map((k) => {
+    const inModel = model && k in model, inGold = k in gold;
+    const differs = !inModel || !inGold || JSON.stringify(model[k]) !== JSON.stringify(gold[k]);
+    const fails = checksForField(k, failedChecks);
+    const badLines = new Set();
+    for (const c of fails)
+      for (const m of String(c.detail || "").matchAll(/line\s+(\d+)/gi)) badLines.add(m[1]);
+    const keyCls = fails.length ? " verr" : differs ? " diff" : "";
+    const cellCls = fails.length ? " verr" : differs ? " diff" : "";
+    const errNotes = fails.map((c) => `<div class="field-err">✗ ${esc(c.id)} — ${esc(c.detail ?? "")}</div>`).join("");
+    return `<div class="cmp-key${keyCls}">${esc(k)}</div>` +
+      `<div class="cmp-cell m${cellCls}">${model === null ? `<span class="cmp-missing">artifact missing</span>` : inModel ? renderValue(model[k], { badLines }) : `<span class="cmp-missing">model omitted this field</span>`}${errNotes}</div>` +
+      `<div class="cmp-cell g${differs ? "" : " same"}">${inGold ? renderValue(gold[k]) : `<i>not in gold</i>`}</div>`;
+  }).join("");
+  const raw = modelMissing ? "" : `<details class="raw-json"><summary>raw JSON</summary>${prettyBlock(modelText)}</details>`;
+  return `<div class="cmp${goldCls}">${head}${rows}</div>${raw}`;
+}
+
+function renderOutput(t) {
+  const head = `<h2>Output artifact — model vs gold${info("output")}</h2>`;
+  const note = t.case_notes ? `<p style="color:var(--muted);font-size:12.5px;margin:0 0 6px">Case: ${esc(t.case_notes)} · expected validator status: <b>${esc(t.expected_status ?? "?")}</b></p>` : "";
+  const failedChecks = ((t.validator || {}).checks || []).filter((c) => c.status !== "pass");
+  const goldByPath = Object.fromEntries((t.gold_files || []).map((g) => [g.path, g.content]));
+  const modelPaths = new Set((t.output_files || []).map((f) => f.path));
+  const files = (t.output_files || []).map((f) =>
+    `<div class="file-head">${esc(f.path)}</div>${renderComparison(f.content, goldByPath[f.path], f.missing, failedChecks)}`);
+  for (const g of t.gold_files || [])  // gold-only files (model produced nothing, no missing marker)
+    if (!modelPaths.has(g.path))
+      files.push(`<div class="file-head">${esc(g.path)}</div>${renderComparison("", g.content, true, failedChecks)}`);
+  if (!files.length)
+    return `<div class="card">${head}${note}<span class="missing-note">No output artifacts recorded for this run.</span></div>`;
+  return `<div class="card">${head}${note}${files.join("")}</div>`;
+}
+
+function renderValidator(t) {
+  const v = t.validator;
+  if (!v) return `<div class="card"><h2>Validator${info("validator")}</h2><span class="missing-note">validator.json missing</span></div>`;
+  const ordered = [...(v.checks || [])].sort((a, b) => (a.status === "pass") - (b.status === "pass"));
+  const checks = ordered.map((c) =>
+    `<div class="check ${c.status === "pass" ? "pass" : "fail"}"><span class="cid">${esc(c.id)}</span><span>${esc(c.detail ?? "")}</span></div>`).join("");
+  const repair = (v.repair_feedback || []).length
+    ? `<div class="repair"><b>Repair feedback</b> <span class="info" title="Derived only from failed checks and schema errors — what the model would be told in a repair loop.">i</span><ul>${v.repair_feedback.map((r) => `<li>${esc(r)}</li>`).join("")}</ul></div>` : "";
+  return `<div class="card"><h2>Validator — ${esc(v.status)} · score ${v.score ?? "?"} · ${fmtMs(v.duration_ms)}${info("validator")}</h2>${checks || "<i>no checks</i>"}${repair}</div>`;
+}
+
+function renderJudge(t) {
+  const j = t.judge;
+  if (!j) return "";
+  const cls = j.verdict === "pass" ? "pass" : j.verdict === "fail" ? "fail" : "error";
+  const reasons = (j.reasons || []).map((r) => `<li>${esc(r)}</li>`).join("");
+  const matter = (j.diffs_that_matter || []).map((r) => `<li>${esc(r)}</li>`).join("");
+  const dont = (j.diffs_that_dont_matter || []).map((r) => `<li>${esc(r)}</li>`).join("");
+  return `<div class="card"><h2>LLM judge — <span class="badge ${cls}">${esc(j.verdict)}</span>
+      · confidence ${esc(j.confidence ?? "?")}${info("judge")}</h2>
+    ${reasons ? `<ul>${reasons}</ul>` : ""}
+    ${j.what_should_have_happened ? `<div class="judge-box"><b>What should have happened:</b> ${esc(j.what_should_have_happened)}</div>` : ""}
+    ${matter ? `<b style="color:var(--fail)">Differences that matter</b><ul>${matter}</ul>` : ""}
+    ${dont ? `<b style="color:var(--muted)">Differences that don't</b><ul style="color:var(--muted)">${dont}</ul>` : ""}
+    <div class="judge-meta">judge model: ${esc(j.judge_model ?? "?")} · unvalidated grader — your label below is the ground truth</div>
+  </div>`;
+}
+
+function renderFinalMessage(t) {
+  return `<div class="card"><h2>Final message${info("final")}</h2>${t.final_message ? mdLite(t.final_message) : "<i>none captured</i>"}</div>`;
+}
+
+// Prompt is the rubric you grade against — render it open, above the output.
+function renderPrompt(t) {
+  return `<div class="card"><h2>Prompt${info("prompt")}</h2>${t.prompt ? mdLite(t.prompt) : "<i>missing</i>"}</div>`;
+}
+
+// Trajectory is reference material consulted alongside the output (never graded), so it lives in
+// the sticky right column. Per-step accordions are kept; JSON detail is no-wrap (see CSS).
+function renderTrajectory(t) {
+  const steps = (t.trajectory || []).map((s) =>
+    `<details class="step ${esc(s.kind)}"><summary>${esc(s.title)}</summary><pre>${esc(s.detail)}</pre></details>`).join("");
+  const n = (t.trajectory || []).length;
+  return `<div class="card"><h2>Trajectory — ${n} step${n === 1 ? "" : "s"}${info("trajectory")}</h2>` +
+    `${steps || `<div id="traj-empty"><i>no trajectory recovered</i></div>`}</div>`;
+}
+
+// Secondary diagnostics — kept collapsed at the bottom of the center column.
+function renderCollapsed(t) {
+  const debt = (t.harness_debt || []).map((d) => `<li><b>${esc(d.kind)}</b> — ${esc(d.detail)}</li>`).join("");
+  const blocks = [
+    [`stderr${info("stderr")}`, t.stderr_tail ? `<pre>${esc(t.stderr_tail)}</pre>` : "<i>empty</i>"],
+    [`Harness debt (${(t.harness_debt || []).length})${info("debt")}`, debt ? `<ul>${debt}</ul>` : "<i>none</i>"],
+    [`Command${info("command")}`, t.command ? `<pre>${esc(t.command.join(" "))}</pre>` : "<i>unknown</i>"],
+  ];
+  return blocks.map(([title, body]) =>
+    `<div class="card"><details class="section"><summary>${title}</summary>${body}</details></div>`).join("");
+}
+
+function toggleGold() {
+  state.showGold = !state.showGold;
+  $("toggle-ref").textContent = state.showGold ? "Gold: on" : "Gold: off";
+  for (const c of document.querySelectorAll(".cmp")) c.classList.toggle("hide-gold", !state.showGold);
+}
+
+function armShort(arm) {
+  return String(arm || "?").replace("_without_skill", " −skill").replace("_with_skill", " +skill");
+}
+function renderSidebar() {
+  const nav = $("sidebar");
+  const groups = new Map(); // skill -> [viewIdx...]
+  state.view.forEach((traceIdx, viewIdx) => {
+    const skill = state.traces[traceIdx].skill || "unknown";
+    if (!groups.has(skill)) groups.set(skill, []);
+    groups.get(skill).push(viewIdx);
+  });
+  const closed = new Set([...nav.querySelectorAll("details:not([open])")].map((d) => d.dataset.skill));
+  nav.innerHTML = [...groups.entries()].map(([skill, viewIdxs]) => {
+    const labeled = viewIdxs.filter((vi) => (state.labels[state.traces[state.view[vi]].trace_id] || {}).label).length;
+    const rows = viewIdxs.map((vi) => {
+      const t = state.traces[state.view[vi]];
+      const entry = state.labels[t.trace_id] || {};
+      const name = (t.case_id || "").startsWith(skill + "-") ? t.case_id.slice(skill.length + 1) : t.case_id;
+      const v = verdict(t);
+      return `<div class="nav-row${vi === state.cursor ? " active" : ""}" data-vi="${vi}" title="${esc(t.trace_id)}">
+        <span class="dot ${entry.label || ""}"></span>
+        <span class="nm">${esc(name)} · ${esc(armShort(t.arm))}</span>
+        <span class="vd ${v}">${v === "—" ? "" : esc(v)}</span></div>`;
+    }).join("");
+    return `<details data-skill="${esc(skill)}"${closed.has(skill) ? "" : " open"}>
+      <summary>${esc(skill)} <span class="gcount">· ${labeled}/${viewIdxs.length}</span></summary>${rows}</details>`;
+  }).join("") || `<div class="nav-row">no runs match filters</div>`;
+  const active = nav.querySelector(".nav-row.active");
+  if (active) active.scrollIntoView({ block: "nearest" });
+}
+
+function render() {
+  const col = $("trace-col");
+  if (!state.view.length) {
+    col.innerHTML = `<div id="empty">No traces match the current filters.</div>`;
+    $("trajectory-col").innerHTML = "";
+    $("counter").textContent = `0 traces`;
+    return;
+  }
+  state.cursor = Math.max(0, Math.min(state.cursor, state.view.length - 1));
+  const t = state.traces[state.view[state.cursor]];
+  // Center column: orientation strip (badges + verdict), then the prompt (the rubric), then the
+  // output being judged and its graders. Trajectory goes to the sticky right column.
+  col.innerHTML = renderBadges(t) + verdictBanner(t) + renderPrompt(t) + renderOutput(t) + renderValidator(t) + renderJudge(t) + renderFinalMessage(t) + renderCollapsed(t);
+  $("trajectory-col").innerHTML = renderTrajectory(t);
+
+  const entry = state.labels[t.trace_id] || {};
+  for (const [id, val] of [["btn-pass", "pass"], ["btn-fail", "fail"], ["btn-defer", "defer"]])
+    $(id).classList.toggle("selected", entry.label === val);
+  if (document.activeElement !== $("notes")) $("notes").value = entry.notes || "";
+
+  const labeled = state.view.filter((i) => (state.labels[state.traces[i].trace_id] || {}).label).length;
+  $("counter").innerHTML = `<b>${state.cursor + 1}</b> of ${state.view.length} · ${labeled} labeled · ${state.view.length - labeled} remaining`;
+  renderSidebar();
+  window.scrollTo(0, 0);
+}
+
+// ------------------------------------------------------------- data + persistence
+function current() { return state.view.length ? state.traces[state.view[state.cursor]] : null; }
+
+function applyFilters() {
+  const f = { skill: $("f-skill").value, arm: $("f-arm").value, verdict: $("f-verdict").value, label: $("f-label").value };
+  state.view = state.traces.map((t, i) => i).filter((i) => {
+    const t = state.traces[i];
+    const entry = state.labels[t.trace_id] || {};
+    if (f.skill && t.skill !== f.skill) return false;
+    if (f.arm && t.arm !== f.arm) return false;
+    if (f.verdict && verdict(t) !== f.verdict) return false;
+    if (f.label === "unlabeled" && entry.label) return false;
+    if (["pass", "fail", "defer"].includes(f.label) && entry.label !== f.label) return false;
+    return true;
+  });
+  state.cursor = 0;
+  render();
+}
+
+async function persist(traceId, patch) {
+  $("save-status").textContent = "saving…";
+  $("save-status").classList.remove("err");
+  try {
+    const res = await fetch("/api/labels", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ trace_id: traceId, ...patch }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    $("save-status").textContent = "saved ✓";
+    localStorage.removeItem("laguna-review-pending:" + traceId);
+  } catch (e) {
+    $("save-status").textContent = "save failed — kept locally";
+    $("save-status").classList.add("err");
+    localStorage.setItem("laguna-review-pending:" + traceId, JSON.stringify({ ...patch, at: Date.now() }));
+  }
+}
+
+function setLabel(label) {
+  const t = current(); if (!t) return;
+  const prev = { ...(state.labels[t.trace_id] || {}) };
+  state.undo.push({ trace_id: t.trace_id, prev });
+  const entry = state.labels[t.trace_id] = { ...(state.labels[t.trace_id] || {}) };
+  entry.label = entry.label === label ? null : label; // click again to clear
+  persist(t.trace_id, { label: entry.label, notes: entry.notes || "" });
+  render();
+}
+
+function saveNotes(immediate = false) {
+  const t = current(); if (!t) return;
+  const entry = state.labels[t.trace_id] = { ...(state.labels[t.trace_id] || {}) };
+  entry.notes = $("notes").value;
+  clearTimeout(state.notesTimer);
+  const doSave = () => persist(t.trace_id, { label: entry.label || null, notes: entry.notes });
+  immediate ? doSave() : (state.notesTimer = setTimeout(doSave, 600));
+}
+
+function undo() {
+  const op = state.undo.pop(); if (!op) return;
+  state.labels[op.trace_id] = op.prev;
+  persist(op.trace_id, { label: op.prev.label || null, notes: op.prev.notes || "" });
+  render();
+}
+
+function nav(delta) {
+  saveNotes(true);
+  state.cursor = Math.min(Math.max(state.cursor + delta, 0), state.view.length - 1);
+  render();
+}
+
+// ------------------------------------------------------------- wiring
+function populateFilterOptions(id) {
+  const values = id === "f-skill" ? state.traces.map((t) => t.skill) : state.traces.map((t) => t.arm);
+  const sel = $(id);
+  for (const v of [...new Set(values.filter(Boolean))].sort()) {
+    const o = document.createElement("option"); o.value = o.textContent = v; sel.appendChild(o);
+  }
+}
+function populateFilters() {
+  populateFilterOptions("f-skill");
+  populateFilterOptions("f-arm");
+  const dl = $("trace-ids");
+  for (const t of state.traces) { const o = document.createElement("option"); o.value = t.trace_id; dl.appendChild(o); }
+}
+
+// Data hot-reload: poll /api/version; on change re-fetch and merge without
+// losing the reviewer's place or in-progress notes.
+function flashStatus(text) {
+  $("save-status").textContent = text;
+  setTimeout(() => { if ($("save-status").textContent === text) $("save-status").textContent = ""; }, 2500);
+}
+async function refreshTraces() {
+  const res = await fetch("/api/traces"); if (!res.ok) return;
+  const doc = await res.json();
+  const keepId = current() ? current().trace_id : null;
+  state.traces = doc.traces || [];
+  $("demo-banner").hidden = !doc.demo;
+  for (const id of ["f-skill", "f-arm"]) { // rebuild option lists, keep selection
+    const sel = $(id), kept = sel.value;
+    sel.options.length = 1;
+    sel.value = "";
+    populateFilterOptions(id);
+    if ([...sel.options].some((o) => o.value === kept)) sel.value = kept;
+  }
+  $("trace-ids").innerHTML = "";
+  for (const t of state.traces) { const o = document.createElement("option"); o.value = t.trace_id; $("trace-ids").appendChild(o); }
+  applyFilters();
+  if (keepId) {
+    const idx = state.view.findIndex((i) => state.traces[i].trace_id === keepId);
+    if (idx >= 0) state.cursor = idx;
+  }
+  render();
+  flashStatus("traces refreshed ↻");
+}
+async function refreshLabels() {
+  const res = await fetch("/api/labels"); if (!res.ok) return;
+  const fresh = await res.json();
+  const cur = current();
+  const editing = document.activeElement === $("notes") && cur;
+  const keep = editing ? state.labels[cur.trace_id] : null;
+  state.labels = fresh || {};
+  if (editing && keep) state.labels[cur.trace_id] = keep; // never clobber in-progress notes
+  render();
+}
+function startHotReload() {
+  setInterval(async () => {
+    try {
+      const res = await fetch("/api/version"); if (!res.ok) return;
+      const v = await res.json();
+      const prev = state.version;
+      state.version = v;
+      if (prev.traces === null) return; // first sample
+      if (v.traces !== prev.traces) await refreshTraces();
+      else if (v.labels !== prev.labels) await refreshLabels();
+    } catch { /* server briefly away (restart) — keep polling */ }
+  }, 2000);
+}
+
+async function init() {
+  try {
+    const [tr, lb] = await Promise.all([fetch("/api/traces"), fetch("/api/labels")]);
+    const traceDoc = await tr.json();
+    if (!tr.ok) throw new Error(traceDoc.error || tr.status);
+    state.traces = traceDoc.traces || [];
+    state.labels = (await lb.json()) || {};
+    $("demo-banner").hidden = !traceDoc.demo;
+  } catch (e) {
+    $("trace-col").innerHTML = `<div id="empty">Failed to load traces: ${esc(e.message)}.<br>
+      Run <code>uv run harness/review/extract_traces.py --demo</code> then reload.</div>`;
+    return;
+  }
+  // retry locally-pended saves from a previous session
+  for (const key of Object.keys(localStorage).filter((k) => k.startsWith("laguna-review-pending:"))) {
+    const traceId = key.slice("laguna-review-pending:".length);
+    try { persist(traceId, JSON.parse(localStorage.getItem(key))); } catch { /* drop */ }
+  }
+  populateFilters();
+  applyFilters();
+
+  $("btn-pass").onclick = () => setLabel("pass");
+  $("btn-fail").onclick = () => setLabel("fail");
+  $("btn-defer").onclick = () => setLabel("defer");
+  $("btn-undo").onclick = undo;
+  $("btn-prev").onclick = () => nav(-1);
+  $("btn-next").onclick = () => nav(1);
+  $("toggle-ref").onclick = toggleGold;
+  for (const id of ["f-skill", "f-arm", "f-verdict", "f-label"]) $(id).onchange = applyFilters;
+  $("jump").onchange = () => {
+    const q = $("jump").value.trim(); if (!q) return;
+    const idx = state.view.findIndex((i) => state.traces[i].trace_id.includes(q));
+    if (idx >= 0) { saveNotes(true); state.cursor = idx; render(); }
+    $("jump").value = "";
+  };
+  $("notes").addEventListener("input", () => saveNotes(false));
+  $("notes").addEventListener("blur", () => saveNotes(true));
+  $("sidebar").addEventListener("click", (e) => {
+    const row = e.target.closest(".nav-row");
+    if (!row || row.dataset.vi === undefined) return;
+    saveNotes(true);
+    state.cursor = Number(row.dataset.vi);
+    render();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const meta = e.metaKey || e.ctrlKey;
+    if (meta && e.key === "s") { e.preventDefault(); saveNotes(true); return; }
+    if (meta && e.key === "Enter") { e.preventDefault(); saveNotes(true); nav(1); return; }
+    const typing = document.activeElement === $("notes") || document.activeElement === $("jump");
+    if (typing) { if (e.key === "Escape") document.activeElement.blur(); return; }
+    switch (e.key) {
+      case "ArrowLeft": e.preventDefault(); nav(-1); break;
+      case "ArrowRight": e.preventDefault(); nav(1); break;
+      case "1": setLabel("pass"); break;
+      case "2": setLabel("fail"); break;
+      case "d": case "D": setLabel("defer"); break;
+      case "u": case "U": undo(); break;
+      case "r": case "R": toggleGold(); break;
+    }
+  });
+  startHotReload();
+}
+init();
+</script>
+</body>
+</html>

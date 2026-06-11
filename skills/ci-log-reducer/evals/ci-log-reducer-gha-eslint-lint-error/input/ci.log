@@ -1,0 +1,39 @@
+2026-06-10T09:12:00Z ##[group]Set up job
+2026-06-10T09:12:00Z Current runner version: '2.317.0'
+2026-06-10T09:12:00Z Machine name: fv-az894-678
+2026-06-10T09:12:01Z ##[endgroup]
+2026-06-10T09:12:01Z ##[group]Checkout clarion-api
+2026-06-10T09:12:01Z   with:
+2026-06-10T09:12:01Z     ref: refs/pull/47/merge
+2026-06-10T09:12:02Z Syncing repository: octopool/clarion-api
+2026-06-10T09:12:03Z Initialized empty Git repository in /home/runner/work/clarion-api/clarion-api/.git/
+2026-06-10T09:12:03Z HEAD is now at 4b2d9f8
+2026-06-10T09:12:03Z ##[endgroup]
+2026-06-10T09:12:03Z ##[group]Set up Node.js 20
+2026-06-10T09:12:04Z Resolved Node.js 20.15.1 from file .nvmrc
+2026-06-10T09:12:04Z ##[endgroup]
+2026-06-10T09:12:04Z ##[group]Cache node_modules
+2026-06-10T09:12:04Z Cache restored from key: Linux-node20-abc123
+2026-06-10T09:12:04Z ##[endgroup]
+2026-06-10T09:12:04Z ##[group]Install dependencies
+2026-06-10T09:12:04Z   npm ci --prefer-offline
+2026-06-10T09:12:05Z added 412 packages in 3.1s
+2026-06-10T09:12:05Z ##[endgroup]
+2026-06-10T09:12:05Z ##[group]Run lint
+2026-06-10T09:12:05Z   npm run lint
+
+> clarion-api@1.3.0 lint
+> eslint --ext .ts src/
+
+/home/runner/work/clarion-api/clarion-api/src/routes/users.ts
+  12:5   error  'userId' is assigned a value but never used  no-unused-vars
+  28:1   error  'authenticateRequest' is not defined          no-undef
+
+/home/runner/work/clarion-api/clarion-api/src/middleware/auth.ts
+   7:14  error  Unexpected use of 'any' type                  @typescript-eslint/no-explicit-any
+  45:3   warning  Prefer 'const' over 'let' for 'headers'    prefer-const
+
+✖ 3 errors, 1 warning
+
+2026-06-10T09:12:06Z ::endgroup::
+2026-06-10T09:12:06Z ##[error]Process completed with exit code 1.

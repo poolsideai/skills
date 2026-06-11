@@ -1,0 +1,5 @@
+{
+  "job": "validate-migrations",
+  "command": "pwsh -Command Invoke-Pester -Path ./Tests -OutputFormat NUnitXml -OutputFile TestResults.xml",
+  "exit_code": 1
+}

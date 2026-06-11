@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/common/eval-case.v1.schema.json",
+  "title": "eval-case.v1",
+  "description": "Schema for an eval case's metadata.json. A case folder contains prompt.md, input/, expected/, and metadata.json; this schema formalizes the canonical metadata.json field list used by every skill's eval cases.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Unique case id; kebab-case, prefixed with the skill name (e.g. \"ci-log-reducer-truncated-log\")."
+    },
+    "skill": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+      "description": "Name of the skill under test; must match an existing skills/<name>/ directory and the skill's frontmatter name."
+    },
+    "bucket": {
+      "type": "string",
+      "enum": ["easy", "realistic", "adversarial", "edge"],
+      "description": "Case category. Every skill ships at least one adversarial case."
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard"],
+      "description": "Author-estimated difficulty of the case."
+    },
+    "arms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "xs_without_skill",
+          "xs_with_skill",
+          "m_without_skill",
+          "m_with_skill"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Subset of the v0 eval arms this case runs under."
+    },
+    "publishability": {
+      "type": "string",
+      "enum": ["internal"],
+      "description": "Publication status of the case and its fixtures. \"internal\" for all v0 cases; further values arrive with the publishing-policy workstream via a schema_version bump."
+    },
+    "validator": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "description": "Canonical validator invocation as an argv array. By convention it points at the skill's scripts/validate_*.ts via bun, with case gold paths as args. The harness appends/fills the fixed argv contract: <cmd> --case <case_dir> --workspace <workspace_dir> --out <result_path>."
+        },
+        "expected_status": {
+          "type": "string",
+          "enum": ["pass", "fail"],
+          "description": "Status the validator must return when replayed against the case's gold expected/ artifacts. Good-failure cases expect \"fail\"."
+        }
+      },
+      "required": ["command", "expected_status"],
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional free-form author notes about the case."
+    }
+  },
+  "required": [
+    "id",
+    "skill",
+    "bucket",
+    "difficulty",
+    "arms",
+    "publishability",
+    "validator"
+  ],
+  "additionalProperties": false
+}

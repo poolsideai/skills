@@ -1,0 +1,859 @@
+{
+  "capturedAt": "2026-06-10T15:08:07.288Z",
+  "sites": [
+    {
+      "slug": "anthropic-agent-skills-docs",
+      "name": "Anthropic Agent Skills Docs",
+      "kind": "official skills docs",
+      "urls": [
+        [
+          "index",
+          "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview"
+        ],
+        [
+          "skill-repo-detail",
+          "https://github.com/anthropics/skills/blob/main/skills/pptx/SKILL.md"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview",
+          "ok": true,
+          "status": 200,
+          "ms": 10228,
+          "title": "Agent Skills - Claude API Docs",
+          "h1": [
+            "Agent Skills"
+          ],
+          "stats": {
+            "bodyTextLength": 16508,
+            "linkCount": 185,
+            "buttonCount": 48,
+            "inputCount": 0,
+            "cardishCount": 1,
+            "scrollHeight": 14731
+          }
+        },
+        {
+          "label": "skill-repo-detail",
+          "url": "https://github.com/anthropics/skills/blob/main/skills/pptx/SKILL.md",
+          "ok": true,
+          "status": 200,
+          "ms": 6615,
+          "title": "skills/skills/pptx/SKILL.md at main · anthropics/skills · GitHub",
+          "h1": [
+            "Search code, repositories, users, issues, pull requests...",
+            "Provide feedback",
+            "Saved searches"
+          ],
+          "stats": {
+            "bodyTextLength": 8442,
+            "linkCount": 137,
+            "buttonCount": 44,
+            "inputCount": 10,
+            "cardishCount": 2,
+            "scrollHeight": 9103
+          }
+        }
+      ]
+    },
+    {
+      "slug": "openai-codex-skills-docs",
+      "name": "OpenAI Codex Agent Skills Docs",
+      "kind": "official skills docs",
+      "urls": [
+        [
+          "index",
+          "https://developers.openai.com/codex/skills"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://developers.openai.com/codex/skills",
+          "ok": true,
+          "status": 200,
+          "ms": 4006,
+          "title": "Agent Skills – Codex | OpenAI Developers",
+          "h1": [],
+          "stats": {
+            "bodyTextLength": 7912,
+            "linkCount": 465,
+            "buttonCount": 47,
+            "inputCount": 2,
+            "cardishCount": 1,
+            "scrollHeight": 844
+          }
+        }
+      ]
+    },
+    {
+      "slug": "chatgpt-gpt-store",
+      "name": "ChatGPT Explore GPTs",
+      "kind": "official GPT catalog",
+      "urls": [
+        [
+          "index",
+          "https://chatgpt.com/gpts"
+        ],
+        [
+          "detail-canva",
+          "https://chatgpt.com/g/g-alKfVrz9K-canva"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://chatgpt.com/gpts",
+          "ok": true,
+          "status": 200,
+          "ms": 13666,
+          "title": "Explore GPTs",
+          "h1": [],
+          "stats": {
+            "bodyTextLength": 43,
+            "linkCount": 1,
+            "buttonCount": 1,
+            "inputCount": 0,
+            "cardishCount": 0,
+            "scrollHeight": 844
+          }
+        },
+        {
+          "label": "detail-canva",
+          "url": "https://chatgpt.com/g/g-alKfVrz9K-canva",
+          "ok": true,
+          "status": 200,
+          "ms": 7338,
+          "title": "ChatGPT",
+          "h1": [
+            "What are you working on?"
+          ],
+          "stats": {
+            "bodyTextLength": 193,
+            "linkCount": 4,
+            "buttonCount": 7,
+            "inputCount": 3,
+            "cardishCount": 0,
+            "scrollHeight": 844
+          }
+        }
+      ]
+    },
+    {
+      "slug": "skillsmp",
+      "name": "SkillsMP",
+      "kind": "agent skills marketplace",
+      "urls": [
+        [
+          "index",
+          "https://skillsmp.com/"
+        ],
+        [
+          "search",
+          "https://skillsmp.com/search"
+        ],
+        [
+          "detail-frontend-design",
+          "https://skillsmp.com/skills/anthropics-claude-code-plugins-frontend-design-skills-frontend-design-skill-md"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://skillsmp.com/",
+          "ok": true,
+          "status": 200,
+          "ms": 5462,
+          "title": "Agent Skills Marketplace - Claude, Codex & ChatGPT Skills | SkillsMP",
+          "h1": [
+            "Skills \nMarketplace"
+          ],
+          "stats": {
+            "bodyTextLength": 10122,
+            "linkCount": 67,
+            "buttonCount": 24,
+            "inputCount": 1,
+            "cardishCount": 59,
+            "scrollHeight": 10147
+          }
+        },
+        {
+          "label": "search",
+          "url": "https://skillsmp.com/search",
+          "ok": true,
+          "status": 200,
+          "ms": 6053,
+          "title": "Search 1.5M Agent Skills | SkillsMP",
+          "h1": [
+            "Browse Agent Skills"
+          ],
+          "stats": {
+            "bodyTextLength": 4769,
+            "linkCount": 48,
+            "buttonCount": 33,
+            "inputCount": 1,
+            "cardishCount": 37,
+            "scrollHeight": 5995
+          }
+        },
+        {
+          "label": "detail-frontend-design",
+          "url": "https://skillsmp.com/skills/anthropics-claude-code-plugins-frontend-design-skills-frontend-design-skill-md",
+          "ok": true,
+          "status": 200,
+          "ms": 5210,
+          "title": "Frontend Design - Official Anthropic Agent Skill | SkillsMP",
+          "h1": [
+            "frontend-design"
+          ],
+          "stats": {
+            "bodyTextLength": 8757,
+            "linkCount": 40,
+            "buttonCount": 16,
+            "inputCount": 0,
+            "cardishCount": 17,
+            "scrollHeight": 7154
+          }
+        }
+      ]
+    },
+    {
+      "slug": "mcpservers-agent-skills",
+      "name": "MCP Servers Agent Skills Library",
+      "kind": "agent skills directory",
+      "urls": [
+        [
+          "index",
+          "https://mcpservers.org/agent-skills"
+        ],
+        [
+          "author-anthropic",
+          "https://mcpservers.org/agent-skills/author/anthropic"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://mcpservers.org/agent-skills",
+          "ok": true,
+          "status": 200,
+          "ms": 12910,
+          "title": "Agent Skills Library",
+          "h1": [
+            "Agent Skills Library"
+          ],
+          "stats": {
+            "bodyTextLength": 5856,
+            "linkCount": 79,
+            "buttonCount": 45,
+            "inputCount": 0,
+            "cardishCount": 42,
+            "scrollHeight": 5157
+          }
+        },
+        {
+          "label": "author-anthropic",
+          "url": "https://mcpservers.org/agent-skills/author/anthropic",
+          "ok": true,
+          "status": 200,
+          "ms": 4836,
+          "title": "Anthropic Skills | Agent Skills Library",
+          "h1": [
+            "Anthropic Skills"
+          ],
+          "stats": {
+            "bodyTextLength": 83591,
+            "linkCount": 369,
+            "buttonCount": 356,
+            "inputCount": 0,
+            "cardishCount": 353,
+            "scrollHeight": 60320
+          }
+        }
+      ]
+    },
+    {
+      "slug": "official-mcp-registry",
+      "name": "Official MCP Registry",
+      "kind": "MCP registry",
+      "urls": [
+        [
+          "index",
+          "https://registry.modelcontextprotocol.io/"
+        ],
+        [
+          "search",
+          "https://registry.modelcontextprotocol.io/?q=github"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://registry.modelcontextprotocol.io/",
+          "ok": true,
+          "status": 200,
+          "ms": 8253,
+          "title": "Official MCP Registry",
+          "h1": [
+            "Official MCP Registry"
+          ],
+          "stats": {
+            "bodyTextLength": 17327,
+            "linkCount": 4,
+            "buttonCount": 6,
+            "inputCount": 7,
+            "cardishCount": 0,
+            "scrollHeight": 21417
+          }
+        },
+        {
+          "label": "search",
+          "url": "https://registry.modelcontextprotocol.io/?q=github",
+          "ok": true,
+          "status": 200,
+          "ms": 8766,
+          "title": "Official MCP Registry",
+          "h1": [
+            "Official MCP Registry"
+          ],
+          "stats": {
+            "bodyTextLength": 18203,
+            "linkCount": 4,
+            "buttonCount": 6,
+            "inputCount": 7,
+            "cardishCount": 0,
+            "scrollHeight": 22444
+          }
+        }
+      ]
+    },
+    {
+      "slug": "smithery",
+      "name": "Smithery",
+      "kind": "MCP registry",
+      "urls": [
+        [
+          "index",
+          "https://smithery.ai/servers"
+        ],
+        [
+          "detail-exa",
+          "https://smithery.ai/servers/exa"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://smithery.ai/servers",
+          "ok": true,
+          "status": 200,
+          "ms": 8141,
+          "title": "MCPs | Smithery",
+          "h1": [],
+          "stats": {
+            "bodyTextLength": 7160,
+            "linkCount": 58,
+            "buttonCount": 33,
+            "inputCount": 1,
+            "cardishCount": 52,
+            "scrollHeight": 3661
+          }
+        },
+        {
+          "label": "detail-exa",
+          "url": "https://smithery.ai/servers/exa",
+          "ok": true,
+          "status": 200,
+          "ms": 5374,
+          "title": "Exa Search - MCP | Smithery",
+          "h1": [
+            "Exa Search"
+          ],
+          "stats": {
+            "bodyTextLength": 2341,
+            "linkCount": 28,
+            "buttonCount": 20,
+            "inputCount": 1,
+            "cardishCount": 7,
+            "scrollHeight": 4349
+          }
+        }
+      ]
+    },
+    {
+      "slug": "glama-mcp",
+      "name": "Glama MCP Servers",
+      "kind": "MCP registry",
+      "urls": [
+        [
+          "index",
+          "https://glama.ai/mcp/servers"
+        ],
+        [
+          "detail-semgrep",
+          "https://glama.ai/mcp/servers/semgrep/mcp"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://glama.ai/mcp/servers",
+          "ok": true,
+          "status": 200,
+          "ms": 12662,
+          "title": "Open-Source MCP Servers – 33,959 in the Glama Registry | Glama",
+          "h1": [
+            "Popular MCP Servers"
+          ],
+          "stats": {
+            "bodyTextLength": 7704,
+            "linkCount": 190,
+            "buttonCount": 7,
+            "inputCount": 1,
+            "cardishCount": 20,
+            "scrollHeight": 8362
+          }
+        },
+        {
+          "label": "detail-semgrep",
+          "url": "https://glama.ai/mcp/servers/semgrep/mcp",
+          "ok": true,
+          "status": 200,
+          "ms": 15009,
+          "title": "Semgrep MCP Server by semgrep | Glama",
+          "h1": [
+            "Semgrep MCP Server",
+            "Semgrep MCP Server"
+          ],
+          "stats": {
+            "bodyTextLength": 14430,
+            "linkCount": 230,
+            "buttonCount": 35,
+            "inputCount": 1,
+            "cardishCount": 4,
+            "scrollHeight": 22963
+          }
+        }
+      ]
+    },
+    {
+      "slug": "mcp-so",
+      "name": "MCP.so",
+      "kind": "MCP registry",
+      "urls": [
+        [
+          "index",
+          "https://mcp.so/explore"
+        ],
+        [
+          "detail-in-parallel",
+          "https://mcp.so/server/in-parallel"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://mcp.so/explore",
+          "ok": true,
+          "status": 200,
+          "ms": 16756,
+          "title": "Explore MCP Servers and Clients",
+          "h1": [
+            "Explore MCP Servers and Clients"
+          ],
+          "stats": {
+            "bodyTextLength": 11815,
+            "linkCount": 658,
+            "buttonCount": 96,
+            "inputCount": 283,
+            "cardishCount": 0,
+            "scrollHeight": 3650
+          }
+        },
+        {
+          "label": "detail-in-parallel",
+          "url": "https://mcp.so/server/in-parallel",
+          "ok": true,
+          "status": 200,
+          "ms": 10696,
+          "title": "In Parallel MCP Server",
+          "h1": [
+            "In Parallel",
+            "mcp.so asks for your consent to use your personal data to:",
+            "Manage your data"
+          ],
+          "stats": {
+            "bodyTextLength": 4108,
+            "linkCount": 646,
+            "buttonCount": 97,
+            "inputCount": 283,
+            "cardishCount": 1,
+            "scrollHeight": 3234
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pulsemcp",
+      "name": "PulseMCP",
+      "kind": "MCP registry",
+      "urls": [
+        [
+          "index",
+          "https://www.pulsemcp.com/servers"
+        ],
+        [
+          "detail-time",
+          "https://www.pulsemcp.com/servers/modelcontextprotocol-time"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://www.pulsemcp.com/servers",
+          "ok": true,
+          "status": 200,
+          "ms": 6256,
+          "title": "MCP Server Directory: 17,760+ updated daily | PulseMCP",
+          "h1": [
+            "MCP Server Directory"
+          ],
+          "stats": {
+            "bodyTextLength": 10798,
+            "linkCount": 291,
+            "buttonCount": 5,
+            "inputCount": 5,
+            "cardishCount": 0,
+            "scrollHeight": 18992
+          }
+        },
+        {
+          "label": "detail-time",
+          "url": "https://www.pulsemcp.com/servers/modelcontextprotocol-time",
+          "ok": true,
+          "status": 200,
+          "ms": 5045,
+          "title": "Time MCP Server by Anthropic | PulseMCP",
+          "h1": [
+            "Time"
+          ],
+          "stats": {
+            "bodyTextLength": 1256,
+            "linkCount": 35,
+            "buttonCount": 1,
+            "inputCount": 0,
+            "cardishCount": 0,
+            "scrollHeight": 3213
+          }
+        }
+      ]
+    },
+    {
+      "slug": "mintmcp",
+      "name": "MintMCP",
+      "kind": "MCP registry",
+      "urls": [
+        [
+          "index",
+          "https://www.mintmcp.com/servers"
+        ],
+        [
+          "detail-github",
+          "https://www.mintmcp.com/servers/github"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://www.mintmcp.com/servers",
+          "ok": true,
+          "status": 200,
+          "ms": 8042,
+          "title": "Browse MCP Servers - MintMCP",
+          "h1": [
+            "Browse the MCP Directory"
+          ],
+          "stats": {
+            "bodyTextLength": 10049,
+            "linkCount": 119,
+            "buttonCount": 39,
+            "inputCount": 5,
+            "cardishCount": 77,
+            "scrollHeight": 13500
+          }
+        },
+        {
+          "label": "detail-github",
+          "url": "https://www.mintmcp.com/servers/github",
+          "ok": true,
+          "status": 200,
+          "ms": 6934,
+          "title": "GitHub MCP Server - MintMCP",
+          "h1": [
+            "GitHub MCP server"
+          ],
+          "stats": {
+            "bodyTextLength": 4870,
+            "linkCount": 45,
+            "buttonCount": 36,
+            "inputCount": 4,
+            "cardishCount": 43,
+            "scrollHeight": 10311
+          }
+        }
+      ]
+    },
+    {
+      "slug": "awesome-skill",
+      "name": "Awesome Skill",
+      "kind": "agent skills catalog",
+      "urls": [
+        [
+          "index-featured",
+          "https://awesomeskill.ai/search?filter=featured"
+        ],
+        [
+          "detail-browser-agent",
+          "https://awesomeskill.ai/skill/vercel-labs-agent-browser-agent-browser"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index-featured",
+          "url": "https://awesomeskill.ai/search?filter=featured",
+          "ok": true,
+          "status": 200,
+          "ms": 13272,
+          "title": "Search Skills - Awesome Skills - Agent Skills Marketplace for Claude, Codex & ChatGPT",
+          "h1": [],
+          "stats": {
+            "bodyTextLength": 0,
+            "linkCount": 0,
+            "buttonCount": 0,
+            "inputCount": 0,
+            "cardishCount": 0,
+            "scrollHeight": 972
+          }
+        },
+        {
+          "label": "detail-browser-agent",
+          "url": "https://awesomeskill.ai/skill/vercel-labs-agent-browser-agent-browser",
+          "ok": true,
+          "status": 200,
+          "ms": 6384,
+          "title": "agent-browser - Claude Skill - Awesome Skills - Agent Skills Marketplace for Claude, Codex & ChatGPT",
+          "h1": [
+            "agent-browser"
+          ],
+          "stats": {
+            "bodyTextLength": 5371,
+            "linkCount": 49,
+            "buttonCount": 6,
+            "inputCount": 0,
+            "cardishCount": 5,
+            "scrollHeight": 5913
+          }
+        }
+      ]
+    },
+    {
+      "slug": "officialskills",
+      "name": "Official Skills",
+      "kind": "agent skills publisher directory",
+      "urls": [
+        [
+          "index",
+          "https://officialskills.sh/"
+        ],
+        [
+          "publisher-microsoft",
+          "https://officialskills.sh/microsoft/skills"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://officialskills.sh/",
+          "ok": true,
+          "status": 200,
+          "ms": 4750,
+          "title": "officialskills.sh — Official Agent Skills Directory",
+          "h1": [
+            "Official\nAgent Skills"
+          ],
+          "stats": {
+            "bodyTextLength": 67929,
+            "linkCount": 618,
+            "buttonCount": 44,
+            "inputCount": 1,
+            "cardishCount": 0,
+            "scrollHeight": 2097
+          }
+        },
+        {
+          "label": "publisher-microsoft",
+          "url": "https://officialskills.sh/microsoft/skills",
+          "ok": true,
+          "status": 200,
+          "ms": 4420,
+          "title": "Microsoft — 133 Agent Skills | officialskills.sh",
+          "h1": [
+            "Microsoft"
+          ],
+          "stats": {
+            "bodyTextLength": 15516,
+            "linkCount": 142,
+            "buttonCount": 3,
+            "inputCount": 0,
+            "cardishCount": 0,
+            "scrollHeight": 9598
+          }
+        }
+      ]
+    },
+    {
+      "slug": "promptbase-agent-skills",
+      "name": "PromptBase Agent Skills",
+      "kind": "commercial agent skills marketplace",
+      "urls": [
+        [
+          "index",
+          "https://promptbase.com/agent-skills"
+        ],
+        [
+          "detail-seogeo",
+          "https://promptbase.com/skill/seogeo-content-strategist-skill-pack"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://promptbase.com/agent-skills",
+          "ok": true,
+          "status": 200,
+          "ms": 4995,
+          "title": "Agent Skills | SKILL.md for Claude, Cursor & ChatGPT",
+          "h1": [
+            "Agent Skills"
+          ],
+          "stats": {
+            "bodyTextLength": 5111,
+            "linkCount": 207,
+            "buttonCount": 0,
+            "inputCount": 1,
+            "cardishCount": 0,
+            "scrollHeight": 7994
+          }
+        },
+        {
+          "label": "detail-seogeo",
+          "url": "https://promptbase.com/skill/seogeo-content-strategist-skill-pack",
+          "ok": true,
+          "status": 200,
+          "ms": 13286,
+          "title": "SEOgeo Content Strategist Skill Pack Claude Skill | PromptBase",
+          "h1": [
+            "SEOgeo Content Strategist Skill Pack"
+          ],
+          "stats": {
+            "bodyTextLength": 5943,
+            "linkCount": 138,
+            "buttonCount": 0,
+            "inputCount": 1,
+            "cardishCount": 0,
+            "scrollHeight": 5219
+          }
+        }
+      ]
+    },
+    {
+      "slug": "composio-toolkits",
+      "name": "Composio Toolkits",
+      "kind": "integration/toolkit catalog",
+      "urls": [
+        [
+          "index",
+          "https://composio.dev/toolkits"
+        ],
+        [
+          "detail-gmail",
+          "https://composio.dev/toolkits/gmail"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://composio.dev/toolkits",
+          "ok": true,
+          "status": 200,
+          "ms": 6443,
+          "title": "Composio toolkits | MCP and API Integrations for AI Agents",
+          "h1": [
+            "AI native integrations for Enterprise Agents"
+          ],
+          "stats": {
+            "bodyTextLength": 9594,
+            "linkCount": 81,
+            "buttonCount": 2,
+            "inputCount": 22,
+            "cardishCount": 0,
+            "scrollHeight": 11850
+          }
+        },
+        {
+          "label": "detail-gmail",
+          "url": "https://composio.dev/toolkits/gmail",
+          "ok": true,
+          "status": 200,
+          "ms": 5610,
+          "title": "Gmail MCP Integration for AI Agents | Composio",
+          "h1": [
+            "Gmail MCP for AI Agents"
+          ],
+          "stats": {
+            "bodyTextLength": 16470,
+            "linkCount": 79,
+            "buttonCount": 12,
+            "inputCount": 0,
+            "cardishCount": 0,
+            "scrollHeight": 13060
+          }
+        }
+      ]
+    },
+    {
+      "slug": "docker-mcp-catalog",
+      "name": "Docker MCP Catalog Docs",
+      "kind": "official MCP catalog docs",
+      "urls": [
+        [
+          "index",
+          "https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/"
+        ]
+      ],
+      "pages": [
+        {
+          "label": "index",
+          "url": "https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/",
+          "ok": true,
+          "status": 200,
+          "ms": 9712,
+          "title": "Docker MCP Catalog | Docker Docs",
+          "h1": [
+            "Docker MCP Catalog"
+          ],
+          "stats": {
+            "bodyTextLength": 4986,
+            "linkCount": 789,
+            "buttonCount": 213,
+            "inputCount": 14,
+            "cardishCount": 2,
+            "scrollHeight": 5606
+          }
+        }
+      ]
+    }
+  ]
+}

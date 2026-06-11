@@ -1,0 +1,233 @@
+{
+  "title": "Official MCP Registry",
+  "url": "https://registry.modelcontextprotocol.io/?q=github",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Official MCP Registry"
+    },
+    {
+      "tag": "h2",
+      "text": "Recently Updated"
+    },
+    {
+      "tag": "h3",
+      "text": "ai.intuitek.the-stall/the-stall"
+    },
+    {
+      "tag": "h3",
+      "text": "com.kordiapp/kordi-mcp-server"
+    },
+    {
+      "tag": "h3",
+      "text": "com.kordiapp/kordi-mcp-server"
+    },
+    {
+      "tag": "h3",
+      "text": "com.mcpemails/emails"
+    },
+    {
+      "tag": "h3",
+      "text": "com.ontoramp/governance-assessment"
+    },
+    {
+      "tag": "h3",
+      "text": "com.openagenda/mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "cx.alloy/alloy"
+    },
+    {
+      "tag": "h3",
+      "text": "dev.adcrunch/mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Buggy1111/shelly-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Delego-Dev/delego"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Jott2121/agent-gate"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-antigravity"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-codex"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-gemini"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-llm"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.Lykhoyda/ask-ollama"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.abhiyoheswaran1/agentloopkit"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.apasztetnik/el-buen-agente-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.apasztetnik/el-buen-agente-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.blackdome-ai/blackdome"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.chaandannn/finops-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.greenmtnsun/giteasy"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.kayhendriksen/foehn"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.leadbay/leadbay-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.piiinpiiins/zotero-mcp-local"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.pzfreo/build123d-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.snoozelieb/coach-mcp"
+    },
+    {
+      "tag": "h3",
+      "text": "io.github.turbyho/fw-context-mcp"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search servers by name...",
+      "type": "search"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Retry",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Previous",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Next",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Server: Local (1.7.9)",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "",
+      "type": "radio"
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "https://custom-url.com",
+      "type": "text"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Cancel",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Apply",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "GitHub",
+      "href": "https://github.com/modelcontextprotocol/registry"
+    },
+    {
+      "text": "Docs",
+      "href": "https://github.com/modelcontextprotocol/registry/tree/main/docs"
+    },
+    {
+      "text": "API Reference",
+      "href": "https://registry.modelcontextprotocol.io/docs"
+    },
+    {
+      "text": "MCP contributors",
+      "href": "https://github.com/modelcontextprotocol/registry"
+    }
+  ],
+  "text": "Official MCP Registry\n\nDiscover Model Context Protocol servers\n\nGitHub\nDocs\nAPI Reference\nRecently Updated\nai.intuitek.the-stall/the-stall\nv4.60.0\n\n205 pay-per-call AI tools: stocks, crypto, DeFi, historical weather, Stack Overflow, news. USDC.\n\nUpdated 6/10/2026\ncom.kordiapp/kordi-mcp-server\nv1.0.0\n\nTrack, analyze, and act on your streaming and SaaS subscriptions from any AI agent.\n\nUpdated 6/10/2026\ncom.kordiapp/kordi-mcp-server\nv1.0.1\n\nTrack, analyze, and act on your streaming and SaaS subscriptions from any AI agent.\n\nUpdated 6/10/2026\ncom.mcpemails/emails\nv1.0.0\n\nEmail for AI agents: read, search, send, organize, and schedule across your inboxes.\n\nUpdated 6/10/2026\ncom.ontoramp/governance-assessment\nv2.0.0\n\nGovernance maturity assessment, compliance gap analysis, and evidence-linked briefs for AI agents.\n\nUpdated 6/10/2026\ncom.openagenda/mcp\nv1.0.2\n\nSearch, analyze and manage events on OpenAgenda.\n\nUpdated 6/10/2026\ncx.alloy/alloy\nv1.0.0\n\nAI workspace — shared knowledge, skills, and tools for AI agents\n\nUpdated 6/10/2026\ndev.adcrunch/mcp\nv1.0.1\n\nAsk AI about your ads — query Meta, TikTok, and Google Ads performance in natural language.\n\nUpdated 6/10/2026\nio.github.Buggy1111/shelly-mcp\nv0.1.1\n\nLocal-first MCP server for Shelly smart-home devices (Gen1-Gen4): control, energy, automation.\n\nUpdated 6/10/2026\nio.github.Delego-Dev/delego\nv0.3.1\n\nIntent-bound action authorization for AI agents: policy, human approval, and a signed audit trail.\n\nUpdated 6/10/2026\nio.github.Jott2121/agent-gate\nv0.1.1\n\nFail-closed quality gate and hash-chained receipt ledger for AI agent workflows.\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-antigravity\nv0.2.2\n\nBridge Claude with Google's Antigravity CLI (agy) for code review and second opinions\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-codex\nv0.3.11\n\nBridge Claude with OpenAI Codex CLI for AI-to-AI collaboration, code review, and second opinions\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-gemini\nv1.6.11\n\nBridge Claude with Gemini CLI for AI-to-AI collaboration, code review, and second opinions\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-llm\nv0.3.16\n\nUnified MCP server — auto-detects Gemini, Codex, Ollama, Antigravity; registers available tools\n\nUpdated 6/10/2026\nio.github.Lykhoyda/ask-ollama\nv0.3.6\n\nBridge Claude with local Ollama LLMs for private AI-to-AI collaboration — no API keys, fully local\n\nUpdated 6/10/2026\nio.github.abhiyoheswaran1/agentloopkit\nv0.26.1\n\nRead-only MCP server for AgentLoopKit tasks, policies, reports, handoffs, and status.\n\nUpdated 6/10/2026\nio.github.apasztetnik/el-buen-agente-mcp\nv2.2.0\n\nLa guía 'El Buen Agente' como 17 tools para evaluar, mejorar y construir agentes LLM. En español.\n\nUpdated 6/10/2026\nio.github.apasztetnik/el-buen-agente-mcp\nv2.3.0\n\nLa guía 'El Buen Agente' como 17 tools para evaluar, mejorar y construir agentes LLM. En español.\n\nUpdated 6/10/2026\nio.github.blackdome-ai/blackdome\nv0.1.0\n\nLive honeypot threat intel: attacker IPs, IOCs, credentials, payloads, actors.\n\nUpdated 6/10/2026\nio.github.chaandannn/finops-mcp\nv0.8.59\n\nLocal-first FinOps copilot: ask AWS, Azure, GCP, and SaaS cost questions in plain English.\n\nUpdated 6/10/2026\nio.github.greenmtnsun/giteasy\nv1.5.0\n\n21 plain-English git tools as an MCP server. No jargon.\n\nUpdated 6/10/2026\nio.github.kayhendriksen/foehn\nv0.3.2\n\nAccess Swiss meteorological open data from MeteoSwiss, powered by foehn\n\nUpdated 6/10/2026\nio.github.leadbay/leadbay-mcp\nv0.19.2\n\nAI lead discovery, qualification, and outreach prep on your Leadbay account.\n\nUpdated 6/10/2026\nio.github.piiinpiiins/zotero-mcp-local\nv0.1.4\n\nSearch, read PDFs, and find related papers in your local Zotero library. Read-only, 100% local.\n\nUpdated 6/10/2026\nio.github.pzfreo/build123d-mcp\nv0.3.45\n\nAI-driven 3D CAD via build123d: execute, render, measure, and export geometry interactively.\n\nUpdated 6/10/2026\nio.github.snoozelieb/coach-mcp\nv1.0.0\n\nAdaptive AI training coach MCP server backed by Garmin Connect\n\nUpdated 6/10/2026\nio.github.turbyho/fw-context-mcp\nv0.1.2\n\nBuild-aware code intelligence for embedded C/C++ firmware — libclang, FTS5, call graphs, 19 tools\n\nUpdated 6/10/2026\nio.github.turbyho/mem-context\nv0.1.3\n\nTemporal memory MCP server with LanceDB vector search, weight-decay scoring, and LLM consolidation\n\nUpdated 6/10/2026\nio.github.turbyho/mem-context\nv0.1.4\n\nTemporal memory MCP server with LanceDB vector search, weight-decay scoring, and LLM consolidation\n\nUpdated 6/10/2026\nio.github.vargahis/monarch-money\nv0.1.3\n\nMCP server for Monarch Money — accounts, transactions, budgets, cashflow, investments, and more\n\nUpdated 6/10/2026\nio.github.zoharbabin/web-researcher-mcp\nv1.25.1\n\nYour AI research assistant that cites real sources and stays honest\n\nUpdated 6/10/2026\nio.github.zoharbabin/web-researcher-mcp\nv1.25.2\n\nYour AI research assistant that cites real sources and stays honest\n\nUpdated 6/10/2026\nso.pharaoh/pharaoh\nv1.0.104\n\nCodebase knowledge graph — architectural awareness for AI coding agents via MCP\n\nUpdated 6/10/2026\nShow only latest versions\nai.smithery/Hint-Services-obsidian-github-mcp\nv0.4.0\n\nConnect AI assistants to your GitHub-hosted Obsidian vault to seamlessly access, search, and analy…\n\n9/14/2025\nai.smithery/saidsef-mcp-github-pr-issue-analyser\nv1.15.0\n\nA Model Context Protocol (MCP) application for automated GitHub PR analysis and issue management.…\n\n10/5/2025\nai.smithery/smithery-ai-github\nv1.0.0\n\nAccess the GitHub API, enabling file operations, repository management, search functionality, and…\n\n9/10/2025\ncom.mcparmory/github\nv1.0.6\n\nManage repositories, users, releases, and automate GitHub workflows\n\n5/11/2026\ncom.thenextgennexus/github-mcp-server\nv1.0.0\n\nGitHub repo analytics: stars, trending, code search, contributor maps for project research.\n\n4/26/2026\nio.github.000safah000-ai/blackhawk-mcp\nv1.0.0\n\nBlackHawkMCP - connect AI to Google Sheets\n\n4/24/2026\nio.github.0580iris-lang/x711-gas-station\nv1.0.0\n\nPay-per-use tool API for AI agents. Free tier, x402 USDC micropayments, or API key.\n\n5/5/2026\nio.github.06ketan/medium-ops\nv0.1.2\n\nMedium CLI + 23-tool MCP server. Your IDE drafts replies. No API keys.\n\n5/3/2026\nio.github.06ketan/slideshot\nv4.4.0\n\nConvert HTML to PDF/PNG/WebP/PPTX slide carousels with 11 themes — for LinkedIn, decks, posts.\n\n5/1/2026\nio.github.06ketan/substack-ops\nv0.3.5\n\nSubstack CLI + 26-tool MCP server. Your IDE drafts replies via propose_reply. No API keys.\n\n5/3/2026\nio.github.0ics-srls/ui-ticket-mcp\nv1.4.0\n\nHuman-to-AI code review bridge. Review UI in the browser, AI agents fix code via MCP.\n\n4/27/2026\nio.github.0nork/0nMCP\nv4.5.1\n\nUniversal AI API Orchestrator — 1,554 tools, 96 services. One install.\n\n4/23/2026\nio.github.0rkz/byte-protocol\nv0.11.1\n\nPayPerByte — per-byte USDC data feeds for AI agents on Arbitrum. EIP-712-attested, no token.\n\n6/4/2026\nio.github.0xAxiom/axiom-agentic-tools\nv0.2.0\n\nx402-paid Base agent tools (USDC). 5 deterministic tools. No API keys. No NFT pass.\n\n5/31/2026\nio.github.0xMassi/webclaw\nv0.1.3\n\nWeb extraction MCP server. Scrape, crawl, extract, summarize any URL to clean markdown.\n\n4/1/2026\nio.github.0xSoftBoi/suwappu\nv0.1.1\n\nCross-chain DEX for AI agents. Swap tokens across 7+ chains.\n\n3/8/2026\nio.github.0xbrainkid/agentfolio\nv1.1.1\n\nQuery AI agent profiles, trust scores, verifications, and marketplace jobs on AgentFolio.\n\n3/24/2026\nio.github.0xbrainkid/agentfolio-mcp-server\nv1.2.1\n\nAI agent identity verification via SATP on Solana. Trust scores and on-chain attestations.\n\n3/25/2026\nio.github.0xdirectping/escrow\nv1.0.0\n\nAgent-to-agent escrow on Base. Post quests with ETH/USDC bounties and settle on-chain.\n\n2/24/2026\nio.github.0xka13b/microsoft-outlook-mcp\nv1.0.1\n\nMicrosoft Outlook (mail) MCP server — read, search, and send email through Microsoft Graph.\n\n6/8/2026\nio.github.0xka13b/ms-calendar-mcp\nv1.0.1\n\nMicrosoft Calendar (Outlook Calendar) MCP server for managing events via Microsoft Graph.\n\n6/8/2026\nio.github.0xka13b/ms-contacts-mcp\nv1.0.1\n\nMicrosoft Contacts MCP server — read and manage your address book through Microsoft Graph.\n\n6/8/2026\nio.github.0xka13b/ms-onedrive-mcp\nv1.0.1\n\nMicrosoft OneDrive MCP server — browse, read, and manage files and folders through Microsoft Graph.\n\n6/8/2026\nio.github.0xka13b/ms-sharepoint-mcp\nv1.0.1\n\nMicrosoft SharePoint MCP server — access sites, lists, and documents through Microsoft Graph.\n\n6/8/2026\nio.github.0xsims/rubric-protocol\nv2.0.2\n\nAI compliance attestation for EU AI Act, SR 11-7, HIPAA. Free local tier, no key required.\n\n4/17/2026\nio.github.0xsl1m/cerebrus-pulse-mcp\nv0.2.0\n\nReal-time crypto intelligence: technical analysis, sentiment, and funding rates\n\n3/5/2026\nio.github.100xPercent/pop-pay\nv0.5.7\n\nRuntime security for AI agent commerce. CLI + MCP server blocks hallucinated purchases.\n\n4/14/2026\nio.github.10iii/air\nv0.2.8\n\nAI-optimized tool output compression for read, grep, diff, bash, test, web, search, and more\n\n3/27/2026\nio.github.1102tools/bls-oews-mcp\nv0.2.7\n\nBLS Occupational Employment and Wage Statistics market wages. 7 tools.\n\n4/25/2026\nio.github.1102tools/ecfr-mcp\nv0.2.6\n\nElectronic Code of Federal Regulations including FAR and DFARS. 13 tools.\n\n4/25/2026\nio.github.1102tools/federal-register-mcp\nv0.2.7\n\nFederal Register proposed/final rules, notices, executive orders, FAR cases. 8 tools.\n\n4/25/2026\nio.github.1102tools/gsa-calc-mcp\nv0.2.7\n\nGSA CALC+ awarded labor ceiling rates from 230K+ MAS contracts. 8 tools.\n\n4/25/2026\nio.github.1102tools/gsa-perdiem-mcp\nv0.2.6\n\nGSA Per Diem federal travel lodging and M&IE rates. 6 tools.\n\n4/25/2026\nio.github.1102tools/regulations-gov-mcp\nv0.2.5\n\nRegulations.gov rulemaking dockets, documents, public comments. 8 tools.\n\n4/25/2026\nio.github.1102tools/sam-gov-mcp\nv0.4.1\n\nSAM.gov entity registration, exclusions, opportunities, contract awards. 15 tools.\n\n4/25/2026\nio.github.1102tools/usaspending-gov-mcp\nv0.3.2\n\nUSASpending.gov federal contracts, subawards, recipients, agencies. 55 tools.\n\n4/25/2026\nio.github.1145-am/syracuse-mcp-server\nv1.2.0\n\nStructured company & industry news for AI agents: typed, dated, source-linked events.\n\n6/4/2026\nio.github.123Ergo/unphurl\nv0.2.3\n\nURL intelligence for AI agents and developers. 16 tools, 25 signal weights, 20 free checks.\n\n4/23/2026\nio.github.139user/tword-divination\nv1.1.0\n\nQimen Dunjia & Da Liu Ren divination: complete nine-palace charts and four-lesson analysis.\n\n2/22/2026\nio.github.171county/modwrench\nv0.0.1\n\nOne MCP server for mod platforms and local modding diagnostics. No data kept.\n\n6/9/2026\nio.github.1clawAI/1claw-mcp\nv0.32.1\n\nHSM-backed vault secrets for AI agents (JIT fetch) plus prompt-injection and threat scanning.\n\n6/5/2026\nio.github.1clickreport/mcp\nv1.0.0\n\n40 tools for marketing analytics, campaign management, and AI monitoring across 6 platforms.\n\n5/26/2026\nio.github.1lystore/mcp-server\nv0.1.7\n\nMCP server for 1ly.store — buy/sell APIs and launch tokens on Bags.fm with USDC & $1LY.\n\n2/18/2026\nio.github.214140846/skillhub-mcp\nv1.0.5\n\nMCP server that exposes Claude-style skills to any MCP client.\n\n1/18/2026\nio.github.29yeovil/bluewatch\nv1.0.0\n\nSearch live UK firefighter recruitment across 73 fire services, with on-call station data.\n\n5/12/2026\nio.github.2s-io/mcp\nv1.10.0\n\nMCP server for 2s.io — pay-per-call tools settled in USDC on Base or Solana via x402.\n\n6/8/2026\nio.github.3121n/kartverket-mcp\nv0.4.2\n\nNorwegian address geocoding, places, properties, buildings & elevation from Kartverket.\n\n6/7/2026\nio.github.3121n/nabolag-mcp\nv0.2.2\n\nNorwegian neighborhood data: transit, road-noise & green-area access by coordinate.\n\n6/7/2026\nio.github.3121n/nve-mcp\nv0.1.2\n\nNorwegian flood & landslide hazard data from NVE, by WGS84 coordinate.\n\n6/7/2026\nio.github.3121n/statfin-mcp\nv0.1.0\n\nStatistics Finland (StatFin/PxWeb): search tables, read metadata, fetch JSON-stat2 data.\n\n6/7/2026\nio.github.3121n/udir-mcp\nv0.1.2\n\nNorwegian school (NSR) & kindergarten (NBR) registry data from UDIR.\n\n6/7/2026\nio.github.32bitsret/demostudio\nv0.1.2\n\nGenerate short-form video ads for Instagram Reels and TikTok from any AI assistant.\n\n3/17/2026\nio.github.365xbusiness/vigo-mcp\nv1.0.0\n\nAI-powered Hong Kong SFC regulatory intelligence. Bilingual EN/ZH compliance queries.\n\n2/15/2026\nio.github.3DUNLMTD/stylemcp\nv0.1.4\n\nBrand rules for AI outputs. Validate and rewrite text to match your brand voice.\n\n1/25/2026\nio.github.420247jake/session-forge\nv2.0.3\n\nPersistent memory and session intelligence for AI coding assistants. Zero config.\n\n3/9/2026\nio.github.4R9UN/mcp-kql-server\nv2.1.3\n\nExecute KQL in AI prompts via NL2KQL with schema discovery and Azure Data Explorer integration\n\n5/9/2026\nio.github.4dmrkey/cryptopolitan\nv1.0.0\n\nReal-time crypto news, analysis, and price predictions for AI agents via MCP.\n\n4/12/2026\nio.github.4rgon4ut/sutra\nv0.1.1\n\nContext Engineering Engine. Provides cognitive tools, memory structures, and agent patterns.\n\n12/18/2025\nio.github.6figr-com/jobgpt-mcp-server\nv1.1.4\n\nJob search automation, auto apply, resume builder, application tracking, and recruiter outreach\n\n3/23/2026\nio.github.78degrees/ghosthunt\nv1.0.0\n\nFind every leaked secret on your machine — API keys in .env files, shell history, and configs.\n\n5/27/2026\nio.github.78degrees/quantrisk\nv1.0.3\n\nPortfolio risk analytics MCP server — VaR, Monte Carlo, stress testing, and more.\n\n5/27/2026\nio.github.7figures007/highstory-mcp\nv1.1.0\n\nHigh Story MCP Server - Automate AI content campaigns and social media management.\n\n4/14/2026\nio.github.7grounds/fedlex-mcp\nv1.0.0\n\nSwiss Federal Law (Fedlex) — search and retrieve articles from 11 federal laws.\n\n4/24/2026\nio.github.7mza/geolocation-mcp\nv0.0.1\n\nAn MCP server that provides fast and up-to-date IP geolocation data.\n\n6/9/2026\nio.github.8beeeaaat/touchdesigner-mcp-server\nv1.2.0\n\nMCP server for TouchDesigner - Control and operate TouchDesigner projects through AI agents\n\n11/26/2025\nio.github.8infinitelabs/scoreflow\nv0.2.1\n\nQuery your Scoreflow level, XP, skill tree and leaderboard from inside Claude Code / Desktop.\n\n4/22/2026\nio.github.930m310n/geomelon-mcp\nv1.0.8\n\nMCP server for the Geomelon geographic API — stdio and remote HTTP transports\n\n5/17/2026\nio.github.930m310n/mcp\nv1.0.7\n\nMCP server for the Geomelon geographic API — stdio and remote HTTP transports\n\n5/17/2026\nio.github.98lukehall/renoun\nv1.4.0\n\nCrypto regime classifier for trading agents. 100% bounded regime accuracy. 50 free calls/day.\n\n3/17/2026\nio.github.A7OM-AI/atom-mcp-server\nv1.1.2\n\nThe Global Price Benchmark for AI Inference. 1,600+ SKUs, 40+ vendors, 14 price indexes.\n\n3/7/2026\nio.github.AAAA-Nexus/aaaa-nexus-mcp\nv0.1.1\n\nFormally verified AI safety APIs. 75+ endpoints, pay-per-call via USDC x402, no signup.\n\n5/2/2026\nio.github.ABRANJAN07/btp-mcp-server\nv1.0.0\n\nDiscover SAP BTP services, browse service catalog, check running instances, query dests, & more\n\n4/25/2026\nio.github.ABTdomain/domainkits-mcp\nv2.0.0\n\nDomain intelligence platform that turns your LLM into a professional domain consultant.\n\n2/15/2026\nio.github.AEGISGOVDAO/aegisgov-contracts-mcp\nv1.0.0\n\nSAM.gov federal contracts: search, details, AI bid analysis. 33k+ live opportunities.\n\n5/11/2026\nio.github.AIAppsAPI/adaptive-recall\nv1.0.1\n\nAdaptive memory system with cognitive scoring, knowledge graph, and self-improving ML.\n\n5/13/2026\nio.github.AIBOLLINGMO/eustore\nv0.2.2\n\nS3-compatible European object storage for AI agents. GDPR-compliant, EU-hosted, crypto payments.\n\n3/28/2026\nio.github.AIDataNordic/food-recipe-mcp\nv1.0.1\n\nSemantic search across 50,000+ food recipes with hybrid retrieval and reranking.\n\n4/11/2026\nio.github.AIDataNordic/nordic-financial-mcp\nv1.1.0\n\nSemantic search over Nordic filings, press releases, macro data and electricity prices.\n\n4/22/2026\nio.github.AILIFE1/cathedral-mcp\nv1.1.0\n\nPersistent memory and drift detection for AI agents across session restarts.\n\n4/12/2026\nio.github.AION-Analytics/aion-indian-market-intelligence\nv1.0.6\n\nIndian macro-event and sector impact intelligence for MCP workflows.\n\n6/6/2026\nio.github.AION-Analytics/aion-news-to-signal\nv1.0.1\n\nIndian financial headlines to sector trading signals and long/short ideas.\n\n6/6/2026\nio.github.AInoAKARI/keymaster-mcp\nv1.0.2\n\nRead-only runtime secret retrieval from HashiCorp Vault via Keymaster for autonomous AI agents.\n\n4/2/2026\nio.github.AIweather-Anurag/ottasia\nv0.1.3\n\nWhere to watch X in Y? 30 Asian and Middle Eastern streaming markets, via Claude.\n\n5/23/2026\nio.github.APonkratov/ya-yandex-wiki-mcp\nv0.2.0\n\nYet Another Yandex Wiki MCP Server.\n\n4/6/2026\nio.github.ARAS-Workspace/claude-kvm\nv2.0.11\n\nMCP server — control remote desktops via VNC with a native Swift daemon and Apple Vision OCR\n\n2/26/2026\nio.github.ARCXS-Protocol/mcp-server\nv1.0.3\n\nThe DNS/SMTP for AI agents: cross-protocol discovery, messaging and transactions. No middleman fees.\n\n6/6/2026\nio.github.ASGCompute/asgcard-mcp-server\nv0.5.13\n\nGive AI agents autonomous virtual card management via x402 and Stellar USDC\n\n3/26/2026\nio.github.Aakashbhardwaj27/ai-scanner\nv1.0.6\n\nScan codebases for LLM/AI SDK usage, exposed API tokens, and hardcoded secrets.\n\n3/21/2026\nio.github.AaronVick/echorift-mcp\nv0.1.0\n\nMCP server for EchoRift infrastructure primitives (BlockWire, CronSynth, Switchboard, Arbiter)\n\n12/13/2025\nio.github.AatirNadim/getme-mcp-server\nv1.1.2\n\nAn MCP server that exposes getMe key-value operations as MCP tools\n\n6/10/2026\nio.github.AbYousef739/signalpipe\nv1.5.0\n\nAgentic Reddit/HN buying-signal detection for Claude Code, Cursor, and Windsurf via MCP.\n\n5/10/2026\nio.github.Abhigyan-Shekhar/Waggle-mcp\nv0.1.8\n\nPersistent graph-backed conversational memory for AI agents.\n\n4/21/2026\nio.github.Able-rip/agent-mosaic-skill\nv1.0.2\n\nConvert photos to LEGO-style brick mosaic previews with AI-powered color quantization.\n\n5/12/2026\nio.github.Aboudjem/sniff\nv0.7.1\n\nQA + a11y scanner: walks your running app's real user flows and reports what's broken.\n\n5/30/2026\nio.github.Aboudjem/ui-ux-suite\nv0.5.1\n\nUI/UX design-audit MCP server: scores a project on 12 dimensions vs WCAG 2.2 + APCA.\n\n5/30/2026\nio.github.Abraxas1010/agent-payment-mcp\nv1.0.1\n\nSecure USDC payments for AI agents on Base blockchain with budget controls and instant settlement.\n\n10/16/2025\nPrevious\nMore available\nNext\nBuilt in the open by MCP contributors\nServer: Local (1.7.9)",
+  "stats": {
+    "bodyTextLength": 18203,
+    "linkCount": 4,
+    "buttonCount": 6,
+    "inputCount": 7,
+    "cardishCount": 0,
+    "scrollHeight": 22444
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "deployment.log",
+  "failing_command": "pytest tests/",
+  "failure_kind": "other",
+  "summary": "Unable to determine failure: no CI log file was provided in the workspace. Cannot analyze what failed without access to the actual build or test runner output.",
+  "error_lines": [
+    { "line": 1, "text": "ERROR: Log file not found" }
+  ],
+  "suggested_next_commands": [
+    "pytest tests/ -v"
+  ]
+}

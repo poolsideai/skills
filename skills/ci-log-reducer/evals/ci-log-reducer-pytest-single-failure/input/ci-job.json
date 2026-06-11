@@ -1,0 +1,5 @@
+{
+  "job": "unit-tests",
+  "command": "uv run pytest -q",
+  "exit_code": 1
+}

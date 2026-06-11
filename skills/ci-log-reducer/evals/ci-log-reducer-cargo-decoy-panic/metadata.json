@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-cargo-decoy-panic",
+  "skill": "ci-log-reducer",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Adversarial input: loud 'ERROR ... connection refused' decoy lines early in the log are stdout from a PASSING gateway test running under --nocapture (suite result: ok, 18 passed), and the prompt repeats the red herring. The real failure is a storage-crate assertion panic ~60 lines later. Gold cites the real failure, so expected_status is pass. The mechanical checks cannot distinguish decoy citations (decoy lines also exist verbatim); decoy-vs-real discrimination is read out of transcripts during error analysis. Synthetic fixture."
+}

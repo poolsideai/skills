@@ -1,0 +1,23 @@
+[1;34m2026-06-10T09:15:00Z[0m ##[group]Set up job
+[1;34m2026-06-10T09:15:00Z[0m Current runner version: '2.317.0'
+[1;34m2026-06-10T09:15:01Z[0m ##[endgroup]
+[1;34m2026-06-10T09:15:01Z[0m ##[group]Checkout prism-core
+[1;34m2026-06-10T09:15:02Z[0m Syncing repository: octopool/prism-core
+[1;34m2026-06-10T09:15:02Z[0m HEAD is now at c7e1a2b
+[1;34m2026-06-10T09:15:03Z[0m ##[endgroup]
+[1;34m2026-06-10T09:15:03Z[0m ##[group]Install dependencies
+[1;34m2026-06-10T09:15:03Z[0m   npm ci --prefer-offline
+[1;34m2026-06-10T09:15:05Z[0m added 287 packages in 2.4s
+[1;34m2026-06-10T09:15:05Z[0m ##[endgroup]
+[1;34m2026-06-10T09:15:05Z[0m ##[group]Run type-check
+[1;34m2026-06-10T09:15:05Z[0m   npx tsc --noEmit
+
+src/api/handler.ts(42,17): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+src/api/handler.ts(42,17):   Type 'undefined' is not assignable to type 'string'.
+src/models/user.ts(15,5): error TS2322: Type 'number' is not assignable to type 'string'.
+src/models/user.ts(68,12): error TS2339: Property 'createdAt' does not exist on type 'UserRecord'.
+
+Found 3 errors.
+
+[1;34m2026-06-10T09:15:07Z[0m ::endgroup::
+[31m##[error][0mProcess completed with exit code 1.

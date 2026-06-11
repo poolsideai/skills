@@ -1,0 +1,411 @@
+{
+  "title": "Gmail MCP Integration for AI Agents | Composio",
+  "url": "https://composio.dev/toolkits/gmail",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Gmail MCP for AI Agents"
+    },
+    {
+      "tag": "h3",
+      "text": "Connect Gmail without Auth hassles"
+    },
+    {
+      "tag": "h2",
+      "text": "Try Gmail now"
+    },
+    {
+      "tag": "h2",
+      "text": "Supported Tools and Triggers"
+    },
+    {
+      "tag": "h2",
+      "text": "Connect Gmail MCP Tool with your Agent"
+    },
+    {
+      "tag": "h2",
+      "text": "Connect Gmail API Tool with your Agent"
+    },
+    {
+      "tag": "h2",
+      "text": "Why Use Composio?"
+    },
+    {
+      "tag": "h2",
+      "text": "Use Gmail with any AI Agent Framework"
+    },
+    {
+      "tag": "h3",
+      "text": "ChatGPT"
+    },
+    {
+      "tag": "h3",
+      "text": "Antigravity"
+    },
+    {
+      "tag": "h3",
+      "text": "OpenAI Agents SDK"
+    },
+    {
+      "tag": "h3",
+      "text": "Claude Agents SDK"
+    },
+    {
+      "tag": "h3",
+      "text": "Claude Code"
+    },
+    {
+      "tag": "h3",
+      "text": "Claude Cowork"
+    },
+    {
+      "tag": "h3",
+      "text": "Codex"
+    },
+    {
+      "tag": "h3",
+      "text": "Cursor"
+    },
+    {
+      "tag": "h3",
+      "text": "VS Code"
+    },
+    {
+      "tag": "h3",
+      "text": "OpenCode"
+    },
+    {
+      "tag": "h3",
+      "text": "OpenClaw"
+    },
+    {
+      "tag": "h3",
+      "text": "Hermes"
+    },
+    {
+      "tag": "h3",
+      "text": "CLI"
+    },
+    {
+      "tag": "h3",
+      "text": "Google ADK"
+    },
+    {
+      "tag": "h3",
+      "text": "Langchain"
+    },
+    {
+      "tag": "h3",
+      "text": "AI SDK"
+    },
+    {
+      "tag": "h3",
+      "text": "Mastra AI"
+    },
+    {
+      "tag": "h3",
+      "text": "LlamaIndex"
+    },
+    {
+      "tag": "h3",
+      "text": "CrewAI"
+    },
+    {
+      "tag": "h3",
+      "text": "Pydantic AI"
+    },
+    {
+      "tag": "h3",
+      "text": "Autogen"
+    },
+    {
+      "tag": "h2",
+      "text": "Explore Other Toolkits"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle menu",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "MARKDOWN\n▾",
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Summarize unread emails from this morning",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Create draft replies to urgent messages",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Fetch contact details for recent senders",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Add 'Follow Up' label to flagged emails",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Connect Gmail MCP Tool with your Agent",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "COPY",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "COPY",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "COPY",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Connect Gmail API Tool with your Agent",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "LOAD MORE",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://composio.dev/?utm_campaign=toolkits"
+    },
+    {
+      "text": "PRICING",
+      "href": "https://composio.dev/pricing?utm_campaign=toolkits"
+    },
+    {
+      "text": "BLOG",
+      "href": "https://composio.dev/blog?utm_campaign=toolkits"
+    },
+    {
+      "text": "ENTERPRISE",
+      "href": "https://composio.dev/enterprise?utm_campaign=toolkits"
+    },
+    {
+      "text": "DOCS",
+      "href": "https://docs.composio.dev/?utm_campaign=toolkits"
+    },
+    {
+      "text": "TOOLKITS",
+      "href": "https://composio.dev/toolkits?utm_campaign=toolkits"
+    },
+    {
+      "text": "SIGN IN",
+      "href": "https://dashboard.composio.dev/login?utm_source=toolkits&utm_medium=navbar&utm_campaign=toolkits&utm_content=%2Ftoolkits%2Fgmail"
+    },
+    {
+      "text": "Home",
+      "href": "https://composio.dev/"
+    },
+    {
+      "text": "All Toolkits",
+      "href": "https://composio.dev/toolkits"
+    },
+    {
+      "text": "GET STARTED FOR FREE",
+      "href": "https://dashboard.composio.dev/login?utm_source=toolkits&utm_medium=hero&utm_campaign=toolkits-gmail&utm_content=%2Ftoolkits%2Fgmail"
+    },
+    {
+      "text": "GET A DEMO",
+      "href": "https://composio.dev/contact?utm_source=toolkits&utm_medium=hero&utm_campaign=demo-gmail&utm_content=%2Ftoolkits%2Fgmail&subject=Demo+request%3A+Gmail+integration"
+    },
+    {
+      "text": "collaboration & communication",
+      "href": "https://composio.dev/toolkits/category/collaboration-communication"
+    },
+    {
+      "text": "Try for Free",
+      "href": "https://dashboard.composio.dev/login?next_page=%2Ftool-router%3Ftoolkits%3Dgmail&utm_source=toolkits&utm_medium=sidebar_cta&utm_campaign=toolkits-gmail&utm_content=%2Ftoolkits%2Fgmail"
+    },
+    {
+      "text": "ChatGPT Use Gmail MCP with ChatGPT",
+      "href": "https://composio.dev/toolkits/gmail/framework/chatgpt"
+    },
+    {
+      "text": "Antigravity Use Gmail MCP with Antigravity",
+      "href": "https://composio.dev/toolkits/gmail/framework/antigravity"
+    },
+    {
+      "text": "OpenAI Agents SDK Use Gmail MCP with OpenAI Agents SDK",
+      "href": "https://composio.dev/toolkits/gmail/framework/open-ai-agents-sdk"
+    },
+    {
+      "text": "Claude Agents SDK Use Gmail MCP with Claude Agents SDK",
+      "href": "https://composio.dev/toolkits/gmail/framework/claude-agents-sdk"
+    },
+    {
+      "text": "Claude Code Use Gmail MCP with Claude Code",
+      "href": "https://composio.dev/toolkits/gmail/framework/claude-code"
+    },
+    {
+      "text": "Claude Cowork Use Gmail MCP with Claude Cowork",
+      "href": "https://composio.dev/toolkits/gmail/framework/claude-cowork"
+    },
+    {
+      "text": "Codex Use Gmail MCP with Codex",
+      "href": "https://composio.dev/toolkits/gmail/framework/codex"
+    },
+    {
+      "text": "Cursor Use Gmail MCP with Cursor",
+      "href": "https://composio.dev/toolkits/gmail/framework/cursor"
+    },
+    {
+      "text": "VS Code Use Gmail MCP with VS Code",
+      "href": "https://composio.dev/toolkits/gmail/framework/vscode"
+    },
+    {
+      "text": "OpenCode Use Gmail MCP with OpenCode",
+      "href": "https://composio.dev/toolkits/gmail/framework/opencode"
+    },
+    {
+      "text": "OpenClaw Use Gmail MCP with OpenClaw",
+      "href": "https://composio.dev/toolkits/gmail/framework/openclaw"
+    },
+    {
+      "text": "Hermes Use Gmail MCP with Hermes",
+      "href": "https://composio.dev/toolkits/gmail/framework/hermes-agent"
+    },
+    {
+      "text": "CLI Use Gmail MCP with CLI",
+      "href": "https://composio.dev/toolkits/gmail/framework/cli"
+    },
+    {
+      "text": "Google ADK Use Gmail MCP with Google ADK",
+      "href": "https://composio.dev/toolkits/gmail/framework/google-adk"
+    },
+    {
+      "text": "Langchain Use Gmail MCP with Langchain",
+      "href": "https://composio.dev/toolkits/gmail/framework/langchain"
+    },
+    {
+      "text": "AI SDK Use Gmail MCP with AI SDK",
+      "href": "https://composio.dev/toolkits/gmail/framework/ai-sdk"
+    },
+    {
+      "text": "Mastra AI Use Gmail MCP with Mastra AI",
+      "href": "https://composio.dev/toolkits/gmail/framework/mastra-ai"
+    },
+    {
+      "text": "LlamaIndex Use Gmail MCP with LlamaIndex",
+      "href": "https://composio.dev/toolkits/gmail/framework/llama-index"
+    },
+    {
+      "text": "CrewAI Use Gmail MCP with CrewAI",
+      "href": "https://composio.dev/toolkits/gmail/framework/crew-ai"
+    },
+    {
+      "text": "Pydantic AI Use Gmail MCP with Pydantic AI",
+      "href": "https://composio.dev/toolkits/gmail/framework/pydantic-ai"
+    },
+    {
+      "text": "Autogen Use Gmail MCP with Autogen",
+      "href": "https://composio.dev/toolkits/gmail/framework/autogen"
+    },
+    {
+      "text": "Outlook OAUTH2 S2S OAUTH2 Outlook is Microsoft's email and calendaring platform for unified communications and scheduling. It helps users st",
+      "href": "https://composio.dev/toolkits/outlook"
+    },
+    {
+      "text": "Slack OAUTH2 Slack is a channel-based messaging platform for teams and organizations. It helps people collaborate in real time, share files,",
+      "href": "https://composio.dev/toolkits/slack"
+    },
+    {
+      "text": "Gong BASIC OAUTH2 Gong is a platform for video meetings, call recording, and team collaboration. It helps teams capture conversations, analy",
+      "href": "https://composio.dev/toolkits/gong"
+    },
+    {
+      "text": "TOOLKIT MARKETPLACE",
+      "href": "https://composio.dev/toolkits"
+    },
+    {
+      "text": "Learn more",
+      "href": "https://docs.composio.dev/tool-router/overview"
+    },
+    {
+      "text": "Learn more",
+      "href": "https://trust.composio.dev/"
+    },
+    {
+      "text": "GET STARTED FOR FREE",
+      "href": "https://dashboard.composio.dev/login?utm_source=toolkits&utm_medium=prefooter&utm_campaign=toolkits-gmail&utm_content=%2Ftoolkits%2Fgmail"
+    },
+    {
+      "text": "GET A DEMO ↗",
+      "href": "https://composio.dev/contact?utm_source=toolkits&utm_medium=prefooter&utm_campaign=demo-gmail&utm_content=%2Ftoolkits%2Fgmail&subject=Demo+request%3A+Gmail+integration"
+    },
+    {
+      "text": "HARSHA GADDIPATI Co-founder, Slashy Karan skipped his own birthday party to fix our critical issue. It was 10 pm and he diverted his Waymo t",
+      "href": "https://composio.dev/case-study/slashy"
+    },
+    {
+      "text": "ABHI ARYA Co-founder, Opennote A lot of students tell us that the moment their connected tools start talking to each other inside Opennote f",
+      "href": "https://composio.dev/case-study/opennote"
+    },
+    {
+      "text": "NIRMAN DAVE CEO, Zams We chose Composio over Pipedream because it delivered depth where it mattered. It supported niche tools and tricky edg",
+      "href": "https://composio.dev/case-study/zams"
+    },
+    {
+      "text": "RYAN YU Founder, Extra Thursday As a solo builder, shipping fast is life or death. The only way I can outcompete incumbents is by outmanoeuv",
+      "href": "https://composio.dev/case-study/extra-thursday-case-study"
+    },
+    {
+      "text": "TOMISIN JENROLA Founder & CEO, SwarmZero Before partnering with Composio, adding tool integrations was a slow, resource-intensive process. E",
+      "href": "https://composio.dev/case-study/swarmzero-case-study"
+    },
+    {
+      "text": "JEROME LECLANCHE Co-Founder, Ingram Technologies With hands-on help from their founder, we integrated Gmail and Google Drive in just 30 minu",
+      "href": "https://composio.dev/case-study/ingram-case-study"
+    },
+    {
+      "text": "HARSHA GADDIPATI Co-founder, Slashy Karan skipped his own birthday party to fix our critical issue. It was 10 pm and he diverted his Waymo t",
+      "href": "https://composio.dev/case-study/slashy"
+    },
+    {
+      "text": "ABHI ARYA Co-founder, Opennote A lot of students tell us that the moment their connected tools start talking to each other inside Opennote f",
+      "href": "https://composio.dev/case-study/opennote"
+    }
+  ],
+  "text": "Gmail MCP for AI Agents\nSecurely connect your AI agents and chatbots (Claude, ChatGPT, Cursor, etc) with Gmail MCP or direct API to read, send, search, and label emails through natural language.\nTRUSTED BY\nGET STARTED FOR FREE\nGET A DEMO\n\n30 min · no commitment · see it on your stack\n\nTry Gmail now\nMARKDOWN\n▾\n\nEnter a prompt below to test the integration in our Tool Router playground. You'll be redirected to sign in and try it live.\n\nSummarize unread emails from this morning\nCreate draft replies to urgent messages\nFetch contact details for recent senders\nAdd 'Follow Up' label to flagged emails\nSupported Tools and Triggers\nTools\nTriggers\nModify email labels\nAdds and/or removes specified Gmail labels for a message; ensure `message_id` and all `label_ids` are valid (use 'listLabels' for custom label IDs).\nBatch delete Gmail messages\nTool to permanently delete multiple Gmail messages in bulk, bypassing Trash with no recovery possible.\nBatch modify Gmail messages\nModify labels on multiple Gmail messages in one efficient API call.\nCreate email draft\nCreates a Gmail email draft.\nCreate Gmail filter\nTool to create a new Gmail filter with specified criteria and actions.\nCreate label\nCreates a new label with a unique name in the specified user's Gmail account.\nCreate Prompt Post\nSend a one-shot prompt to the Sanity Content Agent.\nDelete Draft\nPermanently deletes a specific Gmail draft using its ID with no recovery possible; verify the correct `draft_id` and obtain explicit user confirmation before calling.\nDelete Gmail filter\nTool to permanently delete a Gmail filter by its ID.\nDelete label from account (permanent)\nPermanently DELETES a user-created Gmail label from the account (not from a message).\nDelete message\nPermanently deletes a specific email message by its ID from a Gmail mailbox; for `user_id`, use 'me' for the authenticated user or an email address to which the authenticated user has delegated access.\nDelete thread\nTool to immediately and permanently delete a specified thread and all its messages.\nFetch emails\nFetches a list of email messages from a Gmail account, supporting filtering, pagination, and optional full content retrieval.\nFetch message by message ID\nFetches a specific email message by its ID, provided the `message_id` exists and is accessible to the authenticated `user_id`.\nFetch Message by Thread ID\nRetrieves messages from a Gmail thread using its `thread_id`, where the thread must be accessible by the specified `user_id`.\nForward email message\nForward an existing Gmail message to specified recipients, preserving original body and attachments.\nGet Gmail attachment\nRetrieves a specific attachment by ID from a message in a user's Gmail mailbox, requiring valid message and attachment IDs.\nGet Auto-Forwarding Settings\nTool to get the auto-forwarding setting for the specified account.\nGet contacts\nFetches contacts (connections) for the authenticated Google account, allowing selection of specific data fields and pagination.\nGet Draft\nRetrieves a single Gmail draft by its ID.\nGet Gmail filter\nTool to retrieve a specific Gmail filter by its ID.\nGet label details\nGets details for a specified Gmail label.\nGet Language Settings\nTool to retrieve the language settings for a Gmail user.\nGet People\nRetrieves either a specific person's details (using `resource_name`) or lists 'Other Contacts' (if `other_contacts` is true), with `person_fields` specifying the data to return.\nGet Profile\nRetrieves Gmail profile information (email address, aggregate messagesTotal/threadsTotal, historyId) for a user.\nGet Vacation Settings\nTool to retrieve vacation responder settings for a Gmail user.\nImport message\nTool to import a message into the user's mailbox with standard email delivery scanning and classification.\nInsert message into mailbox\nTool to insert a message into the user's mailbox similar to IMAP APPEND.\nList CSE identities\nTool to list client-side encrypted identities for an authenticated user.\nList CSE key pairs\nTool to list client-side encryption key pairs for an authenticated user.\nList Drafts\nRetrieves a paginated list of email drafts from a user's Gmail account.\nList Gmail filters\nTool to list all Gmail filters (rules) in the mailbox.\nList forwarding addresses\nTool to list all forwarding addresses for the specified Gmail account.\nList Gmail history\nTool to list Gmail mailbox change history since a known startHistoryId.\nList Gmail labels\nRetrieves all system and user-created labels for a Gmail account in a single unpaginated response.\nList send-as aliases\nLists the send-as aliases for a Gmail account, including the primary address and custom 'from' aliases.\nList S/MIME configs\nLists S/MIME configs for the specified send-as alias.\nList threads\nRetrieves a list of email threads from a Gmail account, identified by `user_id` (email address or 'me'), supporting filtering and pagination.\nModify thread labels\nAdds or removes specified existing label IDs from a Gmail thread, affecting all its messages; ensure the thread ID is valid.\nTrash thread\nMoves the specified thread to the trash.\nMove to Trash\nMoves an existing, non-deleted email message to the trash for the specified user.\nPatch Label\nPatches the specified user-created label.\nPatch send-as alias\nTool to patch the specified send-as alias for a Gmail user.\nReply to email thread\nSends a reply within a specific Gmail thread using the original thread's subject; do not provide a custom subject as it will start a new conversation instead of replying in-thread.\nSearch People\nSearches contacts by matching the query against names, nicknames, emails, phone numbers, and organizations, optionally including 'Other Contacts'.\nSend Draft\nSends an existing draft email AS-IS to recipients already defined within the draft.\nSend Email\nSends an email via Gmail API using the authenticated user's Google profile display name.\nGet IMAP Settings\nRetrieves the IMAP settings for a Gmail user account, including whether IMAP is enabled, auto-expunge behavior, expunge behavior, and maximum folder size.\nGet POP settings\nTool to retrieve POP settings for a Gmail account.\nGet send-as alias\nTool to retrieve a specific send-as alias configuration for a Gmail user.\nStop watch notifications\nTool to stop receiving push notifications for a Gmail mailbox.\nUntrash Message\nTool to remove a message from trash in Gmail.\nUntrash thread\nTool to remove a thread from trash in Gmail.\nUpdate draft\nUpdates (replaces) an existing Gmail draft's content in-place by draft ID.\nUpdate IMAP settings\nTool to update IMAP settings for a Gmail account.\nUpdate Label\nTool to update the properties of an existing Gmail label.\nUpdate Language Settings\nTool to update the language settings for a Gmail user.\nUpdate POP settings\nTool to update POP settings for a Gmail account.\nUpdate send-as alias\nTool to update a send-as alias for a Gmail user.\nUpdate User Attributes Values\nUpdate user attribute values for a resource.\nUpdate Vacation Settings\nTool to update vacation responder settings for a Gmail user.\nConnect Gmail MCP Tool with your Agent\nPython\nTypeScript\nInstall Composio\nPYTHON\nCOPY\npip install composio claude-agent-sdk\nInstall the Composio SDK and Claude Agent SDK\nCreate Tool Router Session\nPYTHON\nCOPY\nfrom composio import Composio\nfrom claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions\n\ncomposio = Composio(api_key='your-composio-api-key')\nsession = composio.create(user_id='your-user-id')\nurl = session.mcp.url\nInitialize the Composio client and create a Tool Router session\nConnect to AI Agent\nPYTHON\nCOPY\nimport asyncio\n\noptions = ClaudeAgentOptions(\n    permission_mode='bypassPermissions',\n    mcp_servers={\n        'tool_router': {\n            'type': 'http',\n            'url': url,\n            'headers': {\n                'x-api-key': 'your-composio-api-key'\n            }\n        }\n    },\n    system_prompt='You are a helpful assistant with access to Gmail tools.',\n    max_turns=10\n)\n\nasync def main():\n    async with ClaudeSDKClient(options=options) as client:\n        await client.query('Summarize unread emails from this morning')\n        async for message in client.receive_response():\n            if hasattr(message, 'content'):\n                for block in message.content:\n                    if hasattr(block, 'text'):\n                        print(block.text)\n\nasyncio.run(main())\nUse the MCP server with your AI agent\nConnect Gmail API Tool with your Agent\nWhy Use Composio?\nAI Native Gmail Integration\nSupports both Gmail MCP and direct API based integrations\nStructured, LLM-friendly schemas for reliable tool execution\nRich coverage for reading, writing, and querying your Gmail data\nManaged Auth\nBuilt-in OAuth handling with automatic token refresh and rotation\nCentral place to manage, scope, and revoke Gmail access\nPer user and per environment credentials instead of hard-coded keys\nAgent Optimized Design\nTools are tuned using real error and success rates to improve reliability over time\nComprehensive execution logs so you always know what ran, when, and on whose behalf\nEnterprise Grade Security\nFine-grained RBAC so you control which agents and users can access Gmail\nScoped, least privilege access to Gmail resources\nFull audit trail of agent actions to support review and compliance\nUse Gmail with any AI Agent Framework\n\nChoose a Framework you want to connect Gmail with\n\nChatGPT\n\nUse Gmail MCP with ChatGPT\n\nAntigravity\n\nUse Gmail MCP with Antigravity\n\nOpenAI Agents SDK\n\nUse Gmail MCP with OpenAI Agents SDK\n\nClaude Agents SDK\n\nUse Gmail MCP with Claude Agents SDK\n\nClaude Code\n\nUse Gmail MCP with Claude Code\n\nClaude Cowork\n\nUse Gmail MCP with Claude Cowork\n\nCodex\n\nUse Gmail MCP with Codex\n\nCursor\n\nUse Gmail MCP with Cursor\n\nVS Code\n\nUse Gmail MCP with VS Code\n\nOpenCode\n\nUse Gmail MCP with OpenCode\n\nOpenClaw\n\nUse Gmail MCP with OpenClaw\n\nHermes\n\nUse Gmail MCP with Hermes\n\nCLI\n\nUse Gmail MCP with CLI\n\nGoogle ADK\n\nUse Gmail MCP with Google ADK\n\nLangchain\n\nUse Gmail MCP with Langchain\n\nAI SDK\n\nUse Gmail MCP with AI SDK\n\nMastra AI\n\nUse Gmail MCP with Mastra AI\n\nLlamaIndex\n\nUse Gmail MCP with LlamaIndex\n\nCrewAI\n\nUse Gmail MCP with CrewAI\n\nPydantic AI\n\nUse Gmail MCP with Pydantic AI\n\nAutogen\n\nUse Gmail MCP with Autogen\n\nExplore Other Toolkits\nOutlook\nOAUTH2\nS2S OAUTH2\n\nOutlook is Microsoft's email and calendaring platform for unified communications and scheduling. It helps users stay organized with powerful email, contacts, and calendar management.\n\nSlack\nOAUTH2\n\nSlack is a channel-based messaging platform for teams and organizations. It helps people collaborate in real time, share files, and connect all their tools in one place.\n\nGong\nBASIC\nOAUTH2\n\nGong is a platform for video meetings, call recording, and team collaboration. It helps teams capture conversations, analyze calls, and turn insights into action.\n\nLOAD MORE\nTOOLKIT MARKETPLACE\nFrequently Asked Questions\nDo I need my own developer credentials to use Gmail with Composio?\nNo, you can get started immediately using Composio's built-in Gmail app. For production, we recommend configuring your own OAuth credentials.\nCan I use multiple toolkits together?\nYes! Composio's Tool Router enables agents to use multiple toolkits. Learn more.\nIs Composio secure?\nComposio is SOC 2 and ISO 27001 compliant with all data encrypted in transit and at rest. Learn more.\nWhat if the API changes?\nComposio maintains and updates all toolkit integrations automatically, so your agents always work with the latest API versions.\nUsed by agents from\nNever worry about agent reliability\n\nWe handle tool reliability, observability, and security so you never have to second-guess an agent action.\n\nGET STARTED FOR FREE\nGET A DEMO\n↗\nHARSHA GADDIPATI\nCo-founder, Slashy\n\nKaran skipped his own birthday party to fix our critical issue. It was 10 pm and he diverted his Waymo to help us instead. This really sets the bar, shows you the commitment you need to have when users rely on your software.\n\nABHI ARYA\nCo-founder, Opennote\n\nA lot of students tell us that the moment their connected tools start talking to each other inside Opennote feels almost magical. The agent just knows them, and it has immensely helped in keeping new users on the platform.\n\nNIRMAN DAVE\nCEO, Zams\n\nWe chose Composio over Pipedream because it delivered depth where it mattered. It supported niche tools and tricky edge cases that other platforms simply ignored. Giving us confidence to scale without compromising.\n\nRYAN YU\nFounder, Extra Thursday\n\nAs a solo builder, shipping fast is life or death. The only way I can outcompete incumbents is by outmanoeuvring them. Getting bogged down in the complexities of managing agent auth would have been a death sentence for Extra Thursday.\n\nTOMISIN JENROLA\nFounder & CEO, SwarmZero\n\nBefore partnering with Composio, adding tool integrations was a slow, resource-intensive process. Each integration could take weeks or months of engineering time, and maintaining them meant constantly keeping up with API changes.\n\nJEROME LECLANCHE\nCo-Founder, Ingram Technologies\n\nWith hands-on help from their founder, we integrated Gmail and Google Drive in just 30 minutes. This level of personal support and commitment is exactly what startups should strive for.\n\nHARSHA GADDIPATI\nCo-founder, Slashy\n\nKaran skipped his own birthday party to fix our critical issue. It was 10 pm and he diverted his Waymo to help us instead. This really sets the bar, shows you the commitment you need to have when users rely on your software.\n\nABHI ARYA\nCo-founder, Opennote\n\nA lot of students tell us that the moment their connected tools start talking to each other inside Opennote feels almost magical. The agent just knows them, and it has immensely helped in keeping new users on the platform.\n\nNIRMAN DAVE\nCEO, Zams\n\nWe chose Composio over Pipedream because it delivered depth where it mattered. It supported niche tools and tricky edge cases that other platforms simply ignored. Giving us confidence to scale without compromising.\n\nRYAN YU\nFounder, Extra Thursday\n\nAs a solo builder, shipping fast is life or death. The only way I can outcompete incumbents is by outmanoeuvring them. Getting bogged down in the complexities of managing agent auth would have been a death sentence for Extra Thursday.\n\nTOMISIN JENROLA\nFounder & CEO, SwarmZero\n\nBefore partnering with Composio, adding tool integrations was a slow, resource-intensive process. Each integration could take weeks or months of engineering time, and maintaining them meant constantly keeping up with API changes.\n\nJEROME LECLANCHE\nCo-Founder, Ingram Technologies\n\nWith hands-on help from their founder, we integrated Gmail and Google Drive in just 30 minutes. This level of personal support and commitment is exactly what startups should strive for.\n\nHARSHA GADDIPATI\nCo-founder, Slashy\n\nKaran skipped his own birthday party to fix our critical issue. It was 10 pm and he diverted his Waymo to help us instead. This really sets the bar, shows you the commitment you need to have when users rely on your software.\n\nABHI ARYA\nCo-founder, Opennote\n\nA lot of students tell us that the moment their connected tools start talking to each other inside Opennote feels almost magical. The agent just knows them, and it has immensely helped in keeping new users on the platform.\n\nNIRMAN DAVE\nCEO, Zams\n\nWe chose Composio over Pipedream because it delivered depth where it mattered. It supported niche tools and tricky edge cases that other platforms simply ignored. Giving us confidence to scale without compromising.\n\nRYAN YU\nFounder, Extra Thursday\n\nAs a solo builder, shipping fast is life or death. The only way I can outcompete incumbents is by outmanoeuvring them. Getting bogged down in the complexities of managing agent auth would have been a death sentence for Extra Thursday.\n\nTOMISIN JENROLA\nFounder & CEO, SwarmZero\n\nBefore partnering with Composio, adding tool integrations was a slow, resource-intensive process. Each integration could take weeks or months of engineering time, and maintaining them meant constantly keeping up with API changes.\n\nJEROME LECLANCHE\nCo-Founder, Ingram Technologies\n\nWith hands-on help from their founder, we integrated Gmail and Google Drive in just 30 minutes. This level of personal support and commitment is exactly what startups should strive for.\n\nComposio\nComposio\nStay updated.\nJOIN DISCORD\n\nPRODUCT\n\nENTERPRISE\nPRICING\nAGENT AUTH\n\nRESOURCES\n\nDOCS\nBLOG\nOAUTH2 GUIDES\nCASE STUDIES\n\nCOMPANY\n\nCAREERS\nTRUST\nSUPPORT\nTERMS\nPRIVACY POLICY\n\n© Composio 2026",
+  "stats": {
+    "bodyTextLength": 16470,
+    "linkCount": 79,
+    "buttonCount": 12,
+    "inputCount": 0,
+    "cardishCount": 0,
+    "scrollHeight": 13060
+  }
+}

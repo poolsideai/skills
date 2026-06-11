@@ -1,0 +1,42 @@
+[2026-06-11T04:18:00Z] pipeline: vortex-indexer / main (run 3819)
+[2026-06-11T04:18:00Z] step: test
+[2026-06-11T04:18:01Z] runner: worker-oom-02 (container limit: 512 MiB)
+[2026-06-11T04:18:01Z] $ go test -v -count=1 ./...
+=== RUN   TestIndexerBuildSmall
+=== RUN   TestIndexerBuildSmall/10_docs
+--- PASS: TestIndexerBuildSmall/10_docs (0.03s)
+=== RUN   TestIndexerBuildSmall/100_docs
+--- PASS: TestIndexerBuildSmall/100_docs (0.11s)
+--- PASS: TestIndexerBuildSmall (0.14s)
+=== RUN   TestIndexerSearchExact
+--- PASS: TestIndexerSearchExact (0.07s)
+=== RUN   TestIndexerSearchFuzzy
+--- PASS: TestIndexerSearchFuzzy (0.19s)
+=== RUN   TestIndexerDeleteDoc
+--- PASS: TestIndexerDeleteDoc (0.04s)
+ok  	github.com/vertexlab/vortex-indexer/internal/indexer_small	0.47s
+=== RUN   TestTokenizerASCII
+--- PASS: TestTokenizerASCII (0.01s)
+=== RUN   TestTokenizerUnicode
+--- PASS: TestTokenizerUnicode (0.03s)
+=== RUN   TestTokenizerStopWords
+--- PASS: TestTokenizerStopWords (0.02s)
+ok  	github.com/vertexlab/vortex-indexer/internal/tokenizer	0.07s
+=== RUN   TestRankerBM25
+--- PASS: TestRankerBM25 (0.22s)
+=== RUN   TestRankerTFIDF
+--- PASS: TestRankerTFIDF (0.15s)
+ok  	github.com/vertexlab/vortex-indexer/internal/ranker	0.38s
+=== RUN   TestIndexerBuildLarge
+=== RUN   TestIndexerBuildLarge/10000_docs
+[indexer] allocating posting buffer: 256 MiB
+[indexer] allocating segment table: 128 MiB
+[indexer] loading 10000 documents into memory...
+[indexer] indexed 1000/10000 docs (rss: 301 MiB)
+[indexer] indexed 2000/10000 docs (rss: 388 MiB)
+[indexer] indexed 3000/10000 docs (rss: 451 MiB)
+[indexer] indexed 4000/10000 docs (rss: 498 MiB)
+Killed
+[2026-06-11T04:18:41Z] step "test" exited with code 137
+[2026-06-11T04:18:41Z] error: container memory limit (512 MiB) exceeded; process received SIGKILL
+[2026-06-11T04:18:41Z] pipeline failed: step "test" exited with code 137

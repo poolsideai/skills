@@ -1,0 +1,10 @@
+$ go test ./...
+ok  	pulse/api	0.41s
+ok  	pulse/auth	0.22s
+--- FAIL: TestRenewLeaseExtendsExpiry (0.03s)
+    lease_test.go:58: expiry = 2026-06-10T11:00:00Z, want 2026-06-10T11:05:00Z
+FAIL
+FAIL	pulse/lease	0.310s
+ok  	pulse/metrics	0.18s
+FAIL
+exit status 1

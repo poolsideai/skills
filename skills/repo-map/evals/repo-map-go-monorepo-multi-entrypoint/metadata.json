@@ -1,0 +1,21 @@
+{
+  "id": "repo-map-go-monorepo-multi-entrypoint",
+  "skill": "repo-map",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/repo-map/scripts/validate_repo_map.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Go monorepo with three cmd/ entrypoints (api-server, worker, migrate), shared internal/ packages, and colocated _test.go files. Tests run via a Makefile target that wraps go test with coverage flags. Exercises multiple entrypoints in one repo, Makefile command validation, distribution-style testing, and stdlib-only Go (frameworks must be empty array). Synthetic fixture; no customer data. Generated case."
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "repo-map.v1",
+  "summary": "polyglot-demos is a multi-language demonstration repository with hello-world programs in TypeScript, Python, Rust, Go, and Ruby. Each language has a simple main that prints a greeting using only standard library I/O. The repository showcases build and lint configurations (ESLint, Black, rustfmt, RuboCop, etc.) but uses no production frameworks—only development tools.",
+  "languages": [
+    {
+      "name": "typescript",
+      "evidence": "src/typescript/main.ts"
+    },
+    {
+      "name": "python",
+      "evidence": "src/python/main.py"
+    },
+    {
+      "name": "rust",
+      "evidence": "src/rust/main.rs"
+    },
+    {
+      "name": "go",
+      "evidence": "src/go/main.go"
+    },
+    {
+      "name": "ruby",
+      "evidence": "src/ruby/main.rb"
+    }
+  ],
+  "frameworks": [],
+  "entrypoints": [
+    {
+      "path": "src/typescript/main.ts",
+      "description": "TypeScript hello world; run with bun"
+    },
+    {
+      "path": "src/python/main.py",
+      "description": "Python hello world; run with python"
+    },
+    {
+      "path": "src/rust/main.rs",
+      "description": "Rust hello world; Cargo.toml bin rust-demo, run with cargo run"
+    },
+    {
+      "path": "src/go/main.go",
+      "description": "Go hello world; run with go run"
+    },
+    {
+      "path": "src/ruby/main.rb",
+      "description": "Ruby hello world; run with ruby"
+    }
+  ],
+  "key_directories": [
+    {
+      "path": "src/typescript",
+      "role": "TypeScript demonstration with main and test"
+    },
+    {
+      "path": "src/python",
+      "role": "Python demonstration with main and test"
+    },
+    {
+      "path": "src/rust",
+      "role": "Rust demonstration with main and inline test"
+    },
+    {
+      "path": "src/go",
+      "role": "Go demonstration with main and test"
+    },
+    {
+      "path": "src/ruby",
+      "role": "Ruby demonstration with main and test"
+    }
+  ],
+  "test_commands": [
+    "bun test",
+    "pytest",
+    "make test"
+  ]
+}

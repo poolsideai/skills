@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/common/run-manifest.v0.schema.json",
+  "title": "run-manifest.v0",
+  "description": "Per-run manifest written by the eval runner as manifest.json under runs/<suite>/<case>/<arm>/. Deliberately lean for v0: skill version digests, fixture hashes, and resolved model config arrive in later revisions via a schema_version bump, so consumers must switch on schema_version.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "run-manifest.v0",
+      "description": "Contract identifier; always the literal string \"run-manifest.v0\"."
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique id for this single pool exec invocation (the value passed via --run-id)."
+    },
+    "skill": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+          "description": "Skill under test (frontmatter name). For without-skill arms this is still the skill whose case is being run."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-((0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?$",
+          "description": "Skill semver from frontmatter metadata.version. Content digests arrive in a later schema revision."
+        }
+      },
+      "required": ["name", "version"],
+      "additionalProperties": false
+    },
+    "agent_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The pool exec --agent-name value used for this run."
+    },
+    "pool_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version of the pool CLI that executed the run (e.g. \"0.2.172\")."
+    },
+    "command": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "Full command line of the run as an argv array, exactly as the runner invoked it."
+    },
+    "exit_code": {
+      "type": "integer",
+      "description": "Process exit code of the pool exec subprocess (negative values indicate termination by signal, per Python conventions)."
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "Map from artifact name to path (relative to the run directory unless absolute). Typical keys: prompt, stdout, stderr, trajectory_atif, validator_result, manifest.",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "timing": {
+      "type": "object",
+      "properties": {
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 timestamp when the runner started the pool exec subprocess."
+        },
+        "finished_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 timestamp when the subprocess exited."
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Wall-clock duration of the run in milliseconds."
+        }
+      },
+      "required": ["started_at", "finished_at", "duration_ms"],
+      "additionalProperties": false
+    },
+    "validator_result": {
+      "$ref": "validator-result.v1.schema.json",
+      "description": "The embedded validator-result.v1 object produced by this run's validator."
+    },
+    "harness_debt": {
+      "type": "array",
+      "description": "Every fragile dependency this run relied on (hidden flags, --latest trajectory recovery, history scraping). This list is the evidence file for which harness PRs to do next.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Stable kebab-case category of the debt (e.g. \"trajectory-recovery-latest\", \"hidden-flag-run-id\")."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable description of what was relied on and why it is fragile."
+          }
+        },
+        "required": ["kind", "detail"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "skill",
+    "agent_name",
+    "pool_version",
+    "command",
+    "exit_code",
+    "artifacts",
+    "timing",
+    "validator_result",
+    "harness_debt"
+  ],
+  "additionalProperties": false
+}

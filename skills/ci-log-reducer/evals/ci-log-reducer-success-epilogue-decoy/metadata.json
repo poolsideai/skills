@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-success-epilogue-decoy",
+  "skill": "ci-log-reducer",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Adversarial: pytest failure occurs mid-log, then post-failure cleanup/teardown steps emit success-looking lines (cache saved, artifacts uploaded, cleanup OK) that dominate the tail — model must cite the mid-log failure, not the tail. The mechanical validator cannot penalize decoy citations; that distinction lives in transcript review."
+}

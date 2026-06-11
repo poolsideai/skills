@@ -1,0 +1,579 @@
+{
+  "title": "Browse MCP Servers - MintMCP",
+  "url": "https://www.mintmcp.com/servers",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Browse the MCP Directory"
+    },
+    {
+      "tag": "h3",
+      "text": "Notion"
+    },
+    {
+      "tag": "h3",
+      "text": "Linear"
+    },
+    {
+      "tag": "h3",
+      "text": "Slack"
+    },
+    {
+      "tag": "h3",
+      "text": "Gmail"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Calendar"
+    },
+    {
+      "tag": "h3",
+      "text": "Outlook Email"
+    },
+    {
+      "tag": "h3",
+      "text": "Outlook Calendar"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Drive"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Docs"
+    },
+    {
+      "tag": "h3",
+      "text": "Google Sheets"
+    },
+    {
+      "tag": "h3",
+      "text": "SharePoint"
+    },
+    {
+      "tag": "h3",
+      "text": "Salesforce"
+    },
+    {
+      "tag": "h3",
+      "text": "Zoom"
+    },
+    {
+      "tag": "h3",
+      "text": "Gong"
+    },
+    {
+      "tag": "h3",
+      "text": "Zendesk"
+    },
+    {
+      "tag": "h3",
+      "text": "QuickBooks"
+    },
+    {
+      "tag": "h3",
+      "text": "Playwright"
+    },
+    {
+      "tag": "h3",
+      "text": "Fetch"
+    },
+    {
+      "tag": "h3",
+      "text": "Context7"
+    },
+    {
+      "tag": "h3",
+      "text": "Chrome DevTools"
+    },
+    {
+      "tag": "h3",
+      "text": "Filesystem"
+    },
+    {
+      "tag": "h3",
+      "text": "GitHub"
+    },
+    {
+      "tag": "h3",
+      "text": "Git"
+    },
+    {
+      "tag": "h3",
+      "text": "Sequential Thinking"
+    },
+    {
+      "tag": "h3",
+      "text": "Time"
+    },
+    {
+      "tag": "h3",
+      "text": "Memory"
+    },
+    {
+      "tag": "h3",
+      "text": "Supabase"
+    },
+    {
+      "tag": "h3",
+      "text": "Zapier"
+    },
+    {
+      "tag": "h3",
+      "text": "Desktop Commander"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Customise",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Reject All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Accept All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Close",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Show more",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Necessary",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Functional",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Functional",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Analytics",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Analytics",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Performance",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Advertisement",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Advertisement",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Uncategorised",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Disable Uncategorised",
+      "type": "checkbox"
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Reject All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Save My Preferences",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Accept All",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Platform",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Resources",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Company",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Sign In",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Get started",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Get started",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Toggle menu",
+      "type": ""
+    },
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search MCP servers",
+      "type": "text"
+    },
+    {
+      "tag": "select",
+      "role": "",
+      "text": "Featured\nMost popular\nA-Z",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "All (77)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Official (57)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Featured (16)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Developer tools (17)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Productivity (5)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Communication (7)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Data & analytics (15)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Design (4)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Sales & CRM (5)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Project management (5)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "DevOps & infra (2)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "AI & ML (12)",
+      "type": ""
+    },
+    {
+      "tag": "button",
+      "role": "",
+      "text": "Finance (3)",
+      "type": ""
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://www.cookieyes.com/product/cookie-consent/?ref=cypbcyb&utm_source=cookie-banner&utm_medium=fl-branding"
+    },
+    {
+      "text": "",
+      "href": "https://www.cookieyes.com/product/cookie-consent/?ref=cypbcyb&utm_source=cookie-banner&utm_medium=sl-branding"
+    },
+    {
+      "text": "MintMCP",
+      "href": "https://www.mintmcp.com/"
+    },
+    {
+      "text": "Home",
+      "href": "https://www.mintmcp.com/"
+    },
+    {
+      "text": "Pricing",
+      "href": "https://www.mintmcp.com/pricing"
+    },
+    {
+      "text": "Trust",
+      "href": "https://trust.mintmcp.com/"
+    },
+    {
+      "text": "Sign In",
+      "href": "https://app.mintmcp.com/"
+    },
+    {
+      "text": "Get started",
+      "href": "https://app.mintmcp.com/sign-up"
+    },
+    {
+      "text": "Get started",
+      "href": "https://app.mintmcp.com/sign-up"
+    },
+    {
+      "text": "Notion Official Featured Official Notion MCP server 14 tools OAuth 1.3M",
+      "href": "https://www.mintmcp.com/notion"
+    },
+    {
+      "text": "Linear Official Featured MCP server for Linear project management and issue tracking 31 tools OAuth 506K",
+      "href": "https://www.mintmcp.com/linear"
+    },
+    {
+      "text": "Slack Official Featured Search messages and files, send messages, manage canvases, and access user profiles. 13 tools OAuth 34K",
+      "href": "https://www.mintmcp.com/servers/slack"
+    },
+    {
+      "text": "Gmail Featured Connect to Gmail for email management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/gmail"
+    },
+    {
+      "text": "Google Calendar Featured Connect to Google Calendar for calendar management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/google-calendar"
+    },
+    {
+      "text": "Outlook Email Featured Connect to Outlook for email management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/outlook"
+    },
+    {
+      "text": "Outlook Calendar Featured Connect to Outlook Calendar for calendar management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/outlook-calendar"
+    },
+    {
+      "text": "Google Drive Featured Connect to Google Drive for file management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/google-drive"
+    },
+    {
+      "text": "Google Docs Featured Connect to Google Docs for document management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/google-docs"
+    },
+    {
+      "text": "Google Sheets Featured Connect to Google Sheets for spreadsheet management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/google-sheets"
+    },
+    {
+      "text": "SharePoint Featured Connect to SharePoint for document management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/sharepoint"
+    },
+    {
+      "text": "Salesforce Featured Connect to Salesforce for CRM data access and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/salesforce"
+    },
+    {
+      "text": "Zoom Featured Connect to Zoom for meeting management and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/zoom"
+    },
+    {
+      "text": "Gong Featured Connect to Gong for revenue intelligence and conversation data access with AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/gong"
+    },
+    {
+      "text": "Zendesk Featured Connect to Zendesk for customer support data access and AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/zendesk"
+    },
+    {
+      "text": "QuickBooks Featured Connect to QuickBooks for accounting, invoicing, and financial data access with AI assistance. OAuth",
+      "href": "https://www.mintmcp.com/servers/quickbooks"
+    },
+    {
+      "text": "Playwright Official Provides browser automation capabilities using Playwright. 22 tools Open 42.1M",
+      "href": "https://www.mintmcp.com/servers/playwright"
+    },
+    {
+      "text": "Fetch Retrieve and process web content, converting HTML to markdown for LLM consumption. 1 tools Open 26.7M",
+      "href": "https://www.mintmcp.com/servers/fetch"
+    },
+    {
+      "text": "Context7 Official Up-to-date code docs for any prompt 2 tools Open, API key 13.9M",
+      "href": "https://www.mintmcp.com/servers/context7"
+    },
+    {
+      "text": "Chrome DevTools Official Control and inspect a live Chrome browser for automation, debugging, and performance analysis. 29 tools Open 8.3M",
+      "href": "https://www.mintmcp.com/servers/chrome-devtools"
+    },
+    {
+      "text": "Filesystem Read, write, and manage local files and directories with configurable access controls. 14 tools Open 8.3M",
+      "href": "https://www.mintmcp.com/servers/filesystem"
+    },
+    {
+      "text": "GitHub Official Connect AI assistants to GitHub - manage repos, issues, PRs, and workflows through natural language. 41 tools API key 5.8M",
+      "href": "https://www.mintmcp.com/servers/github"
+    },
+    {
+      "text": "Git Read, search, and manipulate Git repositories including commits, branches, diffs, and history. 13 tools Open 4.7M",
+      "href": "https://www.mintmcp.com/servers/git"
+    },
+    {
+      "text": "Sequential Thinking A tool for dynamic problem-solving through structured thinking with revision and branching. 1 tools Open 4.6M",
+      "href": "https://www.mintmcp.com/servers/sequential-thinking"
+    },
+    {
+      "text": "Time Get current time and convert between timezones using IANA timezone names. 2 tools Open 4.1M",
+      "href": "https://www.mintmcp.com/servers/time"
+    },
+    {
+      "text": "Memory Persistent memory using a local knowledge graph to retain information across conversations. 9 tools Open 2.4M",
+      "href": "https://www.mintmcp.com/servers/memory"
+    },
+    {
+      "text": "Supabase Official MCP server for interacting with the Supabase platform 29 tools OAuth, API key 2.3M",
+      "href": "https://www.mintmcp.com/servers/supabase"
+    },
+    {
+      "text": "Zapier Official Connect AI assistants to 8,000+ apps and 30,000+ actions via Zapier. 1 tools API key 1.5M",
+      "href": "https://www.mintmcp.com/servers/zapier"
+    },
+    {
+      "text": "Desktop Commander Official MCP server for terminal commands, file operations, and process management 26 tools Open 1.2M",
+      "href": "https://www.mintmcp.com/servers/desktop-commander"
+    },
+    {
+      "text": "Stripe Official MCP server integrating with Stripe - tools for customers, products, payments, and more. 31 tools OAuth, API key 1.1M",
+      "href": "https://www.mintmcp.com/servers/stripe"
+    },
+    {
+      "text": "Puppeteer Browser automation using Puppeteer for web interaction, screenshots, and JavaScript execution. 7 tools Open 1.1M",
+      "href": "https://www.mintmcp.com/servers/puppeteer"
+    },
+    {
+      "text": "Exa Official Fast, intelligent web search and web crawling. New mcp tool: Exa-code is a context tool for coding 8 tools Open 945K",
+      "href": "https://www.mintmcp.com/servers/exa"
+    },
+    {
+      "text": "Grafana Official An MCP server giving access to Grafana dashboards, data and more. 50 tools Open, API key 852K",
+      "href": "https://www.mintmcp.com/servers/grafana"
+    },
+    {
+      "text": "Serena Official Coding agent toolkit with semantic code retrieval and editing capabilities. 26 tools Open 724K",
+      "href": "https://www.mintmcp.com/servers/serena"
+    },
+    {
+      "text": "HubSpot Official Access and interact with HubSpot CRM data including contacts, companies, deals, and tickets. 34 tools OAuth, API key 577K",
+      "href": "https://www.mintmcp.com/servers/hubspot"
+    },
+    {
+      "text": "Mastra Official AI agent framework for building MCP servers with tools, workflows, and agents. 13 tools Open 488K",
+      "href": "https://www.mintmcp.com/servers/mastra"
+    },
+    {
+      "text": "Figma Official The Figma MCP server brings Figma design context directly into your AI workflow. 17 tools OAuth 460K",
+      "href": "https://www.mintmcp.com/servers/figma"
+    },
+    {
+      "text": "Terraform Official Generate more accurate Terraform and automate workflows for HCP Terraform and Terraform Enterprise 9 tools Open, API key ",
+      "href": "https://www.mintmcp.com/servers/terraform"
+    },
+    {
+      "text": "Brave Search Official Web search, images, videos, news, local results, and AI summaries via Brave Search API. 6 tools API key 430K",
+      "href": "https://www.mintmcp.com/servers/brave-search"
+    },
+    {
+      "text": "dbt Cloud Official Remote MCP server for dbt Cloud AI features including Semantic Layer, SQL, and Discovery tools 24 tools API key 333K",
+      "href": "https://www.mintmcp.com/servers/dbt-cloud"
+    },
+    {
+      "text": "Asana Official Access Asana tasks, projects, goals, and team data from AI assistants. 44 tools OAuth 325K",
+      "href": "https://www.mintmcp.com/servers/asana"
+    }
+  ],
+  "text": "MintMCP\nGet started\nBrowse the MCP Directory\n\nA small sampling of the 10,000+ servers available on MintMCP. Connect any of them to Claude, ChatGPT, Cursor, and more.\n\nFeatured\nMost popular\nA-Z\nAll (77)\nOfficial (57)\nFeatured (16)\nDeveloper tools (17)\nProductivity (5)\nCommunication (7)\nData & analytics (15)\nDesign (4)\nSales & CRM (5)\nProject management (5)\nDevOps & infra (2)\nAI & ML (12)\nFinance (3)\nCustomer support (1)\nOther (1)\nOAuth (42)\nAPI key (26)\nNotion\nOfficial\nFeatured\n\nOfficial Notion MCP server\n\n14 tools\nOAuth\n1.3M\nLinear\nOfficial\nFeatured\n\nMCP server for Linear project management and issue tracking\n\n31 tools\nOAuth\n506K\nSlack\nOfficial\nFeatured\n\nSearch messages and files, send messages, manage canvases, and access user profiles.\n\n13 tools\nOAuth\n34K\nGmail\nFeatured\n\nConnect to Gmail for email management and AI assistance.\n\nOAuth\nGoogle Calendar\nFeatured\n\nConnect to Google Calendar for calendar management and AI assistance.\n\nOAuth\nOutlook Email\nFeatured\n\nConnect to Outlook for email management and AI assistance.\n\nOAuth\nOutlook Calendar\nFeatured\n\nConnect to Outlook Calendar for calendar management and AI assistance.\n\nOAuth\nGoogle Drive\nFeatured\n\nConnect to Google Drive for file management and AI assistance.\n\nOAuth\nGoogle Docs\nFeatured\n\nConnect to Google Docs for document management and AI assistance.\n\nOAuth\nGoogle Sheets\nFeatured\n\nConnect to Google Sheets for spreadsheet management and AI assistance.\n\nOAuth\nSharePoint\nFeatured\n\nConnect to SharePoint for document management and AI assistance.\n\nOAuth\nSalesforce\nFeatured\n\nConnect to Salesforce for CRM data access and AI assistance.\n\nOAuth\nZoom\nFeatured\n\nConnect to Zoom for meeting management and AI assistance.\n\nOAuth\nGong\nFeatured\n\nConnect to Gong for revenue intelligence and conversation data access with AI assistance.\n\nOAuth\nZendesk\nFeatured\n\nConnect to Zendesk for customer support data access and AI assistance.\n\nOAuth\nQuickBooks\nFeatured\n\nConnect to QuickBooks for accounting, invoicing, and financial data access with AI assistance.\n\nOAuth\nPlaywright\nOfficial\n\nProvides browser automation capabilities using Playwright.\n\n22 tools\nOpen\n42.1M\nFetch\n\nRetrieve and process web content, converting HTML to markdown for LLM consumption.\n\n1 tools\nOpen\n26.7M\nContext7\nOfficial\n\nUp-to-date code docs for any prompt\n\n2 tools\nOpen, API key\n13.9M\nChrome DevTools\nOfficial\n\nControl and inspect a live Chrome browser for automation, debugging, and performance analysis.\n\n29 tools\nOpen\n8.3M\nFilesystem\n\nRead, write, and manage local files and directories with configurable access controls.\n\n14 tools\nOpen\n8.3M\nGitHub\nOfficial\n\nConnect AI assistants to GitHub - manage repos, issues, PRs, and workflows through natural language.\n\n41 tools\nAPI key\n5.8M\nGit\n\nRead, search, and manipulate Git repositories including commits, branches, diffs, and history.\n\n13 tools\nOpen\n4.7M\nSequential Thinking\n\nA tool for dynamic problem-solving through structured thinking with revision and branching.\n\n1 tools\nOpen\n4.6M\nTime\n\nGet current time and convert between timezones using IANA timezone names.\n\n2 tools\nOpen\n4.1M\nMemory\n\nPersistent memory using a local knowledge graph to retain information across conversations.\n\n9 tools\nOpen\n2.4M\nSupabase\nOfficial\n\nMCP server for interacting with the Supabase platform\n\n29 tools\nOAuth, API key\n2.3M\nZapier\nOfficial\n\nConnect AI assistants to 8,000+ apps and 30,000+ actions via Zapier.\n\n1 tools\nAPI key\n1.5M\nDesktop Commander\nOfficial\n\nMCP server for terminal commands, file operations, and process management\n\n26 tools\nOpen\n1.2M\nStripe\nOfficial\n\nMCP server integrating with Stripe - tools for customers, products, payments, and more.\n\n31 tools\nOAuth, API key\n1.1M\nPuppeteer\n\nBrowser automation using Puppeteer for web interaction, screenshots, and JavaScript execution.\n\n7 tools\nOpen\n1.1M\nExa\nOfficial\n\nFast, intelligent web search and web crawling. New mcp tool: Exa-code is a context tool for coding\n\n8 tools\nOpen\n945K\nGrafana\nOfficial\n\nAn MCP server giving access to Grafana dashboards, data and more.\n\n50 tools\nOpen, API key\n852K\nSerena\nOfficial\n\nCoding agent toolkit with semantic code retrieval and editing capabilities.\n\n26 tools\nOpen\n724K\nHubSpot\nOfficial\n\nAccess and interact with HubSpot CRM data including contacts, companies, deals, and tickets.\n\n34 tools\nOAuth, API key\n577K\nMastra\nOfficial\n\nAI agent framework for building MCP servers with tools, workflows, and agents.\n\n13 tools\nOpen\n488K\nFigma\nOfficial\n\nThe Figma MCP server brings Figma design context directly into your AI workflow.\n\n17 tools\nOAuth\n460K\nTerraform\nOfficial\n\nGenerate more accurate Terraform and automate workflows for HCP Terraform and Terraform Enterprise\n\n9 tools\nOpen, API key\n442K\nBrave Search\nOfficial\n\nWeb search, images, videos, news, local results, and AI summaries via Brave Search API.\n\n6 tools\nAPI key\n430K\ndbt Cloud\nOfficial\n\nRemote MCP server for dbt Cloud AI features including Semantic Layer, SQL, and Discovery tools\n\n24 tools\nAPI key\n333K\nAsana\nOfficial\n\nAccess Asana tasks, projects, goals, and team data from AI assistants.\n\n44 tools\nOAuth\n325K\nSentry\nOfficial\n\nMCP server for Sentry - error monitoring, issue tracking, and debugging for AI assistants\n\n25 tools\nOAuth, API key\n285K\nWebflow\nOfficial\n\nAI-powered design and management for Webflow sites via the Data API and Designer API.\n\n55 tools\nOAuth, API key\n246K\nOSS Snowflake MCP Server\nOfficial\n\nMCP Server for Snowflake from Snowflake Labs\n\n16 tools\nOpen, API key\n242K\nNetlify\nOfficial\n\nDeploy and manage Netlify sites, projects, teams, extensions, and environment variables.\n\n9 tools\nOpen, API key\n241K\nBigQuery\nOfficial\n\nGoogle-managed MCP server for BigQuery with SQL execution and dataset/table discovery.\n\n6 tools\nOAuth\n222K\nPagerDuty\nOfficial\n\nPagerDuty's official MCP server which provides tools to interact with your PagerDuty account.\n\n64 tools\nAPI key\n183K\nVercel\nOfficial\n\nIntegrate with Vercel to manage deployments, projects, domains, and search docs.\n\n18 tools\nOAuth\n172K\nDatadog\nOfficial\n\nAccess logs, metrics, traces, dashboards, monitors, incidents, and more.\n\nOAuth, API key\n129K\nMonday.com\nOfficial\n\nMCP Server for Monday.com - tools for boards, items, updates, and more.\n\n41 tools\nOAuth\n126K\nKlaviyo\nOfficial\n\nConnect AI tools to Klaviyo marketing data for analytics, campaigns, profiles, and segments.\n\n29 tools\nOAuth, API key\n101K\nDeepWiki\nOfficial\n\nAI-generated documentation and Q&A for any public GitHub repository.\n\n3 tools\nOpen\n93K\nPostman\nOfficial\n\nA basic MCP server to operate on the Postman API.\n\n114 tools\nAPI key\n70K\nAmplitude\nOfficial\n\nSearch, access, and get insights on your Amplitude data\n\n44 tools\nOAuth\n70K\nCanva\nOfficial\n\nCreate, find, autofill, and export Canva designs from AI assistants.\n\n22 tools\nOAuth\n65K\nHugging Face\nOfficial\n\nConnect to Hugging Face Hub and thousands of Gradio AI Applications\n\n10 tools\nOpen, OAuth, API key\n62K\nLaunchDarkly\nOfficial\n\nManage LaunchDarkly feature flags, AI configs, and rollouts via AI agents.\n\n19 tools\nOpen\n60K\nPulumi MCP Server\nOfficial\n\nMCP server for Pulumi infrastructure as code operations via Automation API and Cloud API.\n\n14 tools\nOAuth\n47K\nOpenSearch\nOfficial\n\nMCP server built into OpenSearch for search, analytics, and ML tool discovery.\n\nUnknown\n37K\nFireflies\nOfficial\n\nAccess meeting transcripts, metadata, speaker information, and summaries from Fireflies.ai.\n\n19 tools\nOAuth\n37K\nBox\nOfficial\n\nConnect AI agents to enterprise content in Box for search, AI queries, and file operations.\n\n21 tools\nOAuth\n31K\nSalesforce Platform\nOfficial\n\nAccess Salesforce CRM data and invoke platform actions via hosted endpoints.\n\nOAuth\n27K\nBuildkite\nOfficial\n\nMCP server exposing Buildkite API data (pipelines, builds, jobs, tests) to AI tooling and editors.\n\n28 tools\nAPI key\n25K\nGlean\nOfficial\n\nRemote MCP Server that securely connects Glean Enterprise Knowledge with your IDE, LLM, or agents.\n\nUnknown\n23K\nGuru\nOfficial\n\nConnect AI tools to your Guru knowledge base for verified, permission-aware answers.\n\n6 tools\nOAuth\n22K\nSplunk\nOfficial\n\nConnect AI assistants to Splunk data with SPL queries, index metadata, and RBAC enforcement.\n\n9 tools\nAPI key\n21K\nMercury\nOfficial\n\nRead-only access to Mercury business banking accounts\n\n34 tools\nOAuth\n19K\nMiro\nOfficial\n\nOfficial Miro MCP server for diagram generation, code creation, and visual collaboration.\n\n13 tools\nOAuth\n18K\nAtlassian Rovo\nOfficial\n\nEnables secure, permission-aware access to Atlassian Cloud products.\n\n31 tools\nOAuth\n15K\nClickUp\nOfficial\n\nManage tasks, docs, time tracking, and workspaces in ClickUp via natural language.\n\n51 tools\nOAuth\n14K\nIntercom\nOfficial\n\nEnables AI systems to access Intercom conversations, contacts, and customer data.\n\n13 tools\nOAuth, API key\n13K\nMotion Studio\nOfficial\n\nAnimation expert with Motion documentation, examples, and CSS spring generation.\n\n2 tools\nOpen, API key\n8K\nCampfire\nOfficial\n\nIntegrate with Campfire to access accounting, financial reports, and ERP data.\n\nAPI key\n7K\nRamp\nOfficial\n\nAccess Ramp financial data for spend analysis.\n\nOAuth, Credential\n6K\nGlyphic\nOfficial\n\nAccess sales call recordings, transcripts, deal insights, and conversation analytics.\n\nAPI key\n5K\nCube\nOfficial\n\nExplore analytics data, generate SQL queries, and discover business insights.\n\n1 tools\nAPI key\n2K\nassistant-ui\nOfficial\n\nAllow an agent to query the specific information it needs to complete an assistant-ui related task\n\n2 tools\nOpen\n\nShowing 77 of 10,000+ servers. Looking for a specific service you don't see here? Chat with us.\n\nDon't see what you need?\n\nMintMCP Gateway works with any MCP-compatible server. Talk to us about connecting your custom tools and data sources.\n\nTry it now\n\nNo sales call needed!\n\nMintMCP\n© 2026, all rights reserved\nPRODUCT\nMCP Gateway\nAgent Monitor\nDocumentation\nResources\nPricing\nINTEGRATIONS\nGmail MCP\nOutlook MCP\nGoogle Calendar MCP\nOutlook Calendar MCP\nLinear MCP\nNotion MCP\nDatabases\nSnowflake MCP\nElasticsearch MCP\nSalesforce MCP\nSee all →\nCOMPANY\nJobs\nAbout us\nEvents\nBlog\nContact\nTerms\nPrivacy\nTrust Center\nFOLLOW US HERE\nGithub\nLinkedIn\nX\nPROUD MEMBER OF\nENTERPRISE-READY",
+  "stats": {
+    "bodyTextLength": 10049,
+    "linkCount": 119,
+    "buttonCount": 39,
+    "inputCount": 5,
+    "cardishCount": 77,
+    "scrollHeight": 13500
+  }
+}

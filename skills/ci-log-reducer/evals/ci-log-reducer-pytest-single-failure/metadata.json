@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-pytest-single-failure",
+  "skill": "ci-log-reducer",
+  "bucket": "easy",
+  "difficulty": "easy",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Baseline case: short synthetic pytest log with one clean assertion failure and ci-job.json metadata naming the command. Synthetic fixture; no customer data."
+}

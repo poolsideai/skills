@@ -1,0 +1,13 @@
+[package]
+name = "polyglot-demos"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "rust-demo"
+path = "src/rust/main.rs"
+
+[dev-dependencies]
+# Only development/build tools
+cargo-watch = "8.4"
+clippy = "0.0.302"

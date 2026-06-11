@@ -1,0 +1,6 @@
+{
+  "job": "rspec-parallel",
+  "command": "bundle exec rspec --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml",
+  "exit_code": 1,
+  "parallelism": 4
+}

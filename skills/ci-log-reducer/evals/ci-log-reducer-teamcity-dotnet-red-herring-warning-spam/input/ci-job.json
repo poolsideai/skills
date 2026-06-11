@@ -1,0 +1,5 @@
+{
+  "job": "dotnet-test",
+  "command": "dotnet test --logger teamcity",
+  "exit_code": 1
+}

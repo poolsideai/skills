@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-jenkins-gradle-module-failure",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "hard",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Jenkins-style pipeline log with Gradle multi-module build; only :payments-service fails (one JUnit assertion, multiline stack trace) while :api-gateway and :auth-service pass — model must isolate the single failing module and cite the FAILED test line, exception, and BUILD FAILED region."
+}

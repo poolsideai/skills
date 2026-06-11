@@ -1,0 +1,19 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "ci.log",
+  "failing_command": "mypy src/",
+  "failure_kind": "lint_error",
+  "summary": "mypy found 3 type errors in 2 files: src/api/routes.py:45 has incompatible argument type (str instead of int for validate_user), src/utils/parser.py:78 is missing a return statement, src/api/routes.py:92 has incompatible assignment (float assigned to int variable). 12 source files checked total.",
+  "error_lines": [
+    { "line": 25, "text": "src/api/routes.py:45: error: Argument 1 to \"validate_user\" has incompatible type \"str\"; expected \"int\"  [arg-type]" },
+    { "line": 26, "text": "src/utils/parser.py:78: error: Missing return statement  [return]" },
+    { "line": 27, "text": "src/api/routes.py:92: error: Incompatible types in assignment (expression has type \"float\", variable has type \"int\")  [assignment]" },
+    { "line": 28, "text": "Found 3 errors in 2 files (checked 12 source files)" }
+  ],
+  "suggested_next_commands": [
+    "mypy src/api/routes.py",
+    "mypy src/utils/parser.py",
+    "mypy src/ --show-error-context",
+    "grep -n 'validate_user\\|def.*parser' src/api/routes.py src/utils/parser.py"
+  ]
+}

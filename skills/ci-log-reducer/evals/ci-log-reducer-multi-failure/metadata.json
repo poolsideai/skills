@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-multi-failure",
+  "skill": "ci-log-reducer",
+  "bucket": "edge",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Boundary case: three simultaneous failures across two test files; the summary and error_lines must cover all of them, not collapse to the first. No ci-job.json — failing_command must come from the log's '+ python -m pytest -q' line. Synthetic fixture."
+}

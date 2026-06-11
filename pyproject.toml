@@ -1,0 +1,22 @@
+[project]
+name = "laguna-skills-harness"
+version = "0.1.0"
+description = "External eval harness for the Laguna skills library (plan items 9-12): drives today's pool CLI as a subprocess, materializes fixture workspaces, recovers trajectories, runs per-case validators, and writes run-manifest.v0 manifests."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # Contract validation (schemas/common/*.schema.json). [format] pulls
+    # rfc3339-validator so timing.started_at/finished_at are asserted, not advisory.
+    "jsonschema[format]>=4.21",
+    # SKILL.md frontmatter parsing (skill version for run-manifest.v0).
+    "pyyaml>=6.0",
+    # Genuine UUIDv7 run ids -- non-v7 --run-id values are silently skipped by
+    # pool history listings (docs/trajectory-recovery-spike.md F4/F5).
+    "uuid6>=2024.1.12",
+]
+
+[tool.uv]
+# Script-only repo: install dependencies into the project env but never try to
+# build/install this project as a package. `uv run harness/runner/run_eval.py ...`
+# works from the repo root.
+package = false

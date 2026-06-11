@@ -1,0 +1,245 @@
+{
+  "title": "Agent Skills | SKILL.md for Claude, Cursor & ChatGPT",
+  "url": "https://promptbase.com/agent-skills",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Agent Skills"
+    },
+    {
+      "tag": "h3",
+      "text": "Explore the Marketplace"
+    },
+    {
+      "tag": "h3",
+      "text": "Sell Your Prompts"
+    },
+    {
+      "tag": "h3",
+      "text": "Get a Custom Prompt"
+    },
+    {
+      "tag": "h3",
+      "text": "Generate AI Content"
+    }
+  ],
+  "controls": [
+    {
+      "tag": "input",
+      "role": "",
+      "text": "Search prompts",
+      "type": "text"
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "href": "https://promptbase.com/"
+    },
+    {
+      "text": "Create",
+      "href": "https://promptbase.com/create"
+    },
+    {
+      "text": "Hire",
+      "href": "https://promptbase.com/hire"
+    },
+    {
+      "text": "Sell",
+      "href": "https://promptbase.com/sell"
+    },
+    {
+      "text": "Login",
+      "href": "https://promptbase.com/login"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/chat"
+    },
+    {
+      "text": "Upgrade",
+      "href": "https://promptbase.com/promptbase-select"
+    },
+    {
+      "text": "Upgrade",
+      "href": "https://promptbase.com/promptbase-select"
+    },
+    {
+      "text": "Explore all skills",
+      "href": "https://promptbase.com/marketplace?sortBy=score&itemType=skill&domain=text"
+    },
+    {
+      "text": "",
+      "href": "https://www.theverge.com/2022/9/2/23326868/dalle-midjourney-ai-promptbase-prompt-market-sales-artist-interview"
+    },
+    {
+      "text": "",
+      "href": "https://www.wired.com/story/picture-limitless-creativity-ai-image-generators/"
+    },
+    {
+      "text": "",
+      "href": "https://www.fastcompany.com/90825418/promptbase-generative-ai-prompt-marketplace"
+    },
+    {
+      "text": "",
+      "href": "https://techcrunch.com/2022/07/29/a-startup-is-charging-1-99-for-strings-of-text-to-feed-to-dall-e-2/"
+    },
+    {
+      "text": "",
+      "href": "https://www.theatlantic.com/technology/archive/2023/02/openai-text-models-google-search-engine-bard-chatbot-chatgpt-prompt-writing/672991/"
+    },
+    {
+      "text": "",
+      "href": "https://www.wsj.com/articles/working-with-ai-review-learning-to-love-the-machine-11664135970"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/etsy-listing-optimizer-2026-seo"
+    },
+    {
+      "text": "Etsy Listing Optimizer 2026 SEO",
+      "href": "https://promptbase.com/skill/etsy-listing-optimizer-2026-seo"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/junk-journal-kit-builder"
+    },
+    {
+      "text": "Junk Journal Kit Builder",
+      "href": "https://promptbase.com/skill/junk-journal-kit-builder"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/etsy-digital-product-listing-factory"
+    },
+    {
+      "text": "Etsy Digital Product Listing Factory",
+      "href": "https://promptbase.com/skill/etsy-digital-product-listing-factory"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/brandable-niche-idea-miner-agent"
+    },
+    {
+      "text": "Brandable Niche Idea Miner Agent",
+      "href": "https://promptbase.com/skill/brandable-niche-idea-miner-agent"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/code-review-security-audit"
+    },
+    {
+      "text": "Code Review Security Audit",
+      "href": "https://promptbase.com/skill/code-review-security-audit"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/etsy-printable-launch-agent"
+    },
+    {
+      "text": "Etsy Printable Launch Agent",
+      "href": "https://promptbase.com/skill/etsy-printable-launch-agent"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/printable-learning-activity-pack-agent"
+    },
+    {
+      "text": "Printable Learning Activity Pack Agent",
+      "href": "https://promptbase.com/skill/printable-learning-activity-pack-agent"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/etsy-listing-optimizer-2026-seo"
+    },
+    {
+      "text": "Etsy Listing Optimizer 2026 SEO",
+      "href": "https://promptbase.com/skill/etsy-listing-optimizer-2026-seo"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/seogeo-content-strategist-skill-pack"
+    },
+    {
+      "text": "SEOgeo Content Strategist Skill Pack",
+      "href": "https://promptbase.com/skill/seogeo-content-strategist-skill-pack"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/quick-business-idea-generator-tool"
+    },
+    {
+      "text": "Quick Business Idea Generator Tool",
+      "href": "https://promptbase.com/skill/quick-business-idea-generator-tool"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/agent-conversion-auditor"
+    },
+    {
+      "text": "Agent Conversion Auditor",
+      "href": "https://promptbase.com/skill/agent-conversion-auditor"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/premium-3d-promo-poster-generator-2"
+    },
+    {
+      "text": "Premium 3D Promo Poster Generator",
+      "href": "https://promptbase.com/skill/premium-3d-promo-poster-generator-2"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/130-marketing-ideas"
+    },
+    {
+      "text": "130 Marketing Ideas",
+      "href": "https://promptbase.com/skill/130-marketing-ideas"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/quantumlean-process-architect"
+    },
+    {
+      "text": "Quantumlean Process Architect",
+      "href": "https://promptbase.com/skill/quantumlean-process-architect"
+    },
+    {
+      "text": "Trending Agent Skills Explore all",
+      "href": "https://promptbase.com/marketplace?sortBy=hotness&itemType=skill&domain=text"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/image-set-builder"
+    },
+    {
+      "text": "Image Set Builder",
+      "href": "https://promptbase.com/skill/image-set-builder"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/entity-relationship-extractor"
+    },
+    {
+      "text": "Entity Relationship Extractor",
+      "href": "https://promptbase.com/skill/entity-relationship-extractor"
+    },
+    {
+      "text": "",
+      "href": "https://promptbase.com/skill/scrapbooking-organizer"
+    },
+    {
+      "text": "Scrapbooking Organizer",
+      "href": "https://promptbase.com/skill/scrapbooking-organizer"
+    }
+  ],
+  "text": "Upgrade\nGENERAL\nHome\nMarketplace\nCreate\nHire\nLogin\nChat\nSell\nEXPLORE\nAgent Skills\nSupercharge your AI agent. Expert-built, tested SKILL.md skills for Claude, ChatGPT & more - instantly level-up your agent.\nExplore all skills\nFeatured Agent Skills\n💬 ChatGPT Skill\n5.0\nEtsy Listing Optimizer 2026 SEO\nFree\n💬 ChatGPT Skill\nJunk Journal Kit Builder\n$9.99\n💬 ChatGPT Skill\nEtsy Digital Product Listing Factory\n$9.99\n💬 ChatGPT Skill\nBrandable Niche Idea Miner Agent\n$9.99\n🟧 Claude Skill\nCode Review Security Audit\n$3.99\n💬 ChatGPT Skill\nEtsy Printable Launch Agent\n$6.99\n💬 ChatGPT Skill\nPrintable Learning Activity Pack Agent\n$9.99\nFree Agent Skills\n💬 ChatGPT Skill\n5.0\nEtsy Listing Optimizer 2026 SEO\nFree\n🟧 Claude Skill\nSEOgeo Content Strategist Skill Pack\nFree\n🟧 Claude Skill\n5.0\nQuick Business Idea Generator Tool\nFree\n💬 ChatGPT Skill\nAgent Conversion Auditor\nFree\n💬 ChatGPT Skill\n5.0\nPremium 3D Promo Poster Generator\nFree\n🟧 Claude Skill\n130 Marketing Ideas\nFree\n🟧 Claude Skill\nQuantumlean Process Architect\nFree\nTrending Agent Skills\nExplore all\n1\n💬 ChatGPT Skill\n5.0\nImage Set Builder\n$6.99\n2\n🟧 Claude Skill\nEntity Relationship Extractor\n$9.99\n3\n💬 ChatGPT Skill\nScrapbooking Organizer\n$6.99\n4\n💬 ChatGPT Skill\nNda Analyzer\n$6.99\n5\n💬 ChatGPT Skill\nImage Architect Agent\n$6.99\n6\n💬 ChatGPT Skill\nMarketplace Qa Conversion Builder\n$9.99\n7\n💬 ChatGPT Skill\n24 Organizational Intelligence Engine\n$6.99\n8\n💬 ChatGPT Skill\nEmail Conversion Architect\n$4.99\n9\n💬 ChatGPT Skill\nMajor Sports Event Content Agents\n$2.99\n10\n💬 ChatGPT Skill\nService Page SEO Copywriter\n$6.99\n11\n💬 ChatGPT Skill\nWedding Speech Writer\n$6.99\n12\n💬 ChatGPT Skill\nProduct Packaging Clarity Builder\n$9.99\n13\n💬 ChatGPT Skill\nInterview Prep Master\n$6.99\n14\n💬 ChatGPT Skill\nYoga Pose Teaching Guide Creator\n$9.99\n15\n💬 ChatGPT Skill\nChildrens Library Storytime Builder\n$9.99\nExplore the Marketplace\nBrowse 270k+ quality, tested prompts\nSell Your Prompts\nCreate, share and earn\nGet a Custom Prompt\nWork with expert prompt engineers\nGenerate AI Content\nCreate images, videos, and more\nMost Popular Agent Skills This Week\nExplore all\n1\nImage Set Builder\nChatGPT Skill\n5.0\n$6.99\n2\nKids Logic Games Builder\nChatGPT Skill\n$9.99\n3\nPersonal Transformation Course Builder\nChatGPT Skill\n$9.99\n4\nEntity Relationship Extractor\nClaude Skill\n$9.99\n5\nDataarchitectureadvisor\nClaude Skill\n$6.99\nMost Popular Agent Skills This Month\nExplore all\n1\nJunk Journal Kit Builder\nChatGPT Skill\n$9.99\n2\nPrintable Learning Activity Pack Agent\nChatGPT Skill\n$9.99\n3\nOnline Business Branding Builder Agent\nChatGPT Skill\n$9.99\n4\nDigital Product Business Builder Agent\nChatGPT Skill\n$9.99\n5\nFrontend Security Audit Fix Pass\nClaude Skill\n5.0\n$9.99\nTop Creators\nExplore all\n1\n@shandra\n5.0\n2\n@sjjdesign\n5.0\n3\n@mayreesedunn\n5.0\n4\n@akynapriest\n5.0\n5\n@diamondprompts\n4.9\nBest Agent Skills\n💬 ChatGPT Skill\n5.0\nEtsy Listing Optimizer 2026 SEO\nFree\n💬 ChatGPT Skill\nJunk Journal Kit Builder\n$9.99\n💬 ChatGPT Skill\nEtsy Digital Product Listing Factory\n$9.99\n💬 ChatGPT Skill\nBrandable Niche Idea Miner Agent\n$9.99\n🟧 Claude Skill\nCode Review Security Audit\n$3.99\n💬 ChatGPT Skill\nEtsy Printable Launch Agent\n$6.99\n💬 ChatGPT Skill\nPrintable Learning Activity Pack Agent\n$9.99\n🟧 Claude Skill\nSpec Out Your Idea\n$8.99\n💬 ChatGPT Skill\nOnline Business Branding Builder Agent\n$9.99\n💬 ChatGPT Skill\nDigital Product Business Builder Agent\n$9.99\n🟧 Claude Skill\n5.0\nUser Story To Code\n$9.99\n🟧 Claude Skill\n5.0\nFrontend Security Audit Fix Pass\n$9.99\n💬 ChatGPT Skill\nCanva Template Marketplace Idea Agent\n$9.99\n💬 ChatGPT Skill\nFeng Shui Home Harmony Planner\n$9.99\n🟧 Claude Skill\nMulti Agent Architect\n$6.99\n💬 ChatGPT Skill\n5.0\nImage Set Builder\n$6.99\n💬 ChatGPT Skill\nProfessional Curriculum Designer Agent\n$9.99\n💬 ChatGPT Skill\n5.0\nKids Drawing Skills Lesson Builder\n$9.99\n💬 ChatGPT Skill\n5.0\nEducational Coloring Book Builder Agent\n$9.99\n💬 ChatGPT Skill\nTeacher Builder\n$6.99\n💬 ChatGPT Skill\nMum Tell Me Your Story Journal Builder\n$9.99\n💬 ChatGPT Skill\nCreative Builder Agent\n$9.99\n💬 ChatGPT Skill\n5.0\nCuriosity Rabbit Hole Builder\n$5.99\n💬 ChatGPT Skill\nClassroom Management Toolkit Creator\n$9.99\n\n© PromptBase 2026\n\nFAQContactChangelogBlogPrivacyTermsLeaderboardAffiliates\nCATEGORIES\nMost Popular Models\nBest AI prompts\nArt & Illustration prompts\nLogo & Icon prompts\nGraphic & Design prompts\nProductivity & Writing prompts\nMarketing & Business prompts\nPhotography prompts\nGames & 3D prompts\nSitemap\nMODELS\nImage prompts\nText prompts\nVideo prompts\nFree prompts\nMidjourney prompts\nSora prompts\nFLUX prompts\nDALL·E prompts\nChatGPT Image prompts\nGemini Image prompts\nKLING AI prompts\nHailuo AI prompts\nGoogle Imagen prompts\nStable Diffusion prompts\nDeepSeek prompts\nChatGPT prompts\nLeonardo Ai prompts\nLlama prompts\nClaude prompts\nIdeogram prompts\nGemini prompts\nChatGPT prompts\nGrok prompts\nGrok Image prompts\nGrok Video prompts\nVeo prompts\nMidjourney Video prompts\nSeedance prompts\nSeedream prompts\nHunyuan prompts\nRecraft prompts\nWan prompts\nQwen Image prompts\nHappy Horse prompts\nSKILLS\nAll Agent Skills\nClaude Skills\nChatGPT Skills\nCursor Skills\nOpenClaw Skills",
+  "stats": {
+    "bodyTextLength": 5111,
+    "linkCount": 207,
+    "buttonCount": 0,
+    "inputCount": 1,
+    "cardishCount": 0,
+    "scrollHeight": 7994
+  }
+}

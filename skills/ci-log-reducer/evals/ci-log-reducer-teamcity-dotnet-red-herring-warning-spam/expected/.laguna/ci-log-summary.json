@@ -1,0 +1,17 @@
+{
+  "schema_version": "ci-log-summary.v1",
+  "log_file": "build.log",
+  "failing_command": "dotnet test --logger teamcity",
+  "failure_kind": "test_failure",
+  "summary": "Namespace.Tests.PaymentProcessorTests.ProcessRefund fails with assertion error: expected status 'completed', got 'pending'. The failure is at PaymentProcessorTests.cs:line 78. All other tests pass, including Namespace.Tests.LegacyClientTests.ConnectToLegacyEndpoint (which emits 180 deprecation warnings but passes). 8 tests pass, 1 fails.",
+  "error_lines": [
+    { "line": 177, "text": "[2024-01-15 14:32:22] ##teamcity[testFailed name='Namespace.Tests.PaymentProcessorTests.ProcessRefund' message='Assert.Equal() Failure: Values differ' details='Expected: completed|nActual:   pending|n   at PaymentService.Tests.PaymentProcessorTests.ProcessRefund() in /workspace/PaymentService.Tests/PaymentProcessorTests.cs:line 78']" },
+    { "line": 183, "text": "[2024-01-15 14:32:22] Failed!  - Failed:     1, Passed:     8, Skipped:     0, Total:     9, Duration: 1.8s" },
+    { "line": 184, "text": "[2024-01-15 14:32:22] ##teamcity[buildProblem description='Test(s) failed' identity='dotnet-test-failure']" }
+  ],
+  "suggested_next_commands": [
+    "dotnet test --filter FullyQualifiedName~PaymentProcessorTests.ProcessRefund",
+    "dotnet test --filter FullyQualifiedName~PaymentProcessorTests --logger \"console;verbosity=detailed\"",
+    "grep -rn 'ProcessRefund' PaymentService.Tests/"
+  ]
+}

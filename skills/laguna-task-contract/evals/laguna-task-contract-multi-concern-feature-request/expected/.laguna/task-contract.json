@@ -1,0 +1,57 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Add input validation to user.ts, refactor error handler in server.ts, and update API docs in README.md to improve error handling across the user flow.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "feature-request.md",
+        "why": "product team's feature request for improved error handling"
+      },
+      {
+        "path": "src/user.ts",
+        "why": "user creation logic needing input validation"
+      },
+      {
+        "path": "src/server.ts",
+        "why": "error handler needing refactor for proper status codes"
+      },
+      {
+        "path": "README.md",
+        "why": "API documentation needing error format updates"
+      }
+    ],
+    "commands": [],
+    "logs": []
+  },
+  "scope": {
+    "paths": [
+      "src/user.ts",
+      "src/server.ts",
+      "README.md"
+    ],
+    "max_files_to_modify": 1
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": [
+      "change unrelated logic",
+      "modify database schema",
+      "add external dependencies"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "command",
+        "command": "bun run typecheck"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poolside.ai/schemas/skills/laguna-task-contract/task-contract.schema.json",
+  "title": "task-contract.v1",
+  "description": "A bounded work order for Laguna XS.2 acting as a narrow worker, written by the laguna-task-contract skill to .laguna/task-contract.json at the workspace root. The schema enforces shape and completeness; the validator (scripts/validate_contract.ts) additionally enforces the bounded-contract rules: single-concern goal, bounded scope paths, task_type-consistent max_files_to_modify, safe local acceptance commands, and no unbounded verbs in the goal.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "task-contract.v1",
+      "description": "Contract identifier; always the literal string \"task-contract.v1\"."
+    },
+    "model_mode": {
+      "const": "laguna_xs_worker",
+      "description": "Always \"laguna_xs_worker\": this contract is consumed by Laguna XS.2 as a bounded worker. Router work belongs in router-contract.v1."
+    },
+    "task_type": {
+      "type": "string",
+      "enum": ["single_file_patch", "test_generation", "log_reduction", "stack_trace_routing", "repo_map"],
+      "description": "The one kind of work the worker performs. Read-only types (log_reduction, stack_trace_routing, repo_map) require scope.max_files_to_modify = 0; single_file_patch requires exactly 1; test_generation allows 1-2."
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Exactly one sentence naming one concern. No chained tasks (no '; ', ', and ', 'and then'), no unbounded quantifiers ('whole repo', 'everything', 'all tests')."
+    },
+    "context_packet": {
+      "type": "object",
+      "description": "The curated context the worker receives instead of the full workspace. Empty arrays are explicit statements that a category is not needed.",
+      "properties": {
+        "files": {
+          "type": "array",
+          "maxItems": 12,
+          "description": "Workspace-relative files the worker should read, each with a one-line reason.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Workspace-relative file path."
+              },
+              "why": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Why this file is in the packet."
+              }
+            },
+            "required": ["path", "why"],
+            "additionalProperties": false
+          }
+        },
+        "commands": {
+          "type": "array",
+          "maxItems": 6,
+          "description": "Relevant commands (e.g. the failing command), verbatim.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "logs": {
+          "type": "array",
+          "maxItems": 6,
+          "description": "Workspace-relative paths of relevant logs or failure excerpts.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": ["files", "commands", "logs"],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "description": "The blast radius. paths lists what the worker may touch (read-only tasks: what it reads); max_files_to_modify caps edits.",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "description": "Explicit workspace-relative files or bounded globs. A glob is bounded only below a literal first segment (src/**/*.ts is fine; *, **, **/* and *.ts at the top level are not). No absolute paths, no '..'.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "max_files_to_modify": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Hard cap on files the worker may modify. 0 for read-only tasks, 1 for single_file_patch, 1-2 for test_generation."
+        }
+      },
+      "required": ["paths", "max_files_to_modify"],
+      "additionalProperties": false
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "output_format": {
+          "type": "string",
+          "enum": ["unified_diff", "json"],
+          "description": "The single allowed output shape. Patch tasks return only a unified diff; read-only tasks return JSON written to artifact_path."
+        },
+        "artifact_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Workspace-relative path where the JSON artifact lands. Required in practice when output_format is \"json\"."
+        },
+        "must_not": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "description": "Explicit prohibitions, e.g. \"change unrelated behavior\", \"perform broad refactors\", \"invent unavailable files\".",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": ["output_format", "must_not"],
+      "additionalProperties": false
+    },
+    "acceptance": {
+      "type": "object",
+      "description": "Mechanical checks that decide success. Every check must be runnable locally with no network access.",
+      "properties": {
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["command", "schema", "patch_apply", "test_result"],
+                "description": "command/test_result need a concrete local command; schema needs schema_path; patch_apply needs target_path. The validator enforces these pairings."
+              },
+              "command": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Concrete shell command, verbatim and runnable — no placeholders ('...', '<file>', TODO), no network or destructive operations."
+              },
+              "schema_path": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Workspace-relative path of the JSON Schema the artifact must satisfy."
+              },
+              "target_path": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Workspace-relative file the patch must apply to."
+              }
+            },
+            "required": ["type"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["checks"],
+      "additionalProperties": false
+    },
+    "repair_policy": {
+      "type": "object",
+      "properties": {
+        "max_repairs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Bounded repair loop: at most one repair attempt."
+        },
+        "return_only_corrected_output": {
+          "type": "boolean",
+          "description": "On repair, the worker returns only the corrected artifact — no explanations, no extra changes."
+        }
+      },
+      "required": ["max_repairs", "return_only_corrected_output"],
+      "additionalProperties": false
+    },
+    "escalation": {
+      "type": "string",
+      "enum": ["stop_and_report", "route_to_m1", "route_to_human"],
+      "description": "The explicit 'cannot complete this safely' path: what the worker does when acceptance still fails after the repair budget."
+    }
+  },
+  "required": [
+    "schema_version",
+    "model_mode",
+    "task_type",
+    "goal",
+    "context_packet",
+    "scope",
+    "constraints",
+    "acceptance",
+    "repair_policy",
+    "escalation"
+  ],
+  "additionalProperties": false
+}

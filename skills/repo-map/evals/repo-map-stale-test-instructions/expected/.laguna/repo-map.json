@@ -1,0 +1,28 @@
+{
+  "schema_version": "repo-map.v1",
+  "summary": "email-validator is a lightweight JavaScript library for email address syntax validation (no DNS verification), providing isValidEmail and parseEmail functions. The README describes a Jest test suite in detail, but the tree contains no test files — tests were removed and documentation was not updated. package.json lists jest as a dev dependency and declares a test script, but with no *.test.*, *.spec.*, or __tests__/ files present, the test command is unsupported.",
+  "languages": [
+    {
+      "name": "javascript",
+      "evidence": "src/index.js"
+    },
+    {
+      "name": "typescript",
+      "evidence": "src/index.d.ts"
+    }
+  ],
+  "frameworks": [],
+  "entrypoints": [
+    {
+      "path": "src/index.js",
+      "description": "Library main module exporting isValidEmail and parseEmail; package.json main and exports point here"
+    }
+  ],
+  "key_directories": [
+    {
+      "path": "src",
+      "role": "library source: validation logic and TypeScript type definitions"
+    }
+  ],
+  "test_commands": []
+}

@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-truncated-log-no-summary",
+  "skill": "ci-log-reducer",
+  "bucket": "edge",
+  "difficulty": "hard",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Edge case: log truncated mid-run with no final summary; two failures are visible before cutoff; preamble is absent so failing_command must be sourced from ci-job.json only."
+}

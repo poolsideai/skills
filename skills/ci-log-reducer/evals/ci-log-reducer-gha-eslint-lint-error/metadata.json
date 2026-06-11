@@ -1,0 +1,13 @@
+{
+  "id": "ci-log-reducer-gha-eslint-lint-error",
+  "skill": "ci-log-reducer",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/ci-log-reducer/scripts/validate_log_summary.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "GitHub Actions log with ::group::/##[group]/##[error] markers and step timestamps; ESLint fails with 3 errors across 2 files. Probes correct failure_kind=lint_error and multi-file error extraction."
+}

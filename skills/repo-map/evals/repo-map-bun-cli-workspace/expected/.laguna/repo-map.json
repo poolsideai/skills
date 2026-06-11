@@ -1,0 +1,38 @@
+{
+  "schema_version": "repo-map.v1",
+  "summary": "tidy-csv is a TypeScript command-line tool, run with bun, for cleaning and summarizing CSV files: a dedupe command that removes duplicate rows and a stats command that reports per-column fill counts. No frameworks — only bun builtins and a small hand-rolled CSV parser. A bash release script packages tarballs into dist/.",
+  "languages": [
+    {
+      "name": "typescript",
+      "evidence": "src/cli.ts"
+    },
+    {
+      "name": "shell",
+      "evidence": "scripts/release.sh"
+    }
+  ],
+  "frameworks": [],
+  "entrypoints": [
+    {
+      "path": "src/cli.ts",
+      "description": "CLI main; package.json bin \"tidy-csv\", dispatches the dedupe and stats subcommands"
+    }
+  ],
+  "key_directories": [
+    {
+      "path": "src/commands",
+      "role": "one module per CLI subcommand (dedupe, stats)"
+    },
+    {
+      "path": "src/lib",
+      "role": "shared CSV parse/write helpers plus their bun test"
+    },
+    {
+      "path": "scripts",
+      "role": "release tooling (release.sh builds the dist tarball)"
+    }
+  ],
+  "test_commands": [
+    "bun test"
+  ]
+}
