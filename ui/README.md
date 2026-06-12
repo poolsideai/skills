@@ -10,6 +10,21 @@ bun ui/server.ts          # web UI  → http://127.0.0.1:4319/workflows.html
 bun ui/bench.ts <cmd>     # the same substrate for agents (JSON in/out)
 ```
 
+## Quick start
+
+If you want the Smithers demo project to appear in the workbench, initialize it first:
+
+```bash
+cd experiments/smithers-pool
+bun install
+bun run setup
+mkdir -p .smithers
+cd ../..
+bun ui/server.ts
+```
+
+Then open `http://127.0.0.1:4319/workflows.html`.
+
 ## Three surfaces, one substrate
 
 Everything lives in `ui/lib.ts`; the HTTP server (`ui/server.ts`) and the
@@ -23,7 +38,8 @@ bun ui/bench.ts models                       # pool agents list (laguna first, t
 bun ui/bench.ts skill-generate --name my-skill --prompt "..." --model anthropic/claude-sonnet-4.6
 bun ui/bench.ts workflow-generate --prompt "..." --model laguna-m.1 --project experiments/smithers-pool
 bun ui/bench.ts workflow-run .smithers/workflows/my-flow.tsx --project experiments/smithers-pool
-bun ui/bench.ts runs / run-show <runId>      # workflow runs as TrajectoryRecords
+bun ui/bench.ts runs --project experiments/smithers-pool
+bun ui/bench.ts run-show <runId> --project experiments/smithers-pool
 bun ui/bench.ts eval-run --suite evals/suites/smoke.json --case <id> --arm xs_with_skill
 bun ui/bench.ts eval-runs                    # live harness status + per-arm results
 ```
@@ -102,8 +118,8 @@ models, `anthropic/claude-*`, etc.) as the author, via pool's `--agent-name`:
 
 ## The annotation app (harness/review) is wired in, not replaced
 
-The pre-existing trace-annotation tool (`harness/review/serve.py`, default
-port 8901, serving `runs/review/traces.json` + `labels.json`) stays its own
+The pre-existing trace-annotation tool (`harness/review/serve.py`, standalone default
+port 8765, serving `runs/review/traces.json` + `labels.json`) stays its own
 deep-review surface. The workbench connects to it rather than reimplementing
 it:
 

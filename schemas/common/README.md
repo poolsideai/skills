@@ -10,6 +10,14 @@ cross-cutting contracts live here.
 | `eval-case.v1.schema.json` | An eval case's `metadata.json` (canonical field list) | case authors | harness fixtures/matrix, repo structure checks |
 | `run-manifest.v0.schema.json` | Per-run `manifest.json` written under `runs/<suite>/<case>/<arm>/` | harness runner | report, harness-debt review |
 
+## Validate schemas
+
+From the repo root:
+
+```bash
+uv run scripts/check_schemas.py
+```
+
 ## Conventions
 
 - `$id`s are stable identifiers of the form `https://poolside.ai/schemas/common/<file>`; they are not

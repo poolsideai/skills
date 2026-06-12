@@ -66,6 +66,16 @@ main {
   margin: 0 auto;
 }
 
+.prototype-note {
+  margin: 24px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(242, 184, 75, 0.38);
+  border-radius: var(--radius);
+  background: rgba(242, 184, 75, 0.08);
+  color: #ffd996;
+  font-size: 0.92rem;
+}
+
 .site-header {
   min-height: 80px;
   display: flex;

@@ -27,9 +27,10 @@ laguna-eval-<case-id>-<arm>-XXXX/          (tempfile.mkdtemp)
    `expected/` gold artifacts for the very case under test — and leaking those into the
    workspace would invalidate the eval. Everything else in the skill
    (`SKILL.md`, `schemas/`, `scripts/`, `references/`) ships verbatim.
-4. Baseline (without-skill) arms get **no** `.poolside/` directory at all. The skill tool
-   stays enabled in both arms (it is on by default and there is no public flag to disable
-   it); baseline = tool enabled, zero project skills available.
+4. Baseline (without-skill) arms get **no** `.poolside/skills/<skill>/` directory. Both
+   arms may still get the same `.poolside/settings.yaml` sandbox config. The skill tool stays
+   enabled in both arms (it is on by default and there is no public flag to disable it);
+   baseline = tool enabled, zero project skills available.
 
 ## home/ (isolated HOME)
 

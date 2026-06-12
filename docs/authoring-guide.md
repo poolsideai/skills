@@ -2,14 +2,9 @@
 
 The single authoring standard for this repo. It reconciles the pool house style (the
 `skill-creator` default skill that ships with `pool`, plus the agentskills.io spec it follows)
-with Plan A's fixed section template. Every skill merged here follows this guide; the structure
-checks in `scripts/` enforce the mechanical parts.
+with Plan A's fixed section template. Every publishable skill follows this guide; WIP skill directories must be clearly marked until they satisfy the gates. The structure checks in `scripts/` enforce the mechanical parts.
 
-Status: binding for v0. Sources: plan item 3 in
-[`plans/laguna-skills-v0-2026-06-10.md`](plans/laguna-skills-v0-2026-06-10.md), the verified
-frontmatter constraints in
-`.resources/investigations/laguna-substrate/verified-state/6.1-skill-format-and-authoring.md`,
-and Plan A's skill contract in `.resources/investigations/laguna-skills-plan-approach.md`.
+Status: normative for v0 skill authors. Historical source notes live in the plan and investigation files, but this guide is the document to follow.
 
 ---
 
@@ -54,8 +49,7 @@ skills/<name>/
   references/                   # optional; progressive-disclosure docs
     <topic>.md
   evals/
-    cases/
-      <case-id>/                # one folder per case; format in §7
+    <case-id>/                  # one folder per case; format in §7
 ```
 
 Shared TS helpers live in `skills/_shared/` (notably `validator-result.ts`, which validators

@@ -73,12 +73,12 @@ execution only — **no network access**, and nothing here ever modifies reposit
    - With retried steps, prefer failures that reproduce in the final attempt; call
      earlier-only failures flaky in the summary.
    - If several distinct failures exist, cover **all** of them — never stop at the first.
-4. **CRITICAL: Copy `text` fields character-for-character from the preprocessor output.**
-   The validator byte-compares each `text` against the actual log line. Any difference —
-   extra whitespace, trimmed whitespace, paraphrasing, normalization, escape-sequence
-   changes — will fail the verbatim check. If the preprocessor emitted the line, use that
-   exact string; if you read the log directly, copy the full line with all leading/trailing
-   whitespace and special characters preserved.
+4. **CRITICAL: Copy `text` fields from the preprocessor output.**
+   Copy the complete line without changing leading whitespace, quotes, escape sequences,
+   or characters. The validator ignores trailing whitespace, but it does not forgive
+   paraphrasing, normalization, or trimming meaningful leading whitespace. If the
+   preprocessor emitted the line, use that exact string; if you read the log directly,
+   copy the full line.
 5. Write the artifact per the Output contract below.
 6. Validate, and repair at most once (next two sections).
 
@@ -94,8 +94,8 @@ Write exactly one JSON object to **`.laguna/ci-log-summary.json`** at the worksp
 - `failure_kind` — `test_failure | build_error | lint_error | infra_error | other`
 - `summary` — ≤600 chars, covering every distinct failure
 - `error_lines` — 1–20 `{line, text}` pairs; `line` is 1-based integer, `text` is the
-  **exact verbatim string** from that line number in the log, with all whitespace and
-  characters preserved byte-for-byte
+  complete line from that line number in the log. Preserve leading whitespace and all
+  characters; trailing whitespace is ignored by the validator.
 - `suggested_next_commands` — 1–5 safe, local commands (no network: no installs, fetches,
   pushes; nothing destructive: no `rm`, hard resets, `sudo`)
 
@@ -105,7 +105,7 @@ Each `{line, text}` pair must satisfy:
 
 - `line` is the 1-based line number in the log file where `text` appears.
 - `text` is the **complete, unmodified line** from the log at that line number:
-  - Do NOT trim leading or trailing whitespace.
+  - Do NOT trim leading whitespace; trailing whitespace is insignificant to validation.
   - Do NOT normalize tabs, escape sequences, or control characters.
   - Do NOT paraphrase, summarize, or abbreviate.
   - Do NOT add or remove quotes, brackets, or any other characters.
@@ -121,7 +121,7 @@ Each `{line, text}` pair must satisfy:
 ```json
 { "line": 54, "text": "got: 0" }
 ```
-This will fail validation even though the content words match.
+This will fail validation because leading whitespace is part of the line.
 
 A summary that only appears in the chat message does not exist for grading — the file must
 be on disk. Mention in your final message that you wrote it and what the verdict was.

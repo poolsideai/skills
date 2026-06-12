@@ -7,6 +7,10 @@
 > (`docs/reviews/laguna-skills-v0-critique-2026-06-10.md`); refines verified-state §6.6 / §6.7.
 > `forge` paths relative to `/Users/ben/code/poolside/forge/` @ `d6733f6589` (2026-06-10).
 
+## Current state
+
+Use this as historical evidence plus the current addendum. With `pool` 1.0.5, `--run-id` is accepted, `history trajectories --atif` exists, and the runner treats `trajectory.ndjson` as the canonical recovered artifact. ATIF is optional and feature-detected.
+
 ## Verdict in one paragraph
 
 A **deterministic run-id → trajectory mapping exists today** and the critique's worry dissolves: every pool

@@ -7,6 +7,8 @@ All plans written against commit `8fe6fd5` (2026-06-11) by a planning agent
 that audited `ui/`, `harness/review/`, and the handoff bundle. Each plan is
 self-contained: an executor needs only the plan file and the repo.
 
+Status: internal implementation tracker for the Skills Workbench redesign. Normal skill authoring and eval work starts in the root README, not here.
+
 ## Status
 
 | # | Plan | Screen | Effort | Risk | Depends on | Status |

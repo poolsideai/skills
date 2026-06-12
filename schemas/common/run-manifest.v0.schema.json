@@ -55,7 +55,7 @@
     },
     "artifacts": {
       "type": "object",
-      "description": "Map from artifact name to path (relative to the run directory unless absolute). Typical keys: prompt, stdout, stderr, trajectory_atif, validator_result, manifest.",
+      "description": "Map from artifact name to path (relative to the run directory unless absolute). Typical keys: prompt, stdout, stderr, trajectory_ndjson, optional trajectory_atif, validator_result, run_facts, manifest.",
       "additionalProperties": {
         "type": "string",
         "minLength": 1

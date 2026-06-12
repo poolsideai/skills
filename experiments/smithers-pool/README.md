@@ -220,9 +220,9 @@ runnable, both upstream rows exist and are interpolated into its prompt.
 ```bash
 cd experiments/smithers-pool
 bun install
-bun scripts/setup.ts        # seeds work/ fixtures (idempotent, wipes work/)
+bun run setup              # seeds work/ fixtures (idempotent, wipes work/)
 mkdir -p .smithers          # sqlite needs the dir to exist
-./node_modules/.bin/smithers up example.workflow.tsx --format json
+bun run workflow
 ```
 
 Inspect afterwards:
@@ -232,6 +232,7 @@ Inspect afterwards:
 bun -e 'import {Database} from "bun:sqlite"; const db=new Database(".smithers/smithers.db");
   for (const t of ["greet","repo_map","dep_scan","combine"])
     console.log(t, JSON.stringify(db.query(`select * from ${t}`).all()));'
+bun run typecheck
 ls runs/                    # per-pool-call prompt/stdout/stderr/meta captures
 ```
 

@@ -8,6 +8,10 @@
 > Sources: plan item 1; verified-state §6.4 (`.resources/investigations/laguna-substrate/verified-state/6.4-exec-cli-surface.md`)
 > and §6.7 (`.../6.7-model-config.md`).
 
+## Current state
+
+Use this as historical evidence plus the current addendum. The current known-good CLI is `pool` 1.0.5: `pool exec` is a named subcommand, `--run-id` is accepted as a hidden flag, `--sandbox` is documented, and unknown flags now exit nonzero. The `pool` 0.2.172 findings below explain why the runner still probes the installed binary before live runs.
+
 ## TL;DR
 
 | Question | Answer |
