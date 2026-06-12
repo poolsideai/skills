@@ -6,9 +6,15 @@ out rather than restating rules.
 
 ## Prerequisites
 
-`uv`, `bun`, and `pool` on PATH. Versions and notes are in the root [`README.md`](../README.md)
-(Prerequisites). Everything in the next section runs with **zero credentials**; the credentials
-matrix in [`concepts.md`](concepts.md) says exactly what each later step needs.
+Install `uv`, `bun`, and `pool` on PATH. Versions and notes are in the root
+[`README.md`](../README.md) (Prerequisites). Authenticate `pool` before live evals; the runner can
+use `POOLSIDE_TOKEN` or `~/.config/poolside/credentials.json`.
+
+Optimization and eval-case generation also need a reflection or generation model key. The default
+GEPA path accepts `ANTHROPIC_API_KEY`; OpenRouter works through litellm with model ids such as
+`openrouter/<provider>/<model>` plus `OPENROUTER_API_KEY`; other litellm providers work when their
+usual environment variables are present. Everything in the offline section below runs with zero
+credentials.
 
 ## The loop, offline first
 
@@ -68,6 +74,59 @@ Run these from the repo root, in order. None of them call a model or the network
 When the repo checks, eval dry run, optimizer smoke, and demo review app work, the offline loop is
 wired for local development. Treat the eval-case coverage check as advisory until the WIP skills
 have full cases.
+
+## The live loop
+
+Use `ci-log-reducer` for the first full pass because it is the worked example and has a per-skill
+suite.
+
+1. **Run the structure checks again before spending pool runs.** These should be green unless you
+   are intentionally working through a known WIP coverage gap.
+
+   ```bash
+   uv run scripts/check_skill_structure.py
+   uv run scripts/check_schemas.py
+   uv run scripts/check_validator_robustness.py
+   uv run scripts/check_eval_cases.py
+   ```
+
+2. **Dry-run and replay the target suite.** This validates fixture materialization and gold replay
+   without calling `pool`.
+
+   ```bash
+   uv run harness/runner/run_eval.py --suite evals/suites/skill-ci-log-reducer.json --dry-run --replay
+   ```
+
+3. **Run the live scoreboard suite.** The bench wrapper starts the harness detached and reports the
+   pid/log path; poll with `eval-runs` until every arm is finished.
+
+   ```bash
+   bun ui/bench.ts eval-run --suite evals/suites/skill-ci-log-reducer.json
+   bun ui/bench.ts eval-runs
+   ```
+
+4. **Run GEPA through the workbench wrapper.** Start with smoke or baseline-only when validating
+   wiring, then run a bounded live search when credentials and budget are ready.
+
+   ```bash
+   bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
+   bun ui/bench.ts optimize-skill --skill ci-log-reducer --baseline-only
+   bun ui/bench.ts optimize-skill --skill ci-log-reducer --max-metric-calls 60
+   bun ui/bench.ts optimize-runs
+   ```
+
+5. **Turn a finished optimization into a proposal, not a direct edit.** This folds the best GEPA
+   candidate into `runs/proposals/<skill>/` and the improvement queue. Accepting a proposal bumps
+   the skill version, runs the structure gate, and starts the suite again; it is still a human
+   review action.
+
+   ```bash
+   bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
+   ```
+
+   Proposals generated from GEPA include this warning by design: `EVIDENCE LEVEL: search val split
+   only - run the full eval suite and check the scoreboard before accepting.` Treat all eval and
+   optimization numbers as internal/directional.
 
 ## Read one real skill end to end
 
