@@ -117,7 +117,7 @@ Today, importing a skill from outside this repo is a manual path. The planned `o
 
 1. **Create a skill folder.** Copy the existing skill into `skills/<name>/SKILL.md`. Keep the name lowercase and kebab-case.
 2. **Make the output gradeable.** Add an output schema in `skills/<name>/schemas/` and a validator in `skills/<name>/scripts/validate_*.ts`. If the skill cannot name a deterministic artifact or diff target, it is not ready for optimization here.
-3. **Add eval cases.** Create at least three cases under `skills/<name>/evals/<case-id>/`, including one adversarial case. Each case needs `prompt.md`, `input/`, `expected/`, and `metadata.json`.
+3. **Add eval cases.** Create at least three cases under `skills/<name>/evals/<case-id>/`, including one adversarial case. Each case needs `prompt.md`, `input/`, `expected/`, and `metadata.json`. You don't have to write all three by hand: `harness/generate/gen_eval_cases.py` LM-synthesizes whole candidate cases, runs each through the same mechanical gates CI uses — including gold replay against your frozen validator and a sensitivity probe — and quarantines the survivors under `runs/generate/` until you review and `--promote` them. See [`evals/README.md`](evals/README.md#bootstrapping-cases-with-the-generator).
 4. **Add a suite.** Create `evals/suites/skill-<name>.json` listing those case directories.
 5. **Run the gates.**
 

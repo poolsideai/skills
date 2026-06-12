@@ -157,6 +157,65 @@ the validator is wrong, or the Output contract path drifted. Fix the case, not t
 good-failure cases, "replays green" means the validator returns `fail` on the gold artifact — that is
 its `expected_status`.
 
+## Bootstrapping cases with the generator
+
+Hand-authoring is the baseline; `harness/generate/gen_eval_cases.py` accelerates it. It's the
+gskill/SWE-smith recipe adapted for this repo: an LM synthesizes a complete case, then the same
+mechanical gates CI runs grade it, and nothing reaches `skills/<skill>/evals/` without a human
+promoting it. The eval corpus is the grader, so the grader stays human-curated — generation is a
+drafting tool, not an auto-merge.
+
+The pipeline is **synthesize → gate → human-review → promote**. Candidates land in
+`runs/generate/<skill>/<stamp>/candidates/` (gitignored); they enter the frozen set only via an
+explicit `--promote` you run after reading the case. Per candidate, after the LM emits a payload,
+these gates run (violations feed a bounded LM repair loop):
+
+1. **CI parity** — the same `scripts/check_eval_cases.py` checks (imported, not reimplemented):
+   folder entries, metadata vs `eval-case.v1`, id/skill consistency, validator command.
+2. **Shared grading target** — `prompt.md` must name every gold artifact's workspace-relative path,
+   so the without-skill arms grade against the same target.
+3. **No gold leak** — `input/` must not pre-seed any gold artifact path.
+4. **Dedup** — the case id is unused and no `input/` file is byte-identical to an existing case's.
+5. **Size caps** — per-file and per-case byte caps; gold `*.json` parses.
+6. **Gold replay** — `input/` + `expected/` overlaid into a scratch workspace, the case's **frozen**
+   validator run via the argv contract, its `status` asserted equal to `validator.expected_status`
+   (the same replay [Gold replay](#gold-replay) above describes).
+7. **Sensitivity probe** — pass-cases replay *again* with every gold artifact replaced by junk; the
+   validator must then **not** pass. A case the validator passes on junk gold grades nothing and is
+   rejected as vacuous.
+
+Generation needs an LM key (`CASEGEN_LM` / `GEPA_REFLECTION_LM`, default
+`anthropic/claude-sonnet-4-5`; OpenRouter and OpenAI-compatible endpoints work the same way the GEPA
+track does — see `harness/llm.py`). The `--validate-only` and `--promote` paths make no LM calls.
+
+```sh
+# draft 4 candidates covering corpus gaps (LM-proposed specs):
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --n 4
+
+# draft from an explicit spec instead of letting the LM propose them:
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer \
+  --spec 'CircleCI yarn workspace test failure with a misleading warning decoy'
+
+# offline: run the gates against an existing case dir (no LM, no promote):
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer \
+  --validate-only skills/ci-log-reducer/evals/ci-log-reducer-flaky-retry
+
+# after reading the candidate: promote it into the frozen set.
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer \
+  --promote runs/generate/ci-log-reducer/<stamp>/candidates/<case-id>
+```
+
+`--promote` copies the reviewed case into `skills/<skill>/evals/`, appends it to
+`evals/suites/skill-<skill>.json`, reruns the skill-scoped checks plus `--dry-run --replay`, and
+rolls back the copy and the suite edit on any failure. It does **not** commit: review `git diff` and
+commit yourself — promotion is the human decision the whole pipeline defers to. Each promoted case
+records its provenance in `notes` so generated fixtures stay traceable.
+
+One methodology caveat (`docs/eval-methodology.md` §7): LM-generated cases share failure-mode priors
+with the LM agents under test, so they can systematically miss the same blind spots. The human review
+step and the `adversarial`/`edge` buckets are the guard, not the gates alone — read every candidate
+before promoting it.
+
 ## Authoring checklist
 
 Per the hard gates in `docs/authoring-guide.md`:
