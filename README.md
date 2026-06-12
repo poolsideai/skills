@@ -1,18 +1,20 @@
 # Laguna Skills
 
-Build, test, and improve skills for Poolside's Laguna models.
+A validator-first skill library and external eval harness for Poolside's Laguna models. This repo is the place to bring a directory of skills, make each skill gradeable, measure it with `pool`, and optimize the instructions with GEPA without changing the grader.
 
-This repo is for turning agent instructions into working, measurable tools. A skill starts as `SKILL.md`, but it is not done until it has a schema, validator, eval cases, and run evidence. The loop is:
+A skill is not a prompt pack. It is a contract: `SKILL.md` prose, a deterministic output schema, an executable validator, eval cases including an adversarial case, and run evidence. The newcomer path is three commands in this order:
 
-1. Author a skill with a clear output contract.
-2. Run it against eval cases with and without the skill installed.
-3. Inspect failures in the local workbench.
-4. Use GEPA to automatically search for better `SKILL.md` instructions.
-5. Review the proposed diff, rerun checks, and promote only what holds up.
+```bash
+uv run scripts/check_skill_structure.py
+uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay
+uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
+```
 
-The feedback loop matters because it gives you visible behavior, concrete failures, and a diff you can accept or reject.
+That is the short form of the full loop: **check -> eval -> optimize**. Once credentials are available, replace the smoke and dry-run commands with the live per-skill suite and GEPA run, then review the proposal before accepting anything.
 
-New here? [`docs/getting-started.md`](docs/getting-started.md) walks the loop offline first, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary, including Laguna, arms, gold replay, and GEPA.
+The worked example is [`ci-log-reducer`](skills/ci-log-reducer/SKILL.md): its validation score moved from 0.694 to 0.837 to 0.939 across two GEPA rounds. Those numbers are internal and directional only, not publishable lift claims; see [`docs/eval-methodology.md`](docs/eval-methodology.md) section 7.
+
+New here? [`docs/getting-started.md`](docs/getting-started.md) walks the full loop, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary, including Laguna, arms, gold replay, and GEPA.
 
 ## What this gives you
 
