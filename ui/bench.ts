@@ -20,6 +20,7 @@
  *   bun ui/bench.ts eval-runs
  *   bun ui/bench.ts optimize-skill --skill <name> [--max-metric-calls N] [--smoke|--baseline-only]
  *   bun ui/bench.ts optimize-runs
+ *   bun ui/bench.ts optimize-propose --skill <name> [--run-dir <dir>]
  *   bun ui/bench.ts node-evals [--project <id>]
  *   bun ui/bench.ts node-eval-insitu <runId> [--project <id>]
  *   bun ui/bench.ts node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>]
@@ -43,6 +44,7 @@ import {
   listModels,
   listNodeEvals,
   listOptimizeRuns,
+  proposalFromOptimizeRun,
   listRuns,
   listSkills,
   listWorkflows,
@@ -99,6 +101,7 @@ const USAGE = {
     "eval-runs — harness processes + per-arm results from runs/<suite>/<case>/<arm>/",
     "optimize-skill --skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA SKILL.md optimization (harness/optimize/gepa_skill.py)",
     "optimize-runs — optimization processes + result.json summaries from runs/optimize/",
+    "optimize-propose --skill <name> [--run-dir <dir>] — fold a finished GEPA run into the improvement queue (accept = version bump + checks + re-eval)",
     "node-evals [--project <id>] — node-level eval records (in-workflow + standalone)",
     "node-eval-insitu <runId> [--project <id>] — grade every node of a finished run via its skill validator",
     "node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>] [--project <id>] — re-run a node standalone and grade each trial",
@@ -204,6 +207,11 @@ async function main() {
     }
     case "optimize-runs":
       return emit(listOptimizeRuns());
+    case "optimize-propose": {
+      const skill = flag(args, "skill") ?? args.positional[0];
+      if (!skill) throw new HttpError(400, "usage: optimize-propose --skill <name> [--run-dir <dir>]");
+      return emit(proposalFromOptimizeRun({ skill, runDir: flag(args, "run-dir") ?? undefined }));
+    }
     case undefined:
     case "help":
       return emit(USAGE);

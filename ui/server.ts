@@ -5,13 +5,21 @@
  *   bun ui/server.ts            # http://127.0.0.1:4319/workflows.html
  */
 
+import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { join } from "node:path";
 import {
+  acceptProposal,
+  listOptimizeRuns,
+  appendEvidence,
   DEFAULT_AGENT,
+  buildFeed,
   discoverProjects,
+  dismissProposal,
+  editWorkflow,
   evalNodeStandalone,
   evalWorkflowNodes,
   generateSkill,
+  generateStatus,
   generateWorkflow,
   getProject,
   HttpError,
@@ -20,16 +28,27 @@ import {
   listHarnessProcesses,
   listModels,
   listNodeEvals,
+  listPlayground,
+  nodeArtifacts,
+  listProposals,
   listRuns,
   listSkills,
   listWorkflows,
+  promotePlayground,
   REPO_ROOT,
+  revertWorkflow,
   runDetail,
+  safeWorkflowPath,
+  skillDetail,
   skillEvalSummaries,
   startEvalRun,
+  startGenerate,
+  startPlayground,
   startRun,
+  startSuggest,
   syncReviewTraces,
   workflowGraph,
+  workflowNodeFacts,
 } from "./lib.ts";
 import { spawn } from "node:child_process";
 
@@ -59,13 +78,26 @@ async function ensureReviewServer(): Promise<void> {
   child.unref();
 }
 
+async function proxyReview(path: string, init?: RequestInit): Promise<Response> {
+  const target = `http://127.0.0.1:${REVIEW_PORT}${path}`;
+  try {
+    const res = await fetch(target, { ...init, signal: AbortSignal.timeout(10_000) });
+    return new Response(await res.arrayBuffer(), {
+      status: res.status,
+      headers: { "content-type": res.headers.get("content-type") ?? "application/json" },
+    });
+  } catch {
+    void ensureReviewServer();
+    return json({ error: "review server not reachable; starting it — retry in a few seconds" }, 503);
+  }
+}
+
 const STATIC_FILES: Record<string, string> = {
   "/": "index.html",
   "/index.html": "index.html",
   "/skill.html": "skill.html",
   "/workflows.html": "workflows.html",
   "/styles.css": "styles.css",
-  "/ui/workflows.js": "ui/workflows.js",
 };
 
 function contentType(path: string): string {
@@ -82,6 +114,18 @@ function json(value: unknown, status = 200): Response {
   });
 }
 
+function requireSafeSegment(value: string | undefined, label: string): string {
+  if (!value || !/^[A-Za-z0-9._:-]+$/.test(value) || value.includes("..") || value.includes("/") || value.includes("\\")) {
+    throw new HttpError(400, `invalid ${label}`);
+  }
+  return value;
+}
+
+function requireSkillName(value: string | undefined): string {
+  if (!value || !/^[a-z0-9][a-z0-9-]*$/.test(value)) throw new HttpError(400, "invalid skill");
+  return value;
+}
+
 const server = Bun.serve({
   port: PORT,
   hostname: "127.0.0.1",
@@ -89,6 +133,18 @@ const server = Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
     try {
+      // Generic static for the workbench frontend: ui/**.js|css only, no traversal.
+      if (req.method === "GET" && /^\/ui\/[A-Za-z0-9_\/-]+\.(js|css)$/.test(url.pathname)) {
+        const abs = join(REPO_ROOT, url.pathname.slice(1));
+        if (abs.startsWith(join(REPO_ROOT, "ui") + "/") && existsSync(abs)) {
+          const uiRoot = realpathSync(join(REPO_ROOT, "ui"));
+          const realAbs = realpathSync(abs);
+          if (realAbs.startsWith(uiRoot + "/")) {
+            return new Response(Bun.file(realAbs), { headers: { "content-type": contentType(realAbs) } });
+          }
+        }
+      }
+
       const staticFile = STATIC_FILES[url.pathname];
       if (staticFile && req.method === "GET") {
         return new Response(Bun.file(join(REPO_ROOT, staticFile)), {
@@ -103,6 +159,8 @@ const server = Bun.serve({
           return json(discoverProjects().map(({ root: _root, ...p }) => p));
         if (url.pathname === "/api/models") return json(await listModels());
         if (url.pathname === "/api/runs") return json(listRuns(project()));
+        if (url.pathname === "/api/feed") return json(buildFeed(project()));
+        if (url.pathname === "/api/optimize/runs") return json(listOptimizeRuns());
         const runMatch = url.pathname.match(/^\/api\/runs\/([A-Za-z0-9._:-]+)$/);
         if (runMatch) return json(runDetail(project(), runMatch[1]));
         if (url.pathname === "/api/workflows") return json(listWorkflows(project()));
@@ -111,16 +169,59 @@ const server = Bun.serve({
           if (!path) throw new HttpError(400, "path query param required");
           return json(await workflowGraph(project(), path));
         }
+        if (url.pathname === "/api/workflows/nodes") {
+          const path = url.searchParams.get("path");
+          if (!path) throw new HttpError(400, "path query param required");
+          const graph = await workflowGraph(project(), path);
+          const taskIds = graph.nodes.filter((n) => n.kind === "task").map((n) => n.id);
+          return json(workflowNodeFacts(project(), path, taskIds));
+        }
+        if (url.pathname === "/api/workflows/source") {
+          const path = url.searchParams.get("path");
+          if (!path) throw new HttpError(400, "path query param required");
+          const abs = safeWorkflowPath(project(), path);
+          if (!existsSync(abs)) throw new HttpError(404, `workflow not found: ${path}`);
+          return new Response(readFileSync(abs, "utf8"), {
+            headers: { "content-type": "text/plain; charset=utf-8" },
+          });
+        }
         if (url.pathname === "/api/skills") {
           const summaries = skillEvalSummaries();
           return json(listSkills().map((s) => ({ ...s, evalSummary: summaries[s.name] ?? null })));
+        }
+        if (url.pathname === "/api/skill-detail") {
+          return json(skillDetail(requireSkillName(url.searchParams.get("name") ?? undefined)));
+        }
+        if (url.pathname === "/api/playground") {
+          return json(listPlayground(requireSkillName(url.searchParams.get("skill") ?? undefined)));
+        }
+        if (url.pathname === "/api/proposals") {
+          const skill = url.searchParams.get("skill");
+          if (!skill) throw new HttpError(400, "skill query param required");
+          return json(listProposals(skill));
         }
         if (url.pathname === "/api/evals/suites") return json(listEvalSuites());
         if (url.pathname === "/api/evals/runs")
           return json({ harness: listHarnessProcesses(), runs: listEvalRuns() });
         if (url.pathname === "/api/node-evals") return json(listNodeEvals(project()));
+        if (url.pathname === "/api/node-artifacts") {
+          const runId = url.searchParams.get("runId");
+          const nodeId = url.searchParams.get("nodeId");
+          if (!runId || !nodeId) throw new HttpError(400, "runId and nodeId are required");
+          if (!/^[A-Za-z0-9._:-]+$/.test(runId)) throw new HttpError(400, "invalid runId");
+          if (!/^[A-Za-z0-9._:-]+$/.test(nodeId)) throw new HttpError(400, "invalid nodeId");
+          return json(nodeArtifacts(project(), runId, nodeId));
+        }
         if (url.pathname === "/api/review/status") {
           return json({ url: `http://127.0.0.1:${REVIEW_PORT}/`, running: await reviewRunning() });
+        }
+        if (url.pathname === "/api/review/traces") return proxyReview(`/api/traces${url.search}`);
+        if (url.pathname === "/api/review/labels") return proxyReview(`/api/labels${url.search}`);
+        if (url.pathname === "/api/review/version") return proxyReview(`/api/version${url.search}`);
+        if (url.pathname === "/api/generate/status") {
+          const tag = url.searchParams.get("tag");
+          if (!tag) throw new HttpError(400, "tag query param required");
+          return json(generateStatus(tag));
         }
       }
 
@@ -139,6 +240,25 @@ const server = Bun.serve({
           if (host !== `127.0.0.1:${PORT}` && host !== `localhost:${PORT}`) {
             throw new HttpError(403, `cross-origin POST rejected (origin ${origin})`);
           }
+        }
+        if (url.pathname === "/api/review/labels") {
+          return proxyReview("/api/labels", {
+            method: "POST",
+            body: await req.text(),
+            headers: { "content-type": "application/json" },
+          });
+        }
+        if (url.pathname === "/api/generate/start") {
+          const body = (await req.json()) as {
+            kind?: string;
+            prompt?: string;
+            project?: string;
+            id?: string;
+            name?: string;
+            agentName?: string;
+            smoke?: boolean;
+          };
+          return json(startGenerate(body));
         }
         if (url.pathname === "/api/workflows/generate") {
           const body = (await req.json()) as {
@@ -164,6 +284,27 @@ const server = Bun.serve({
           if (!body.path) throw new HttpError(400, "path is required");
           return json(await startRun(getProject(body.project ?? null), body.path, body.input));
         }
+        if (url.pathname === "/api/workflows/edit") {
+          const body = (await req.json()) as {
+            project?: string;
+            path?: string;
+            instruction?: string;
+            agentName?: string;
+          };
+          if (!body.path) throw new HttpError(400, "path is required");
+          if (!body.instruction?.trim()) throw new HttpError(400, "instruction is required");
+          return json(
+            await editWorkflow(getProject(body.project ?? null), body.path, body.instruction, {
+              agentName: body.agentName || DEFAULT_AGENT,
+            }),
+          );
+        }
+        if (url.pathname === "/api/workflows/revert") {
+          const body = (await req.json()) as { project?: string; path?: string; backup?: string };
+          if (!body.path) throw new HttpError(400, "path is required");
+          if (!body.backup) throw new HttpError(400, "backup is required");
+          return json(revertWorkflow(getProject(body.project ?? null), body.path, body.backup));
+        }
         if (url.pathname === "/api/skills/generate") {
           const body = (await req.json()) as { name?: string; prompt?: string; agentName?: string };
           if (!body.name?.trim()) throw new HttpError(400, "name is required");
@@ -174,6 +315,68 @@ const server = Bun.serve({
           const body = (await req.json()) as { suite?: string; cases?: string[]; arms?: string[] };
           if (!body.suite) throw new HttpError(400, "suite is required");
           return json(startEvalRun({ suite: body.suite, cases: body.cases, arms: body.arms }));
+        }
+        if (url.pathname === "/api/playground/run") {
+          const body = (await req.json()) as {
+            skill?: string;
+            prompt?: string;
+            model?: string;
+            fixtureCase?: string;
+            smoke?: boolean;
+          };
+          const skill = requireSkillName(body.skill);
+          if (!body.prompt?.trim()) throw new HttpError(400, "prompt is required");
+          const fixtureCase = body.fixtureCase ? requireSafeSegment(body.fixtureCase, "fixtureCase") : undefined;
+          return json(startPlayground({ ...body, skill, fixtureCase }));
+        }
+        if (url.pathname === "/api/playground/promote") {
+          const body = (await req.json()) as { skill?: string; id?: string };
+          return json(promotePlayground(requireSkillName(body.skill), requireSafeSegment(body.id, "id")));
+        }
+        if (url.pathname === "/api/proposals/suggest") {
+          const body = (await req.json()) as {
+            skill?: string;
+            source?: string;
+            model?: string;
+            refs?: unknown;
+            note?: string;
+            smoke?: boolean;
+          };
+          if (!body.skill) throw new HttpError(400, "skill is required");
+          return json(startSuggest({
+            skill: body.skill,
+            source: body.source,
+            model: body.model,
+            refs: body.refs,
+            note: body.note,
+            smoke: body.smoke,
+          }));
+        }
+        if (url.pathname === "/api/proposals/evidence") {
+          const body = (await req.json()) as {
+            skill?: string;
+            source?: string;
+            traceId?: string;
+            note?: string;
+            refs?: unknown;
+          };
+          if (!body.skill) throw new HttpError(400, "skill is required");
+          return json(appendEvidence(body.skill, {
+            source: body.source,
+            traceId: body.traceId,
+            note: body.note,
+            refs: body.refs,
+          }));
+        }
+        if (url.pathname === "/api/proposals/accept") {
+          const body = (await req.json()) as { skill?: string; id?: string };
+          if (!body.skill || !body.id) throw new HttpError(400, "skill and id are required");
+          return json(await acceptProposal(body.skill, body.id));
+        }
+        if (url.pathname === "/api/proposals/dismiss") {
+          const body = (await req.json()) as { skill?: string; id?: string };
+          if (!body.skill || !body.id) throw new HttpError(400, "skill and id are required");
+          return json(dismissProposal(body.skill, body.id));
         }
         if (url.pathname === "/api/node-evals/insitu") {
           const body = (await req.json()) as { project?: string; runId?: string };

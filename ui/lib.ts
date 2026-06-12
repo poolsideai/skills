@@ -18,9 +18,11 @@
 import { Database } from "bun:sqlite";
 import { spawn } from "node:child_process";
 import {
+  appendFileSync,
   closeSync,
   cpSync,
   existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   openSync,
@@ -401,10 +403,14 @@ export function listWorkflows(project: Project): { path: string; name: string }[
   return found;
 }
 
-function safeWorkflowPath(project: Project, relPath: string): string {
-  const abs = resolve(project.root, normalize(relPath));
+export function safeWorkflowPath(project: Project, relPath: string): string {
+  const normalizedRel = normalize(relPath).replace(/^\.\/+/, "");
+  const workflowShape = /^(?:\.smithers\/workflows\/[^/]+\.tsx|[^/]+\.workflow\.tsx)$/;
+  if (!workflowShape.test(normalizedRel)) {
+    throw new HttpError(400, "workflow path must be .smithers/workflows/*.tsx or a root *.workflow.tsx file");
+  }
+  const abs = resolve(project.root, normalizedRel);
   if (!abs.startsWith(project.root + "/")) throw new HttpError(400, "workflow path escapes project");
-  if (!abs.endsWith(".tsx")) throw new HttpError(400, "workflow path must be a .tsx file");
   return abs;
 }
 
@@ -621,6 +627,118 @@ export async function generateWorkflow(
   };
 }
 
+function workflowEditingPrompt(
+  instruction: string,
+  relPath: string,
+  before: string,
+  skills: SkillSummary[],
+  repair?: string,
+): string {
+  const skillCatalog = skills.length
+    ? [
+        "Available Poolside skills (install one into a node's workspace with the PoolAgent `skill` option when the node's job matches the skill's purpose):",
+        ...skills.map((s) => `- ${s.name}: ${s.description.slice(0, 160)}`),
+        'Skill usage: new PoolAgent({ ..., skill: { name: "<skill-name>", from: join(ROOT, "..", "..", "skills", "<skill-name>") } })',
+        "",
+      ].join("\n")
+    : "";
+  return [
+    "You are editing an existing Smithers workflow TSX source file.",
+    "Return the COMPLETE updated file inside a single ```tsx code fence and nothing else after it.",
+    "",
+    "Hard rules:",
+    "- Preserve the current file's imports, createSmithers usage, PoolAgent usage, exported default shape, and project-relative path conventions unless the requested change requires touching them.",
+    "- Every Task must keep a stable kebab/underscore id, label, output schema from outputs.<key>, agent = a PoolAgent, timeoutMs, retries={1}.",
+    "- Zod schemas must stay small and mechanically checkable.",
+    '- Use Sequence / Parallel for structure. To feed upstream outputs into a downstream prompt, use smithers((ctx) => { const row = ctx.latest(outputs.<key>, "<node-id>"); ... }) and interpolate JSON.stringify(row ?? "(pending)") into the plain-string child. NEVER use a deps={} function child (it breaks static graph projection).',
+    "- Do NOT invent other agents, providers, or imports. PoolAgent only.",
+    "- Prompts must instruct concrete, verifiable work in the node's working directory.",
+    "- Apply only the requested change. Do not reformat unrelated code or rename unrelated nodes.",
+    "",
+    skillCatalog,
+    repair ? `A previous attempt failed verification with this error; fix it:\n${repair}\n` : "",
+    `File path: ${relPath}`,
+    "User change instruction:",
+    instruction,
+    "",
+    "Below is the CURRENT file. Apply this change and return the COMPLETE updated file in one ```tsx fence:",
+    "```tsx",
+    before,
+    "```",
+  ].join("\n");
+}
+
+export async function editWorkflow(
+  project: Project,
+  relPath: string,
+  instruction: string,
+  options: { agentName?: string } = {},
+) {
+  if (!project.smithersBin) throw new HttpError(400, `${project.id} has no local smithers install`);
+  const target = safeWorkflowPath(project, relPath);
+  if (!existsSync(target)) throw new HttpError(404, `workflow not found: ${relPath}`);
+  const before = readFileSync(target, "utf8");
+  const agentName = options.agentName || DEFAULT_AGENT;
+  const attempts: { kind: string; ok: boolean; detail?: string }[] = [];
+  const tag = Date.now().toString(36);
+  const backupPath = `${target}.bak-${tag}`;
+  let backedUp = false;
+  let repair: string | undefined;
+  let lastError = "verification failed after 2 rounds";
+
+  for (let round = 1; round <= 2; round++) {
+    const text = await poolGenerate(
+      workflowEditingPrompt(instruction, relPath, before, listSkills(), repair),
+      agentName,
+      `edit:${basename(relPath)}`,
+    );
+    const source = extractFence(text);
+    if (!source) {
+      attempts.push({ kind: "generate", ok: false, detail: "no tsx code fence in pool response" });
+      repair = "Your response contained no ```tsx code fence. Return the complete file in one fence.";
+      lastError = "no tsx code fence in pool response";
+      continue;
+    }
+    attempts.push({ kind: "generate", ok: true });
+    if (!backedUp) {
+      cpSync(target, backupPath);
+      backedUp = true;
+    }
+    writeFileSync(target, source, "utf8");
+
+    const verify = await runCommand(
+      [project.smithersBin, "graph", relPath, "--format", "json"],
+      project.root,
+      90_000,
+      { scrubEnv: true },
+    );
+    if (verify.exitCode === 0) {
+      attempts.push({ kind: "verify", ok: true });
+      return { ok: true, path: relPath, backup: tag, before, after: source, attempts };
+    }
+    const detail = (verify.stderr || verify.stdout).slice(0, 1200);
+    attempts.push({ kind: "verify", ok: false, detail });
+    repair = detail;
+    lastError = detail;
+  }
+
+  if (backedUp) {
+    cpSync(backupPath, target);
+    rmSync(backupPath, { force: true });
+  }
+  return { ok: false, path: relPath, attempts, error: lastError };
+}
+
+export function revertWorkflow(project: Project, relPath: string, backupTag: string) {
+  if (!/^[a-z0-9]+$/.test(backupTag)) throw new HttpError(400, "invalid backup tag");
+  const target = safeWorkflowPath(project, relPath);
+  const backupPath = `${target}.bak-${backupTag}`;
+  if (!existsSync(backupPath)) throw new HttpError(404, "workflow backup not found");
+  cpSync(backupPath, target);
+  rmSync(backupPath, { force: true });
+  return { ok: true };
+}
+
 export async function startRun(
   project: Project,
   relPath: string,
@@ -805,6 +923,400 @@ export async function generateSkill(
 }
 
 // ===========================================================================
+// Improvement queue: proposal store + detached suggestions + accept gate
+
+export type SkillProposal = {
+  id: string;
+  skill: string;
+  createdAtMs: number;
+  status: "open" | "accepted" | "dismissed";
+  source: string;
+  model: string;
+  summary: string;
+  baseVersion: string | null;
+  proposedContent: string;
+  evidence: { kind: string; ref: string; detail?: string }[];
+  acceptedAtMs?: number;
+  newVersion?: string;
+};
+
+type SuggestProcess = {
+  pid: number;
+  tag: string;
+  skill: string;
+  source: string;
+  model: string;
+  argv: string[];
+  paramsPath: string;
+  outPath: string;
+  logPath: string;
+  startedAtMs: number;
+  running: boolean;
+};
+
+const PROPOSALS_ROOT = join(REPO_ROOT, "runs", "proposals");
+const PROPOSAL_STATE_DIR = join(PROPOSALS_ROOT, ".state");
+
+type ProposalEvidence = { kind: string; ref: string; detail?: string };
+
+function assertSkillExists(skill: string): string {
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(skill)) throw new HttpError(400, `invalid skill: ${skill}`);
+  const skillMd = join(SKILLS_ROOT, skill, "SKILL.md");
+  if (!existsSync(skillMd)) throw new HttpError(404, `skill not found: ${skill}`);
+  return skillMd;
+}
+
+function proposalPath(skill: string, id: string): string {
+  assertSkillExists(skill);
+  if (!/^proposal-[a-z0-9-]+$/.test(id)) throw new HttpError(400, `invalid proposal id: ${id}`);
+  return join(PROPOSALS_ROOT, skill, `${id}.json`);
+}
+
+function readProposal(skill: string, id: string): SkillProposal {
+  const path = proposalPath(skill, id);
+  if (!existsSync(path)) throw new HttpError(404, `proposal not found: ${id}`);
+  try {
+    return JSON.parse(readFileSync(path, "utf8")) as SkillProposal;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new HttpError(500, `proposal unreadable: ${message}`);
+  }
+}
+
+function writeProposalAtomic(path: string, proposal: SkillProposal): void {
+  mkdirSync(join(path, ".."), { recursive: true });
+  const tmp = `${path}.${process.pid}.${Date.now()}.tmp`;
+  writeFileSync(tmp, JSON.stringify(proposal, null, 2));
+  renameSync(tmp, path);
+}
+
+function checkDetails(checks: { id?: string; status?: string; detail?: string }[]): string {
+  return checks
+    .filter((c) => c.status && c.status !== "pass")
+    .map((c) => [c.id, c.status, c.detail].filter(Boolean).join(": "))
+    .join("\n")
+    .slice(0, 2000);
+}
+
+function lastJsonLines(path: string, n: number): Record<string, unknown>[] {
+  if (!existsSync(path)) return [];
+  return readFileSync(path, "utf8")
+    .split("\n")
+    .filter(Boolean)
+    .slice(-n)
+    .flatMap((line) => {
+      try {
+        return [JSON.parse(line) as Record<string, unknown>];
+      } catch {
+        return [];
+      }
+    });
+}
+
+function collectProposalEvidence(skill: string): ProposalEvidence[] {
+  const evidence: ProposalEvidence[] = [];
+  const nodeEvals = discoverProjects()
+    .flatMap((project) => {
+      try {
+        return listNodeEvals(project);
+      } catch {
+        return [];
+      }
+    })
+    .filter((r) => r.skill === skill && (r.status === "fail" || r.status === "error"))
+    .sort((a, b) => b.gradedAtMs - a.gradedAtMs)
+    .slice(0, 5);
+  for (const record of nodeEvals) {
+    evidence.push({
+      kind: "node-eval",
+      ref: record.id,
+      detail: checkDetails(record.checks) || record.note || record.status,
+    });
+  }
+
+  const evalRuns = listEvalRuns()
+    .filter((run) => run.skill === skill && (run.status === "fail" || run.status === "error"))
+    .slice(0, 5);
+  for (const run of evalRuns) {
+    evidence.push({
+      kind: "eval-run",
+      ref: run.id,
+      detail: checkDetails(run.checks) || run.status,
+    });
+  }
+
+  const evidencePath = join(PROPOSALS_ROOT, skill, "evidence.jsonl");
+  for (const line of lastJsonLines(evidencePath, 10)) {
+    evidence.push({
+      kind: "human-note",
+      ref: String(line.traceId ?? line.atMs ?? "manual"),
+      detail: [line.source ? `source=${line.source}` : null, line.note ? String(line.note) : null]
+        .filter(Boolean)
+        .join("\n"),
+    });
+  }
+  return evidence;
+}
+
+export function listProposals(skill: string): { proposals: SkillProposal[]; pending: SuggestProcess[] } {
+  assertSkillExists(skill);
+  const dir = join(PROPOSALS_ROOT, skill);
+  const proposals: SkillProposal[] = [];
+  if (existsSync(dir)) {
+    for (const file of readdirSync(dir).sort().reverse()) {
+      if (!file.endsWith(".json")) continue;
+      try {
+        proposals.push(JSON.parse(readFileSync(join(dir, file), "utf8")) as SkillProposal);
+      } catch {
+        // skip unreadable proposal
+      }
+    }
+  }
+  proposals.sort((a, b) => b.createdAtMs - a.createdAtMs);
+
+  const pending: SuggestProcess[] = [];
+  if (existsSync(PROPOSAL_STATE_DIR)) {
+    for (const file of readdirSync(PROPOSAL_STATE_DIR).sort().reverse()) {
+      if (!file.startsWith("suggest-") || !file.endsWith(".json") || file.endsWith(".params.json")) continue;
+      try {
+        const sidecar = JSON.parse(readFileSync(join(PROPOSAL_STATE_DIR, file), "utf8"));
+        if (sidecar.skill === skill) pending.push({ ...sidecar, running: pidAlive(sidecar.pid) });
+      } catch {
+        // skip unreadable sidecar
+      }
+    }
+  }
+  return { proposals, pending };
+}
+
+export function appendEvidence(
+  skill: string,
+  item: { source?: string; traceId?: string; note?: string; refs?: unknown },
+) {
+  assertSkillExists(skill);
+  const dir = join(PROPOSALS_ROOT, skill);
+  mkdirSync(dir, { recursive: true });
+  const line = {
+    atMs: Date.now(),
+    skill,
+    source: item.source ?? "manual",
+    ...(item.traceId ? { traceId: item.traceId } : {}),
+    ...(item.note ? { note: item.note } : {}),
+    ...(item.refs !== undefined ? { refs: item.refs } : {}),
+  };
+  appendFileSync(join(dir, "evidence.jsonl"), `${JSON.stringify(line)}\n`, "utf8");
+  return { ok: true, evidence: line };
+}
+
+export function startSuggest(options: {
+  skill: string;
+  source?: string;
+  model?: string;
+  refs?: unknown;
+  note?: string;
+  smoke?: boolean;
+}) {
+  assertSkillExists(options.skill);
+  const source = options.source ?? "manual";
+  const model = options.model ?? DEFAULT_AGENT;
+  const tag = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  const proposalDir = join(PROPOSALS_ROOT, options.skill);
+  mkdirSync(proposalDir, { recursive: true });
+  mkdirSync(PROPOSAL_STATE_DIR, { recursive: true });
+
+  const evidence = collectProposalEvidence(options.skill);
+  if (options.note || options.refs !== undefined) {
+    evidence.push({
+      kind: "request-note",
+      ref: source,
+      detail: [options.note, options.refs !== undefined ? JSON.stringify(options.refs).slice(0, 2000) : null]
+        .filter(Boolean)
+        .join("\n"),
+    });
+  }
+  const paramsPath = join(PROPOSAL_STATE_DIR, `suggest-${tag}.params.json`);
+  const outPath = join(proposalDir, `proposal-${tag}.json`);
+  writeFileSync(
+    paramsPath,
+    JSON.stringify({ skill: options.skill, source, model, refs: options.refs, note: options.note, evidence }, null, 2),
+  );
+
+  const argv = ["bun", "ui/propose.ts", "--skill", options.skill, "--params", paramsPath, "--out", outPath];
+  if (options.smoke) argv.push("--smoke");
+  const logPath = join(PROPOSAL_STATE_DIR, `suggest-${tag}.log`);
+  const fd = openSync(logPath, "a");
+  const child = spawn(argv[0], argv.slice(1), {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: ["ignore", fd, fd],
+    detached: true,
+  });
+  child.unref();
+  closeSync(fd);
+  const sidecar = {
+    pid: child.pid ?? -1,
+    tag,
+    skill: options.skill,
+    source,
+    model,
+    argv,
+    paramsPath: paramsPath.slice(REPO_ROOT.length + 1),
+    outPath: outPath.slice(REPO_ROOT.length + 1),
+    logPath: logPath.slice(REPO_ROOT.length + 1),
+    startedAtMs: Date.now(),
+  };
+  writeFileSync(join(PROPOSAL_STATE_DIR, `suggest-${tag}.json`), JSON.stringify(sidecar, null, 2));
+  return { ok: true, tag, sidecar: { ...sidecar, running: pidAlive(sidecar.pid) } };
+}
+
+function nextPatchVersion(version: string | null): string {
+  const match = version?.match(/^(\d+)\.(\d+)\.(\d+)$/);
+  if (!match) throw new HttpError(409, `unparseable skill version: ${version ?? "null"}`);
+  return `${match[1]}.${match[2]}.${Number(match[3]) + 1}`;
+}
+
+function normalizeYamlScalar(value: string | undefined): string | undefined {
+  return value?.trim().replace(/^["']|["']$/g, "");
+}
+
+export async function acceptProposal(skill: string, id: string) {
+  const skillMd = assertSkillExists(skill);
+  const path = proposalPath(skill, id);
+  const proposal = readProposal(skill, id);
+  if (proposal.status !== "open") throw new HttpError(409, `proposal is ${proposal.status}`);
+
+  const original = readFileSync(skillMd, "utf8");
+  const liveVersion = parseFrontmatter(original).version ?? null;
+  if (liveVersion !== proposal.baseVersion) {
+    throw new HttpError(
+      409,
+      `skill changed since proposal was computed (${liveVersion ?? "null"} vs ${proposal.baseVersion ?? "null"}) — dismiss and re-suggest`,
+    );
+  }
+  const newVersion = nextPatchVersion(proposal.baseVersion);
+  if (!/version:\s*"?[^"\n]+"?/.test(proposal.proposedContent)) {
+    throw new HttpError(422, "proposedContent is missing metadata.version");
+  }
+  const content = proposal.proposedContent.replace(
+    /version:\s*"?[^"\n]+"?/,
+    `version: "${newVersion}"`,
+  );
+  const proposedName = normalizeYamlScalar(parseFrontmatter(content).name);
+  if (proposedName !== skill) {
+    throw new HttpError(422, `proposedContent frontmatter name ${proposedName ?? "<missing>"} differs from ${skill}`);
+  }
+
+  writeFileSync(skillMd, content, "utf8");
+  let check: { exitCode: number | null; stdout: string; stderr: string };
+  try {
+    check = await runCommand(["uv", "run", "scripts/check_skill_structure.py"], REPO_ROOT, 120_000);
+  } catch (error) {
+    writeFileSync(skillMd, original, "utf8");
+    throw error;
+  }
+  if (check.exitCode !== 0) {
+    writeFileSync(skillMd, original, "utf8");
+    return { ok: false, error: (check.stdout + check.stderr).slice(0, 1500) };
+  }
+
+  const accepted: SkillProposal = { ...proposal, status: "accepted", acceptedAtMs: Date.now(), newVersion };
+  writeProposalAtomic(path, accepted);
+  const suite = `evals/suites/skill-${skill}.json`;
+  const evalRun = existsSync(join(REPO_ROOT, suite)) ? startEvalRun({ suite }) : null;
+  return { ok: true, id, skill, newVersion, evalRun };
+}
+
+/** Fold a finished GEPA optimize run (runs/optimize/<skill>/<dir>) into the
+ * improvement queue as an open proposal. Accepting it reuses the normal gates:
+ * base-version 409 guard, structure check + rollback, auto version bump, and
+ * an eval-suite re-run. The strongest skill author (GEPA, eval-validated)
+ * flows through the same human accept button as every other proposal. */
+export function proposalFromOptimizeRun(options: { skill: string; runDir?: string }): SkillProposal {
+  const { skill } = options;
+  const skillMd = assertSkillExists(skill);
+  const optimizeRoot = join(REPO_ROOT, "runs", "optimize", skill);
+  let runDir = options.runDir ? resolve(REPO_ROOT, options.runDir) : null;
+  if (!runDir) {
+    const finished = existsSync(optimizeRoot)
+      ? readdirSync(optimizeRoot)
+          .map((name) => join(optimizeRoot, name))
+          .filter((dir) => existsSync(join(dir, "result.json")))
+          .sort((a, b) => statSync(join(b, "result.json")).mtimeMs - statSync(join(a, "result.json")).mtimeMs)
+      : [];
+    runDir = finished[0] ?? null;
+  }
+  if (!runDir || !existsSync(join(runDir, "result.json"))) {
+    throw new HttpError(404, `no finished optimize run (result.json) for ${skill} — pass --run-dir`);
+  }
+  let result: Record<string, unknown>;
+  let config: Record<string, unknown> = {};
+  try {
+    result = JSON.parse(readFileSync(join(runDir, "result.json"), "utf8"));
+  } catch (error) {
+    throw new HttpError(500, `result.json unreadable: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  try {
+    config = JSON.parse(readFileSync(join(runDir, "config.json"), "utf8"));
+  } catch {
+    // config.json is informational (reflection model name); tolerate absence
+  }
+  if (result.best_changed === false) {
+    throw new HttpError(409, "best candidate equals the seed — nothing to propose");
+  }
+  const bestPath = join(runDir, "best", "SKILL.md");
+  if (!existsSync(bestPath)) throw new HttpError(404, `optimize run has no best/SKILL.md: ${runDir}`);
+  const proposedContent = readFileSync(bestPath, "utf8");
+
+  const seed = typeof result.seed_val_score === "number" ? result.seed_val_score : null;
+  const best = typeof result.best_val_score === "number" ? result.best_val_score : null;
+  const fmt = (x: number | null) => (x === null ? "n/a" : x.toFixed(3));
+  const lift = seed !== null && best !== null ? best - seed : null;
+  const valCases = Array.isArray(result.val_cases) ? (result.val_cases as string[]) : [];
+  const arms = Array.isArray(result.arms) ? (result.arms as string[]).join(",") : "xs_with_skill";
+
+  const id = `proposal-gepa-${basename(runDir).toLowerCase().replace(/[^a-z0-9-]/g, "-")}`;
+  const path = proposalPath(skill, id);
+  if (existsSync(path)) throw new HttpError(409, `proposal already exists: ${id}`);
+
+  const proposal: SkillProposal = {
+    id,
+    skill,
+    createdAtMs: Date.now(),
+    status: "open",
+    source: "gepa-optimize",
+    model: String(config.reflection_lm ?? "unknown"),
+    summary:
+      `GEPA-optimized SKILL.md: val ${fmt(seed)} -> ${fmt(best)}` +
+      (lift !== null ? ` (${lift >= 0 ? "+" : ""}${lift.toFixed(3)})` : "") +
+      ` on ${valCases.length} held-out case(s); ${result.total_metric_calls ?? "?"} rollouts (${arms}).` +
+      " EVIDENCE LEVEL: search val split only — run the full eval suite and check the scoreboard before accepting." +
+      " Numbers are internal/directional (eval-methodology §7).",
+    baseVersion: parseFrontmatter(readFileSync(skillMd, "utf8")).version ?? null,
+    proposedContent,
+    evidence: [
+      {
+        kind: "gepa-optimize",
+        ref: runDir.startsWith(REPO_ROOT + "/") ? runDir.slice(REPO_ROOT.length + 1) : runDir,
+        detail:
+          `seed_val=${fmt(seed)} best_val=${fmt(best)} metric_calls=${result.total_metric_calls ?? "?"}\n` +
+          `val_cases: ${valCases.join(", ")}\nreview best.diff in the run dir for the exact prose change`,
+      },
+    ],
+  };
+  writeProposalAtomic(path, proposal);
+  return proposal;
+}
+
+export function dismissProposal(skill: string, id: string) {
+  const path = proposalPath(skill, id);
+  const proposal = readProposal(skill, id);
+  if (proposal.status !== "open") throw new HttpError(409, `proposal is ${proposal.status}`);
+  const dismissed: SkillProposal = { ...proposal, status: "dismissed" };
+  writeProposalAtomic(path, dismissed);
+  return { ok: true, id, skill, status: "dismissed" };
+}
+
+// ===========================================================================
 // Evals: suites, harness runs, live status
 
 const EVAL_RUNS_ROOT = join(REPO_ROOT, "runs");
@@ -878,6 +1390,121 @@ export type EvalRunRecord = {
   checks: { id: string; status: string; detail?: string }[];
 };
 
+export type GenerateStartOptions = {
+  kind?: string;
+  prompt?: string;
+  project?: string | null;
+  id?: string;
+  name?: string;
+  agentName?: string;
+  smoke?: boolean;
+};
+
+type GenerateDestination =
+  | { route: string; path: string }
+  | { route: string; name: string };
+
+type GenerateSidecar = {
+  pid: number;
+  kind: "workflow" | "skill";
+  params: GenerateStartOptions & { project: string | null };
+  destination: GenerateDestination;
+  logPath: string;
+  resultPath: string;
+  startedAtMs: number;
+};
+
+const GENERATE_STATE_DIR = join(EVAL_RUNS_ROOT, ".generate");
+
+function workflowSlug(input: string | undefined, fallback: string): string {
+  return (
+    (input || fallback)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 48) || "generated-workflow"
+  );
+}
+
+function skillSlug(input: string | undefined): string {
+  return (input ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function startGenerate(options: GenerateStartOptions) {
+  const kind = options.kind;
+  if (kind !== "workflow" && kind !== "skill") throw new HttpError(400, "kind must be workflow or skill");
+  const prompt = options.prompt?.trim();
+  if (!prompt) throw new HttpError(400, "prompt is required");
+
+  const project = kind === "workflow" ? getProject(options.project ?? null).id : (options.project ?? null);
+  let destination: GenerateDestination;
+  if (kind === "workflow") {
+    const id = workflowSlug(options.id, prompt);
+    const path = `.smithers/workflows/${id}.tsx`;
+    destination = { route: `#/workflows/${encodeURIComponent(path)}`, path };
+  } else {
+    const name = skillSlug(options.name);
+    if (!name) throw new HttpError(400, "name is required");
+    if (existsSync(join(SKILLS_ROOT, name))) throw new HttpError(409, `skills/${name} already exists`);
+    destination = { route: `#/skills/${encodeURIComponent(name)}`, name };
+  }
+
+  mkdirSync(GENERATE_STATE_DIR, { recursive: true });
+  const tag = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const paramsPath = join(GENERATE_STATE_DIR, `gen-${tag}.params.json`);
+  const resultPath = join(GENERATE_STATE_DIR, `gen-${tag}.result.json`);
+  const logPath = join(GENERATE_STATE_DIR, `gen-${tag}.log`);
+  const params = { ...options, kind, prompt, project };
+  writeFileSync(paramsPath, JSON.stringify(params, null, 2), "utf8");
+
+  const argv = ["bun", "ui/generate.ts", "--params", paramsPath, "--out", resultPath];
+  const fd = openSync(logPath, "a");
+  const child = spawn(argv[0], argv.slice(1), {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: ["ignore", fd, fd],
+    detached: true,
+  });
+  child.unref();
+  closeSync(fd);
+
+  const sidecar: GenerateSidecar = {
+    pid: child.pid ?? -1,
+    kind,
+    params,
+    destination,
+    logPath: logPath.slice(REPO_ROOT.length + 1),
+    resultPath: resultPath.slice(REPO_ROOT.length + 1),
+    startedAtMs: Date.now(),
+  };
+  writeFileSync(join(GENERATE_STATE_DIR, `gen-${tag}.json`), JSON.stringify(sidecar, null, 2), "utf8");
+  return { ok: true, tag, kind, destination };
+}
+
+export function generateStatus(tag: string) {
+  if (!/^[a-z0-9]+$/.test(tag)) throw new HttpError(400, "invalid tag");
+  const sidecarPath = join(GENERATE_STATE_DIR, `gen-${tag}.json`);
+  if (!existsSync(sidecarPath)) throw new HttpError(404, `generate job not found: ${tag}`);
+  const sidecar = JSON.parse(readFileSync(sidecarPath, "utf8")) as GenerateSidecar;
+  let result: unknown = null;
+  const resultPath = join(REPO_ROOT, sidecar.resultPath);
+  if (existsSync(resultPath)) {
+    try {
+      result = JSON.parse(readFileSync(resultPath, "utf8"));
+    } catch {
+      // partial write; next poll will pick it up
+    }
+  }
+  const alive = pidAlive(sidecar.pid);
+  if (!alive && !result) {
+    result = { ok: false, error: `worker died — see ${sidecar.logPath}` };
+  }
+  return { tag, ...sidecar, running: alive && !result, result };
+}
+
 type HarnessProcess = {
   pid: number;
   suite: string;
@@ -888,6 +1515,7 @@ type HarnessProcess = {
 };
 
 const HARNESS_STATE_DIR = join(EVAL_RUNS_ROOT, ".harness");
+const NON_EVAL_RUN_DIRS = new Set(["generate", "optimize", "playground", "proposals", "review"]);
 
 function pidAlive(pid: number): boolean {
   try {
@@ -952,15 +1580,26 @@ export function startEvalRun(options: { suite: string; cases?: string[]; arms?: 
 
 
 type OptimizeProcess = {
-  pid: number;
+  pid: number | null;
   skill: string;
   mode: string;
   argv: string[];
-  logPath: string;
+  logPath: string | null;
   outDir: string | null;
   startedAtMs: number;
   running: boolean;
   result?: unknown;
+  progress?: OptimizeProgress | null;
+  source?: "sidecar" | "scan";
+};
+
+type OptimizeProgress = {
+  rolloutsDone: number | null;
+  rolloutsTotal: number | null;
+  secPerRollout: number | null;
+  nCandidates: number | null;
+  reflectionLm: string | null;
+  lastLogAtMs: number | null;
 };
 
 const OPTIMIZE_STATE_DIR = join(EVAL_RUNS_ROOT, "optimize", ".state");
@@ -975,6 +1614,7 @@ export function startOptimizeRun(options: {
   maxMetricCalls?: number;
   reflectionLm?: string;
   arms?: string[];
+  workers?: number;
   smoke?: boolean;
   baselineOnly?: boolean;
 }) {
@@ -992,6 +1632,7 @@ export function startOptimizeRun(options: {
   }
   if (options.maxMetricCalls) argv.push("--max-metric-calls", String(options.maxMetricCalls));
   if (options.reflectionLm) argv.push("--reflection-lm", options.reflectionLm);
+  if (options.workers) argv.push("--workers", String(Math.max(1, Math.min(8, options.workers))));
   for (const a of options.arms ?? []) argv.push("--arm", a);
   if (options.smoke) argv.push("--smoke");
   if (options.baselineOnly) argv.push("--baseline-only");
@@ -1024,32 +1665,145 @@ export function startOptimizeRun(options: {
   return { ok: true, ...sidecar };
 }
 
-/** Optimization runs tracked like harness runs: pid sidecars + liveness,
- * enriched with the driver's result.json once it lands. */
-export function listOptimizeRuns(): OptimizeProcess[] {
-  if (!existsSync(OPTIMIZE_STATE_DIR)) return [];
-  const procs: OptimizeProcess[] = [];
-  for (const file of readdirSync(OPTIMIZE_STATE_DIR).sort().reverse()) {
-    if (!file.endsWith(".json")) continue;
+/** Parse live progress straight from a GEPA run dir — the engine journals
+ * to disk every rollout, so "real-time" is just reading what's already there.
+ * Tolerant of partial writes; every field is best-effort nullable. */
+function optimizeProgress(outDirAbs: string): OptimizeProgress | null {
+  const gepaDir = join(outDirAbs, "gepa");
+  const progress: OptimizeProgress = {
+    rolloutsDone: null,
+    rolloutsTotal: null,
+    secPerRollout: null,
+    nCandidates: null,
+    reflectionLm: null,
+    lastLogAtMs: null,
+  };
+  let sawAnything = false;
+  for (const logName of ["run_log_stderr.txt", "run_log.txt"]) {
+    const logPath = join(gepaDir, logName);
+    if (!existsSync(logPath)) continue;
     try {
-      const sidecar = JSON.parse(readFileSync(join(OPTIMIZE_STATE_DIR, file), "utf8"));
-      let result: unknown = null;
-      if (sidecar.outDir) {
-        const resultPath = join(REPO_ROOT, sidecar.outDir, "result.json");
-        if (existsSync(resultPath)) {
-          try {
-            result = JSON.parse(readFileSync(resultPath, "utf8"));
-          } catch {
-            // partial write; next poll picks it up
-          }
-        }
+      const stat = statSync(logPath);
+      progress.lastLogAtMs = Math.max(progress.lastLogAtMs ?? 0, stat.mtimeMs);
+      const raw = readFileSync(logPath, "utf8");
+      const tail = raw.slice(-8192).replace(/\r/g, "\n");
+      const bars = [...tail.matchAll(/(\d+)\/(\d+) \[[0-9:?]+<[0-9:?]+, ([0-9.]+)s\/rollouts?\]/g)];
+      const last = bars[bars.length - 1];
+      if (last) {
+        progress.rolloutsDone = Number(last[1]);
+        progress.rolloutsTotal = Number(last[2]);
+        progress.secPerRollout = Number(last[3]);
+        sawAnything = true;
       }
-      procs.push({ ...sidecar, running: pidAlive(sidecar.pid), result });
     } catch {
-      // unreadable sidecar; skip
+      // unreadable log tail; keep whatever we have
     }
   }
-  return procs;
+  try {
+    const candidates = JSON.parse(readFileSync(join(gepaDir, "candidates.json"), "utf8"));
+    if (Array.isArray(candidates)) {
+      progress.nCandidates = candidates.length;
+      sawAnything = true;
+    }
+  } catch {
+    // not written yet
+  }
+  try {
+    const config = JSON.parse(readFileSync(join(outDirAbs, "config.json"), "utf8"));
+    if (typeof config.reflection_lm === "string") progress.reflectionLm = config.reflection_lm;
+    if (progress.rolloutsTotal === null && typeof config.max_metric_calls === "number") {
+      progress.rolloutsTotal = config.max_metric_calls;
+    }
+    sawAnything = true;
+  } catch {
+    // no config yet
+  }
+  return sawAnything ? progress : null;
+}
+
+//: a run dir's engine log going quiet for this long means the process died.
+//: generous: under pool contention a single rollout can take many minutes
+//: without the progress bar (and thus the log file's mtime) ticking.
+const OPTIMIZE_STALE_MS = 15 * 60_000;
+
+/** Optimization runs: pid sidecars + liveness for workbench-launched runs,
+ * merged with a directory scan so CLI-launched runs (uv run gepa_skill.py)
+ * are visible too, all enriched with live progress parsed from the GEPA
+ * run dir and with the driver's result.json once it lands. */
+export function listOptimizeRuns(): OptimizeProcess[] {
+  const procs: OptimizeProcess[] = [];
+  const seenOutDirs = new Set<string>();
+
+  const readResult = (outDir: string | null): unknown => {
+    if (!outDir) return null;
+    const resultPath = join(REPO_ROOT, outDir, "result.json");
+    if (!existsSync(resultPath)) return null;
+    try {
+      return JSON.parse(readFileSync(resultPath, "utf8"));
+    } catch {
+      return null; // partial write; next poll picks it up
+    }
+  };
+
+  if (existsSync(OPTIMIZE_STATE_DIR)) {
+    for (const file of readdirSync(OPTIMIZE_STATE_DIR).sort().reverse()) {
+      if (!file.endsWith(".json")) continue;
+      try {
+        const sidecar = JSON.parse(readFileSync(join(OPTIMIZE_STATE_DIR, file), "utf8"));
+        if (sidecar.outDir) seenOutDirs.add(String(sidecar.outDir));
+        const result = readResult(sidecar.outDir);
+        const progress = sidecar.outDir && !result ? optimizeProgress(join(REPO_ROOT, sidecar.outDir)) : null;
+        procs.push({ ...sidecar, running: pidAlive(sidecar.pid), result, progress, source: "sidecar" });
+      } catch {
+        // unreadable sidecar; skip
+      }
+    }
+  }
+
+  // Sidecar-less runs (launched straight from the CLI): the run dir itself is
+  // the registration. Liveness is inferred from engine-log freshness.
+  const optimizeRoot = join(EVAL_RUNS_ROOT, "optimize");
+  if (existsSync(optimizeRoot)) {
+    for (const skill of readdirSync(optimizeRoot)) {
+      if (skill.startsWith(".")) continue;
+      const skillRoot = join(optimizeRoot, skill);
+      let entries: string[] = [];
+      try {
+        entries = readdirSync(skillRoot);
+      } catch {
+        continue;
+      }
+      for (const dir of entries.sort().reverse()) {
+        const outDirRel = join("runs", "optimize", skill, dir);
+        if (seenOutDirs.has(outDirRel)) continue;
+        const outDirAbs = join(skillRoot, dir);
+        if (!existsSync(join(outDirAbs, "config.json"))) continue;
+        const result = readResult(outDirRel);
+        const progress = result ? null : optimizeProgress(outDirAbs);
+        const fresh = progress?.lastLogAtMs != null && Date.now() - progress.lastLogAtMs < OPTIMIZE_STALE_MS;
+        let startedAtMs = Date.now();
+        try {
+          startedAtMs = statSync(join(outDirAbs, "config.json")).mtimeMs;
+        } catch {
+          // keep fallback
+        }
+        procs.push({
+          pid: null,
+          skill,
+          mode: "optimize",
+          argv: [],
+          logPath: null,
+          outDir: outDirRel,
+          startedAtMs,
+          running: !result && fresh,
+          result,
+          progress,
+          source: "scan",
+        });
+      }
+    }
+  }
+  return procs.sort((a, b) => b.startedAtMs - a.startedAtMs);
 }
 
 export function listEvalRuns(): EvalRunRecord[] {
@@ -1064,7 +1818,7 @@ export function listEvalRuns(): EvalRunRecord[] {
       .map((p) => basename(p.suite).replace(/\.json$/, "")),
   );
   for (const suite of readdirSync(EVAL_RUNS_ROOT, { withFileTypes: true })) {
-    if (!suite.isDirectory() || suite.name.startsWith(".")) continue;
+    if (!suite.isDirectory() || suite.name.startsWith(".") || NON_EVAL_RUN_DIRS.has(suite.name)) continue;
     const suiteDir = join(EVAL_RUNS_ROOT, suite.name);
     for (const caseEntry of readdirSync(suiteDir, { withFileTypes: true })) {
       if (!caseEntry.isDirectory()) continue;
@@ -1182,6 +1936,284 @@ export function skillEvalSummaries(): Record<string, SkillEvalSummary> {
 }
 
 // ===========================================================================
+// Skill detail + playground
+
+export type SkillDetail = {
+  skill: SkillSummary & { evalSummary: SkillEvalSummary | null };
+  skillMd: string;
+  inWorkflow: { pass: number; total: number };
+  cases: { id: string; bucket: string | null; difficulty: string | null; expectedStatus: string | null }[];
+  usedIn: { project: string; path: string; name: string }[];
+};
+
+export type PlaygroundRecord = {
+  kind: "playground";
+  id: string;
+  skill: string;
+  prompt: string;
+  agentName: string;
+  fixtureCase?: string;
+  status: "pass" | "fail" | "error";
+  score: number | null;
+  checks: { id: string; status: string; detail?: string }[];
+  grader: "skill-validator" | "exit-code";
+  durationMs: number | null;
+  trajectoryUrl: string | null;
+  workspace: string | null;
+  createdAtMs: number;
+  note?: string;
+};
+
+type PlaygroundProcess = {
+  pid: number;
+  tag: string;
+  skill: string;
+  model: string;
+  fixtureCase?: string;
+  argv: string[];
+  paramsPath: string;
+  outPath: string;
+  logPath: string;
+  startedAtMs: number;
+  running: boolean;
+};
+
+const PLAYGROUND_ROOT = join(REPO_ROOT, "runs", "playground");
+const PLAYGROUND_STATE_DIR = join(PLAYGROUND_ROOT, ".state");
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function readSkillCaseMetadata(skill: string, caseName: string) {
+  const metaPath = join(SKILLS_ROOT, skill, "evals", caseName, "metadata.json");
+  const meta = JSON.parse(readFileSync(metaPath, "utf8"));
+  const validator = meta.validator && typeof meta.validator === "object" ? meta.validator : {};
+  return {
+    id: typeof meta.id === "string" ? meta.id : caseName,
+    bucket: typeof meta.bucket === "string" ? meta.bucket : null,
+    difficulty: typeof meta.difficulty === "string" ? meta.difficulty : null,
+    expectedStatus: typeof validator.expected_status === "string" ? validator.expected_status : null,
+  };
+}
+
+function safeFixtureCaseName(value: string): string {
+  if (!value || value.includes("/") || value.includes("..")) {
+    throw new HttpError(400, `invalid fixture case: ${value}`);
+  }
+  return value;
+}
+
+function assertNoSymlinks(dir: string): void {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const abs = join(dir, entry.name);
+    if (lstatSync(abs).isSymbolicLink()) throw new HttpError(400, `fixture input contains symlink: ${abs}`);
+    if (entry.isDirectory()) assertNoSymlinks(abs);
+  }
+}
+
+function playgroundRecordPath(skill: string, id: string): string {
+  assertSkillExists(skill);
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(id)) throw new HttpError(400, `invalid playground id: ${id}`);
+  return join(PLAYGROUND_ROOT, skill, `${id}.json`);
+}
+
+function readPlaygroundRecord(skill: string, id: string): PlaygroundRecord {
+  const path = playgroundRecordPath(skill, id);
+  if (!existsSync(path)) throw new HttpError(404, `playground record not found: ${id}`);
+  try {
+    return JSON.parse(readFileSync(path, "utf8")) as PlaygroundRecord;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new HttpError(500, `playground record unreadable: ${message}`);
+  }
+}
+
+export function skillDetail(name: string): SkillDetail {
+  const skillMdPath = assertSkillExists(name);
+  const summaries = skillEvalSummaries();
+  const summary = listSkills().find((s) => s.name === name || basename(s.path) === name);
+  if (!summary) throw new HttpError(404, `skill not found: ${name}`);
+
+  const nodeEvals = discoverProjects().flatMap((project) => {
+    try {
+      return listNodeEvals(project);
+    } catch {
+      return [];
+    }
+  });
+  const inWorkflowRecords = nodeEvals.filter((r) => r.skill === name && r.mode === "in-workflow" && r.status !== "error");
+
+  const cases: SkillDetail["cases"] = [];
+  const evalsDir = join(SKILLS_ROOT, name, "evals");
+  if (existsSync(evalsDir)) {
+    for (const entry of readdirSync(evalsDir).sort()) {
+      const metaPath = join(evalsDir, entry, "metadata.json");
+      if (!existsSync(metaPath)) continue;
+      try {
+        cases.push(readSkillCaseMetadata(name, entry));
+      } catch {
+        cases.push({ id: entry, bucket: null, difficulty: null, expectedStatus: null });
+      }
+    }
+  }
+
+  const usedIn: SkillDetail["usedIn"] = [];
+  const skillPattern = new RegExp(`skill:\\s*\\{[^}]*name:\\s*"${escapeRegExp(name)}"`);
+  for (const project of discoverProjects()) {
+    for (const workflow of listWorkflows(project)) {
+      try {
+        const abs = safeWorkflowPath(project, workflow.path);
+        if (!existsSync(abs) || statSync(abs).size > 200_000) continue;
+        if (skillPattern.test(readFileSync(abs, "utf8"))) {
+          usedIn.push({ project: project.id, path: workflow.path, name: workflow.name });
+        }
+      } catch {
+        // One broken workflow should not break the skill page.
+      }
+    }
+  }
+
+  return {
+    skill: { ...summary, evalSummary: summaries[name] ?? null },
+    skillMd: readFileSync(skillMdPath, "utf8").slice(0, 40_000),
+    inWorkflow: {
+      pass: inWorkflowRecords.filter((r) => r.status === "pass").length,
+      total: inWorkflowRecords.length,
+    },
+    cases,
+    usedIn,
+  };
+}
+
+export function listPlayground(skill: string): { records: PlaygroundRecord[]; pending: PlaygroundProcess[] } {
+  assertSkillExists(skill);
+  const records: PlaygroundRecord[] = [];
+  const dir = join(PLAYGROUND_ROOT, skill);
+  if (existsSync(dir)) {
+    for (const file of readdirSync(dir).sort().reverse()) {
+      if (!file.endsWith(".json")) continue;
+      try {
+        const record = JSON.parse(readFileSync(join(dir, file), "utf8")) as PlaygroundRecord;
+        if (record.skill === skill) records.push(record);
+      } catch {
+        // skip unreadable records
+      }
+    }
+  }
+  records.sort((a, b) => b.createdAtMs - a.createdAtMs);
+
+  const pending: PlaygroundProcess[] = [];
+  if (existsSync(PLAYGROUND_STATE_DIR)) {
+    for (const file of readdirSync(PLAYGROUND_STATE_DIR).sort().reverse()) {
+      if (!file.startsWith("playground-") || !file.endsWith(".json") || file.endsWith(".params.json")) continue;
+      try {
+        const sidecar = JSON.parse(readFileSync(join(PLAYGROUND_STATE_DIR, file), "utf8"));
+        if (sidecar.skill === skill) pending.push({ ...sidecar, running: pidAlive(sidecar.pid) });
+      } catch {
+        // skip unreadable sidecars
+      }
+    }
+  }
+  return { records, pending };
+}
+
+export function startPlayground(options: { skill?: string; prompt?: string; model?: string; fixtureCase?: string; smoke?: boolean }) {
+  const skill = options.skill ?? "";
+  assertSkillExists(skill);
+  const prompt = options.prompt?.trim();
+  if (!prompt) throw new HttpError(400, "prompt is required");
+  const model = options.model || DEFAULT_AGENT;
+  let fixtureCase: string | undefined;
+  if (options.fixtureCase) {
+    fixtureCase = safeFixtureCaseName(options.fixtureCase);
+    const inputDir = join(SKILLS_ROOT, skill, "evals", fixtureCase, "input");
+    if (!existsSync(inputDir)) throw new HttpError(404, `fixture input not found: ${fixtureCase}`);
+  }
+
+  mkdirSync(join(PLAYGROUND_ROOT, skill), { recursive: true });
+  mkdirSync(PLAYGROUND_STATE_DIR, { recursive: true });
+  const tag = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  const paramsPath = join(PLAYGROUND_STATE_DIR, `playground-${tag}.params.json`);
+  const outPath = join(PLAYGROUND_ROOT, skill, `${tag}.json`);
+  const logPath = join(PLAYGROUND_STATE_DIR, `playground-${tag}.log`);
+  writeFileSync(paramsPath, JSON.stringify({ skill, prompt, model, fixtureCase, smoke: Boolean(options.smoke) }, null, 2));
+
+  const argv = ["bun", "ui/playground.ts", "--params", paramsPath, "--out", outPath];
+  const fd = openSync(logPath, "a");
+  const child = spawn(argv[0], argv.slice(1), {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: ["ignore", fd, fd],
+    detached: true,
+  });
+  child.unref();
+  closeSync(fd);
+
+  const sidecar = {
+    pid: child.pid ?? -1,
+    tag,
+    skill,
+    model,
+    ...(fixtureCase ? { fixtureCase } : {}),
+    argv,
+    paramsPath: paramsPath.slice(REPO_ROOT.length + 1),
+    outPath: outPath.slice(REPO_ROOT.length + 1),
+    logPath: logPath.slice(REPO_ROOT.length + 1),
+    startedAtMs: Date.now(),
+  };
+  writeFileSync(join(PLAYGROUND_STATE_DIR, `playground-${tag}.json`), JSON.stringify(sidecar, null, 2));
+  return { ok: true, tag, sidecar: { ...sidecar, running: pidAlive(sidecar.pid) } };
+}
+
+export function promotePlayground(skill: string, id: string) {
+  assertSkillExists(skill);
+  const record = readPlaygroundRecord(skill, id);
+  if (!record.workspace || !existsSync(record.workspace)) {
+    throw new HttpError(410, `playground workspace is gone for ${id}`);
+  }
+  const validator = findSkillValidator(skill);
+  if (!validator) throw new HttpError(409, `skill has no validator: ${skill}`);
+
+  const candidateRel = join("runs", "generate", skill, `playground-${id}`);
+  const candidate = join(REPO_ROOT, candidateRel);
+  if (existsSync(candidate)) throw new HttpError(409, `candidate already exists: ${candidateRel}`);
+  mkdirSync(candidate, { recursive: true });
+  writeFileSync(join(candidate, "prompt.md"), record.prompt, "utf8");
+
+  const inputDir = join(candidate, "input");
+  mkdirSync(inputDir, { recursive: true });
+  if (record.fixtureCase) {
+    const sourceInput = join(SKILLS_ROOT, skill, "evals", safeFixtureCaseName(record.fixtureCase), "input");
+    if (existsSync(sourceInput)) {
+      assertNoSymlinks(sourceInput);
+      cpSync(sourceInput, inputDir, { recursive: true });
+    }
+  }
+
+  const expectedDir = join(candidate, "expected");
+  mkdirSync(expectedDir, { recursive: true });
+  const lagunaDir = join(record.workspace, ".laguna");
+  if (existsSync(lagunaDir)) cpSync(lagunaDir, join(expectedDir, ".laguna"), { recursive: true });
+
+  const metadata = {
+    id: `playground-${id}`,
+    skill,
+    bucket: "candidate",
+    arms: ["xs_without_skill", "xs_with_skill"],
+    validator: {
+      command: ["bun", `skills/${skill}/scripts/${basename(validator)}`],
+      expected_status: "pass",
+    },
+    notes: `promoted from playground run ${id} — review before gen_eval_cases.py --promote`,
+  };
+  writeFileSync(join(candidate, "metadata.json"), JSON.stringify(metadata, null, 2), "utf8");
+
+  const command = `uv run harness/generate/gen_eval_cases.py --skill ${skill} --validate-only ${candidateRel}`;
+  return { ok: true, path: candidateRel, command };
+}
+
+// ===========================================================================
 // Node-level evals
 //
 // Two modes, one record shape:
@@ -1247,7 +2279,7 @@ function findSkillValidator(skill: string): string | null {
   return validator ? join(scriptsDir, validator) : null;
 }
 
-async function gradeWorkspace(
+export async function gradeWorkspace(
   skill: string | null,
   workspace: string,
   fallbackExitCode: number | null,
@@ -1372,6 +2404,64 @@ function latestNodeCapture(project: Project, workflowPath: string, nodeId: strin
   return null;
 }
 
+export type NodeFacts = {
+  nodeId: string;
+  skill: string | null;
+  agentName: string | null;
+  lastEvals: NodeEvalRecord[];
+};
+
+/** Per-node enrichment for the canvas inspector: skill + model recovered
+ * from the node's most recent pool capture, grades from node-evals.
+ * Scans at most the 10 most recent runs of this workflow. */
+export function workflowNodeFacts(project: Project, relPath: string, nodeIds: string[]): NodeFacts[] {
+  const evals = listNodeEvals(project);
+  const wanted = new Set(nodeIds);
+  const captureByNode = new Map<string, PoolCapture>();
+  let scanned = 0;
+  for (const run of listRuns(project)) {
+    if (scanned >= 10 || captureByNode.size === wanted.size) break;
+    if (run.workflowPath && !run.workflowPath.endsWith(relPath.replace(/^\.\//, ""))) continue;
+    scanned++;
+    try {
+      const detail = runDetail(project, run.id);
+      for (const c of [...detail.captures].sort((a, b) => b.mtimeMs - a.mtimeMs)) {
+        if (c.matchedNodeId && wanted.has(c.matchedNodeId) && !captureByNode.has(c.matchedNodeId)) {
+          captureByNode.set(c.matchedNodeId, c);
+        }
+      }
+    } catch {
+      // unreadable run; keep looking
+    }
+  }
+  return nodeIds.map((nodeId) => {
+    const capture = captureByNode.get(nodeId) ?? null;
+    let agentName: string | null = null;
+    if (capture) {
+      try {
+        const meta = JSON.parse(readFileSync(join(project.root, capture.dir, "meta.json"), "utf8"));
+        const argv = Array.isArray(meta.argv) ? (meta.argv as string[]) : [];
+        const i = argv.indexOf("--agent-name");
+        agentName = i >= 0 ? argv[i + 1] : null;
+      } catch {
+        // capture meta unreadable
+      }
+    }
+    return {
+      nodeId,
+      skill: capture?.skillInstalled ? basename(capture.skillInstalled) : null,
+      agentName,
+      lastEvals: evals
+        .filter(
+          (r) =>
+            r.nodeId === nodeId &&
+            (!r.workflowPath || r.workflowPath.endsWith(relPath.replace(/^\.\//, ""))),
+        )
+        .slice(0, 5),
+    };
+  });
+}
+
 // ===========================================================================
 // Review-app integration: fold workbench records into the annotation tool.
 //
@@ -1415,7 +2505,7 @@ function nljsonSteps(stdoutNdjson: string): { kind: string; title: string; detai
   return steps;
 }
 
-function lagunaArtifacts(workspace: string | null): { path: string; content: string; missing: boolean }[] {
+export function lagunaArtifacts(workspace: string | null): { path: string; content: string; missing: boolean }[] {
   if (!workspace) return [];
   const dir = join(workspace, ".laguna");
   if (!existsSync(dir)) return [];
@@ -1432,6 +2522,78 @@ function lagunaArtifacts(workspace: string | null): { path: string; content: str
     }
   }
   return files;
+}
+
+export type NodeArtifacts = {
+  prompt: string | null;
+  skill: string | null;
+  traceId: string | null;
+  files: {
+    path: string;
+    model: { content: string; missing: boolean };
+    gold: { content: string; case: string } | null;
+  }[];
+  checks: { id: string; status: string; detail?: string }[];
+  status: "pass" | "fail" | "error" | "ungraded";
+};
+
+/** Everything the expanded node row needs: the node's prompt (capture
+ * prompt.md), its model artifacts (workspace .laguna/), the latest
+ * in-workflow grade, and — when the grading skill ships eval cases — a gold
+ * reference example matched by workspace-relative artifact path. The gold
+ * is labeled a reference EXAMPLE: one acceptable answer from
+ * skills/<skill>/evals/<case>/expected/, not this node's own gold. */
+export function nodeArtifacts(project: Project, runId: string, nodeId: string): NodeArtifacts {
+  const detail = runDetail(project, runId);
+  const capture = detail.captures
+    .filter((c) => c.matchedNodeId === nodeId && c.cwd)
+    .sort((a, b) => b.mtimeMs - a.mtimeMs)[0] ?? null;
+  const latestEval =
+    listNodeEvals(project).find((r) => r.mode === "in-workflow" && r.runId === runId && r.nodeId === nodeId) ??
+    null;
+  const skill = capture?.skillInstalled ? basename(capture.skillInstalled) : (latestEval?.skill ?? null);
+  let prompt: string | null = null;
+  if (capture) {
+    try {
+      prompt = readFileSync(join(project.root, capture.dir, "prompt.md"), "utf8");
+    } catch {
+      // partial capture; keep null prompt
+    }
+  }
+  const modelFiles = capture?.cwd ? lagunaArtifacts(capture.cwd) : [];
+  const files = modelFiles.map((f) => ({
+    path: f.path,
+    model: { content: f.content, missing: f.missing },
+    gold: goldReference(skill, f.path),
+  }));
+  return {
+    prompt,
+    skill,
+    traceId: capture ? `workbench/${runId.slice(0, 8)}/${nodeId}/${basename(capture.dir)}` : null,
+    files,
+    checks: latestEval?.checks ?? [],
+    status: latestEval ? latestEval.status : "ungraded",
+  };
+}
+
+/** First gold file at the same workspace-relative path across the skill's
+ * eval cases (expected/ mirrors the workspace layout — e.g.
+ * expected/.laguna/ci-log-summary.json). */
+function goldReference(skill: string | null, relPath: string): { content: string; case: string } | null {
+  if (!skill) return null;
+  const evalsDir = join(SKILLS_ROOT, skill, "evals");
+  if (!existsSync(evalsDir)) return null;
+  for (const caseDir of readdirSync(evalsDir).sort()) {
+    const goldPath = join(evalsDir, caseDir, "expected", relPath);
+    if (existsSync(goldPath)) {
+      try {
+        return { content: readFileSync(goldPath, "utf8").slice(0, 20_000), case: caseDir };
+      } catch {
+        // unreadable gold; keep searching
+      }
+    }
+  }
+  return null;
 }
 
 function validatorResultFromNodeEval(record: NodeEvalRecord | null) {
@@ -1577,6 +2739,345 @@ export function syncReviewTraces(project: Project): { added: number; total: numb
   writeFileSync(tmpPath, JSON.stringify(payload, null, 1) + "\n");
   renameSync(tmpPath, REVIEW_TRACES_PATH);
   return { added: traces.length, total: all.length };
+}
+
+// ===========================================================================
+// Unified runs feed
+
+export type FeedRecord = {
+  type: "workflow" | "eval" | "node" | "playground";
+  id: string;
+  title: string;
+  skill: string | null;
+  workflow: string | null;
+  arm: string | null;
+  model: string | null;
+  atMs: number | null;
+  durationMs: number | null;
+  verdict: "pass" | "fail" | "error" | "running" | "ungraded";
+  score: number | null;
+  label: "pass" | "fail" | "defer" | null;
+  traceId: string | null;
+  children?: FeedRecord[];
+};
+
+export type SkillScorecardRow = {
+  skill: string;
+  lift: number | null;
+  withSkill: { pass: number; total: number; avgScore: number | null };
+  withoutSkill: { pass: number; total: number; avgScore: number | null };
+  inWorkflow: { pass: number; total: number };
+  unlabeledFails: number;
+};
+
+const REVIEW_LABELS_PATH = join(REPO_ROOT, "runs", "review", "labels.json");
+
+type ReviewLabelEntry = { label?: unknown; updated_at?: unknown };
+type ReviewLabels = Record<string, ReviewLabelEntry>;
+
+function parseTimeMs(value: string | null): number | null {
+  if (!value) return null;
+  const ms = Date.parse(value);
+  return Number.isFinite(ms) ? ms : null;
+}
+
+function loadReviewLabels(): ReviewLabels {
+  try {
+    const parsed = JSON.parse(readFileSync(REVIEW_LABELS_PATH, "utf8"));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    // Missing or corrupt labels.json must not break the read-only feed.
+    return {};
+  }
+}
+
+function normalizeReviewLabel(entry: ReviewLabelEntry | undefined): FeedRecord["label"] {
+  return entry?.label === "pass" || entry?.label === "fail" || entry?.label === "defer"
+    ? entry.label
+    : null;
+}
+
+function newestLabelKeyWithPrefix(labels: ReviewLabels, prefix: string): string | null {
+  const matches = Object.keys(labels).filter((key) => key.startsWith(prefix));
+  if (!matches.length) return null;
+  // Deliberate approximation: capture-dir suffixes are not present on node
+  // eval records, so choose the lexicographically newest matching trace key.
+  matches.sort((a, b) => a.localeCompare(b));
+  return matches[matches.length - 1];
+}
+
+function labelForTrace(labels: ReviewLabels, traceId: string | null, prefix?: string): FeedRecord["label"] {
+  if (traceId) {
+    const exact = normalizeReviewLabel(labels[traceId]);
+    if (exact) return exact;
+  }
+  if (prefix) return normalizeReviewLabel(labels[newestLabelKeyWithPrefix(labels, prefix) ?? ""]);
+  return null;
+}
+
+function evalVerdict(run: EvalRunRecord): FeedRecord["verdict"] {
+  if (run.status === "running") return "running";
+  if (run.gradedPass === true) return "pass";
+  if (run.gradedPass === false) return "fail";
+  if (run.status === "error") return "error";
+  if (run.status === "fail") return "fail";
+  return "ungraded";
+}
+
+function nodeVerdict(status: NodeEvalRecord["status"]): FeedRecord["verdict"] {
+  return status === "pass" ? "pass" : status === "fail" ? "fail" : "error";
+}
+
+function workflowVerdict(run: TrajectoryRecord, nodeEvals: NodeEvalRecord[]): FeedRecord["verdict"] {
+  if (["running", "pending", "started"].includes(run.status)) return "running";
+  if (["failed", "cancelled", "error"].includes(run.status)) return "error";
+  if (nodeEvals.length > 0) return nodeEvals.every((r) => r.status === "pass") ? "pass" : "fail";
+  return "ungraded";
+}
+
+function liftFromSummary(summary: SkillEvalSummary): number | null {
+  if (summary.withSkill.total === 0 || summary.withoutSkill.total === 0) return null;
+  const withRate = summary.withSkill.pass / summary.withSkill.total;
+  const withoutRate = summary.withoutSkill.pass / summary.withoutSkill.total;
+  return Math.round((withRate - withoutRate) * 1000) / 10;
+}
+
+function flattenFeed(records: FeedRecord[]): FeedRecord[] {
+  const out: FeedRecord[] = [];
+  for (const record of records) {
+    out.push(record);
+    if (record.children?.length) out.push(...flattenFeed(record.children));
+  }
+  return out;
+}
+
+/** Build the Runs page's one-feed view. Workflow details are capped to the
+ * 30 newest workflow runs to keep the landing page responsive; if this grows
+ * slow, add a short TTL cache rather than expanding the cap. */
+export function buildFeed(project: Project): { scorecard: SkillScorecardRow[]; records: FeedRecord[] } {
+  const labels = loadReviewLabels();
+  const records: FeedRecord[] = [];
+  const nodeEvals = listNodeEvals(project);
+  const inWorkflowByRun = new Map<string, NodeEvalRecord[]>();
+  for (const record of nodeEvals) {
+    if (record.mode === "in-workflow" && record.runId) {
+      const group = inWorkflowByRun.get(record.runId) ?? [];
+      group.push(record);
+      inWorkflowByRun.set(record.runId, group);
+    }
+  }
+
+  const exactTraceByRunNode = new Map<string, string>();
+  for (const run of listRuns(project).slice(0, 30)) {
+    let skills: string[] = [];
+    try {
+      const detail = runDetail(project, run.id);
+      skills = [...new Set(detail.captures
+        .map((capture) => capture.skillInstalled ? basename(capture.skillInstalled) : null)
+        .filter((skill): skill is string => Boolean(skill)))];
+      for (const capture of detail.captures) {
+        if (!capture.matchedNodeId) continue;
+        exactTraceByRunNode.set(
+          `${run.id}:${capture.matchedNodeId}`,
+          `workbench/${run.id.slice(0, 8)}/${capture.matchedNodeId}/${basename(capture.dir)}`,
+        );
+      }
+    } catch {
+      // Unreadable historical runs still appear; they just lack skill joins.
+    }
+    const runNodeEvals = inWorkflowByRun.get(run.id) ?? [];
+    const suffix = skills.length ? ` · skills: ${skills.join(", ")}` : "";
+    records.push({
+      type: "workflow",
+      id: run.id,
+      title: `${run.title}${suffix}`,
+      skill: skills[0] ?? null,
+      workflow: run.workflowPath,
+      arm: null,
+      model: null,
+      atMs: run.finishedAtMs ?? run.startedAtMs ?? run.createdAtMs,
+      durationMs: run.startedAtMs && run.finishedAtMs ? Math.max(0, run.finishedAtMs - run.startedAtMs) : null,
+      verdict: workflowVerdict(run, runNodeEvals),
+      score: null,
+      label: null,
+      traceId: null,
+    });
+  }
+
+  const evalGroups = new Map<string, EvalRunRecord[]>();
+  for (const run of listEvalRuns()) {
+    const key = `${run.suite}/${run.caseId}`;
+    const group = evalGroups.get(key) ?? [];
+    group.push(run);
+    evalGroups.set(key, group);
+  }
+  for (const [id, arms] of evalGroups) {
+    arms.sort((a, b) => a.arm.localeCompare(b.arm));
+    const children = arms.map((armRun): FeedRecord => {
+      const traceId = `${armRun.suite}/${armRun.caseId}/${armRun.arm}`; // extract_traces.py exact format
+      return {
+        type: "eval",
+        id: armRun.id,
+        title: armRun.caseId,
+        skill: armRun.skill,
+        workflow: null,
+        arm: armRun.arm,
+        model: armRun.agentName,
+        atMs: parseTimeMs(armRun.finishedAt) ?? parseTimeMs(armRun.startedAt),
+        durationMs: armRun.durationMs,
+        verdict: evalVerdict(armRun),
+        score: armRun.score,
+        label: labelForTrace(labels, traceId),
+        traceId,
+      };
+    });
+    const running = children.some((child) => child.verdict === "running");
+    const errored = children.some((child) => child.verdict === "error");
+    const graded = arms.filter((arm) => arm.gradedPass != null);
+    const verdict: FeedRecord["verdict"] = running
+      ? "running"
+      : graded.length
+        ? (graded.every((arm) => arm.gradedPass) ? "pass" : "fail")
+        : (errored ? "error" : "ungraded");
+    records.push({
+      type: "eval",
+      id,
+      title: `${arms[0]?.caseId ?? id} · ${arms.length} arm${arms.length === 1 ? "" : "s"}`,
+      skill: arms.find((arm) => arm.skill)?.skill ?? null,
+      workflow: null,
+      arm: null,
+      model: null,
+      atMs: Math.max(...children.map((child) => child.atMs ?? 0)) || null,
+      durationMs: children.reduce((sum, child) => sum + (child.durationMs ?? 0), 0) || null,
+      verdict,
+      score: null,
+      label: null,
+      traceId: null,
+      children,
+    });
+  }
+
+  const standaloneGroups = new Map<string, NodeEvalRecord[]>();
+  for (const record of nodeEvals) {
+    if (record.mode === "in-workflow") {
+      const prefix = record.runId ? `workbench/${record.runId.slice(0, 8)}/${record.nodeId}/` : undefined;
+      const exactTraceId = record.runId ? exactTraceByRunNode.get(`${record.runId}:${record.nodeId}`) ?? null : null;
+      records.push({
+        type: "node",
+        id: record.id,
+        title: `${record.workflowPath ?? "workflow"} · ${record.nodeId}`,
+        skill: record.skill,
+        workflow: record.workflowPath,
+        arm: "in-workflow",
+        model: record.agentName,
+        atMs: record.gradedAtMs,
+        durationMs: record.durationMs,
+        verdict: nodeVerdict(record.status),
+        score: record.score,
+        label: labelForTrace(labels, exactTraceId, prefix),
+        traceId: exactTraceId,
+      });
+      continue;
+    }
+    const groupId = record.id.replace(/-\d+$/, "");
+    const group = standaloneGroups.get(groupId) ?? [];
+    group.push(record);
+    standaloneGroups.set(groupId, group);
+  }
+  for (const [groupId, group] of standaloneGroups) {
+    group.sort((a, b) => (a.trial ?? 0) - (b.trial ?? 0));
+    const pass = group.filter((r) => r.status === "pass").length;
+    const children = group.map((record): FeedRecord => {
+      const traceId = `workbench/standalone/${record.id}`;
+      return {
+        type: "node",
+        id: record.id,
+        title: `trial ${record.trial ?? "?"} · ${record.nodeId}`,
+        skill: record.skill,
+        workflow: record.workflowPath,
+        arm: `standalone #${record.trial ?? "?"}`,
+        model: record.agentName,
+        atMs: record.gradedAtMs,
+        durationMs: record.durationMs,
+        verdict: nodeVerdict(record.status),
+        score: record.score,
+        label: labelForTrace(labels, traceId),
+        traceId,
+      };
+    });
+    records.push({
+      type: "node",
+      id: groupId,
+      title: `${group[0]?.workflowPath ?? "workflow"} · ${group[0]?.nodeId ?? "node"} · ${pass}/${group.length} pass`,
+      skill: group.find((r) => r.skill)?.skill ?? null,
+      workflow: group[0]?.workflowPath ?? null,
+      arm: "standalone",
+      model: group.find((r) => r.agentName)?.agentName ?? null,
+      atMs: Math.max(...group.map((r) => r.gradedAtMs ?? 0)) || null,
+      durationMs: group.reduce((sum, r) => sum + (r.durationMs ?? 0), 0) || null,
+      verdict: group.every((r) => r.status === "pass") ? "pass" : group.some((r) => r.status === "error") ? "error" : "fail",
+      score: null,
+      label: null,
+      traceId: null,
+      children,
+    });
+  }
+
+  for (const skill of listSkills()) {
+    try {
+      for (const record of listPlayground(skill.name).records) {
+        records.push({
+          type: "playground",
+          id: record.id,
+          title: `playground · ${record.prompt.slice(0, 80) || skill.name}`,
+          skill: record.skill,
+          workflow: null,
+          arm: record.fixtureCase ? `fixture ${record.fixtureCase}` : "empty workspace",
+          model: record.agentName,
+          atMs: record.createdAtMs,
+          durationMs: record.durationMs,
+          verdict: nodeVerdict(record.status),
+          score: record.score,
+          label: null,
+          traceId: null,
+        });
+      }
+    } catch {
+      // Playground is additive; one corrupt record should not break the feed.
+    }
+  }
+
+  records.sort((a, b) => (b.atMs ?? 0) - (a.atMs ?? 0));
+
+  const summaries = skillEvalSummaries();
+  const skills = new Set<string>(Object.keys(summaries));
+  for (const record of flattenFeed(records)) if (record.skill) skills.add(record.skill);
+
+  const flat = flattenFeed(records);
+  const scorecard: SkillScorecardRow[] = [...skills].sort().map((skill) => {
+    const withSkill = summaries[skill]?.withSkill ?? { pass: 0, total: 0, avgScore: null };
+    const withoutSkill = summaries[skill]?.withoutSkill ?? { pass: 0, total: 0, avgScore: null };
+    const inWorkflowRecords = nodeEvals.filter((record) => record.mode === "in-workflow" && record.skill === skill);
+    return {
+      skill,
+      lift: liftFromSummary({ withSkill, withoutSkill }),
+      withSkill,
+      withoutSkill,
+      inWorkflow: {
+        pass: inWorkflowRecords.filter((record) => record.status === "pass").length,
+        total: inWorkflowRecords.length,
+      },
+      unlabeledFails: flat.filter((record) => record.skill === skill && record.verdict === "fail" && record.label == null).length,
+    };
+  });
+  scorecard.sort((a, b) => {
+    if (a.lift == null && b.lift == null) return a.skill.localeCompare(b.skill);
+    if (a.lift == null) return 1;
+    if (b.lift == null) return -1;
+    return a.lift - b.lift || a.skill.localeCompare(b.skill);
+  });
+
+  return { scorecard, records };
 }
 
 /** Re-run one node's prompt in fresh workspace copies and grade each trial.
