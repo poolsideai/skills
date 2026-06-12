@@ -325,6 +325,7 @@ const COMMAND_DETAILS: CommandDetail[] = [
       { name: "--max-output-tokens", value: "N", description: "LM completion cap." },
       { name: "--temperature", value: "number", description: "LM sampling temperature." },
       { name: "--max-repair-rounds", value: "N", description: "LM repair rounds after gate rejection; zero is allowed." },
+      { name: "--bootstrap", description: "Allow generation for a skill with zero existing cases; no LM-free promotion." },
       { name: "--seed-example", value: "case-id", description: "Existing case id to use as the worked example." },
       { name: "--validator-timeout", value: "seconds", description: "Per-validator timeout used by mechanical gates." },
       { name: "--out-dir", value: "dir", description: "Output directory; default is runs/generate/<skill>/<utc-stamp>." },
@@ -634,6 +635,7 @@ const EVAL_CASE_GENERATE_FLAGS = new Set([
   "max-output-tokens",
   "temperature",
   "max-repair-rounds",
+  "bootstrap",
   "seed-example",
   "validator-timeout",
   "out-dir",
@@ -664,6 +666,11 @@ function parseEvalCaseGenerateArgs(argv: string[]): Flags {
         throw new HttpError(400, `--${key} requires at least one case dir`);
       }
       (out.flags[key] ??= []).push(...values);
+      continue;
+    }
+
+    if (key === "bootstrap") {
+      (out.flags[key] ??= []).push("true");
       continue;
     }
 
@@ -706,6 +713,7 @@ function runEvalCaseGenerate(rawArgv: string[]): unknown {
   if (maxOutputTokens !== undefined) argv.push("--max-output-tokens", String(maxOutputTokens));
   if (temperature !== undefined) argv.push("--temperature", String(temperature));
   if (maxRepairRounds !== undefined) argv.push("--max-repair-rounds", String(maxRepairRounds));
+  if (flag(args, "bootstrap") === "true") argv.push("--bootstrap");
   pushOptional(argv, "--seed-example", flag(args, "seed-example"));
   if (validatorTimeout !== undefined) argv.push("--validator-timeout", String(validatorTimeout));
   pushOptional(argv, "--out-dir", flag(args, "out-dir"));

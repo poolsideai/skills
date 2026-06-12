@@ -104,6 +104,20 @@ SAFE_SEGMENT = re.compile(r"^[A-Za-z0-9._\-]+$")
 FEEDBACK_ITEM_CHARS = 500
 
 
+DEFAULT_ARMS = ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"]
+ARTIFACT_PATH_RE = re.compile(r"(?:`|\s|^)((?:\.laguna|[A-Za-z0-9._/-]+?)/[A-Za-z0-9._/-]+\.json)(?:`|\s|$)")
+
+
+def infer_artifact_paths(text: str) -> list[str]:
+    paths = {m.group(1).strip("`,)") for m in ARTIFACT_PATH_RE.finditer(text)}
+    return sorted(
+        p for p in paths
+        if not p.startswith("schemas/")
+        and not p.endswith("validator-result.json")
+        and "/validator-result" not in p
+    )
+
+
 def utc_stamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%SZ")
 
@@ -128,7 +142,7 @@ def child_env() -> dict[str, str]:
 class SkillContext:
     """Everything the generator needs to know about one skill, read once."""
 
-    def __init__(self, skill: str, seed_example: str | None) -> None:
+    def __init__(self, skill: str, seed_example: str | None, *, bootstrap: bool = False) -> None:
         self.skill = skill
         self.skill_dir = REPO_ROOT / "skills" / skill
         if not (self.skill_dir / "SKILL.md").is_file():
@@ -145,12 +159,14 @@ class SkillContext:
         if not self.validators:
             raise SystemExit(f"skill {skill} has no scripts/validate_*.ts — not generatable")
 
+        evals_dir = self.skill_dir / "evals"
         self.cases = [
             mx.load_case(d)
-            for d in sorted(p for p in (self.skill_dir / "evals").iterdir() if p.is_dir())
-        ]
+            for d in sorted(p for p in evals_dir.iterdir() if p.is_dir())
+        ] if evals_dir.is_dir() else []
+        self.bootstrap = bootstrap
         clean = [c for c in self.cases if not c.errors]
-        if not clean:
+        if not clean and not bootstrap:
             raise SystemExit(f"skill {skill} has no loadable eval cases to seed from")
         self.existing_ids = {c.id for c in self.cases}
 
@@ -162,23 +178,42 @@ class SkillContext:
                     digest = hashlib.sha256(f.read_bytes()).hexdigest()
                     self.input_hashes.setdefault(digest, f"{case.id}/input/{f.relative_to(case.input_dir)}")
 
-        if seed_example:
+        if bootstrap and not clean:
+            if seed_example:
+                raise SystemExit("--seed-example cannot be used with --bootstrap before any cases exist")
+            validator_name = sorted(self.validators)[0]
+            self.example = None
+            self.canonical_validator = ["bun", f"skills/{skill}/scripts/{validator_name}"]
+            schema_text = "\n".join(self.schemas.values())
+            self.artifact_relpaths = infer_artifact_paths(self.skill_md + "\n" + schema_text)
+            if not self.artifact_relpaths:
+                raise SystemExit(
+                    f"--bootstrap could not infer a deterministic artifact path for {skill}; "
+                    "add one to SKILL.md's Output contract first"
+                )
+            self.arms = list(DEFAULT_ARMS)
+        elif seed_example:
             picks = [c for c in clean if c.id == seed_example]
             if not picks:
                 raise SystemExit(f"--seed-example {seed_example!r} is not a loadable case of {skill}")
             self.example = picks[0]
+            self.arms = list(self.example.metadata.get("arms") or DEFAULT_ARMS)
         else:
             preferred = [c for c in clean if c.expected_status == "pass"]
             self.example = (preferred or clean)[0]
-        self.canonical_validator = self.example.validator_command
-        self.artifact_relpaths = [
-            str(p.relative_to(self.example.expected_dir))
-            for p in sorted(self.example.expected_dir.rglob("*"))
-            if p.is_file()
-        ]
+            self.arms = list(self.example.metadata.get("arms") or DEFAULT_ARMS)
+        if self.example is not None:
+            self.canonical_validator = self.example.validator_command
+            self.artifact_relpaths = [
+                str(p.relative_to(self.example.expected_dir))
+                for p in sorted(self.example.expected_dir.rglob("*"))
+                if p.is_file()
+            ]
 
     def inventory(self) -> str:
         rows = []
+        if not self.cases:
+            return "No existing eval cases. This is bootstrap mode; create the first worked example."
         for c in self.cases:
             m = c.metadata
             rows.append(
@@ -188,6 +223,22 @@ class SkillContext:
         return "\n".join(rows)
 
     def example_block(self) -> str:
+        if self.example is None:
+            return "\n\n".join([
+                "### bootstrap mode",
+                "No existing case is available. Create the first case in the same shape the harness expects.",
+                "### metadata.json required shape",
+                json.dumps({
+                    "id": f"{self.skill}-<slug>",
+                    "skill": self.skill,
+                    "bucket": "easy|realistic|adversarial|edge",
+                    "difficulty": "easy|medium|hard",
+                    "arms": self.arms,
+                    "publishability": "internal",
+                    "validator": {"command": self.canonical_validator, "expected_status": "pass|fail"},
+                    "notes": "Synthetic fixture; no customer data. Generated case.",
+                }, indent=2),
+            ])
         parts = [f"### prompt.md\n{self.example.prompt_path.read_text(encoding='utf-8')}"]
         parts.append(
             "### metadata.json\n"
@@ -285,7 +336,7 @@ artifact must make that validator return status "{spec.get('expected_status', 'p
 Authoring rules (mechanically enforced; violations are rejected):
 - case_id = "{ctx.skill}-<slug>" (kebab-case).
 - metadata must conform to eval-case.v1 exactly like the example: fields id,
-  skill ("{ctx.skill}"), bucket, difficulty, arms (copy the example's arms),
+  skill ("{ctx.skill}"), bucket, difficulty, arms {json.dumps(ctx.arms)},
   publishability ("internal"), validator, notes. Use validator.command
   {json.dumps(ctx.canonical_validator)} and expected_status "{spec.get('expected_status', 'pass')}".
   End notes with: "Synthetic fixture; no customer data. Generated case."
@@ -653,6 +704,8 @@ def main() -> int:
     parser.add_argument("--max-repair-rounds", type=int, default=2,
                         help="LM repair rounds after a gate rejection (default 2)")
     parser.add_argument("--seed-example", help="case id to use as the worked example (default: first pass-status case)")
+    parser.add_argument("--bootstrap", action="store_true",
+                        help="allow generation for a skill with zero existing cases; seeds from SKILL.md, schemas, and validator only")
     parser.add_argument("--validator-timeout", type=float, default=120.0)
     parser.add_argument("--out-dir", help="default: runs/generate/<skill>/<utc-stamp>")
     parser.add_argument("--validate-only", nargs="+", metavar="CASE_DIR",
@@ -661,10 +714,12 @@ def main() -> int:
                         help="no LM: gate + copy candidate(s) into skills/<skill>/evals/ and the per-skill suite")
     args = parser.parse_args()
 
-    ctx = SkillContext(args.skill, args.seed_example)
-
     if args.validate_only and args.promote:
         parser.error("--validate-only and --promote are mutually exclusive")
+    if args.bootstrap and (args.validate_only or args.promote):
+        parser.error("--bootstrap is only valid for generation, not --validate-only or --promote")
+
+    ctx = SkillContext(args.skill, args.seed_example, bootstrap=args.bootstrap)
 
     if args.validate_only:
         failures = 0
@@ -709,7 +764,8 @@ def main() -> int:
         "n": args.n,
         "explicit_specs": args.specs,
         "max_repair_rounds": args.max_repair_rounds,
-        "seed_example": ctx.example.id,
+        "seed_example": ctx.example.id if ctx.example is not None else None,
+        "bootstrap": args.bootstrap,
         "argv": sys.argv[1:],
     }
     (out_dir / "config.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")

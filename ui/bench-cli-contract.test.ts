@@ -151,7 +151,7 @@ describe("bench discovery CLI contract", () => {
       output: "bench-eval-case-generate.v1",
     });
     expect(output.command.flags?.map((flag) => flag.name)).toEqual(
-      expect.arrayContaining(["--skill", "--n", "--spec", "--validate-only", "--promote"]),
+      expect.arrayContaining(["--skill", "--n", "--spec", "--bootstrap", "--validate-only", "--promote"]),
     );
     expect(output.command.flags?.filter((flag) => flag.repeatable).map((flag) => flag.name)).toEqual(
       expect.arrayContaining(["--spec", "--validate-only", "--promote"]),
@@ -214,6 +214,25 @@ describe("bench discovery CLI contract", () => {
       expect.arrayContaining(["uv", "harness/generate/gen_eval_cases.py", "--skill", "__missing_skill__", "--validate-only", "__missing_case__"]),
     );
     expect(body.exit_code).not.toBe(0);
+    expect(body.stderr_text).toContain("no such skill");
+  });
+
+  test("eval-case-generate forwards bootstrap mode", () => {
+    const result = runBench(["eval-case-generate", "--skill", "__missing_skill__", "--bootstrap", "--n", "1"]);
+
+    expect(result.exitCode).toBe(1);
+    const body = expectJsonStderr<{ mode: string; command: string[]; stderr_text: string }>(result);
+    expect(body.mode).toBe("generate");
+    expect(body.command).toEqual([
+      "uv",
+      "run",
+      "harness/generate/gen_eval_cases.py",
+      "--skill",
+      "__missing_skill__",
+      "--n",
+      "1",
+      "--bootstrap",
+    ]);
     expect(body.stderr_text).toContain("no such skill");
   });
 
