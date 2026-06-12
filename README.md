@@ -10,14 +10,14 @@ This repo is for turning agent instructions into working, measurable tools. A sk
 4. Use GEPA to automatically search for better `SKILL.md` instructions.
 5. Review the proposed diff, rerun checks, and promote only what holds up.
 
-The feedback loop is the product: visible behavior, concrete failures, and a diff you can accept or reject.
+The feedback loop matters because it gives you visible behavior, concrete failures, and a diff you can accept or reject.
 
-New here? [`docs/getting-started.md`](docs/getting-started.md) walks the loop offline first, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary (Laguna, arms, gold replay, GEPA, …).
+New here? [`docs/getting-started.md`](docs/getting-started.md) walks the loop offline first, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary, including Laguna, arms, gold replay, and GEPA.
 
 ## What this gives you
 
 - **A skill library** for reusable Laguna behaviors, including CI log reduction, task scoping, and repo mapping.
-- **An eval harness** that compares model runs with and without a skill, using deterministic workspace artifacts instead of vibes.
+- **An eval harness** that compares model runs with and without a skill, using deterministic workspace artifacts rather than subjective judgment.
 - **GEPA-based skill optimization** that rewrites `SKILL.md` candidates and scores them against frozen validators.
 - **Eval-case generation** for growing the test corpus, with generated cases quarantined until human review.
 - **A local workbench** for the skills catalog, workflow catalog, eval runs, node-level grades, optimization runs, proposals, and trace review.
@@ -113,7 +113,7 @@ Expected today: this fails only for `workspace-inventory`, which has no cases ye
 
 ## Zero to one: optimize an existing skill for Laguna
 
-Today, importing a skill from outside this repo is a manual path. The planned `onboard --source <dir>` command is not shipped yet, so the honest workflow is:
+Today, importing a skill from outside this repo is a manual path. The planned `onboard --source <dir>` command is not shipped yet, so use this workflow:
 
 1. **Create a skill folder.** Copy the existing skill into `skills/<name>/SKILL.md`. Keep the name lowercase and kebab-case.
 2. **Make the output gradeable.** Add an output schema in `skills/<name>/schemas/` and a validator in `skills/<name>/scripts/validate_*.ts`. If the skill cannot name a deterministic artifact or diff target, it is not ready for optimization here.

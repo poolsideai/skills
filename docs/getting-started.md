@@ -1,12 +1,12 @@
 # Getting Started
 
 A first-session walkthrough of the skill loop. Unfamiliar terms (Laguna, arms, gold replay,
-GEPA, …) are defined in [`concepts.md`](concepts.md); this page sequences commands and links
+GEPA, and others) are defined in [`concepts.md`](concepts.md); this page sequences commands and links
 out rather than restating rules.
 
 ## Prerequisites
 
-`uv`, `bun`, and `pool` on PATH — versions and notes in the root [`README.md`](../README.md)
+`uv`, `bun`, and `pool` on PATH. Versions and notes are in the root [`README.md`](../README.md)
 (Prerequisites). Everything in the next section runs with **zero credentials**; the credentials
 matrix in [`concepts.md`](concepts.md) says exactly what each later step needs.
 
@@ -14,7 +14,7 @@ matrix in [`concepts.md`](concepts.md) says exactly what each later step needs.
 
 Run these from the repo root, in order. None of them call a model or the network.
 
-1. **Repo checks** — structure, schemas, validator robustness:
+1. **Repo checks**: structure, schemas, validator robustness:
 
    ```bash
    uv run scripts/check_skill_structure.py
@@ -23,7 +23,7 @@ Run these from the repo root, in order. None of them call a model or the network
    uv run scripts/check_eval_cases.py   # expected to fail only for WIP skills with no cases
    ```
 
-2. **Eval dry run** — materializes every case into a temp workspace, prints the exact `pool`
+2. **Eval dry run**: materializes every case into a temp workspace, prints the exact `pool`
    commands a live run would use, and gold-replays each validator against its case's `expected/`
    gold:
 
@@ -31,13 +31,13 @@ Run these from the repo root, in order. None of them call a model or the network
    uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay
    ```
 
-3. **Optimizer smoke** — verifies the GEPA wiring without pool or API keys:
+3. **Optimizer smoke**: verifies the GEPA wiring without pool or API keys:
 
    ```bash
    uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
    ```
 
-4. **Review app on demo traces** — see what trace annotation looks like:
+4. **Review app on demo traces**: see what trace annotation looks like:
 
    ```bash
    uv run harness/review/extract_traces.py --demo
@@ -49,7 +49,7 @@ If all four work, your checkout is healthy and you understand the shape of the l
 ## Read one real skill end to end
 
 The abstract rules in [`authoring-guide.md`](authoring-guide.md) map onto a concrete example:
-read [`skills/ci-log-reducer/`](../skills/ci-log-reducer/) in authoring order —
+read [`skills/ci-log-reducer/`](../skills/ci-log-reducer/) in authoring order:
 `schemas/*.schema.json` first, then `scripts/validate_*.ts`, then one case folder under
 `evals/` (note the adversarial one), then `SKILL.md`. That order is Gate 1 of the two hard
 gates. For a skill that uses progressive-disclosure `references/`, see
@@ -57,7 +57,7 @@ gates. For a skill that uses progressive-disclosure `references/`, see
 
 ## Going live
 
-Live steps need credentials — see the matrix in [`concepts.md`](concepts.md).
+Live steps need credentials. See the matrix in [`concepts.md`](concepts.md).
 
 - **Live eval run** (`pool` auth): the root README's "Eval dry run" section covers
   `POOLSIDE_TOKEN` and `--api-url`; results land under `runs/`.
