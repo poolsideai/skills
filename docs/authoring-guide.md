@@ -6,6 +6,10 @@ with Plan A's fixed section template. Every publishable skill follows this guide
 
 Status: normative for v0 skill authors. Historical source notes live in the plan and investigation files, but this guide is the document to follow.
 
+Worked example: read [`skills/ci-log-reducer/`](../skills/ci-log-reducer/) end to end in authoring
+order (schema → validator → eval cases → `SKILL.md`); [`skills/laguna-task-contract/`](../skills/laguna-task-contract/)
+shows `references/` usage. A narrative walkthrough lives in [`getting-started.md`](getting-started.md).
+
 ---
 
 ## 1. The two hard gates

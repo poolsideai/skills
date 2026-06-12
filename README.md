@@ -2,6 +2,8 @@
 
 Validator-backed skills for Poolside's Laguna models, plus a small eval harness that tests whether a skill helps on its own cases.
 
+New here? [`docs/getting-started.md`](docs/getting-started.md) walks the loop offline first, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary (Laguna, arms, gold replay, GEPA, …).
+
 A skill in this repo is not just prompt text. A publishable skill has:
 
 - `SKILL.md` with clear trigger and boundary instructions.
@@ -212,13 +214,19 @@ schemas/common/          # shared JSON schemas
 evals/suites/            # suite definitions
 harness/                 # Python eval runner and review tools
 scripts/                 # repo checks and install helper
-docs/                    # authoring guide, eval method, plans, and spike notes
+docs/                    # docs index, getting started, authoring guide, eval method, plans, spikes
 ui/                      # local workbench
+plans/                   # workbench redesign implementation plans (done; see plans/README.md)
+experiments/             # spikes with their own setup, e.g. smithers-pool
+.resources/              # design handoff, investigations, and decision-register source material
 runs/                    # eval and review output, gitignored
 ```
 
 ## Authoring docs
 
+- [`docs/README.md`](docs/README.md): documentation index, organized by audience.
+- [`docs/getting-started.md`](docs/getting-started.md): first-session walkthrough, offline steps first.
+- [`docs/concepts.md`](docs/concepts.md): glossary and the offline-vs-credentials command matrix.
 - [`docs/authoring-guide.md`](docs/authoring-guide.md): binding skill authoring rules.
 - [`evals/README.md`](evals/README.md): case folder format and gold replay.
 - [`schemas/common/README.md`](schemas/common/README.md): shared schema contracts.
