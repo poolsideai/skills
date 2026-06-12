@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #0b1118; -webkit-font-smoothing: antialiased; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #dfe9f2; background: #0b1118; min-height: 100vh; padding: 0 0 120px 0;">
+
+  <!-- ============ HEADER ============ -->
+  <header data-screen-label="Header" style="max-width: 1140px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 40px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; background: #122433; color: #3ec6f2; border: 1px solid #1d3a4f; border-radius: 6px; padding: 5px 9px;">ps</span>
+      <span style="font-size: 14px; font-weight: 600; color: #9fb2c4;">poolside skills — UX review</span>
+      <span style="flex: 1;"></span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">round 1 of 2 · audit + IA + 3 directions</span>
+    </div>
+    <h1 style="font-size: 56px; line-height: 1.04; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 24px 0; max-width: 880px;">One substrate, three apps, zero paths: a UX audit of the skills workbench</h1>
+    <p style="font-size: 19px; line-height: 1.55; color: #9fb2c4; max-width: 760px; margin: 0 0 18px 0;">The data model is right — everything reduces to a trajectory record, and skill lift is measurable. But the UI fragments one mental model across three surfaces, buries both creation flows, and never offers the system's most basic verb: <em style="color: #dfe9f2; font-style: normal; font-weight: 600;">run a skill against a prompt, right now.</em></p>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a99a8; border: 1px solid #1d2a3a; border-radius: 999px; padding: 6px 12px;">audited: catalog :4319</span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a99a8; border: 1px solid #1d2a3a; border-radius: 999px; padding: 6px 12px;">workbench /workflows.html</span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a99a8; border: 1px solid #1d2a3a; border-radius: 999px; padding: 6px 12px;">review app :8901</span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a99a8; border: 1px solid #1d2a3a; border-radius: 999px; padding: 6px 12px;">ui/lib.ts · server.ts · bench.ts</span>
+    </div>
+  </header>
+
+  <!-- ============ TLDR ============ -->
+  <section data-screen-label="TLDR" style="max-width: 1140px; margin: 64px auto 0 auto; padding: 0 32px;">
+    <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 28px 32px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: #3ec6f2; margin-bottom: 18px;">TL;DR — FIVE CALLS</div>
+      <ol style="margin: 0; padding: 0 0 0 22px; display: grid; gap: 12px; font-size: 15.5px; line-height: 1.5; color: #c4d2de;">
+        <li><strong style="color: #dfe9f2;">Collapse to one app, four nouns.</strong> Skills · Workflows · Runs · Review, one theme, one nav. The catalog stays a public export of the same data, not a sibling app.</li>
+        <li><strong style="color: #dfe9f2;">One authoring surface, chat-driven.</strong> A single composer authors skills <em>and</em> workflows, iterates by rewriting, supports <span style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; color: #3ec6f2;">$skill</span> mentions, and hands you node-by-node manual control after generation.</li>
+        <li><strong style="color: #dfe9f2;">Add the missing primitive: the playground run.</strong> "Try this skill with a prompt" is the zero-to-first-success path and the cheapest trajectory producer. It doesn't exist today.</li>
+        <li><strong style="color: #dfe9f2;">One runs feed with facets, not three look-alike lists.</strong> Workflow runs, eval arm-runs, node evals, and playground runs are one record shape — show them as one feed, faceted by skill / workflow / arm / verdict, with the skill scorecard as its pivot.</li>
+        <li><strong style="color: #dfe9f2;">Make review a mode, not a second app.</strong> Deep-link any run row into a full-screen annotation mode; labels land in the skill's improvement queue — the seed of the DSPy/GEPA loop.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 01 CONCEPT MAP ============ -->
+  <section data-screen-label="01 Concept map" style="max-width: 1140px; margin: 88px auto 0 auto; padding: 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 12px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5d7186;">01</span>
+      <h2 style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">The mental model, stated once</h2>
+    </div>
+    <p style="font-size: 16px; line-height: 1.6; color: #9fb2c4; max-width: 760px; margin: 0 0 32px 0;">The confusion isn't that the concepts are complicated — it's that the UI never states them. Here is the whole domain in one sentence: <strong style="color: #dfe9f2;">a skill is a graded contract; a workflow is a graph of agent nodes that may install skills; every execution is a trajectory record; an eval is a graded record; review turns grades into improvements.</strong></p>
+
+    <!-- entity chain -->
+    <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 32px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #5d7186; margin-bottom: 22px;">THE NOUNS &amp; HOW THEY CONNECT</div>
+      <div style="display: flex; align-items: stretch; gap: 0; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 170px; background: #131e2c; border: 1px solid #25405a; border-radius: 10px; padding: 16px 18px;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3ec6f2; letter-spacing: 0.12em; margin-bottom: 8px;">SKILL</div>
+          <div style="font-size: 14px; line-height: 1.45; color: #c4d2de;">A contract: output schema + executable validator + eval cases. Exists to lift model outcomes.</div>
+        </div>
+        <div style="display: flex; align-items: center; padding: 0 10px; flex-direction: column; justify-content: center;">
+          <span style="color: #3ec6f2; font-size: 18px;">→</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 4px;">installs into</span>
+        </div>
+        <div style="flex: 1; min-width: 170px; background: #131e2c; border: 1px solid #25405a; border-radius: 10px; padding: 16px 18px;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3ec6f2; letter-spacing: 0.12em; margin-bottom: 8px;">NODE ⊂ WORKFLOW</div>
+          <div style="font-size: 14px; line-height: 1.45; color: #c4d2de;">One agent turn: a prompt + a model + 0…n skills. A workflow is a Smithers graph of these.</div>
+        </div>
+        <div style="display: flex; align-items: center; padding: 0 10px; flex-direction: column; justify-content: center;">
+          <span style="color: #3ec6f2; font-size: 18px;">→</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 4px;">executes as</span>
+        </div>
+        <div style="flex: 1; min-width: 170px; background: #131e2c; border: 1px solid #25405a; border-radius: 10px; padding: 16px 18px;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3ec6f2; letter-spacing: 0.12em; margin-bottom: 8px;">RUN</div>
+          <div style="font-size: 14px; line-height: 1.45; color: #c4d2de;">Any execution — workflow, eval arm, node trial, playground. All one record shape.</div>
+        </div>
+        <div style="display: flex; align-items: center; padding: 0 10px; flex-direction: column; justify-content: center;">
+          <span style="color: #3ec6f2; font-size: 18px;">→</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 4px;">graded by</span>
+        </div>
+        <div style="flex: 1; min-width: 170px; background: #131e2c; border: 1px solid #25405a; border-radius: 10px; padding: 16px 18px;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3ec6f2; letter-spacing: 0.12em; margin-bottom: 8px;">EVAL → LABEL</div>
+          <div style="font-size: 14px; line-height: 1.45; color: #c4d2de;">Validator grade (mechanical) + human label (review). Evidence the skill helped — or how it failed.</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px dashed #1d2a3a;">
+        <span style="color: #38c08a; font-size: 18px;">↩</span>
+        <span style="font-size: 14px; color: #9fb2c4;"><strong style="color: #38c08a;">The loop:</strong> failing grades and labels flow back into the skill — prompt tweaks, contract changes, new eval cases. That loop is the product (and the on-ramp to DSPy/GEPA-style automation later). Every screen should make the user's position in this loop obvious.</span>
+      </div>
+    </div>
+
+    <!-- producers diagram -->
+    <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 32px; margin-top: 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #5d7186; margin-bottom: 6px;">"AN EVAL IS BASICALLY ANY TRAJECTORY" — MAKE THE UI SAY SO</div>
+      <p style="font-size: 14.5px; line-height: 1.55; color: #9fb2c4; margin: 0 0 22px 0; max-width: 740px;">Four producers emit the same record. Today each producer gets its own list with its own styling and its own scroll position. They should be one feed — and the aggregated vs. disaggregated question (skill ran top-level vs. skill ran as a node inside a workflow) becomes a facet, not a separate section.</p>
+      <div style="display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0; align-items: center;">
+        <div style="display: grid; gap: 8px;">
+          <div style="background: #131e2c; border: 1px solid #243348; border-radius: 8px; padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">workflow run</div>
+          <div style="background: #131e2c; border: 1px solid #243348; border-radius: 8px; padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">eval arm-run <span style="color: #5d7186;">(suite × case × arm)</span></div>
+          <div style="background: #131e2c; border: 1px solid #243348; border-radius: 8px; padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">node-eval trial <span style="color: #5d7186;">(in-situ / standalone)</span></div>
+          <div style="background: #10202b; border: 1px dashed #2a6b54; border-radius: 8px; padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #38c08a;">playground run <span style="color: #2a6b54;">← missing today</span></div>
+        </div>
+        <div style="padding: 0 22px; color: #3ec6f2; font-size: 20px;">→</div>
+        <div style="background: #11263a; border: 1px solid #25516e; border-radius: 10px; padding: 20px 18px; text-align: center;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2; letter-spacing: 0.1em;">TRAJECTORY RECORD</div>
+          <div style="font-size: 13px; color: #8fa7ba; margin-top: 6px;">prompt · model · skills · workspace artifacts · tokens · timing</div>
+        </div>
+        <div style="padding: 0 22px; color: #3ec6f2; font-size: 20px;">→</div>
+        <div style="display: grid; gap: 8px;">
+          <div style="background: #131e2c; border: 1px solid #243348; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #c4d2de;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a;">grade</span> — validator pass/fail + checks</div>
+          <div style="background: #131e2c; border: 1px solid #243348; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #c4d2de;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #e8b13f;">label</span> — human pass/fail/defer + notes</div>
+          <div style="background: #131e2c; border: 1px solid #243348; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #c4d2de;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3ec6f2;">scorecard</span> — skill lift, with vs. without</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 AUDIT ============ -->
+  <section data-screen-label="02 Audit findings" style="max-width: 1140px; margin: 88px auto 0 auto; padding: 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 12px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5d7186;">02</span>
+      <h2 style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Audit — what's broken and why</h2>
+    </div>
+    <p style="font-size: 16px; line-height: 1.6; color: #9fb2c4; max-width: 760px; margin: 0 0 32px 0;">Eight findings, ordered by how much they block the core loop. Your own words are the acceptance test: <em>"I built the thing and I don't know how to just run a skill I already have with a prompt."</em></p>
+
+    <div style="display: grid; gap: 14px;">
+
+      <!-- F1 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #ff8a80; border: 1px solid #5c2622; background: #2a1412; border-radius: 5px; padding: 4px 8px;">HIGH</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F1 · cross-cutting</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">Three apps carry one mental model</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> Catalog (static, :4319), workbench (same port, different page), review app (:8901, entirely different light theme). Nav labels drift: the catalog's nav says <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">Workflows</span>, the workbench's says <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">Workbench</span>; "Evals" is an in-page anchor on one surface and a separate origin on another. The review app has no link back at all.</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> Users must understand your deployment topology (two ports, three documents) to navigate a single conceptual space. Every hop resets visual language, so nothing learned on one surface transfers. This is the root of "I can't keep the mental models clean" — the models are fine; the seams are arbitrary.</div>
+        </div>
+      </div>
+
+      <!-- F2 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #ff8a80; border: 1px solid #5c2622; background: #2a1412; border-radius: 5px; padding: 4px 8px;">HIGH</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F2 · authoring</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">Creation — the whole point — is buried and one-shot</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> Skill authoring is a collapsed <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">&lt;details&gt;</span> labeled "Author a new skill" at the bottom of the third sidebar panel. The workflow composer is a 5-row textarea in a ~280px column. Both are fire-and-forget: one generate click, one hidden repair round, no rendered output to inspect, no conversation, no per-node tweaking afterward. Everything downstream (runs, evals, the loop) depends on these two flows.</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> The system's strongest capability — model-assisted authoring with mechanical verification (<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">smithers graph</span>, <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">check_skill_structure.py</span>) — reads as an afterthought. And because generation is one-shot, the natural behavior ("that's close, now change node 2's prompt") has no home. Authoring should be a conversation that ends in an inspectable, editable artifact.</div>
+        </div>
+      </div>
+
+      <!-- F3 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #ff8a80; border: 1px solid #5c2622; background: #2a1412; border-radius: 5px; padding: 4px 8px;">HIGH</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F3 · missing primitive</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">"Run a skill with a prompt" does not exist</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> A skill can only be exercised through an eval suite (heavyweight, case-bound) or inside a workflow (requires authoring a graph first). There is no "try it now" anywhere — not on the workbench skills list, not on the catalog detail page (whose "Use this skill" panel offers <em>View source</em> and <em>Copy install command</em>).</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> This is the zero-to-first-success path for every new user (including you). It's also the cheapest trajectory producer for the eval flywheel: an interesting playground run should be promotable to an eval case in one click. The substrate already supports it — it's one `pool exec` with a skill installed.</div>
+        </div>
+      </div>
+
+      <!-- F4 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #ff8a80; border: 1px solid #5c2622; background: #2a1412; border-radius: 5px; padding: 4px 8px;">HIGH</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F4 · runs &amp; evals</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">Three look-alike run lists; the answer to "did the skill help?" is fine print</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> <em>Workflow runs</em>, <em>Evals</em>, and <em>Node evals</em> render as three stacked sections of nearly identical pill-rows; once you've scrolled, the only disambiguator (the heading) is off-screen. There's no grouping or filtering by skill or workflow — the exact pivots you asked for. Skill lift, the headline metric of the entire project, appears as sidebar fine print: <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #8fa7ba;">"evals — with skill: 0/1 (avg 0.857) · without: 1/1"</span>.</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> The taxonomy question you raised — top-level skill runs vs. skill-as-node-in-workflow runs, aggregated vs. disaggregated — is unanswerable in this layout because the dimension (skill) is spread across three sections instead of being a facet of one feed. The user is doing the JOIN in their head.</div>
+        </div>
+      </div>
+
+      <!-- F5 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #f0c674; border: 1px solid #54451f; background: #261f0e; border-radius: 5px; padding: 4px 8px;">MED</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F5 · workflow detail</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">The graph is a poster, not a surface</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> The projected graph shows node names and truncated descriptions, but nodes aren't clickable. A node's actual substance — its prompt, its model, its installed skills, its latest grade — is invisible and uneditable. Yet the node is precisely where skills and workflows meet, and per Smithers, each node <em>is</em> a prompt + model + skills.</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> "Skills feel disconnected from workflows" is this finding. The connection exists in the data (<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">PoolAgent { skill }</span>, pool captures, node-eval grades) but has no pixels. A node inspector — model select, prompt editor with <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #3ec6f2;">$skill</span> typeahead, grade chips — is the single highest-leverage missing component.</div>
+        </div>
+      </div>
+
+      <!-- F6 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #f0c674; border: 1px solid #54451f; background: #261f0e; border-radius: 5px; padding: 4px 8px;">MED</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F6 · review</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">Review is a dead end, and its plumbing is exposed as UI</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> "Sync workbench → review" makes the user run an ETL step by hand. "review traces ↗" opens trace 1-of-32 in a foreign app — not the failing run you were just looking at. Labels auto-save to <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">labels.json</span> and… stay there. Nothing routes a Fail label + note back to the skill it indicts.</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> You said evals exist <em>for skill improvement</em>. The improvement signal currently terminates in a JSON file. The review UI itself is genuinely good (keyboard-first, gold column, trajectory tree) — it's the connective tissue that's missing: deep-link in from any run row, route labels out to the skill's improvement queue.</div>
+        </div>
+      </div>
+
+      <!-- F7 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #f0c674; border: 1px solid #54451f; background: #261f0e; border-radius: 5px; padding: 4px 8px;">MED</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F7 · layout</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">One endless column; the sidebar does three jobs</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> The workbench stacks graph → runs → run detail → evals → node evals in a single ~5-screen scroll. The sidebar interleaves navigation (workflow list, skills list), creation (two generator forms), and status — three different jobs in one 280px column. Failing-check details dump full-width strings into list rows.</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> Position in the page becomes the only information scent, and it's unreliable ("Everything is one endless scroll"). Each job the sidebar does undermines the others: lists get cramped to make room for forms; forms feel minor because they're styled like list footers.</div>
+        </div>
+      </div>
+
+      <!-- F8 -->
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 30px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #9fb2c4; border: 1px solid #2a3a4d; background: #15202d; border-radius: 5px; padding: 4px 8px;">LOW</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">F8 · catalog</span>
+          <h3 style="font-size: 18px; font-weight: 600; margin: 0;">Catalog truth drifts from workbench truth</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; font-size: 14.5px; line-height: 1.6;">
+          <div style="color: #c4d2de;"><strong style="color: #dfe9f2;">Observed.</strong> The skill detail page hand-maintains "Eval status" numbers (and currently renders a stack of duplicate/skeleton Eval status panels). The workbench computes real per-arm scorecards from run manifests. Two sources of the same fact.</div>
+          <div style="color: #9fb2c4;"><strong style="color: #dfe9f2;">Why it hurts.</strong> Minor now; corrosive once open-sourced — the public page is the one that will be wrong. Fix falls out of the IA: the catalog becomes a build-time export of the same scorecard data, not a parallel authoring effort.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 03 PROPOSED IA ============ -->
+  <section data-screen-label="03 Proposed IA" style="max-width: 1140px; margin: 88px auto 0 auto; padding: 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 12px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5d7186;">03</span>
+      <h2 style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Proposed IA — contextual gravity</h2>
+    </div>
+    <p style="font-size: 16px; line-height: 1.6; color: #9fb2c4; max-width: 780px; margin: 0 0 32px 0;">Your instinct from the questionnaire is the organizing principle: <strong style="color: #dfe9f2;">wherever you stand, the other nouns arrange themselves around you.</strong> Four top-level sections, and every entity page answers three questions — what is this, how has it performed, and what can I do with it from here.</p>
+
+    <!-- sitemap current vs proposed -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 26px 28px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #ff8a80; margin-bottom: 18px;">TODAY — TOPOLOGY AS NAVIGATION</div>
+        <div style="display: grid; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px;">
+          <div style="border: 1px solid #243348; border-radius: 8px; padding: 12px 14px; color: #c4d2de;">:4319/index.html <span style="color: #5d7186;">— static catalog (own data)</span></div>
+          <div style="border: 1px solid #243348; border-radius: 8px; padding: 12px 14px; color: #c4d2de;">:4319/workflows.html <span style="color: #5d7186;">— everything else, one scroll</span>
+            <div style="margin-top: 8px; padding-left: 14px; display: grid; gap: 5px; color: #8fa7ba; font-size: 12px;">
+              <div>├ workflows + composer <span style="color: #5d7186;">(sidebar)</span></div>
+              <div>├ skills + author-a-skill <span style="color: #5d7186;">(collapsed)</span></div>
+              <div>├ graph <span style="color: #5d7186;">(read-only)</span></div>
+              <div>├ workflow runs / evals / node evals <span style="color: #5d7186;">(3 lists)</span></div>
+            </div>
+          </div>
+          <div style="border: 1px solid #243348; border-radius: 8px; padding: 12px 14px; color: #c4d2de;">:8901 <span style="color: #5d7186;">— review app (light theme, no way back)</span></div>
+        </div>
+      </div>
+      <div style="background: #0f1722; border: 1px solid #1d3a4f; border-radius: 14px; padding: 26px 28px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #3ec6f2; margin-bottom: 18px;">PROPOSED — ONE APP, FOUR NOUNS</div>
+        <div style="display: grid; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px;">
+          <div style="border: 1px solid #25405a; border-radius: 8px; padding: 12px 14px; color: #c4d2de;">Skills <span style="color: #5d7186;">— library → skill page: scorecard · try it · runs · improve</span></div>
+          <div style="border: 1px solid #25405a; border-radius: 8px; padding: 12px 14px; color: #c4d2de;">Workflows <span style="color: #5d7186;">— list → canvas: editable graph · node inspector · its runs</span></div>
+          <div style="border: 1px solid #25405a; border-radius: 8px; padding: 12px 14px; color: #c4d2de;">Runs <span style="color: #5d7186;">— one feed, faceted: type · skill · workflow · arm · verdict</span></div>
+          <div style="border: 1px solid #25405a; border-radius: 8px; padding: 12px 14px; color: #c4d2de;">Review <span style="color: #5d7186;">— annotation as a full-screen mode, deep-linked from any run</span></div>
+          <div style="border: 1px dashed #2a6b54; border-radius: 8px; padding: 12px 14px; color: #38c08a;">+ New (⌘K) <span style="color: #2a6b54;">— one chat composer: skill | workflow, from anywhere</span></div>
+          <div style="border: 1px dashed #2c3d54; border-radius: 8px; padding: 12px 14px; color: #8fa7ba;">Catalog <span style="color: #5d7186;">— public build-time export of the same data</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- contextual gravity matrix -->
+    <div style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 30px; margin-top: 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #5d7186; margin-bottom: 22px;">THE CONTEXTUAL-GRAVITY MATRIX — WHAT ORBITS WHAT</div>
+      <div style="display: grid; grid-template-columns: 130px 1fr 1fr 1fr; gap: 0; font-size: 13.5px; line-height: 1.5;">
+        <div style="padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; color: #5d7186; border-bottom: 1px solid #1d2a3a;">YOU ARE AT…</div>
+        <div style="padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; color: #5d7186; border-bottom: 1px solid #1d2a3a;">THE PRIMARY WORK</div>
+        <div style="padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; color: #5d7186; border-bottom: 1px solid #1d2a3a;">ONE CLICK AWAY</div>
+        <div style="padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; color: #5d7186; border-bottom: 1px solid #1d2a3a;">CREATE FROM HERE</div>
+
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #3ec6f2; font-weight: 600;">A skill</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #c4d2de;">Read the contract; see the scorecard (with vs. without, top-level vs. in-workflow, split <em>and</em> aggregated); iterate via chat.</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #9fb2c4;">Every run that touched it, grouped by producer; workflows that install it; its failing labels.</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #9fb2c4;"><strong style="color: #38c08a;">Try it now</strong> (playground) · add to an existing workflow's node · new workflow seeded with this skill · new eval case from a run.</div>
+
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #3ec6f2; font-weight: 600;">A workflow</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #c4d2de;">The canvas: editable graph; click a node → inspector (prompt, model, skills with <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px;">$</span>-typeahead); chat agent rewrites the TSX, diff shown.</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #9fb2c4;">This workflow's runs; per-node grade history; the skills its nodes install (jump to skill page).</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #9fb2c4;">Run it · add node (manually or via chat) · promote a node to a standalone eval subject.</div>
+
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #3ec6f2; font-weight: 600;">A run</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #c4d2de;">The trajectory: nodes/steps, artifacts, validator checks, tokens. Same renderer for all four producers.</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #9fb2c4;">Its skill(s) and workflow; sibling arms of the same case (with ↔ without); the previous run of the same thing.</div>
+        <div style="padding: 16px 14px; border-bottom: 1px solid #16202e; color: #9fb2c4;"><strong style="color: #e8b13f;">Review &amp; label</strong> (full-screen mode) · re-run · promote to eval case.</div>
+
+        <div style="padding: 16px 14px; color: #3ec6f2; font-weight: 600;">Review mode</div>
+        <div style="padding: 16px 14px; color: #c4d2de;">Keyboard-first labeling exactly as today: gold column, trajectory tree, pass/fail/defer + notes.</div>
+        <div style="padding: 16px 14px; color: #9fb2c4;">Next/prev unlabeled in the current facet (e.g. "fails for ci-log-reducer"), not a global 1-of-32.</div>
+        <div style="padding: 16px 14px; color: #9fb2c4;">Label routes to the skill's <strong style="color: #dfe9f2;">improvement queue</strong> — the staging area for prompt-optimization, and later DSPy/GEPA.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 DIRECTIONS ============ -->
+  <section data-screen-label="04 Three directions" style="max-width: 1140px; margin: 88px auto 0 auto; padding: 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 12px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5d7186;">04</span>
+      <h2 style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Three quick directions</h2>
+    </div>
+    <p style="font-size: 16px; line-height: 1.6; color: #9fb2c4; max-width: 780px; margin: 0 0 32px 0;">All three assume the IA above (one app, four nouns, one composer). They differ in <strong style="color: #dfe9f2;">what the home surface is</strong> — which determines what feels primary. Wireframe fidelity on purpose; pick one and I develop it hi-fi.</p>
+
+    <!-- DIRECTION A -->
+    <div data-screen-label="Direction A" style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 30px; margin-bottom: 18px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #0b1118; background: #3ec6f2; border-radius: 6px; padding: 4px 10px;">A</span>
+        <h3 style="font-size: 21px; font-weight: 700; margin: 0;">Library &amp; Studio</h3>
+        <span style="font-size: 13.5px; color: #5d7186;">entity-first · the skill page is home</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: start;">
+        <!-- wireframe A -->
+        <div style="background: #0b1219; border: 1px solid #1d2a3a; border-radius: 10px; padding: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #111b27; border: 1px solid #1d2a3a; border-radius: 7px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #3ec6f2;">ps</span>
+            <span style="display: flex; gap: 4px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #0b1118; background: #3ec6f2; border-radius: 4px; padding: 3px 7px;">Skills</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 3px 7px;">Workflows</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 3px 7px;">Runs</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 3px 7px;">Review</span>
+            </span>
+            <span style="flex: 1;"></span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #38c08a; border: 1px dashed #2a6b54; border-radius: 4px; padding: 3px 8px;">+ New ⌘K</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 95px 1fr 120px; gap: 10px; margin-top: 10px;">
+            <div style="display: grid; gap: 6px; align-content: start;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #5d7186; padding: 2px 4px;">SKILLS</div>
+              <div style="background: #15212f; border: 1px solid #2b3e57; border-radius: 5px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #dfe9f2;">ci-log-reducer</div>
+              <div style="border: 1px solid #1d2a3a; border-radius: 5px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #5d7186;">task-contract</div>
+              <div style="border: 1px solid #1d2a3a; border-radius: 5px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #5d7186;">repo-map</div>
+              <div style="border: 1px solid #1d2a3a; border-radius: 5px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #5d7186;">ws-inventory</div>
+            </div>
+            <div style="display: grid; gap: 8px; align-content: start;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 15px; font-weight: 700; color: #dfe9f2;">ci-log-reducer</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #38c08a;">lift +18%</span>
+              </div>
+              <div style="display: flex; gap: 5px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #0b1118; background: #8fa7ba; border-radius: 4px; padding: 2px 7px;">Overview</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 2px 7px;">Runs 14</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 2px 7px;">Workflows 3</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #e8b13f; border: 1px solid #54451f; border-radius: 4px; padding: 2px 7px;">Improve 2</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+                <div style="border: 1px solid #243348; border-radius: 6px; padding: 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba;">with skill<br><span style="font-size: 12px; color: #38c08a;">6/7</span></div>
+                <div style="border: 1px solid #243348; border-radius: 6px; padding: 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba;">without<br><span style="font-size: 12px; color: #ff8a80;">3/7</span></div>
+                <div style="border: 1px solid #243348; border-radius: 6px; padding: 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba;">in-workflow<br><span style="font-size: 12px; color: #38c08a;">4/4</span></div>
+              </div>
+              <div style="border: 1px dashed #2c3d54; border-radius: 6px; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #5d7186;">contract · schema · validator · eval cases</div>
+            </div>
+            <div style="display: grid; gap: 6px; align-content: start;">
+              <div style="background: #10202b; border: 1px dashed #2a6b54; border-radius: 6px; padding: 8px;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #38c08a; margin-bottom: 5px;">TRY IT NOW</div>
+                <div style="border: 1px solid #1f3b30; border-radius: 4px; padding: 6px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5d7186;">paste a prompt…</div>
+                <div style="margin-top: 5px; background: #38c08a; color: #0b1118; border-radius: 4px; padding: 4px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; font-weight: 700;">Run</div>
+              </div>
+              <div style="border: 1px solid #243348; border-radius: 6px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba;">+ add to workflow…</div>
+              <div style="border: 1px solid #243348; border-radius: 6px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba;">↻ iterate via chat</div>
+            </div>
+          </div>
+        </div>
+        <!-- rationale A -->
+        <div style="font-size: 14.5px; line-height: 1.6; color: #c4d2de;">
+          <p style="margin: 0 0 14px 0;">Top nav = the four nouns. Each section is list → detail. The skill page is the richest surface: scorecard up top (with/without × top-level/in-workflow, aggregated and split), tabs for its runs and workflows, and a persistent <strong style="color: #38c08a;">Try it now</strong> panel — F3 solved as furniture, present on every skill.</p>
+          <p style="margin: 0 0 14px 0;"><strong style="color: #dfe9f2;">Nails:</strong> discoverability, the aggregation question, zero-to-first-success, open-source legibility (it reads like a familiar library + detail app).</p>
+          <p style="margin: 0;"><strong style="color: #dfe9f2;">Tradeoff:</strong> the workflow canvas and the loop are one level down — authoring feels like a feature of a section rather than the center of the product.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIRECTION B -->
+    <div data-screen-label="Direction B" style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 30px; margin-bottom: 18px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #0b1118; background: #e8b13f; border-radius: 6px; padding: 4px 10px;">B</span>
+        <h3 style="font-size: 21px; font-weight: 700; margin: 0;">The Loop</h3>
+        <span style="font-size: 13.5px; color: #5d7186;">eval-first · the scorecard is home, the loop is the chrome</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: start;">
+        <!-- wireframe B -->
+        <div style="background: #0b1219; border: 1px solid #1d2a3a; border-radius: 10px; padding: 14px;">
+          <div style="display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: #111b27; border: 1px solid #1d2a3a; border-radius: 7px; justify-content: center;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #0b1118; background: #e8b13f; border-radius: 4px; padding: 3px 8px;">1 Author</span>
+            <span style="color: #5d7186; font-size: 10px;">→</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 3px 8px;">2 Run</span>
+            <span style="color: #5d7186; font-size: 10px;">→</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 3px 8px;">3 Grade</span>
+            <span style="color: #5d7186; font-size: 10px;">→</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 3px 8px;">4 Review</span>
+            <span style="color: #5d7186; font-size: 10px;">→</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba; border: 1px solid #243348; border-radius: 4px; padding: 3px 8px;">5 Improve</span>
+            <span style="color: #38c08a; font-size: 10px;">↩</span>
+          </div>
+          <div style="margin-top: 10px; display: grid; gap: 8px;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #5d7186;">SKILL SCORECARD — sorted by weakest lift</div>
+            <div style="display: grid; grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr 1fr; gap: 6px; align-items: center; border: 1px solid #243348; border-radius: 6px; padding: 8px 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #dfe9f2;">task-contract</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #ff8a80;">lift −2%</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba;">0/2 pass</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #e8b13f;">2 unlabeled</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #38c08a; text-align: right;">→ review fails</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr 1fr; gap: 6px; align-items: center; border: 1px solid #243348; border-radius: 6px; padding: 8px 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #dfe9f2;">ci-log-reducer</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #38c08a;">lift +18%</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba;">6/7 pass</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8fa7ba;">labeled ✓</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #5d7186; text-align: right;">→ suggest tweaks</span>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #5d7186; margin-top: 4px;">ALL RUNS — one feed</div>
+            <div style="display: flex; gap: 4px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #3ec6f2; border: 1px solid #1d3a4f; border-radius: 999px; padding: 2px 7px;">type: any ▾</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #3ec6f2; border: 1px solid #1d3a4f; border-radius: 999px; padding: 2px 7px;">skill: ci-log-reducer ✕</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba; border: 1px solid #243348; border-radius: 999px; padding: 2px 7px;">workflow ▾</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba; border: 1px solid #243348; border-radius: 999px; padding: 2px 7px;">verdict ▾</span>
+            </div>
+            <div style="display: grid; gap: 5px;">
+              <div style="display: flex; gap: 8px; align-items: center; border: 1px solid #1d2a3a; border-radius: 6px; padding: 7px 10px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #ff8a80; border: 1px solid #5c2622; border-radius: 999px; padding: 1px 6px;">fail</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #c4d2de;">eval · pytest-single-failure · xs_with_skill</span><span style="flex: 1;"></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #e8b13f;">review →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center; border: 1px solid #1d2a3a; border-radius: 6px; padding: 7px 10px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #38c08a; border: 1px solid #1f3b30; border-radius: 999px; padding: 1px 6px;">pass</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #c4d2de;">workflow · code-review-ben · node repo_map</span><span style="flex: 1;"></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5d7186;">open →</span></div>
+              <div style="display: flex; gap: 8px; align-items: center; border: 1px solid #1d2a3a; border-radius: 6px; padding: 7px 10px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #38c08a; border: 1px solid #1f3b30; border-radius: 999px; padding: 1px 6px;">pass</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #c4d2de;">playground · "summarize this CI log" · xs.2</span><span style="flex: 1;"></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #3ec6f2;">+ make eval case</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- rationale B -->
+        <div style="font-size: 14.5px; line-height: 1.6; color: #c4d2de;">
+          <p style="margin: 0 0 14px 0;">The improvement loop becomes literal chrome: a persistent five-stage stepper, and the home page is the <strong style="color: #dfe9f2;">skill scorecard sorted by weakest lift</strong> — the system tells you where to spend attention. Below it, the unified runs feed with facet chips; every fail row deep-links into review mode; every interesting playground run offers "make this an eval case."</p>
+          <p style="margin: 0 0 14px 0;"><strong style="color: #dfe9f2;">Nails:</strong> your stated priority ("evals exist for skill improvement"), the F4 taxonomy mess, the path toward DSPy/GEPA — stage 5 is a placeholder the automation grows into.</p>
+          <p style="margin: 0;"><strong style="color: #dfe9f2;">Tradeoff:</strong> entity pages (skill contract, workflow canvas) are subordinate; browsing/authoring-first sessions fight the chrome. Riskier to make legible for open-source newcomers.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIRECTION C -->
+    <div data-screen-label="Direction C" style="background: #0f1722; border: 1px solid #1d2a3a; border-radius: 14px; padding: 30px; margin-bottom: 18px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #0b1118; background: #38c08a; border-radius: 6px; padding: 4px 10px;">C</span>
+        <h3 style="font-size: 21px; font-weight: 700; margin: 0;">Canvas</h3>
+        <span style="font-size: 13.5px; color: #5d7186;">authoring-first · the workflow graph is home, chat is the pen</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: start;">
+        <!-- wireframe C -->
+        <div style="background: #0b1219; border: 1px solid #1d2a3a; border-radius: 10px; padding: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 140px; gap: 10px;">
+            <div style="position: relative; border: 1px dashed #243348; border-radius: 8px; padding: 14px; min-height: 200px;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5d7186; position: absolute; top: 6px; left: 8px;">CANVAS — code-review-ben</div>
+              <div style="display: flex; align-items: center; gap: 6px; margin-top: 16px;">
+                <div style="background: #15212f; border: 1px solid #243348; border-radius: 6px; padding: 7px 9px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #dfe9f2;">diff_intake</div><div style="font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #38c08a; margin-top: 2px;">● pass</div></div>
+                <span style="color: #5d7186; font-size: 10px;">→</span>
+                <div style="background: #16283b; border: 1.5px solid #3ec6f2; border-radius: 6px; padding: 7px 9px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #dfe9f2;">correctness</div><div style="font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #3ec6f2; margin-top: 2px;">$repo-map</div></div>
+                <span style="color: #5d7186; font-size: 10px;">→</span>
+                <div style="background: #15212f; border: 1px solid #243348; border-radius: 6px; padding: 7px 9px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #dfe9f2;">fanin</div><div style="font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #e8b13f; margin-top: 2px;">● ungraded</div></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px; margin-top: 10px; margin-left: 60px;">
+                <div style="background: #15212f; border: 1px solid #243348; border-radius: 6px; padding: 7px 9px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #dfe9f2;">security</div><div style="font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #38c08a; margin-top: 2px;">● pass</div></div>
+                <div style="border: 1px dashed #2c3d54; border-radius: 6px; padding: 7px 9px; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: #5d7186;">+ add node</div>
+              </div>
+              <div style="position: absolute; left: 10px; right: 10px; bottom: 10px; background: #10202b; border: 1px solid #2a6b54; border-radius: 6px; padding: 7px 9px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #38c08a;">chat ▸ "add a maintainability reviewer in parallel, give it $repo-map"</div>
+            </div>
+            <div style="display: grid; gap: 6px; align-content: start;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #3ec6f2;">NODE — correctness</div>
+              <div style="border: 1px solid #243348; border-radius: 5px; padding: 6px 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba;">model: laguna-xs.2 ▾</div>
+              <div style="border: 1px solid #243348; border-radius: 5px; padding: 6px 8px 14px 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5d7186;">prompt… edit ✎</div>
+              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #3ec6f2; border: 1px solid #1d3a4f; border-radius: 999px; padding: 2px 6px;">$repo-map ✕</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #5d7186; border: 1px dashed #2c3d54; border-radius: 999px; padding: 2px 6px;">$ add skill…</span>
+              </div>
+              <div style="border: 1px solid #243348; border-radius: 5px; padding: 6px 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8fa7ba;">grades: 3/3 standalone ↗</div>
+            </div>
+          </div>
+        </div>
+        <!-- rationale C -->
+        <div style="font-size: 14.5px; line-height: 1.6; color: #c4d2de;">
+          <p style="margin: 0 0 14px 0;">The graph stops being a poster. Home is the canvas of the selected workflow: nodes are clickable, the <strong style="color: #dfe9f2;">node inspector</strong> exposes exactly the Smithers trinity (model · prompt · skills, with <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #3ec6f2;">$</span>-typeahead), and the docked chat rewrites the TSX with a visible diff. Skills are a palette; a "skill alone" is just a one-node workflow — which quietly unifies playground runs with workflow runs.</p>
+          <p style="margin: 0 0 14px 0;"><strong style="color: #dfe9f2;">Nails:</strong> F2 + F5 head-on; "skills disconnected from workflows" disappears because the join (the node) is the primary surface; per-node grade badges put evals in your peripheral vision while authoring.</p>
+          <p style="margin: 0;"><strong style="color: #dfe9f2;">Tradeoff:</strong> heaviest build; eval depth (suites, scorecards, review) lives in panels and can feel secondary; canvas UIs punish small screens.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 RECOMMENDATION ============ -->
+  <section data-screen-label="05 Recommendation" style="max-width: 1140px; margin: 88px auto 0 auto; padding: 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 12px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5d7186;">05</span>
+      <h2 style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Recommendation</h2>
+    </div>
+    <div style="background: #0f1722; border: 1px solid #1d3a4f; border-radius: 14px; padding: 30px 34px;">
+      <p style="font-size: 16.5px; line-height: 1.65; color: #c4d2de; margin: 0 0 16px 0; max-width: 860px;"><strong style="color: #3ec6f2;">A as the backbone, C as the Workflows section, B's scorecard as the Runs home.</strong> These aren't really competing apps — they're competing answers to "what is home." A's entity-first nav is the only one that stays legible for open-source newcomers <em>and</em> gives every noun a stable address. Then the two genuinely novel surfaces slot in where they belong: the Canvas (C) <em>is</em> the workflow detail page, and the Loop scorecard (B) <em>is</em> the Runs landing view. One composer (⌘K) serves all of it.</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #9fb2c4; margin: 0; max-width: 860px;">If you'd rather commit to a pure direction, pick <strong style="color: #dfe9f2;">C</strong> — it attacks your two worst pains (creation, skill↔workflow disconnect) most directly. But say the word and round 2 is hi-fi screens of the hybrid: Skills page with Try-it panel, Workflow canvas with node inspector + chat, unified Runs feed + scorecard, and Review as a themed full-screen mode.</p>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #07090d; -webkit-font-smoothing: antialiased; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #dfe9f2; background: #07090d; min-height: 100vh; padding: 56px 0 140px 0;">
+
+  <!-- ====== DOC HEADER ====== -->
+  <header style="max-width: 1620px; margin: 0 auto 14px auto; padding: 0 40px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <h1 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Workbench hi-fi — round 2</h1>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5d7186;">canvas-first workflows · loop beneath · skills as their own surface</span>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; max-width: 1100px;">
+      <span style="font-size: 13px; color: #9fb2c4; border: 1px solid #1d2a3a; border-radius: 999px; padding: 7px 14px;">Workflows own authoring; the node inspector gets real room</span>
+      <span style="font-size: 13px; color: #9fb2c4; border: 1px solid #1d2a3a; border-radius: 999px; padding: 7px 14px;">Runs sit directly under the canvas, newest first, accordion detail</span>
+      <span style="font-size: 13px; color: #9fb2c4; border: 1px solid #1d2a3a; border-radius: 999px; padding: 7px 14px;">Skills edited on their own page — improved by evidence, not inline edits</span>
+    </div>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 01 — WORKFLOW CANVAS                                   -->
+  <!-- ============================================================ -->
+  <section data-screen-label="01 Workflow canvas" style="max-width: 1620px; margin: 48px auto 0 auto; padding: 0 40px; overflow-x: auto;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">01</span>
+      <h2 style="font-size: 19px; font-weight: 600; margin: 0;">Workflow canvas — node selected</h2>
+      <span style="font-size: 13px; color: #5d7186;">the authoring home · inspector = model + prompt + skills + how it's performing</span>
+    </div>
+
+    <div style="background: #0b1118; border: 1px solid #1c2735; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); min-width: 1480px;">
+
+      <!-- app top bar -->
+      <div style="display: flex; align-items: center; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #161f2c; background: #0c131c;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; background: #122433; color: #3ec6f2; border: 1px solid #1d3a4f; border-radius: 4px; padding: 4px 7px;">ps</span>
+          <span style="font-size: 14px; font-weight: 600;">Poolside Skills</span>
+        </span>
+        <nav style="display: flex; gap: 4px; margin-left: 20px;">
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Skills</span>
+          <span style="font-size: 13px; color: #dfe9f2; font-weight: 600; padding: 7px 14px; border-radius: 3px; background: #15212f; border: 1px solid #243348;">Workflows</span>
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Runs</span>
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Review</span>
+        </nav>
+        <span style="flex: 1;"></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #5d7186;">project: smithers-pool ▾</span>
+        <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #0b1118; background: #3ec6f2; border-radius: 4px; padding: 8px 16px;">+ New <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 400; opacity: 0.75;">⌘K</span></span>
+      </div>
+
+      <!-- workflow header -->
+      <div style="display: flex; align-items: center; gap: 14px; padding: 16px 24px; border-bottom: 1px solid #161f2c;">
+        <span style="font-size: 13px; color: #5d7186;">Workflows /</span>
+        <span style="font-size: 17px; font-weight: 700;">code-review-ben</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">.smithers/workflows/code-review-ben.tsx</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #38c08a; border: 1px solid #1a2e26; background: #10202b; border-radius: 999px; padding: 3px 10px;">graph verified</span>
+        <span style="flex: 1;"></span>
+        <span style="font-size: 13px; color: #9fb2c4; border: 1px solid #1c2c3e; border-radius: 3px; padding: 8px 14px;">View TSX</span>
+        <span style="font-size: 13.5px; font-weight: 700; color: #0b1118; background: #3ec6f2; border-radius: 3px; padding: 8px 18px;">▶ Run workflow</span>
+      </div>
+
+      <!-- canvas + inspector -->
+      <div style="display: grid; grid-template-columns: 1fr 470px; gap: 0;">
+
+        <!-- CANVAS -->
+        <div style="position: relative; min-height: 600px; background: radial-gradient(circle at 1px 1px, #141d29 1px, transparent 0); background-size: 26px 26px; background-color: #0a0f16; border-right: 1px solid #161f2c; overflow: hidden;">
+          <div style="position: relative; width: 980px; height: 600px;">
+            <svg width="980" height="600" viewBox="0 0 980 600" style="position: absolute; inset: 0;">
+              <line x1="218" y1="300" x2="300" y2="140" stroke="#2c3d54" stroke-width="1.5"></line>
+              <line x1="218" y1="300" x2="300" y2="300" stroke="#3ec6f2" stroke-width="1.5"></line>
+              <line x1="218" y1="300" x2="300" y2="460" stroke="#2c3d54" stroke-width="1.5"></line>
+              <line x1="478" y1="140" x2="568" y2="300" stroke="#2c3d54" stroke-width="1.5"></line>
+              <line x1="478" y1="300" x2="568" y2="300" stroke="#3ec6f2" stroke-width="1.5"></line>
+              <line x1="478" y1="460" x2="568" y2="300" stroke="#2c3d54" stroke-width="1.5"></line>
+              <line x1="746" y1="300" x2="790" y2="300" stroke="#2c3d54" stroke-width="1.5"></line>
+            </svg>
+
+            <!-- diff_intake -->
+            <div style="position: absolute; left: 40px; top: 264px; width: 178px; background: #121b27; border: 1px solid #1c2c3e; border-radius: 4px; padding: 12px 14px;">
+              <div style="display: flex; align-items: center; gap: 7px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #dfe9f2;">diff_intake</span>
+                <span style="flex: 1;"></span>
+                <span style="width: 7px; height: 7px; border-radius: 999px; background: #38c08a;"></span>
+              </div>
+              <div style="font-size: 11px; color: #7d91a4; margin-top: 5px; line-height: 1.4;">Normalize incoming diff</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 7px;">xs.2 · no skill</div>
+            </div>
+
+            <!-- correctness (selected) -->
+            <div style="position: absolute; left: 300px; top: 256px; width: 178px; background: #13273a; border: 2px solid #3ec6f2; border-radius: 4px; padding: 12px 14px; box-shadow: 0 0 0 4px rgba(62,198,242,0.10), 0 12px 36px rgba(0,0,0,0.45);">
+              <div style="display: flex; align-items: center; gap: 7px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffffff;">correctness_review</span>
+                <span style="flex: 1;"></span>
+                <span style="width: 7px; height: 7px; border-radius: 999px; background: #38c08a;"></span>
+              </div>
+              <div style="font-size: 11px; color: #9db4c9; margin-top: 5px; line-height: 1.4;">Review diff for correctness</div>
+              <div style="display: flex; gap: 5px; margin-top: 8px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #3ec6f2; border: 1px solid #1d4a63; background: #0f2433; border-radius: 999px; padding: 2px 8px;">$repo-map</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186;">xs.2</span>
+              </div>
+            </div>
+
+            <!-- security -->
+            <div style="position: absolute; left: 300px; top: 100px; width: 178px; background: #121b27; border: 1px solid #1c2c3e; border-radius: 4px; padding: 12px 14px;">
+              <div style="display: flex; align-items: center; gap: 7px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #dfe9f2;">security_review</span>
+                <span style="flex: 1;"></span>
+                <span style="width: 7px; height: 7px; border-radius: 999px; background: #38c08a;"></span>
+              </div>
+              <div style="font-size: 11px; color: #7d91a4; margin-top: 5px; line-height: 1.4;">Review diff for security</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 7px;">xs.2 · no skill</div>
+            </div>
+
+            <!-- maintainability -->
+            <div style="position: absolute; left: 300px; top: 420px; width: 178px; background: #121b27; border: 1px solid #1c2c3e; border-radius: 4px; padding: 12px 14px;">
+              <div style="display: flex; align-items: center; gap: 7px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #dfe9f2;">maintainability</span>
+                <span style="flex: 1;"></span>
+                <span style="width: 7px; height: 7px; border-radius: 999px; background: #e8b13f;"></span>
+              </div>
+              <div style="font-size: 11px; color: #7d91a4; margin-top: 5px; line-height: 1.4;">Review diff for maintainability</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 7px;">xs.2 · no skill</div>
+            </div>
+
+            <!-- fanin -->
+            <div style="position: absolute; left: 568px; top: 264px; width: 178px; background: #121b27; border: 1px solid #1c2c3e; border-radius: 4px; padding: 12px 14px;">
+              <div style="display: flex; align-items: center; gap: 7px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #dfe9f2;">review_fanin</span>
+                <span style="flex: 1;"></span>
+                <span style="width: 7px; height: 7px; border-radius: 999px; background: #38c08a;"></span>
+              </div>
+              <div style="font-size: 11px; color: #7d91a4; margin-top: 5px; line-height: 1.4;">Merge review findings</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 7px;">m.1 · no skill</div>
+            </div>
+
+            <!-- final -->
+            <div style="position: absolute; left: 790px; top: 264px; width: 168px; background: #121b27; border: 1px solid #1c2c3e; border-radius: 4px; padding: 12px 14px;">
+              <div style="display: flex; align-items: center; gap: 7px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #dfe9f2;">final_synthesis</span>
+                <span style="flex: 1;"></span>
+                <span style="width: 7px; height: 7px; border-radius: 999px; background: #38c08a;"></span>
+              </div>
+              <div style="font-size: 11px; color: #7d91a4; margin-top: 5px; line-height: 1.4;">Synthesize final review</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #5d7186; margin-top: 7px;">m.1 · no skill</div>
+            </div>
+
+            <!-- add node ghost -->
+            <div style="position: absolute; left: 568px; top: 420px; width: 130px; border: 1.5px dashed #2c3d54; border-radius: 4px; padding: 14px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">+ add node</div>
+
+            <!-- chat dock -->
+            <div style="position: absolute; left: 24px; right: 24px; bottom: 20px; display: flex; align-items: center; gap: 12px; background: #0e1822; border: 1px solid #25516e; border-radius: 5px; padding: 13px 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">✦</span>
+              <span style="font-size: 13.5px; color: #6e859b; flex: 1;">Describe a change — "add a maintainability reviewer in parallel and give it <span style="color: #3ec6f2;">$repo-map</span>" — the model rewrites the TSX, you review the diff</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186; border: 1px solid #243348; border-radius: 3px; padding: 3px 7px;">$ skill</span>
+              <span style="font-size: 12.5px; font-weight: 700; color: #0b1118; background: #3ec6f2; border-radius: 3px; padding: 7px 14px;">Send</span>
+            </div>
+
+            <!-- zoom controls -->
+            <div style="position: absolute; right: 18px; top: 16px; display: flex; gap: 6px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8fa7ba; border: 1px solid #1c2c3e; background: #0e1620; border-radius: 3px; padding: 4px 9px;">−</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186; border: 1px solid #1c2c3e; background: #0e1620; border-radius: 3px; padding: 4px 9px;">100%</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8fa7ba; border: 1px solid #1c2c3e; background: #0e1620; border-radius: 3px; padding: 4px 9px;">+</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- INSPECTOR -->
+        <div style="background: #0d141d; padding: 22px 24px 26px 24px; display: grid; gap: 18px; align-content: start;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #ffffff;">correctness_review</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5d7186; border: 1px solid #1c2c3e; border-radius: 999px; padding: 2px 9px;">agent node</span>
+            <span style="flex: 1;"></span>
+            <span style="font-size: 15px; color: #5d7186;">✕</span>
+          </div>
+
+          <!-- model -->
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #5d7186; margin-bottom: 8px;">MODEL</div>
+            <div style="display: flex; align-items: center; gap: 10px; background: #0f1a26; border: 1px solid #1c2c3e; border-radius: 3px; padding: 11px 14px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #dfe9f2;">laguna-xs.2</span>
+              <span style="font-size: 11px; color: #5d7186;">worker · 256k ctx</span>
+              <span style="flex: 1;"></span>
+              <span style="color: #5d7186; font-size: 11px;">▾</span>
+            </div>
+          </div>
+
+          <!-- prompt -->
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #5d7186;">PROMPT</span>
+              <span style="flex: 1;"></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #3ec6f2;">⤢ expand</span>
+            </div>
+            <div style="background: #0f1a26; border: 1px solid #1c2c3e; border-radius: 3px; padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.65; color: #b9c9d8;">Review the normalized diff from <span style="color: #e8b13f;">{ctx.latest(outputs.diff, "diff_intake")}</span> for correctness only. Use the repo map at <span style="color: #3ec6f2;">.laguna/repo-map.json</span> to locate affected entry points and tests. Report findings as severity-ranked JSON; cite file:line for every claim. Do not comment on style or security.</div>
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+              <span style="font-size: 11px; color: #5d7186;">↳ input: diff_intake</span>
+              <span style="font-size: 11px; color: #5d7186;">↦ output: outputs.correctness</span>
+            </div>
+          </div>
+
+          <!-- skills -->
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #5d7186; margin-bottom: 8px;">SKILLS</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <span style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2; border: 1px solid #1d4a63; background: #0f2433; border-radius: 999px; padding: 6px 13px;">$repo-map <span style="color: #38c08a; font-size: 10.5px;">lift +9%</span> <span style="color: #46647d;">✕</span></span>
+            </div>
+            <!-- typeahead -->
+            <div style="margin-top: 10px; background: #111b27; border: 1px solid #25516e; border-radius: 3px; overflow: hidden;">
+              <div style="padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #dfe9f2; border-bottom: 1px solid #1c2c3e;">$ci<span style="color: #3ec6f2;">|</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #15212f;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">$ci-log-reducer</span>
+                <span style="font-size: 11px; color: #7d91a4; flex: 1;">Reduce a failing CI log to a verifiable failure summary</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38c08a;">6/7 ↩</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8fa7ba;">$laguna-task-contract</span>
+                <span style="font-size: 11px; color: #5d7186; flex: 1;">Bound an open request into a worker contract</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5d7186;">0/2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- node performance -->
+          <div style="border-top: 1px solid #151e2a; padding-top: 16px;">
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #5d7186;">NODE PERFORMANCE</span>
+              <span style="flex: 1;"></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #3ec6f2;">all runs →</span>
+            </div>
+            <div style="display: grid; gap: 5px;">
+              <div style="display: flex; align-items: center; gap: 10px; background: #0f1a26; border: 1px solid #1c2c3e; border-radius: 3px; padding: 9px 12px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a; border: 1px solid #1a2e26; border-radius: 999px; padding: 2px 8px;">pass</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">in-workflow · run 901f8e4a</span>
+                <span style="flex: 1;"></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">1h ago</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; background: #0f1a26; border: 1px solid #1c2c3e; border-radius: 3px; padding: 9px 12px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a; border: 1px solid #1a2e26; border-radius: 999px; padding: 2px 8px;">3/3</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">standalone trials · m.1-authored</span>
+                <span style="flex: 1;"></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">2h ago</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; background: #0f1a26; border: 1px solid #1c2c3e; border-radius: 3px; padding: 9px 12px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ff8a80; border: 1px solid #5c2622; border-radius: 999px; padding: 2px 8px;">fail</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">in-workflow · run 347e170c</span>
+                <span style="flex: 1;"></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">3h ago</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <span style="flex: 1; text-align: center; font-size: 12.5px; font-weight: 600; color: #dfe9f2; border: 1px solid #1c2c3e; border-radius: 3px; padding: 9px 0;">Re-run node · 3 trials</span>
+              <span style="flex: 1; text-align: center; font-size: 12.5px; font-weight: 600; color: #e8b13f; border: 1px solid #54451f; background: #1d1810; border-radius: 3px; padding: 9px 0;">✦ Suggest improvements</span>
+            </div>
+            <div style="font-size: 11px; line-height: 1.5; color: #5d7186; margin-top: 9px;">Suggest improvements sends this node's trajectories to laguna-m.1 — proposals land on the <span style="color: #8fa7ba;">$repo-map</span> skill page as a draft version, never edited inline.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 02 — THE LOOP BENEATH THE CANVAS                       -->
+  <!-- ============================================================ -->
+  <section data-screen-label="02 Run loop" style="max-width: 1620px; margin: 72px auto 0 auto; padding: 0 40px; overflow-x: auto;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">02</span>
+      <h2 style="font-size: 19px; font-weight: 600; margin: 0;">The loop — runs directly beneath the canvas</h2>
+      <span style="font-size: 13px; color: #5d7186;">same page, scrolled down · node detail = content-first: model vs. gold, then verdict</span>
+    </div>
+
+    <div style="background: #0b1118; border: 1px solid #1c2735; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); min-width: 1480px;">
+
+      <!-- breadcrumb -->
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px 24px; border-bottom: 1px solid #161f2c; background: #0c131c;">
+        <span style="font-size: 13px; font-weight: 700;">code-review-ben</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">canvas ↑</span>
+        <span style="flex: 1;"></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">RUNS — newest first · 4 trajectory records</span>
+      </div>
+
+      <!-- column header -->
+      <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; padding: 8px 24px; border-bottom: 1px solid #111a24; background: #090e15;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">STATUS</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">RUN / NODE</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">TIMING</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">VERDICT</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">LABEL</div>
+        <div></div>
+      </div>
+
+      <div style="padding: 16px 24px 24px 24px; display: grid; gap: 10px;">
+
+        <!-- spec note -->
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #0b1118; background: #e8b13f; border-radius: 2px; padding: 2px 7px;">SPEC</span>
+          <span style="font-size: 12px; color: #8fa7ba;">The run header row is <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3ec6f2;">position: sticky; top: 0</code> — it pins at the top of the viewport as the user scrolls through the eval detail, so run context is never lost. Use <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3ec6f2;">overflow: clip</code> (not hidden) on the parent card to allow sticky + border-radius together.</span>
+        </div>
+        <!-- RUN ROW — expanded: the whole unit is one bordered card -->
+        <div style="border: 1px solid #1e3349; border-radius: 4px; overflow: clip; background: #0b1824;">
+          <!-- run header row — sticky so it stays visible while scrolling the eval detail -->
+          <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; background: #0f1e2e; border-bottom: 1px solid #162535; cursor: pointer; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 12px rgba(0,0,0,0.4);">
+            <div>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a; border: 1px solid #1a2e26; background: #0b1e16; border-radius: 2px; padding: 3px 8px;">finished</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #dfe9f2;">218c91f0</span>
+              <span style="font-size: 11.5px; color: #5d7186;">code-review-ben · 6 nodes</span>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba;">6.9m · 3h ago</div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #38c08a;">5 pass</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #ff8a80;">1 fail</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11.5px; color: #e8b13f; font-weight: 600;">Review →</span>
+            </div>
+            <div style="text-align: center; color: #5d7186; font-size: 11px;">▴</div>
+          </div>
+
+          <!-- node rows — clearly inside this run's card -->
+          <div style="background: #090e18;">
+
+            <!-- node: diff_intake — pass, collapsed -->
+            <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 9px 24px 9px 40px; border-bottom: 1px solid #0d1620; cursor: pointer;">
+              <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a;">pass</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">diff_intake</span>
+                <span style="font-size: 11px; color: #3a4f62;">no skill · exit-code</span>
+              </div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">14.2s · 38k tok</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+              <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+            </div>
+
+            <!-- node: correctness_review — FAIL, EXPANDED -->
+            <div style="border-left: 3px solid #ff8a80; border-bottom: 1px solid #0d1620;">
+              <!-- node header row — highlighted -->
+              <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 11px 24px 11px 37px; background: #0d1e2e; cursor: pointer;">
+                <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #ff8a80; background: #2a1010; border: 1px solid #5c2622; border-radius: 2px; padding: 3px 8px;">fail</span></div>
+                <div style="display: flex; align-items: center; gap: 9px;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #ffffff;">correctness_review</span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #3ec6f2; border: 1px solid #1d4a63; background: #0f2433; border-radius: 999px; padding: 2px 8px;">$repo-map</span>
+                </div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8fa7ba;">81.6s · 204k tok</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ff8a80;">3/4 checks</div>
+                <div style="font-size: 11.5px; color: #e8b13f; font-weight: 600;">unlabeled</div>
+                <div style="text-align: center; color: #5d7186; font-size: 11px;">▴</div>
+              </div>
+
+              <!-- expanded content — the eval detail -->
+              <div style="padding: 20px 24px 0 40px; background: #0a1520;">
+
+                <!-- PROMPT -->
+                <div style="padding-bottom: 16px; border-bottom: 1px solid #111e2c;">
+                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: #3a4f62; margin-bottom: 8px;">PROMPT</div>
+                  <div style="font-size: 13px; line-height: 1.65; color: #8fa7ba; max-width: 900px;">Review the normalized diff from <span style="color: #c4a052;">{ctx.latest(outputs.diff, "diff_intake")}</span> for correctness only. Use the repo map at <span style="color: #3ec6f2;">.laguna/repo-map.json</span> to locate affected entry points and tests. Report findings as severity-ranked JSON with file:line citations. Do not comment on style or security. <span style="color: #3ec6f2; font-size: 12px;">show full ↓</span></div>
+                </div>
+
+                <!-- MODEL vs GOLD -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 18px;">
+                  <div style="padding-right: 28px; border-right: 1px solid #111e2c;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                      <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #4e6272;">MODEL OUTPUT</span>
+                      <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #3a4f62;">outputs.correctness</span>
+                    </div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.75; color: #b9c9d8; background: #07101a; padding: 16px 18px; border-radius: 3px;">
+                      <div style="color: #7d91a4;">{"findings": [</div>
+                      <div style="padding-left: 16px; color: #b9c9d8;">{ "severity": "high", "file": "src/parser.ts", "line": 214,</div>
+                      <div style="padding-left: 32px; color: #b9c9d8;">"claim": "off-by-one in lookahead window" },</div>
+                      <div style="padding-left: 16px; background: #2d1513; border-left: 2px solid #ff8a80; color: #ffa59a;">{ "severity": "med", "file": "src/lexer.ts",</div>
+                      <div style="padding-left: 32px; background: #2d1513; color: #ffa59a;">"line": <span style="background: #4a1e1b; padding: 1px 4px; border-radius: 2px;">96</span> <span style="color: #ff8a80; font-size: 10.5px;">← doesn't exist</span>,</div>
+                      <div style="padding-left: 32px; background: #2d1513; color: #ffa59a;">"claim": "token cache not invalidated" } ]}</div>
+                    </div>
+                  </div>
+                  <div style="padding-left: 28px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                      <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #38c08a;">GOLD REFERENCE</span>
+                      <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #3a4f62;">evals/pytest-single-failure/</span>
+                    </div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.75; color: #b9c9d8; background: #071510; padding: 16px 18px; border-radius: 3px;">
+                      <div style="color: #7d91a4;">{"findings": [</div>
+                      <div style="padding-left: 16px; color: #b9c9d8;">{ "severity": "high", "file": "src/parser.ts", "line": 214,</div>
+                      <div style="padding-left: 32px; color: #b9c9d8;">"claim": "off-by-one in lookahead window" },</div>
+                      <div style="padding-left: 16px; background: #0d2318; border-left: 2px solid #38c08a; color: #9fd4b8;">{ "severity": "med", "file": "src/lexer.ts",</div>
+                      <div style="padding-left: 32px; background: #0d2318; color: #9fd4b8;">"line": <span style="background: #163d28; padding: 1px 4px; border-radius: 2px;">72</span> <span style="color: #38c08a; font-size: 10.5px;">← correct</span>,</div>
+                      <div style="padding-left: 32px; background: #0d2318; color: #9fd4b8;">"claim": "token cache not invalidated on reset" } ]}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- validator checks -->
+                <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid #111e2c;">
+                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: #3a4f62; margin-bottom: 10px;">VALIDATOR — $repo-map · 3/4 checks pass</div>
+                  <div style="display: grid; gap: 6px; max-width: 900px;">
+                    <div style="display: flex; gap: 12px; align-items: baseline; font-size: 13px;"><span style="color: #38c08a; font-family: 'JetBrains Mono', monospace; width: 14px;">✓</span><span style="color: #c4d2de;">schema-valid</span></div>
+                    <div style="display: flex; gap: 12px; align-items: baseline; font-size: 13px;"><span style="color: #38c08a; font-family: 'JetBrains Mono', monospace; width: 14px;">✓</span><span style="color: #c4d2de;">all cited paths exist in repo tree</span></div>
+                    <div style="display: flex; gap: 12px; align-items: baseline; font-size: 13px;"><span style="color: #ff8a80; font-family: 'JetBrains Mono', monospace; width: 14px;">✗</span><span style="color: #ffa59a;">cited-lines-exist — <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">src/lexer.ts</span> has 88 lines; model cited 96, gold says 72</span></div>
+                    <div style="display: flex; gap: 12px; align-items: baseline; font-size: 13px;"><span style="color: #38c08a; font-family: 'JetBrains Mono', monospace; width: 14px;">✓</span><span style="color: #c4d2de;">no prose-only framework claims</span></div>
+                  </div>
+                </div>
+
+                <!-- ACTION BAR -->
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px; background: #0e1e2e; border-top: 1px solid #1a2e42; margin-left: -40px; margin-right: -24px; padding: 14px 24px 14px 40px;">
+                  <span style="font-size: 13px; font-weight: 600; color: #9fb2c4; border: 1px solid #243348; border-radius: 3px; padding: 8px 14px; background: #0c1a28; white-space: nowrap; cursor: pointer;">↺ Re-run</span>
+                  <span style="font-size: 13.5px; font-weight: 700; color: #0b1118; background: #e8b13f; border-radius: 3px; padding: 9px 18px; white-space: nowrap; cursor: pointer;">✦ Suggest fix</span>
+                  <span style="flex: 1;"></span>
+                  <textarea placeholder="Note — what went wrong? Be specific: what did the model miss, hallucinate, or get right? (auto-saves)" style="font-family: 'Helvetica Neue', sans-serif; font-size: 12.5px; color: #9fb2c4; background: #0c1a28; border: 1px solid #243348; border-radius: 3px; padding: 9px 13px; width: 340px; min-height: 38px; max-height: 160px; outline: none; flex-shrink: 0; resize: vertical; line-height: 1.5; transition: height 0.15s;"></textarea>
+                  <div style="display: flex; gap: 5px; flex-shrink: 0;">
+                    <span style="font-size: 13px; font-weight: 700; color: #38c08a; border: 1px solid #2a5c42; background: #0e2318; border-radius: 3px; padding: 8px 16px; cursor: pointer;">Pass</span>
+                    <span style="font-size: 13px; font-weight: 700; color: #ffffff; background: #c0392b; border-radius: 3px; padding: 8px 16px; cursor: pointer;">Fail</span>
+                    <span style="font-size: 13px; font-weight: 700; color: #9fb2c4; border: 1px solid #243348; background: #0c1a28; border-radius: 3px; padding: 8px 16px; cursor: pointer;">Defer</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- node: security_review — pass, collapsed -->
+            <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 9px 24px 9px 40px; border-bottom: 1px solid #0d1620; cursor: pointer;">
+              <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a;">pass</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">security_review</span>
+                <span style="font-size: 11px; color: #3a4f62;">no skill · exit-code</span>
+              </div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">63.1s · 142k tok</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+              <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+            </div>
+
+            <!-- node: maintainability — ungraded -->
+            <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 9px 24px 9px 40px; border-bottom: 1px solid #0d1620; cursor: pointer;">
+              <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #e8b13f;">ungraded</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">maintainability_review</span>
+                <span style="font-size: 11px; color: #3a4f62;">no skill · no validator</span>
+              </div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">77.4s · 198k tok</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+              <div style="font-size: 11px; color: #e8b13f;">unlabeled</div>
+              <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+            </div>
+
+            <!-- node: fanin + synthesis — grouped -->
+            <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 9px 24px 9px 40px; cursor: pointer;">
+              <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a;">pass</span></div>
+              <div style="display: flex; align-items: center; gap: 9px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">review_fanin → final_synthesis</span>
+                <span style="font-size: 11px; color: #3a4f62;">2 nodes · m.1</span>
+              </div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">2.1m total</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+              <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EARLIER RUNS section label -->
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62; padding: 4px 0 2px 0;">EARLIER RUNS</div>
+
+        <!-- collapsed run card: with fails -->
+        <div style="border: 1px solid #151e2a; border-radius: 4px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; cursor: pointer;">
+          <div>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a; border: 1px solid #1a2e26; background: #0b1e16; border-radius: 2px; padding: 3px 8px;">finished</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #c4d2de;">347e170c</span>
+            <span style="font-size: 11.5px; color: #5d7186;">code-review-ben · 6 nodes</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba;">7.4m · yesterday</div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #38c08a;">4 pass</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #ff8a80;">2 fail</span>
+          </div>
+          <div style="font-size: 11.5px; color: #e8b13f; font-weight: 600;">2 unlabeled</div>
+          <div style="text-align: center; color: #5d7186; font-size: 11px;">▸</div>
+        </div>
+        </div>
+
+        <!-- collapsed run: all pass -->
+        <div style="border: 1px solid #151e2a; border-radius: 4px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; cursor: pointer;">
+            <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a; border: 1px solid #1a2e26; background: #0b1e16; border-radius: 2px; padding: 3px 8px;">finished</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #c4d2de;">c3b7b89d</span>
+              <span style="font-size: 11.5px; color: #5d7186;">code-review-ben · 6 nodes</span>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba;">6.2m · 2d ago</div>
+            <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #38c08a;">all pass</span></div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">labeled ✓</div>
+            <div style="text-align: center; color: #5d7186; font-size: 11px;">▸</div>
+          </div>
+        </div>
+
+        <!-- collapsed run: in progress -->
+        <div style="border: 1px solid #1d3a4f; border-radius: 4px; overflow: hidden; background: #0a1520;">
+          <div style="display: grid; grid-template-columns: 90px 1fr 160px 120px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; cursor: pointer;">
+            <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #3ec6f2; border: 1px solid #1d3a4f; background: #0a1e2e; border-radius: 2px; padding: 3px 8px;">running</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #c4d2de;">9fa4d21c</span>
+              <span style="font-size: 11.5px; color: #5d7186;">code-review-ben · 3/6 nodes</span>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba;">2.3m · just now</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #5d7186;">in progress…</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+            <div style="text-align: center; color: #5d7186; font-size: 11px;">▸</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 03 — SKILLS PAGE                                       -->
+  <!-- ============================================================ -->
+  <section data-screen-label="03 Skills page" style="max-width: 1620px; margin: 72px auto 0 auto; padding: 0 40px; overflow-x: auto;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">03</span>
+      <h2 style="font-size: 19px; font-weight: 600; margin: 0;">Skills — a separate surface, improved by evidence</h2>
+      <span style="font-size: 13px; color: #5d7186;">library &amp; studio · try it · scorecard · suggestions arrive from trajectories, accepted as versions</span>
+    </div>
+
+    <div style="background: #0b1118; border: 1px solid #1c2735; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); min-width: 1480px;">
+
+      <!-- app top bar -->
+      <div style="display: flex; align-items: center; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #161f2c; background: #0c131c;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; background: #122433; color: #3ec6f2; border: 1px solid #1d3a4f; border-radius: 4px; padding: 4px 7px;">ps</span>
+          <span style="font-size: 14px; font-weight: 600;">Poolside Skills</span>
+        </span>
+        <nav style="display: flex; gap: 4px; margin-left: 20px;">
+          <span style="font-size: 13px; color: #dfe9f2; font-weight: 600; padding: 7px 14px; border-radius: 3px; background: #15212f; border: 1px solid #1c2c3e;">Skills</span>
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Workflows</span>
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Runs</span>
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Review</span>
+        </nav>
+        <span style="flex: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #0b1118; background: #3ec6f2; border-radius: 4px; padding: 8px 16px;">+ New <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 400; opacity: 0.75;">⌘K</span></span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr 390px; gap: 0;">
+
+        <!-- library rail -->
+        <div style="border-right: 1px solid #161f2c; padding: 18px 14px; display: grid; gap: 4px; align-content: start; background: #0c121a;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #5d7186; padding: 0 8px 8px 8px;">LIBRARY · 4</div>
+          <div style="background: #15212f; border: 1px solid #243348; border-radius: 3px; padding: 11px 13px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #ffffff;">ci-log-reducer</span>
+              <span style="flex: 1;"></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38c08a;">+18%</span>
+            </div>
+            <div style="font-size: 11px; color: #7d91a4; margin-top: 4px;">CI log → failure summary</div>
+          </div>
+          <div style="border: 1px solid transparent; border-radius: 3px; padding: 11px 13px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">laguna-task-contract</span>
+              <span style="flex: 1;"></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #ff8a80;">−2%</span>
+            </div>
+            <div style="font-size: 11px; color: #5d7186; margin-top: 4px;">request → bounded contract</div>
+          </div>
+          <div style="border: 1px solid transparent; border-radius: 3px; padding: 11px 13px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">repo-map</span>
+              <span style="flex: 1;"></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38c08a;">+9%</span>
+            </div>
+            <div style="font-size: 11px; color: #5d7186; margin-top: 4px;">repo → evidence-backed map</div>
+          </div>
+          <div style="border: 1px solid transparent; border-radius: 3px; padding: 11px 13px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">workspace-inventory</span>
+              <span style="flex: 1;"></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5d7186;">—</span>
+            </div>
+            <div style="font-size: 11px; color: #5d7186; margin-top: 4px;">no eval runs yet</div>
+          </div>
+        </div>
+
+        <!-- skill detail -->
+        <div style="padding: 26px 30px; border-right: 1px solid #161f2c;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700; margin: 0; color: #ffffff;">ci-log-reducer</h3>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 999px; padding: 3px 10px;">v0.1.0</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #38c08a; border: 1px solid #1a2e26; background: #10202b; border-radius: 999px; padding: 3px 10px;">structure ✓</span>
+            <span style="flex: 1;"></span>
+            <span style="font-size: 12.5px; color: #9fb2c4; border: 1px solid #1c2c3e; border-radius: 3px; padding: 7px 13px;">View source</span>
+          </div>
+          <p style="font-size: 14px; line-height: 1.55; color: #9fb2c4; margin: 12px 0 0 0; max-width: 560px;">Reduce one failing CI log to a machine-checkable failure summary at <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #c4d2de;">.laguna/ci-log-summary.json</span> — failing command, failure kind, decisive lines cited verbatim, safe next commands.</p>
+
+          <!-- scorecard -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px;">
+            <div style="border: 1px solid #1c2c3e; border-radius: 4px; padding: 13px 15px;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #5d7186;">WITH SKILL</div>
+              <div style="font-size: 21px; font-weight: 700; color: #38c08a; margin-top: 5px;">6/7</div>
+              <div style="font-size: 11px; color: #5d7186; margin-top: 2px;">avg score 0.92</div>
+            </div>
+            <div style="border: 1px solid #1c2c3e; border-radius: 4px; padding: 13px 15px;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #5d7186;">WITHOUT</div>
+              <div style="font-size: 21px; font-weight: 700; color: #ff8a80; margin-top: 5px;">3/7</div>
+              <div style="font-size: 11px; color: #5d7186; margin-top: 2px;">avg score 0.61</div>
+            </div>
+            <div style="border: 1px solid #1c2c3e; border-radius: 4px; padding: 13px 15px;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #5d7186;">IN-WORKFLOW</div>
+              <div style="font-size: 21px; font-weight: 700; color: #38c08a; margin-top: 5px;">4/4</div>
+              <div style="font-size: 11px; color: #5d7186; margin-top: 2px;">across 2 workflows</div>
+            </div>
+            <div style="border: 1px solid #1d4a63; background: #0e1d29; border-radius: 4px; padding: 13px 15px;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3ec6f2;">LIFT</div>
+              <div style="font-size: 21px; font-weight: 700; color: #3ec6f2; margin-top: 5px;">+18%</div>
+              <div style="font-size: 11px; color: #46647d; margin-top: 2px;">xs.2 · smoke + first-bundle</div>
+            </div>
+          </div>
+
+          <!-- tabs -->
+          <div style="display: flex; gap: 4px; margin-top: 24px; border-bottom: 1px solid #151e2a; padding-bottom: 0;">
+            <span style="font-size: 13px; font-weight: 600; color: #dfe9f2; padding: 9px 16px; border-bottom: 2px solid #3ec6f2;">Contract</span>
+            <span style="font-size: 13px; color: #8fa7ba; padding: 9px 16px;">Eval cases · 4</span>
+            <span style="font-size: 13px; color: #8fa7ba; padding: 9px 16px;">Runs · 14</span>
+            <span style="font-size: 13px; color: #8fa7ba; padding: 9px 16px;">Used in · 2 workflows</span>
+            <span style="font-size: 13px; color: #8fa7ba; padding: 9px 16px;">Versions</span>
+          </div>
+
+          <!-- contract preview -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px;">
+            <div style="border: 1px solid #151e2a; border-radius: 4px; padding: 14px 16px;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5d7186; margin-bottom: 8px;">SKILL.md</div>
+              <div style="font-size: 12.5px; line-height: 1.6; color: #9fb2c4;">Use when the user provides a CI log… write exactly one JSON object… every cited line number must exist in the log; text must match verbatim… <span style="color: #3ec6f2;">read all ↓</span></div>
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <div style="border: 1px solid #151e2a; border-radius: 4px; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">ci-log-summary.schema.json</span>
+                <span style="flex: 1;"></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38c08a;">7 fields</span>
+              </div>
+              <div style="border: 1px solid #151e2a; border-radius: 4px; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">validate_ci_log_summary.ts</span>
+                <span style="flex: 1;"></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38c08a;">7 checks</span>
+              </div>
+              <div style="border: 1px solid #151e2a; border-radius: 4px; padding: 12px 16px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">evals/ · 4 cases</span>
+                <span style="flex: 1;"></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #e8b13f;">1 adversarial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- right rail: try it + improvement queue -->
+        <div style="padding: 24px 22px; display: grid; gap: 14px; align-content: start; background: #0c121a;">
+          <!-- try it -->
+          <div style="border: 1px solid #1a2e26; background: #0e1a18; border-radius: 4px; padding: 18px;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #38c08a; margin-bottom: 10px;">TRY IT NOW</div>
+            <div style="background: #0b1416; border: 1px solid #1c322b; border-radius: 3px; padding: 12px 14px; font-size: 13px; line-height: 1.55; color: #8fa7ba; min-height: 64px;">The CI job for this repo just failed — log attached. Summarize what broke.<span style="color: #38c08a;">|</span></div>
+            <div style="display: flex; gap: 8px; margin-top: 10px; align-items: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 3px; padding: 5px 10px;">workspace: fixture ▾</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 3px; padding: 5px 10px;">xs.2 ▾</span>
+              <span style="flex: 1;"></span>
+              <span style="font-size: 13px; font-weight: 700; color: #0b1118; background: #38c08a; border-radius: 3px; padding: 8px 18px;">Run</span>
+            </div>
+            <div style="font-size: 11px; color: #4e6a5e; margin-top: 9px;">A playground run — graded by the validator, promotable to an eval case.</div>
+          </div>
+
+          <!-- improvement queue -->
+          <div style="border: 1px solid #3a3014; background: #15110a; border-radius: 4px; padding: 18px;">
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #e8b13f;">IMPROVEMENT QUEUE · 2</span>
+              <span style="flex: 1;"></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5d7186;">from trajectories</span>
+            </div>
+            <div style="background: #0f1722; border: 1px solid #25211a; border-radius: 3px; padding: 14px;">
+              <div style="font-size: 12.5px; line-height: 1.5; color: #c4d2de;"><strong style="color: #e8b13f;">laguna-m.1</strong> reviewed 2 failing trajectories (run 218c91f0, eval pytest-single-failure) — both fail <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">error-lines-verbatim</span>.</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7; margin-top: 10px; background: #0c1218; border-radius: 2px; padding: 10px 13px;">
+                <div style="color: #5d7186;">SKILL.md › Accuracy</div>
+                <div style="color: #ff8a80;">− match that line exactly</div>
+                <div style="color: #38c08a;">+ copy the line byte-for-byte; never</div>
+                <div style="color: #38c08a;">+ normalize whitespace or quotes</div>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <span style="flex: 1; text-align: center; font-size: 12px; font-weight: 700; color: #0b1118; background: #e8b13f; border-radius: 3px; padding: 8px 0;">Accept as v0.1.1</span>
+                <span style="text-align: center; font-size: 12px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 3px; padding: 8px 14px;">View evidence</span>
+                <span style="text-align: center; font-size: 12px; color: #5d7186; border: 1px solid #1c2c3e; border-radius: 3px; padding: 8px 12px;">✕</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px; border: 1px solid #25211a; border-radius: 3px; padding: 11px 14px;">
+              <span style="font-size: 12px; color: #9fb2c4;">+ new eval case from playground run 8841…</span>
+              <span style="flex: 1;"></span>
+              <span style="color: #5d7186; font-size: 11px;">▸</span>
+            </div>
+            <div style="font-size: 11px; line-height: 1.55; color: #6b6147; margin-top: 11px;">Skills aren't edited inline — a stronger model proposes changes from run evidence; accepting creates a draft version that re-runs the eval suite.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 04 — ⌘K COMMAND PALETTE                               -->
+  <!-- ============================================================ -->
+  <section data-screen-label="04 ⌘K Composer" style="max-width: 1620px; margin: 72px auto 0 auto; padding: 0 40px; overflow-x: auto;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">04</span>
+      <h2 style="font-size: 19px; font-weight: 600; margin: 0;">⌘K — quick action palette</h2>
+      <span style="font-size: 13px; color: #5d7186;">type a slash command + what you want · enter · it builds in the background</span>
+    </div>
+
+    <!-- one input, two examples -->
+    <div style="display: grid; gap: 18px; max-width: 860px;">
+
+      <!-- /workflow typed -->
+      <div style="background: #0d1520; border: 1px solid #1e3349; border-radius: 6px; box-shadow: 0 24px 60px rgba(0,0,0,0.6); padding: 16px 20px; display: flex; align-items: baseline; gap: 12px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #3ec6f2; white-space: nowrap;">/workflow</span>
+        <span style="font-size: 15px; line-height: 1.5; color: #dfe9f2; flex: 1;">map the fixture repo with <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #3ec6f2;">$repo-map</span>, scan deps in parallel, merge into a report<span style="color: #3ec6f2; opacity: 0.6;">|</span></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186; white-space: nowrap;">↵ create</span>
+      </div>
+
+      <!-- /skill typed -->
+      <div style="background: #0d1520; border: 1px solid #1e3349; border-radius: 6px; box-shadow: 0 24px 60px rgba(0,0,0,0.6); padding: 16px 20px; display: flex; align-items: baseline; gap: 12px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #38c08a; white-space: nowrap;">/skill</span>
+        <span style="font-size: 15px; line-height: 1.5; color: #dfe9f2; flex: 1;">read package.json and write a flat dep list to .laguna/dep-list.json with installed + latest versions<span style="color: #38c08a; opacity: 0.6;">|</span></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186; white-space: nowrap;">↵ create</span>
+      </div>
+
+      <!-- behavior, one line -->
+      <div style="font-size: 13px; line-height: 1.6; color: #7d91a4;">Enter starts generation in the background and takes you straight to the new workflow's canvas or skill's page — progress, graph verification, and the structure check land there. <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">$skill-name</span> autocompletes inline anywhere in the text.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 05 — UNIFIED RUNS PAGE                                 -->
+  <!-- ============================================================ -->
+  <section data-screen-label="05 Runs page" style="max-width: 1620px; margin: 72px auto 0 auto; padding: 0 40px; overflow-x: auto;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">05</span>
+      <h2 style="font-size: 19px; font-weight: 600; margin: 0;">Runs — one feed, every trajectory</h2>
+      <span style="font-size: 13px; color: #5d7186;">scorecard pivot on top · facets · eval arms paired so lift is visible per case</span>
+    </div>
+
+    <div style="background: #0b1118; border: 1px solid #1c2735; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); min-width: 1480px;">
+
+      <!-- app top bar -->
+      <div style="display: flex; align-items: center; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #161f2c; background: #0c131c;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; background: #122433; color: #3ec6f2; border: 1px solid #1d3a4f; border-radius: 4px; padding: 4px 7px;">ps</span>
+          <span style="font-size: 14px; font-weight: 600;">Poolside Skills</span>
+        </span>
+        <nav style="display: flex; gap: 4px; margin-left: 20px;">
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Skills</span>
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Workflows</span>
+          <span style="font-size: 13px; color: #dfe9f2; font-weight: 600; padding: 7px 14px; border-radius: 3px; background: #15212f; border: 1px solid #1c2c3e;">Runs</span>
+          <span style="font-size: 13px; color: #8fa7ba; padding: 7px 14px; border-radius: 3px;">Review</span>
+        </nav>
+        <span style="flex: 1;"></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 3px; padding: 6px 12px; cursor: pointer;">▶ Run suite: smoke ▾</span>
+        <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #0b1118; background: #3ec6f2; border-radius: 4px; padding: 8px 16px;">+ New <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 400; opacity: 0.75;">⌘K</span></span>
+      </div>
+
+      <!-- SKILL SCORECARD — the pivot -->
+      <div style="padding: 20px 24px 18px 24px; border-bottom: 1px solid #161f2c;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62; margin-bottom: 10px;">SKILL SCORECARD — every run, pivoted by skill · sorted by weakest lift</div>
+        <div style="display: grid; grid-template-columns: 1.3fr 90px 130px 130px 140px 130px 110px; gap: 0; font-size: 13px;">
+          <!-- header -->
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 6px 10px;">SKILL</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 6px 10px;">LIFT</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 6px 10px;">WITH SKILL</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 6px 10px;">WITHOUT</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 6px 10px;">IN-WORKFLOW</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 6px 10px;">UNLABELED</div>
+          <div></div>
+          <!-- task-contract: weakest -->
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #dfe9f2;">laguna-task-contract</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #ff8a80; font-weight: 700;">−2%</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #ff8a80;">0/2 · 0.857</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #ff8a80;">0/2 · 0.857</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3a4f62;">—</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e8b13f;">2 fails →</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; text-align: right; color: #3a4f62; font-size: 11px;">▸</div>
+          <!-- repo-map: filtered/selected -->
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; background: #0e1d2c; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #3ec6f2; font-weight: 700;">repo-map</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; background: #0e1d2c; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #38c08a; font-weight: 700;">+9%</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; background: #0e1d2c; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #38c08a;">2/2 · 1.0</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; background: #0e1d2c; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8fa7ba;">2/2 · 0.91</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; background: #0e1d2c; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #38c08a;">5/5 nodes</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; background: #0e1d2c; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5d7186;">labeled ✓</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; background: #0e1d2c; text-align: right; color: #3ec6f2; font-size: 11px;">▾</div>
+          <!-- ci-log-reducer -->
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #dfe9f2;">ci-log-reducer</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #38c08a; font-weight: 700;">+18%</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e8b13f;">0/1 · 0.857</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #38c08a;">1/1 · 1.0</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3a4f62;">—</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e8b13f;">1 fail →</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; text-align: right; color: #3a4f62; font-size: 11px;">▸</div>
+          <!-- workspace-inventory -->
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #8fa7ba;">workspace-inventory</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #3a4f62;">—</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3a4f62;">no eval runs yet</div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24;"></div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24;"></div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24;"></div>
+          <div style="padding: 9px 10px; border-top: 1px solid #111a24; text-align: right; color: #3a4f62; font-size: 11px;">▸</div>
+        </div>
+      </div>
+
+      <!-- FACETS -->
+      <div style="display: flex; align-items: center; gap: 8px; padding: 14px 24px; border-bottom: 1px solid #111a24;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 999px; padding: 5px 12px; cursor: pointer;">type: all ▾</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #3ec6f2; border: 1px solid #1d4a63; background: #0f2433; border-radius: 999px; padding: 5px 12px; cursor: pointer;">skill: repo-map ✕</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 999px; padding: 5px 12px; cursor: pointer;">workflow ▾</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 999px; padding: 5px 12px; cursor: pointer;">arm ▾</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8fa7ba; border: 1px solid #1c2c3e; border-radius: 999px; padding: 5px 12px; cursor: pointer;">verdict ▾</span>
+        <span style="flex: 1;"></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">7 records touch repo-map — eval arms, workflow nodes, standalone trials, playground</span>
+      </div>
+
+      <!-- column header -->
+      <div style="display: grid; grid-template-columns: 110px 1fr 230px 170px 130px 110px 32px; gap: 0; padding: 8px 24px; border-bottom: 1px solid #111a24; background: #090e15;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">TYPE</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">RECORD</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">ARM / MODEL</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">TIMING</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">VERDICT</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #3a4f62;">LABEL</div>
+        <div></div>
+      </div>
+
+      <div style="padding: 10px 24px 24px 24px; display: grid; gap: 8px;">
+
+        <!-- eval case: arms paired -->
+        <div style="border: 1px solid #151e2a; border-radius: 4px; overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; background: #0d141d;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #e8b13f;">eval</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; color: #dfe9f2;">smoke / repo-map-python-uv-service</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #3ec6f2; border: 1px solid #1d4a63; background: #0f2433; border-radius: 999px; padding: 2px 8px;">$repo-map</span>
+            <span style="flex: 1;"></span>
+            <span style="font-size: 11.5px; color: #5d7186;">both arms pass — no lift on this case</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 110px 1fr 230px 170px 130px 110px 32px; gap: 0; align-items: center; padding: 8px 20px 8px 36px; border-top: 1px solid #0d1620;">
+            <div></div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">xs_with_skill</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">laguna-xs-polaris-…ctx256k</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">44.8s · 284k in / 4.5k out</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a;">pass · 1.0</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">labeled ✓</div>
+            <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 110px 1fr 230px 170px 130px 110px 32px; gap: 0; align-items: center; padding: 8px 20px 8px 36px; border-top: 1px solid #0d1620;">
+            <div></div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de;">xs_without_skill</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">laguna-xs-polaris-…ctx256k</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">44.3s · 184k in / 4.0k out</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a;">pass · 1.0</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">labeled ✓</div>
+            <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+          </div>
+        </div>
+
+        <!-- node eval: in-workflow -->
+        <div style="display: grid; grid-template-columns: 110px 1fr 230px 170px 130px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; border: 1px solid #151e2a; border-radius: 4px; cursor: pointer;">
+          <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #8fa7ba;">node</span></div>
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; color: #dfe9f2;">repo_map</span>
+            <span style="font-size: 11.5px; color: #5d7186;">in-workflow · pool-spike · run 901f8e4a</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">graded by skill-validator</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">1h ago</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a;">pass · 1.0</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+          <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+        </div>
+
+        <!-- node eval: standalone trials -->
+        <div style="display: grid; grid-template-columns: 110px 1fr 230px 170px 130px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; border: 1px solid #151e2a; border-radius: 4px; cursor: pointer;">
+          <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #8fa7ba;">node</span></div>
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; color: #dfe9f2;">repo_map</span>
+            <span style="font-size: 11.5px; color: #5d7186;">standalone · 3 trials · fresh workspace copies</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">laguna-m.1</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">2h ago</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a;">3/3 pass</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a4f62;">—</div>
+          <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+        </div>
+
+        <!-- workflow run containing the skill -->
+        <div style="display: grid; grid-template-columns: 110px 1fr 230px 170px 130px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; border: 1px solid #151e2a; border-radius: 4px; cursor: pointer;">
+          <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #3ec6f2;">workflow</span></div>
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; color: #dfe9f2;">pool-spike · 901f8e4a</span>
+            <span style="font-size: 11.5px; color: #5d7186;">repo_map node installs $repo-map</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">4/4 nodes</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">56.0s · 2h ago</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a;">all pass</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">labeled ✓</div>
+          <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+        </div>
+
+        <!-- playground run -->
+        <div style="display: grid; grid-template-columns: 110px 1fr 230px 170px 130px 110px 32px; gap: 0; align-items: center; padding: 11px 20px; border: 1px solid #1a3028; background: #0b1512; border-radius: 4px; cursor: pointer;">
+          <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38c08a;">playground</span></div>
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <span style="font-size: 12.5px; color: #c4d2de; font-style: italic;">"map this repo, I need entry points and test commands"</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">xs.2 · fixture workspace</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5d7186;">38.1s · just now</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a;">pass · 1.0</div>
+          <div><span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #38c08a; cursor: pointer;">+ eval case</span></div>
+          <div style="text-align: center; color: #3a4f62; font-size: 11px;">▸</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SCREEN 06 — REVIEW MODE                                       -->
+  <!-- ============================================================ -->
+  <section data-screen-label="06 Review mode" style="max-width: 1620px; margin: 72px auto 0 auto; padding: 0 40px; overflow-x: auto;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #3ec6f2;">06</span>
+      <h2 style="font-size: 19px; font-weight: 600; margin: 0;">Review — the annotation app as a full-screen mode</h2>
+      <span style="font-size: 13px; color: #5d7186;">same keyboard-first UI as :8901, re-themed · deep-linked from a run row · labels route to the improvement queue</span>
+    </div>
+
+    <div style="background: #0b1118; border: 1px solid #1c2735; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); min-width: 1480px;">
+
+      <!-- mode bar: context + position + filters -->
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px 24px; border-bottom: 1px solid #161f2c; background: #0c131c;">
+        <span style="font-size: 13px; color: #3ec6f2; cursor: pointer;">← back to runs</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #ffffff;">ci-log-reducer-pytest-single-failure</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #c4d2de; border: 1px solid #1c2c3e; border-radius: 999px; padding: 2px 9px;">xs_with_skill</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: #ff8a80; border: 1px solid #5c2622; background: #2a1010; border-radius: 999px; padding: 2px 9px;">graded FAIL</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #3ec6f2; border: 1px solid #1d4a63; background: #0f2433; border-radius: 999px; padding: 2px 9px;">$ci-log-reducer</span>
+        <span style="flex: 1;"></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8fa7ba;">2 of 3 unlabeled in <span style="color: #3ec6f2;">fails · ci-log-reducer</span></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #38c08a; border: 1px solid #1a2e26; border-radius: 3px; padding: 4px 10px; cursor: pointer;">Gold: on</span>
+      </div>
+
+      <!-- body: center content + trajectory rail -->
+      <div style="display: grid; grid-template-columns: 1fr 320px;">
+
+        <!-- CENTER — the part worth keeping from :8901 -->
+        <div style="padding: 22px 28px; border-right: 1px solid #161f2c;">
+
+          <!-- failure summary banner -->
+          <div style="background: #1d100f; border-left: 3px solid #ff8a80; border-radius: 0 3px 3px 0; padding: 12px 16px; margin-bottom: 20px;">
+            <span style="font-size: 13.5px; color: #ffb4ad;"><strong style="color: #ff8a80;">FAILED 1 of 7 checks</strong> — <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">error-lines-verbatim</span>: line 16 text differs from the log; log says <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #dfe9f2;">"&gt; assert cfg.max_retries == 3"</span></span>
+          </div>
+
+          <!-- prompt -->
+          <div style="margin-bottom: 20px;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: #3a4f62; margin-bottom: 8px;">PROMPT</div>
+            <div style="font-size: 13.5px; line-height: 1.65; color: #9fb2c4; max-width: 820px;">The CI job for this repository just failed. The full log is at <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">ci.log</span>… Reduce the log to a structured failure summary and write it to <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c4d2de;">.laguna/ci-log-summary.json</span>. Every cited line number must exist in the log, text must match that line exactly… <span style="color: #3ec6f2; font-size: 12.5px; cursor: pointer;">show full ↓</span></div>
+          </div>
+
+          <!-- output artifact: model vs gold, field by field -->
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: #3a4f62;">OUTPUT ARTIFACT — MODEL VS GOLD</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #5d7186;">.laguna/ci-log-summary.json</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 170px 1fr 1fr; gap: 0; font-size: 13px; border-top: 1px solid #1a2634;">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 8px 10px;">FIELD</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #3a4f62; padding: 8px 10px;">MODEL OUTPUT</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #38c08a; padding: 8px 10px;">GOLD REFERENCE</div>
+
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba; padding: 9px 10px; border-top: 1px solid #111a24;">schema_version</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de; padding: 9px 10px; border-top: 1px solid #111a24;">ci-log-summary.v1</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #5d7186; padding: 9px 10px; border-top: 1px solid #111a24;">ci-log-summary.v1</div>
+
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba; padding: 9px 10px; border-top: 1px solid #111a24;">failing_command</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de; padding: 9px 10px; border-top: 1px solid #111a24;">uv run pytest -q</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #5d7186; padding: 9px 10px; border-top: 1px solid #111a24;">uv run pytest -q</div>
+
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #ff8a80; padding: 9px 10px; border-top: 1px solid #111a24; background: #190d0c;">error_lines[0].text</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #ffa59a; padding: 9px 10px; border-top: 1px solid #111a24; background: #190d0c;">line 16: "assert cfg.max_retries==3"</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #9fd4b8; padding: 9px 10px; border-top: 1px solid #111a24; background: #0c1812;">line 16: "&gt; assert cfg.max_retries == 3"</div>
+
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba; padding: 9px 10px; border-top: 1px solid #111a24;">suggested_next…</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #c4d2de; padding: 9px 10px; border-top: 1px solid #111a24;">uv run pytest tests/test_config.py -q</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #5d7186; padding: 9px 10px; border-top: 1px solid #111a24;">uv run pytest tests/test_config.py -q</div>
+            </div>
+            <div style="font-size: 11.5px; color: #5d7186; margin-top: 8px;">Case: short synthetic pytest log, one clean assertion failure · expected validator status: <span style="color: #38c08a;">pass</span></div>
+          </div>
+        </div>
+
+        <!-- TRAJECTORY RAIL -->
+        <div style="padding: 20px 18px; display: grid; gap: 0; align-content: start; background: #0c121a;">
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: #3a4f62;">TRAJECTORY — 111 STEPS</span>
+            <span style="flex: 1;"></span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #3ec6f2; cursor: pointer;">expand all</span>
+          </div>
+          <div style="display: grid; gap: 2px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #8fa7ba;">
+            <div style="padding: 5px 8px; cursor: pointer;">▸ session.start</div>
+            <div style="padding: 5px 8px; cursor: pointer;">▸ session.input</div>
+            <div style="padding: 5px 8px; cursor: pointer;">▸ tool_call.inference.start</div>
+            <div style="padding: 5px 8px; cursor: pointer;">▸ thought.start</div>
+            <div style="padding: 5px 8px; cursor: pointer;">▸ assistant_message.start</div>
+            <div style="padding: 5px 8px; cursor: pointer; background: #111b27; border-radius: 3px; color: #dfe9f2;">▾ tool_call.start <span style="color: #5d7186;">— Write .laguna/ci-log-summary.json</span></div>
+            <div style="padding: 5px 8px 5px 22px; color: #5d7186; font-size: 10.5px; line-height: 1.5;">writes error_lines[0] with normalized whitespace — the validator will catch this at check 5</div>
+            <div style="padding: 5px 8px; cursor: pointer;">▸ tool_call.approval</div>
+            <div style="padding: 5px 8px; cursor: pointer;">▸ tool_call.result</div>
+            <div style="padding: 5px 8px; cursor: pointer;">▸ thought.end</div>
+            <div style="padding: 5px 8px; color: #3a4f62;">… 101 more steps</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LABEL BAR — high contrast, the reason you're here -->
+      <div style="display: flex; align-items: center; gap: 10px; padding: 14px 24px; background: #101f30; border-top: 1px solid #1e3349;">
+        <span style="font-size: 14px; color: #8fa7ba; border: 1px solid #243348; background: #0c1a28; border-radius: 3px; padding: 8px 13px; cursor: pointer;">←</span>
+        <span style="font-size: 14px; color: #8fa7ba; border: 1px solid #243348; background: #0c1a28; border-radius: 3px; padding: 8px 13px; cursor: pointer;">→</span>
+        <div style="display: flex; gap: 6px; margin-left: 8px;">
+          <span style="font-size: 13.5px; font-weight: 700; color: #0b1118; background: #38c08a; border-radius: 3px; padding: 9px 22px; cursor: pointer;">Pass</span>
+          <span style="font-size: 13.5px; font-weight: 700; color: #ffffff; background: #c0392b; border-radius: 3px; padding: 9px 22px; cursor: pointer;">Fail</span>
+          <span style="font-size: 13.5px; font-weight: 700; color: #9fb2c4; border: 1px solid #243348; background: #0c1a28; border-radius: 3px; padding: 9px 18px; cursor: pointer;">Defer</span>
+        </div>
+        <textarea placeholder="Notes — what went wrong (or right)? Routes to the skill's improvement queue. Auto-saves." style="font-family: 'Helvetica Neue', sans-serif; font-size: 12.5px; color: #9fb2c4; background: #0c1a28; border: 1px solid #243348; border-radius: 3px; padding: 9px 14px; flex: 1; min-height: 38px; max-height: 140px; outline: none; resize: vertical; line-height: 1.5;"></textarea>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #3a4f62; white-space: nowrap;">←→ nav · 1 pass · 2 fail · D defer · U undo · ⌘↵ save+next</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer note -->
+  <div style="max-width: 1620px; margin: 56px auto 0 auto; padding: 0 40px;">
+    <div style="border: 1px dashed #1c2c3e; border-radius: 4px; padding: 18px 24px; font-size: 13.5px; line-height: 1.6; color: #7d91a4; max-width: 980px;">
+      <strong style="color: #9fb2c4;">How the screens connect:</strong> the canvas (01) is where you author and iterate; scrolling down meets the loop (02) — newest run first, accordion node detail with model vs. gold comparison; failing trajectories route to the skill page (03) where m.1 proposes improvements as versioned diffs. ⌘K (04) launches you into either surface from anywhere.
+    </div>
+  </div>
+
+
+</div>
+</x-dc>
+</body>
+</html>
