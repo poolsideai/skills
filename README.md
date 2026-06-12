@@ -1,15 +1,38 @@
 # Laguna Skills
 
-Validator-backed skills for Poolside's Laguna models, plus a small eval harness that tests whether a skill helps on its own cases.
+Build, test, and improve skills for Poolside's Laguna models.
+
+This repo is for turning agent instructions into working, measurable tools. A skill starts as `SKILL.md`, but it is not done until it has a schema, validator, eval cases, and run evidence. The loop is:
+
+1. Author a skill with a clear output contract.
+2. Run it against eval cases with and without the skill installed.
+3. Inspect failures in the local workbench.
+4. Use GEPA to automatically search for better `SKILL.md` instructions.
+5. Review the proposed diff, rerun checks, and promote only what holds up.
+
+The feedback loop is the product: visible behavior, concrete failures, and a diff you can accept or reject.
 
 New here? [`docs/getting-started.md`](docs/getting-started.md) walks the loop offline first, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary (Laguna, arms, gold replay, GEPA, …).
 
-A skill in this repo is not just prompt text. A publishable skill has:
+## What this gives you
+
+- **A skill library** for reusable Laguna behaviors, including CI log reduction, task scoping, and repo mapping.
+- **An eval harness** that compares model runs with and without a skill, using deterministic workspace artifacts instead of vibes.
+- **GEPA-based skill optimization** that rewrites `SKILL.md` candidates and scores them against frozen validators.
+- **Eval-case generation** for growing the test corpus, with generated cases quarantined until human review.
+- **A local workbench** for the skills catalog, workflow catalog, eval runs, node-level grades, optimization runs, proposals, and trace review.
+- **Smithers workflow experiments** where Pool executes workflow nodes and skills can be installed per node.
+
+## What counts as publishable
+
+A publishable skill has:
 
 - `SKILL.md` with clear trigger and boundary instructions.
 - A JSON output schema in `schemas/`.
 - A validator in `scripts/validate_*.ts`.
 - Eval cases under `skills/<name>/evals/<case-id>/`, including one adversarial case.
+
+`skill-generate` can draft a structure-valid skill, but generated drafts are not publishable until they pass the eval-case gates.
 
 ## Current status
 
@@ -39,42 +62,18 @@ Known-good versions used while writing these docs: Python 3.11+, `bun` 1.3.14, a
 
 `uv run ...` reads `pyproject.toml`; this repo is configured as a script-only project with `package = false`, so there is no package install step.
 
-## Quick checks
+## Start here
 
-Run the checks that should be green now:
-
-```bash
-uv run scripts/check_skill_structure.py
-uv run scripts/check_schemas.py
-uv run scripts/check_validator_robustness.py
-```
-
-Run eval-case validation when you are working on case coverage:
-
-```bash
-uv run scripts/check_eval_cases.py
-```
-
-Expected today: this fails only for `workspace-inventory`, which has no cases yet.
-
-## What you can do here
-
-This repo supports the full skill loop:
-
-1. Author a validator-backed skill.
-2. Build eval cases with gold artifacts.
-3. Run the skill against Laguna models with and without the skill installed.
-4. Inspect failures in the workbench and review app.
-5. Use GEPA to propose better `SKILL.md` prose, then review and merge it manually.
-
-The workbench provides a local UI for browsing skills, launching runs, and inspecting outputs. The CLI is better for agents and repeatable runs.
+Run the local workbench:
 
 ```bash
 bun ui/server.ts          # http://127.0.0.1:4319/workflows.html
 bun ui/bench.ts help      # JSON CLI over the same substrate
 ```
 
-Common workbench CLI commands:
+Use the workbench to browse skills, inspect workflows, launch evals, see GEPA optimization runs, review proposals, and sync traces into the review app. Details: [`ui/README.md`](ui/README.md).
+
+Useful workbench CLI commands:
 
 ```bash
 bun ui/bench.ts skills
@@ -96,7 +95,53 @@ cd ../..
 bun ui/server.ts
 ```
 
-Then use the workbench to browse workflow runs, inspect nodes, grade nodes with skill validators, sync traces to review, and compare skill scorecards. Details: [`ui/README.md`](ui/README.md).
+Run the checks that should be green now:
+
+```bash
+uv run scripts/check_skill_structure.py
+uv run scripts/check_schemas.py
+uv run scripts/check_validator_robustness.py
+```
+
+Run eval-case validation when you are working on case coverage:
+
+```bash
+uv run scripts/check_eval_cases.py
+```
+
+Expected today: this fails only for `workspace-inventory`, which has no cases yet.
+
+## Zero to one: optimize an existing skill for Laguna
+
+Today, importing a skill from outside this repo is a manual path. The planned `onboard --source <dir>` command is not shipped yet, so the honest workflow is:
+
+1. **Create a skill folder.** Copy the existing skill into `skills/<name>/SKILL.md`. Keep the name lowercase and kebab-case.
+2. **Make the output gradeable.** Add an output schema in `skills/<name>/schemas/` and a validator in `skills/<name>/scripts/validate_*.ts`. If the skill cannot name a deterministic artifact or diff target, it is not ready for optimization here.
+3. **Add eval cases.** Create at least three cases under `skills/<name>/evals/<case-id>/`, including one adversarial case. Each case needs `prompt.md`, `input/`, `expected/`, and `metadata.json`.
+4. **Add a suite.** Create `evals/suites/skill-<name>.json` listing those case directories.
+5. **Run the gates.**
+
+```bash
+uv run scripts/check_skill_structure.py
+uv run scripts/check_eval_cases.py
+uv run harness/runner/run_eval.py --suite evals/suites/skill-<name>.json --dry-run --replay
+```
+
+6. **Run GEPA.** Start with the smoke check, then run a baseline or live optimization when Poolside auth and a reflection-model key are available.
+
+```bash
+uv run harness/optimize/gepa_skill.py --skill <name> --smoke
+uv run harness/optimize/gepa_skill.py --skill <name> --baseline-only
+uv run harness/optimize/gepa_skill.py --skill <name> --max-metric-calls 60
+```
+
+7. **Promote manually.** Review `runs/optimize/<name>/<stamp>/best.diff`, then use the proposal flow or patch `SKILL.md` directly and rerun the checks.
+
+```bash
+bun ui/bench.ts optimize-propose --skill <name> --run-dir runs/optimize/<name>/<stamp>
+```
+
+If the existing skill has `references/` or helper scripts, copy them into `skills/<name>/` too. The current GEPA pilot optimizes `SKILL.md`; multi-file optimization is planned, not shipped.
 
 ## Eval dry run
 

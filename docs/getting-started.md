@@ -75,4 +75,5 @@ Live steps need credentials — see the matrix in [`concepts.md`](concepts.md).
 Pick your path in the [documentation index](README.md): authoring a skill starts at
 [`authoring-guide.md`](authoring-guide.md) (binding), eval cases at
 [`../evals/README.md`](../evals/README.md), methodology at
-[`eval-methodology.md`](eval-methodology.md).
+[`eval-methodology.md`](eval-methodology.md). Bringing an existing skill in from outside the
+repo is the "Zero to one" section of the root [`README.md`](../README.md).
