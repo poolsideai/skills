@@ -14,13 +14,26 @@ Plan of record: `docs/plans/laguna-skills-v0-2026-06-10.md`. Authoring standard:
 
 ## Commands
 
-Repo structure checks (no model access or network; run these before committing skill changes):
+Repo checks (no model access or network; run these before committing skill changes):
 
 ```sh
-uv run scripts/check_skill_structure.py        # frontmatter, ten-section template, no allowed-tools
-uv run scripts/check_eval_cases.py             # ≥3 cases/skill incl. ≥1 adversarial, metadata fields, gold replay
+uv run scripts/check_skill_structure.py        # frontmatter, non-goals, schemas/, validators/, no allowed-tools
 uv run scripts/check_schemas.py                # every *.schema.json parses
 uv run scripts/check_validator_robustness.py   # needs bun: validators must grade junk as "fail", never crash to "error"
+```
+
+All repo check scripts accept `--help` and `--json`. They exit `0` when checks pass, `1`
+for check violations, and `2` for argument or usage errors. In `--json` mode they emit
+`repo-check-result.v1` on stdout with `schema_version`, `tool`, `status`, `counts`,
+`violation_count`, and `violations[]` entries (`path`, `check`, `message`). Gold replay
+runs through the eval runner:
+`uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay`.
+
+Eval-case coverage check (run while working on cases; this may fail for WIP skills such as
+`workspace-inventory`):
+
+```sh
+uv run scripts/check_eval_cases.py             # >=3 cases/skill incl. >=1 adversarial, metadata, suites, validator paths
 ```
 
 Eval suites (runner materializes each case into a fresh temp workspace, runs `pool exec`, then the
@@ -78,12 +91,16 @@ Workbench: skills + workflow authoring, eval integration, live run view (require
 ```sh
 bun ui/server.ts                               # web UI → http://127.0.0.1:4319/workflows.html
                                                # also auto-starts harness/review/serve.py on 8901
-bun ui/bench.ts <cmd>                          # agent CLI (same substrate as the web UI, JSON I/O)
+bun ui/bench.ts <cmd>                          # agent CLI (shared workbench ops, JSON I/O)
 ```
 
 Key `bench.ts` commands:
 
 ```sh
+bun ui/bench.ts doctor                         # readiness snapshot; no web server required
+bun ui/bench.ts capabilities                   # CLI contract, output conventions, known mirrors
+bun ui/bench.ts commands                       # command catalog with usage, flags, output hints
+bun ui/bench.ts help <command>                 # command-specific JSON help (<command> --help also works)
 bun ui/bench.ts skills                         # list installed skills
 bun ui/bench.ts models                         # pool agents list (laguna first, then anthropic/*, ...)
 bun ui/bench.ts skill-generate --name <name> --prompt "..." --model <agent>
@@ -124,9 +141,11 @@ named in case `metadata.json`, speaking `validator-result.v1` JSON:
 ### Workbench (`ui/`)
 
 `ui/lib.ts` is the substrate for projects, runs, workflows, models, skills, and evals. `ui/server.ts`
-and `ui/bench.ts` are thin layers over it (HTTP routes + static serving; agent CLI). The web UI
-(`workflows.html` + `ui/app.js` + `ui/views/*.js`) and `bench.ts` share identical semantics so an agent can
-drive the full author→run→eval loop from the shell.
+uses it for HTTP routes and static serving. `ui/bench.ts` adds the agent CLI contract: command
+catalog, capabilities, doctor, command-specific help, flag parsing, JSON error responses, and known
+CLI↔HTTP mirror metadata. The web UI (`workflows.html` + `ui/app.js` + `ui/views/*.js`) and
+`bench.ts` share the main workbench operations where `capabilities.parity.known_mirrors` says they
+mirror each other.
 
 **Authoring gates** are enforced by the substrate and CI: `skill-generate` writes into a
 scratch dir, runs `scripts/check_skill_structure.py`, rolls back + feeds violations into one repair

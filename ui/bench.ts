@@ -5,6 +5,9 @@
  * agent that can run shell commands. All output is JSON on stdout; errors
  * are JSON on stderr with a non-zero exit code. No server needed.
  *
+ *   bun ui/bench.ts capabilities
+ *   bun ui/bench.ts commands
+ *   bun ui/bench.ts doctor
  *   bun ui/bench.ts projects
  *   bun ui/bench.ts models
  *   bun ui/bench.ts runs [--project <id>]
@@ -27,7 +30,8 @@
  *
  * Flags: only --case and --arm are repeatable (all occurrences used); for
  * every other flag the LAST occurrence wins. Unknown commands exit 2 with
- * JSON on stderr; `help` (or no command) prints usage on stdout.
+ * JSON on stderr; `help` (or no command) prints usage on stdout. Use
+ * `help <command>` or `<command> --help` for command-specific JSON help.
  */
 
 import {
@@ -79,6 +83,14 @@ function flag(args: Flags, key: string): string | undefined {
   return values?.[values.length - 1]; // last occurrence wins, like most CLIs
 }
 
+function positiveIntegerFlag(value: string | undefined, name: string): number | undefined {
+  if (value === undefined) return undefined;
+  if (!/^[1-9]\d*$/.test(value)) {
+    throw new HttpError(400, `${name} must be a positive integer`);
+  }
+  return Number(value);
+}
+
 function emit(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
 }
@@ -86,6 +98,10 @@ function emit(value: unknown): void {
 const USAGE = {
   usage: "bun ui/bench.ts <command>",
   commands: [
+    "capabilities — machine-readable CLI contract, output conventions, commands, and parity map",
+    "commands — command catalog with usage, flags, and output shape hints",
+    "doctor — machine-readable readiness check for repo, tools, skill contracts, suites, and run state",
+    "help [command] — usage summary, or command-specific JSON help",
     "projects — list Smithers workflow projects",
     "models — list pool agent names usable as authoring/executor models",
     "runs [--project <id>] — workflow runs as TrajectoryRecords",
@@ -109,12 +125,424 @@ const USAGE = {
   ],
 };
 
+type CommandDetail = {
+  name: string;
+  category: string;
+  summary: string;
+  usage: string;
+  output: string;
+  flags?: { name: string; value?: string; repeatable?: boolean; description: string }[];
+  positional?: { name: string; description: string }[];
+  notes?: string[];
+  mirrors?: string[];
+};
+
+const COMMAND_DETAILS: CommandDetail[] = [
+  {
+    name: "capabilities",
+    category: "discovery",
+    summary: "Machine-readable CLI contract, output conventions, commands, and parity map.",
+    usage: "bun ui/bench.ts capabilities",
+    output: "bench-capabilities.v1",
+  },
+  {
+    name: "commands",
+    category: "discovery",
+    summary: "Command catalog with usage, flags, and output shape hints.",
+    usage: "bun ui/bench.ts commands",
+    output: "bench-command-catalog.v1",
+  },
+  {
+    name: "doctor",
+    category: "discovery",
+    summary: "Readiness check for repo, tools, skill contracts, suites, and run state.",
+    usage: "bun ui/bench.ts doctor",
+    output: "bench-doctor.v1",
+    notes: ["Returns status ok, warn, or fail; warnings are actionable but do not imply the CLI is unusable."],
+  },
+  {
+    name: "help",
+    category: "discovery",
+    summary: "Print global usage or command-specific JSON help.",
+    usage: "bun ui/bench.ts help [command]",
+    output: "bench usage object or bench-command-help.v1",
+    positional: [{ name: "command", description: "Optional command name to inspect." }],
+    notes: ["Equivalent command-specific form: `bun ui/bench.ts <command> --help`."],
+  },
+  {
+    name: "projects",
+    category: "workflow",
+    summary: "List Smithers workflow projects.",
+    usage: "bun ui/bench.ts projects",
+    output: "Project[] without local root paths",
+  },
+  {
+    name: "models",
+    category: "workflow",
+    summary: "List pool agent names usable as authoring/executor models.",
+    usage: "bun ui/bench.ts models",
+    output: "string[]",
+  },
+  {
+    name: "runs",
+    category: "workflow",
+    summary: "List workflow runs as TrajectoryRecords.",
+    usage: "bun ui/bench.ts runs [--project <id>]",
+    output: "TrajectoryRecord[]",
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+    mirrors: ["GET /api/runs"],
+  },
+  {
+    name: "run-show",
+    category: "workflow",
+    summary: "Show node detail, outputs, and pool captures for a workflow run.",
+    usage: "bun ui/bench.ts run-show <runId> [--project <id>]",
+    output: "RunDetail",
+    positional: [{ name: "runId", description: "Workflow run id." }],
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+  },
+  {
+    name: "workflows",
+    category: "workflow",
+    summary: "List workflow .tsx files.",
+    usage: "bun ui/bench.ts workflows [--project <id>]",
+    output: "WorkflowFile[]",
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+  },
+  {
+    name: "workflow-graph",
+    category: "workflow",
+    summary: "Render a workflow file as a DAG projection.",
+    usage: "bun ui/bench.ts workflow-graph <path> [--project <id>]",
+    output: "{ nodes, edges }",
+    positional: [{ name: "path", description: "Project-relative workflow file path." }],
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+  },
+  {
+    name: "workflow-generate",
+    category: "workflow",
+    summary: "Ask pool to author a verified workflow.",
+    usage: 'bun ui/bench.ts workflow-generate --prompt "..." [--id <name>] [--model <agent>] [--project <id>]',
+    output: "WorkflowGenerationResult",
+    flags: [
+      { name: "--prompt", value: "text", description: "Workflow authoring prompt. Required." },
+      { name: "--id", value: "name", description: "Workflow id/file stem." },
+      { name: "--model", value: "agent", description: "Authoring agent name." },
+      { name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." },
+    ],
+  },
+  {
+    name: "workflow-run",
+    category: "workflow",
+    summary: "Start a workflow run and return its run id immediately.",
+    usage: "bun ui/bench.ts workflow-run <path> [--input '<json>'] [--project <id>]",
+    output: "{ runId, ... }",
+    positional: [{ name: "path", description: "Project-relative workflow file path." }],
+    flags: [
+      { name: "--input", value: "json", description: "JSON object passed as workflow input." },
+      { name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." },
+    ],
+  },
+  {
+    name: "skills",
+    category: "skills",
+    summary: "List the skill catalog with frontmatter, validators, schemas, and eval case counts.",
+    usage: "bun ui/bench.ts skills",
+    output: "SkillSummary[] with evalSummary",
+    mirrors: ["GET /api/skills"],
+  },
+  {
+    name: "skill-generate",
+    category: "skills",
+    summary: "Ask pool to author a new validator-first skill, gated by check_skill_structure.py.",
+    usage: 'bun ui/bench.ts skill-generate --name <name> --prompt "..." [--model <agent>]',
+    output: "SkillGenerationResult",
+    flags: [
+      { name: "--name", value: "name", description: "Skill directory/frontmatter name. Required." },
+      { name: "--prompt", value: "text", description: "Skill authoring prompt. Required." },
+      { name: "--model", value: "agent", description: "Authoring agent name." },
+    ],
+  },
+  {
+    name: "eval-suites",
+    category: "evals",
+    summary: "List suites and cases from evals/suites/*.json.",
+    usage: "bun ui/bench.ts eval-suites",
+    output: "EvalSuite[]",
+  },
+  {
+    name: "eval-run",
+    category: "evals",
+    summary: "Launch a detached harness run.",
+    usage: "bun ui/bench.ts eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]...",
+    output: "StartEvalRunResult",
+    flags: [
+      { name: "--suite", value: "path", description: "Repo-relative suite path. Required." },
+      { name: "--case", value: "id", repeatable: true, description: "Case id filter. Repeatable." },
+      { name: "--arm", value: "arm", repeatable: true, description: "Harness arm filter. Repeatable." },
+    ],
+  },
+  {
+    name: "eval-runs",
+    category: "evals",
+    summary: "List harness processes and per-arm results from runs/<suite>/<case>/<arm>/.",
+    usage: "bun ui/bench.ts eval-runs",
+    output: "{ harness, runs }",
+  },
+  {
+    name: "optimize-skill",
+    category: "optimization",
+    summary: "Launch detached GEPA SKILL.md optimization.",
+    usage: "bun ui/bench.ts optimize-skill --skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]",
+    output: "StartOptimizeRunResult",
+    flags: [
+      { name: "--skill", value: "name", description: "Skill to optimize. Required unless supplied as the first positional arg." },
+      { name: "--suite", value: "path", description: "Suite path override." },
+      { name: "--max-metric-calls", value: "N", description: "GEPA metric-call budget." },
+      { name: "--reflection-lm", value: "id", description: "Reflection model id." },
+      { name: "--arm", value: "arm", repeatable: true, description: "Harness arm filter. Repeatable." },
+      { name: "--smoke", description: "Run the smoke-sized optimizer path." },
+      { name: "--baseline-only", description: "Run baseline scoring without proposing improvements." },
+    ],
+  },
+  {
+    name: "optimize-runs",
+    category: "optimization",
+    summary: "List optimization processes and result.json summaries from runs/optimize/.",
+    usage: "bun ui/bench.ts optimize-runs",
+    output: "OptimizeProcess[]",
+  },
+  {
+    name: "optimize-propose",
+    category: "optimization",
+    summary: "Fold a finished GEPA run into the improvement queue.",
+    usage: "bun ui/bench.ts optimize-propose --skill <name> [--run-dir <dir>]",
+    output: "OptimizeProposal",
+    flags: [
+      { name: "--skill", value: "name", description: "Optimized skill. Required unless supplied as the first positional arg." },
+      { name: "--run-dir", value: "dir", description: "Specific optimization run directory." },
+    ],
+    mirrors: ["POST /api/proposals"],
+  },
+  {
+    name: "node-evals",
+    category: "node evals",
+    summary: "List node-level eval records, both in-workflow and standalone.",
+    usage: "bun ui/bench.ts node-evals [--project <id>]",
+    output: "NodeEvalRecord[]",
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+    mirrors: ["GET /api/node-evals"],
+  },
+  {
+    name: "node-eval-insitu",
+    category: "node evals",
+    summary: "Grade every node of a finished workflow run via its skill validator.",
+    usage: "bun ui/bench.ts node-eval-insitu <runId> [--project <id>]",
+    output: "NodeEvalRecord[]",
+    positional: [{ name: "runId", description: "Workflow run id." }],
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+  },
+  {
+    name: "node-eval-run",
+    category: "node evals",
+    summary: "Re-run a node standalone and grade each trial.",
+    usage: "bun ui/bench.ts node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>] [--project <id>]",
+    output: "NodeEvalRecord[]",
+    positional: [{ name: "workflowPath", description: "Project-relative workflow file path." }],
+    flags: [
+      { name: "--node", value: "id", description: "Workflow node id. Required." },
+      { name: "--trials", value: "N", description: "Number of standalone trials." },
+      { name: "--model", value: "agent", description: "Execution agent name." },
+      { name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." },
+    ],
+  },
+  {
+    name: "review-sync",
+    category: "review",
+    summary: "Fold workflow node captures and node evals into runs/review/traces.json.",
+    usage: "bun ui/bench.ts review-sync [--project <id>]",
+    output: "{ ok, tracesPath, count }",
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+  },
+];
+
+const COMMAND_BY_NAME = new Map(COMMAND_DETAILS.map((cmd) => [cmd.name, cmd]));
+
+class UnknownCommandError extends Error {
+  constructor(command: string) {
+    super(`Unknown command: ${command}`);
+  }
+}
+
+function commandHelp(name?: string): unknown {
+  if (!name) {
+    return {
+      ...USAGE,
+      help: "Use `bun ui/bench.ts help <command>` or `bun ui/bench.ts <command> --help` for command-specific JSON help.",
+    };
+  }
+  const command = COMMAND_BY_NAME.get(name);
+  if (!command) throw new UnknownCommandError(name);
+  return {
+    schema_version: "bench-command-help.v1",
+    command,
+    conventions: {
+      stdout: "JSON only on success.",
+      stderr: "JSON only on error.",
+      repeatable_flags: ["--case", "--arm"],
+      flag_precedence: "For non-repeatable flags, the last occurrence wins.",
+    },
+  };
+}
+
+function capabilities(): unknown {
+  return {
+    schema_version: "bench-capabilities.v1",
+    contract: {
+      invocation: "bun ui/bench.ts <command>",
+      stdout: "JSON only on success.",
+      stderr: "JSON only on error.",
+      exit_codes: {
+        0: "success",
+        1: "runtime, validation, or HTTP-style command error",
+        2: "unknown command",
+      },
+      repeatable_flags: ["--case", "--arm"],
+      flag_precedence: "For non-repeatable flags, the last occurrence wins.",
+    },
+    environment: {
+      cwd: "repo root",
+      server_required: false,
+      runtime: "bun",
+    },
+    commands: COMMAND_DETAILS,
+    parity: {
+      shared_substrate: "ui/lib.ts",
+      web_server: "ui/server.ts",
+      cli: "ui/bench.ts",
+      known_mirrors: COMMAND_DETAILS.filter((cmd) => cmd.mirrors?.length).map((cmd) => ({
+        command: cmd.name,
+        mirrors: cmd.mirrors,
+      })),
+    },
+    next_commands: [
+      "bun ui/bench.ts doctor",
+      "bun ui/bench.ts commands",
+      "bun ui/bench.ts help eval-run",
+    ],
+  };
+}
+
+type DoctorStatus = "ok" | "warn" | "fail";
+
+function toolStatus(name: string, required = true): { name: string; status: DoctorStatus; path: string | null } {
+  const path = Bun.which(name);
+  return {
+    name,
+    status: path ? "ok" : required ? "fail" : "warn",
+    path,
+  };
+}
+
+function aggregateStatus(items: { status: DoctorStatus }[]): DoctorStatus {
+  if (items.some((item) => item.status === "fail")) return "fail";
+  if (items.some((item) => item.status === "warn")) return "warn";
+  return "ok";
+}
+
+function doctor(): unknown {
+  const prerequisites = [
+    toolStatus("bun"),
+    toolStatus("uv"),
+    toolStatus("python3"),
+    toolStatus("git"),
+    toolStatus("pool", false),
+  ];
+  const skills = listSkills();
+  const incompleteContracts = skills.filter((skill) => skill.validators.length === 0 || skill.schemas.length === 0);
+  const lowCaseCoverage = skills.filter((skill) => skill.evalCases < 3);
+  const suites = listEvalSuites();
+  const suiteCaseCount = suites.reduce((sum, suite) => sum + suite.cases.length, 0);
+  const harness = listHarnessProcesses();
+  const evalRuns = listEvalRuns();
+  const optimizeRuns = listOptimizeRuns();
+
+  const checks: { id: string; status: DoctorStatus; detail: string }[] = [
+    {
+      id: "prerequisites",
+      status: aggregateStatus(prerequisites),
+      detail: `${prerequisites.filter((tool) => tool.status === "ok").length}/${prerequisites.length} tools found`,
+    },
+    {
+      id: "skills-present",
+      status: skills.length > 0 ? "ok" : "fail",
+      detail: `${skills.length} skill(s) discovered`,
+    },
+    {
+      id: "skill-contracts",
+      status: incompleteContracts.length === 0 ? "ok" : "fail",
+      detail:
+        incompleteContracts.length === 0
+          ? "all discovered skills expose at least one schema and validator"
+          : `${incompleteContracts.length} skill(s) are missing validators or schemas`,
+    },
+    {
+      id: "eval-case-coverage",
+      status: lowCaseCoverage.length === 0 ? "ok" : "warn",
+      detail:
+        lowCaseCoverage.length === 0
+          ? "all discovered skills have at least three eval cases"
+          : `${lowCaseCoverage.length} skill(s) have fewer than three eval cases`,
+    },
+    {
+      id: "eval-suites",
+      status: suites.length > 0 && suiteCaseCount > 0 ? "ok" : "warn",
+      detail: `${suites.length} suite(s), ${suiteCaseCount} suite case reference(s)`,
+    },
+  ];
+
+  return {
+    schema_version: "bench-doctor.v1",
+    status: aggregateStatus(checks),
+    prerequisites,
+    checks,
+    catalog: {
+      skills: skills.length,
+      skills_missing_contracts: incompleteContracts.map((skill) => skill.name),
+      skills_below_three_cases: lowCaseCoverage.map((skill) => skill.name),
+      suites: suites.length,
+      suite_case_references: suiteCaseCount,
+    },
+    runtime_state: {
+      harness_processes: harness.length,
+      running_harness_processes: harness.filter((process) => process.running).length,
+      eval_runs: evalRuns.length,
+      optimize_runs: optimizeRuns.length,
+    },
+    next_commands: [
+      "uv run scripts/check_skill_structure.py --json",
+      "uv run scripts/check_eval_cases.py --json",
+      "uv run scripts/check_schemas.py --json",
+      "uv run scripts/check_validator_robustness.py --json",
+      "uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay",
+    ],
+  };
+}
+
 async function main() {
   const [command, ...rest] = process.argv.slice(2);
   const args = parseArgs(rest);
   const project = () => getProject(flag(args, "project") ?? null);
 
+  if (command && flag(args, "help") === "true") return emit(commandHelp(command));
+
   switch (command) {
+    case "capabilities":
+      return emit(capabilities());
+    case "commands":
+      return emit({ schema_version: "bench-command-catalog.v1", commands: COMMAND_DETAILS });
+    case "doctor":
+      return emit(doctor());
     case "projects":
       return emit(discoverProjects().map(({ root: _root, ...p }) => p));
     case "models":
@@ -197,7 +625,7 @@ async function main() {
         startOptimizeRun({
           skill,
           suite: flag(args, "suite"),
-          maxMetricCalls: maxMetricCalls ? Number(maxMetricCalls) : undefined,
+          maxMetricCalls: positiveIntegerFlag(maxMetricCalls, "--max-metric-calls"),
           reflectionLm: flag(args, "reflection-lm"),
           arms: args.flags["arm"],
           smoke: flag(args, "smoke") === "true",
@@ -213,8 +641,9 @@ async function main() {
       return emit(proposalFromOptimizeRun({ skill, runDir: flag(args, "run-dir") ?? undefined }));
     }
     case undefined:
+      return emit(commandHelp());
     case "help":
-      return emit(USAGE);
+      return emit(commandHelp(args.positional[0]));
     case "review-sync":
       return emit({ ok: true, ...syncReviewTraces(project()) });
     case "node-evals":
@@ -230,7 +659,7 @@ async function main() {
       if (!path || !nodeId) throw new HttpError(400, "usage: node-eval-run <workflowPath> --node <id>");
       return emit(
         await evalNodeStandalone(project(), path, nodeId, {
-          trials: flag(args, "trials") ? Number(flag(args, "trials")) : undefined,
+          trials: positiveIntegerFlag(flag(args, "trials"), "--trials"),
           agentName: flag(args, "model"),
         }),
       );
@@ -239,7 +668,7 @@ async function main() {
       // Unknown command is an ERROR: stderr + exit 2, so agent typos
       // (run vs workflow-run) never read as success. `help` / no command
       // gets USAGE on stdout with exit 0.
-      console.error(JSON.stringify({ error: `unknown command: ${command}`, ...USAGE }));
+      console.error(JSON.stringify({ error: `Unknown command: ${command}`, ...USAGE }));
       process.exit(2);
   }
 }
@@ -251,6 +680,10 @@ main()
     setTimeout(() => process.exit(0), 50);
   })
   .catch((error) => {
+    if (error instanceof UnknownCommandError) {
+      console.error(JSON.stringify({ error: error.message, ...USAGE }));
+      process.exit(2);
+    }
     const status = error instanceof HttpError ? error.status : 500;
     console.error(JSON.stringify({ error: error.message ?? String(error), status }));
     process.exit(1);

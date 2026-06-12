@@ -335,7 +335,9 @@ carries the same contract):
 ## 8. Pre-merge checklist
 
 Run `scripts/check_skill_structure.py`, `check_eval_cases.py`, `check_schemas.py`, and
-`check_validator_robustness.py` (via `uv`); they enforce the mechanical rows. The last one
+`check_validator_robustness.py` (via `uv`); they enforce the mechanical rows. Add `--json`
+for a `repo-check-result.v1` payload on stdout in CI or scripted runs. Repo checks exit `0`
+when checks pass, `1` for check violations, and `2` for argument or usage errors. The last one
 feeds each validator malformed-but-parseable artifacts (null/primitive array entries, non-object
 roots) and requires a graded `"fail"` with repair feedback, never a crash into `"error"`.
 The full bar for a skill PR:

@@ -24,7 +24,8 @@ Run from the repo root:
 
     uv run scripts/check_eval_cases.py
 
-Exits 0 when green, 1 with a per-violation report otherwise.
+Exits 0 when checks pass, 1 with a per-violation report, and 2 for argument or
+usage errors. Use --json for a repo-check-result.v1 payload on stdout.
 """
 
 from __future__ import annotations
@@ -43,6 +44,7 @@ from checklib import (
     iter_case_dirs,
     iter_skill_dirs,
     load_json,
+    parse_check_args,
 )
 
 ALLOWED_CASE_ENTRIES = {"prompt.md", "metadata.json", "input", "expected", "validators"}
@@ -256,18 +258,19 @@ def check_suites(report: Report) -> None:
                 )
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    opts = parse_check_args(argv, __doc__ or "Check eval cases and suites.")
     report = Report("check_eval_cases")
     if not SKILLS_DIR.is_dir():
         report.fail(SKILLS_DIR, "skills-dir", "missing skills/ directory at the repo root")
-        return report.finish()
+        return report.finish(json_output=opts.json)
 
     validator = load_case_schema(report)
     for skill_dir in iter_skill_dirs():
         check_skill_cases(report, skill_dir, validator)
     check_suites(report)
-    return report.finish()
+    return report.finish(json_output=opts.json)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
