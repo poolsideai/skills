@@ -9,7 +9,7 @@ description: >-
   numbers with verbatim text, names the failing command, and suggests safe
   local next commands. Do not use to fix the underlying bug or edit code.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # CI Log Reducer
@@ -73,9 +73,14 @@ execution only — **no network access**, and nothing here ever modifies reposit
    - With retried steps, prefer failures that reproduce in the final attempt; call
      earlier-only failures flaky in the summary.
    - If several distinct failures exist, cover **all** of them — never stop at the first.
-4. Write the artifact per the Output contract. Copy `line`/`text` pairs directly from the
-   preprocessor output; derive `failing_command` only from the log or `ci-job.json`.
-5. Validate, and repair at most once (next two sections).
+4. **CRITICAL: Copy `text` fields character-for-character from the preprocessor output.**
+   The validator byte-compares each `text` against the actual log line. Any difference —
+   extra whitespace, trimmed whitespace, paraphrasing, normalization, escape-sequence
+   changes — will fail the verbatim check. If the preprocessor emitted the line, use that
+   exact string; if you read the log directly, copy the full line with all leading/trailing
+   whitespace and special characters preserved.
+5. Write the artifact per the Output contract below.
+6. Validate, and repair at most once (next two sections).
 
 ## Output contract
 
@@ -88,9 +93,35 @@ Write exactly one JSON object to **`.laguna/ci-log-summary.json`** at the worksp
 - `failing_command` — the command that failed, supported by log or `ci-job.json`
 - `failure_kind` — `test_failure | build_error | lint_error | infra_error | other`
 - `summary` — ≤600 chars, covering every distinct failure
-- `error_lines` — 1–20 `{line, text}` pairs; `line` is 1-based, `text` verbatim
+- `error_lines` — 1–20 `{line, text}` pairs; `line` is 1-based integer, `text` is the
+  **exact verbatim string** from that line number in the log, with all whitespace and
+  characters preserved byte-for-byte
 - `suggested_next_commands` — 1–5 safe, local commands (no network: no installs, fetches,
   pushes; nothing destructive: no `rm`, hard resets, `sudo`)
+
+### Critical `error_lines` requirements
+
+Each `{line, text}` pair must satisfy:
+
+- `line` is the 1-based line number in the log file where `text` appears.
+- `text` is the **complete, unmodified line** from the log at that line number:
+  - Do NOT trim leading or trailing whitespace.
+  - Do NOT normalize tabs, escape sequences, or control characters.
+  - Do NOT paraphrase, summarize, or abbreviate.
+  - Do NOT add or remove quotes, brackets, or any other characters.
+  - If the preprocessor output included the line, copy its `text` field exactly.
+  - If reading the log directly, copy the entire line as-is.
+
+**Example of CORRECT verbatim copying** (log line 54 is `"            got: 0"`):
+```json
+{ "line": 54, "text": "            got: 0" }
+```
+
+**Example of INCORRECT copying** (whitespace trimmed):
+```json
+{ "line": 54, "text": "got: 0" }
+```
+This will fail validation even though the content words match.
 
 A summary that only appears in the chat message does not exist for grading — the file must
 be on disk. Mention in your final message that you wrote it and what the verdict was.
@@ -111,9 +142,15 @@ passed; `repair_feedback[]` lists what to fix.
 
 ## Repair
 
-At most **one** repair attempt. Act only on `repair_feedback` and schema errors: correct the
-named fields in `.laguna/ci-log-summary.json`, change nothing unrelated, re-run the
-validator once. If it still fails, stop and escalate; do not loop.
+At most **one** repair attempt. Act only on `repair_feedback` and schema errors:
+
+- **For "Verbatim mismatch" errors:** The validator will report the line number and what the
+  log actually says. Open the log file, navigate to that exact line number, and copy the
+  entire line character-for-character into the `text` field. Do not guess or paraphrase.
+- **For schema errors:** Correct the type, range, or format of the named field.
+- Change nothing unrelated to the reported errors.
+- Re-run the validator once after fixing.
+- If it still fails, stop and escalate; do not loop.
 
 ## Escalation
 
