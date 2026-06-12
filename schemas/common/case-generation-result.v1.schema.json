@@ -2,36 +2,102 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://poolside.ai/schemas/common/case-generation-result.v1.schema.json",
   "title": "Case generation operation result v1",
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["schema_version", "operation", "case_id", "case_dir", "ok", "violations"],
-  "properties": {
-    "schema_version": { "const": "case-generation-result.v1" },
-    "operation": { "enum": ["validate-only", "promote"] },
-    "case_id": { "type": "string", "minLength": 1 },
-    "case_dir": { "type": "string", "minLength": 1 },
-    "ok": { "type": "boolean" },
-    "violations": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "replay_status": { "type": "string", "minLength": 1 },
-    "sensitivity_status": { "type": "string", "minLength": 1 },
-    "rolled_back": { "type": "boolean" },
-    "dest": { "type": "string", "minLength": 1 },
-    "suite": { "type": "string", "minLength": 1 },
-    "next": { "type": "string", "minLength": 1 }
-  },
-  "allOf": [
-    {
-      "if": {
-        "properties": {
-          "operation": { "const": "promote" },
-          "ok": { "const": true }
+  "oneOf": [
+    { "$ref": "#/$defs/singleResult" },
+    { "$ref": "#/$defs/aggregateValidateOnlyResult" }
+  ],
+  "$defs": {
+    "baseValidateOnlyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "operation", "case_id", "case_dir", "ok", "violations"],
+      "properties": {
+        "schema_version": { "const": "case-generation-result.v1" },
+        "operation": { "const": "validate-only" },
+        "case_id": { "type": "string", "minLength": 1 },
+        "case_dir": { "type": "string", "minLength": 1 },
+        "ok": { "type": "boolean" },
+        "violations": {
+          "type": "array",
+          "items": { "type": "string" }
         },
-        "required": ["operation", "ok"]
+        "replay_status": { "type": "string", "minLength": 1 },
+        "sensitivity_status": { "type": "string", "minLength": 1 }
+      }
+    },
+    "singleResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "operation", "case_id", "case_dir", "ok", "violations"],
+      "properties": {
+        "schema_version": { "const": "case-generation-result.v1" },
+        "operation": { "enum": ["validate-only", "promote"] },
+        "case_id": { "type": "string", "minLength": 1 },
+        "case_dir": { "type": "string", "minLength": 1 },
+        "ok": { "type": "boolean" },
+        "violations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "replay_status": { "type": "string", "minLength": 1 },
+        "sensitivity_status": { "type": "string", "minLength": 1 },
+        "rolled_back": { "type": "boolean" },
+        "dest": { "type": "string", "minLength": 1 },
+        "suite": { "type": "string", "minLength": 1 },
+        "next": { "type": "string", "minLength": 1 }
       },
-      "then": { "required": ["dest", "suite", "replay_status", "next"] }
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "operation": { "const": "promote" },
+              "ok": { "const": true }
+            },
+            "required": ["operation", "ok"]
+          },
+          "then": { "required": ["dest", "suite", "replay_status", "next"] }
+        }
+      ]
+    },
+    "aggregateValidateOnlyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "operation",
+        "case_id",
+        "case_dir",
+        "ok",
+        "violations",
+        "counts",
+        "results"
+      ],
+      "properties": {
+        "schema_version": { "const": "case-generation-result.v1" },
+        "operation": { "const": "validate-only" },
+        "case_id": { "type": "string", "minLength": 1 },
+        "case_dir": { "type": "string", "minLength": 1 },
+        "ok": { "type": "boolean" },
+        "violations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cases", "ok", "failed"],
+          "properties": {
+            "cases": { "type": "integer", "minimum": 0 },
+            "ok": { "type": "integer", "minimum": 0 },
+            "failed": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "results": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/baseValidateOnlyResult" }
+        }
+      }
     }
-  ]
+  }
 }

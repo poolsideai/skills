@@ -3,8 +3,7 @@
 
 Checks:
 
-- The three shared v0 contracts exist under schemas/common/:
-  validator-result.v1, eval-case.v1, run-manifest.v0 (plan item 7).
+- Required shared common contracts exist under schemas/common/.
 - Every *.schema.json in the repo (skill output schemas under
   skills/<skill>/schemas/ and shared contracts under schemas/common/) parses
   as JSON, is a JSON object, and validates against its declared metaschema
@@ -44,6 +43,9 @@ REQUIRED_COMMON_SCHEMAS = (
     "validator-result.v1.schema.json",
     "eval-case.v1.schema.json",
     "run-manifest.v0.schema.json",
+    "case-generation-result.v1.schema.json",
+    "eval-error.v1.schema.json",
+    "eval-dry-run-summary.v1.schema.json",
 )
 
 

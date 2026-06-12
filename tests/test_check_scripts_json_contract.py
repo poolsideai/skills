@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+import contextlib
+import importlib.util
+import io
 import json
 import subprocess
+import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -70,6 +76,65 @@ class CheckScriptsJsonContractTests(unittest.TestCase):
             ),
             payload,
         )
+
+    def test_check_schemas_json_failure_requires_all_shared_contract_schemas(self) -> None:
+        scripts_dir = REPO_ROOT / "scripts"
+        sys.path.insert(0, str(scripts_dir))
+        self.addCleanup(lambda: sys.path.remove(str(scripts_dir)))
+        spec = importlib.util.spec_from_file_location(
+            "check_schemas_under_test",
+            scripts_dir / "check_schemas.py",
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        check_schemas = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(check_schemas)
+
+        required_names = (
+            "validator-result.v1.schema.json",
+            "eval-case.v1.schema.json",
+            "run-manifest.v0.schema.json",
+            "case-generation-result.v1.schema.json",
+            "eval-error.v1.schema.json",
+            "eval-dry-run-summary.v1.schema.json",
+        )
+        valid_schema = '{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object"}\n'
+
+        for missing_name in (
+            "case-generation-result.v1.schema.json",
+            "eval-error.v1.schema.json",
+            "eval-dry-run-summary.v1.schema.json",
+        ):
+            with self.subTest(missing_name=missing_name), tempfile.TemporaryDirectory() as temp_dir:
+                temp_repo = Path(temp_dir)
+                common_dir = temp_repo / "schemas" / "common"
+                common_dir.mkdir(parents=True)
+                for name in required_names:
+                    if name != missing_name:
+                        (common_dir / name).write_text(valid_schema)
+
+                stdout = io.StringIO()
+                with (
+                    mock.patch.object(check_schemas, "REPO_ROOT", temp_repo),
+                    mock.patch.object(check_schemas, "COMMON_SCHEMAS_DIR", common_dir),
+                    mock.patch("checklib.REPO_ROOT", temp_repo),
+                    contextlib.redirect_stdout(stdout),
+                ):
+                    exit_code = check_schemas.main(["--json"])
+
+                self.assertNotEqual(exit_code, 0)
+                payload = json.loads(stdout.getvalue())
+                self.assertEqual(payload["schema_version"], "repo-check-result.v1")
+                self.assertEqual(payload["tool"], "check_schemas")
+                self.assertEqual(payload["status"], "fail")
+                self.assertTrue(
+                    any(
+                        str(violation.get("path", "")).endswith(f"schemas/common/{missing_name}")
+                        and violation.get("check") == "common-contract-exists"
+                        for violation in payload["violations"]
+                    ),
+                    payload,
+                )
 
 
 if __name__ == "__main__":

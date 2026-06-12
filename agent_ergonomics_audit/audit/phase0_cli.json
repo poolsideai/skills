@@ -1,0 +1,15 @@
+{
+  "target_path": "/Users/ben/code/poolside/skills",
+  "discovered_at": "2026-06-12T12:55:03Z",
+  "languages": [
+    "python"
+  ],
+  "binaries": [],
+  "env_var_prefix": "",
+  "existing_surfaces": {
+    "robot_mode": false,
+    "capabilities": false,
+    "robot_docs": false
+  },
+  "recommended_mode": "full"
+}

@@ -45,6 +45,7 @@ import shlex
 import shutil
 import sys
 import tempfile
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -63,10 +64,40 @@ from harness.validators.json_schema import validate_instance
 from harness.validators.validator_result import load_validator_result, make_error_result
 
 VALIDATOR_OUT_NAME = "validator.json"
+ERROR_SCHEMA_VERSION = "eval-error.v1"
+
+
+class EvalArgumentParser(argparse.ArgumentParser):
+    def __init__(self, *args: object, json_errors: bool = False, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)
+        self.json_errors = json_errors
+
+    def error(self, message: str) -> None:
+        if self.json_errors:
+            emit_error("args", message, 2)
+            raise SystemExit(2)
+        super().error(message)
+
+
+def wants_json_errors(argv: list[str]) -> bool:
+    return "--robot-dry-run" in argv or "--json-summary" in argv
+
+
+def emit_error(phase: str, message: str, exit_code: int, *, suggested_command: str | None = None) -> None:
+    payload = {
+        "schema_version": ERROR_SCHEMA_VERSION,
+        "ok": False,
+        "phase": phase,
+        "exit_code": exit_code,
+        "error": {"message": message},
+        "suggested_command": suggested_command,
+    }
+    print(json.dumps(payload, indent=2), file=sys.stderr)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Laguna skills eval runner (v0).")
+    raw_argv = sys.argv[1:] if argv is None else argv
+    parser = EvalArgumentParser(description="Laguna skills eval runner (v0).", json_errors=wants_json_errors(raw_argv))
     parser.add_argument("--suite", required=True, help="Path to a suite JSON file (evals/suites/*.json).")
     parser.add_argument("--case", action="append", default=[], dest="cases", metavar="CASE_ID",
                         help="Run only this case id (repeatable).")
@@ -78,6 +109,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="With --dry-run: gold-replay each case's validator against its expected/ artifacts.")
     parser.add_argument("--print-manifest", action="store_true",
                         help="With --dry-run: dump the validated manifest preview JSON per run.")
+    parser.add_argument("--json-summary", action="store_true",
+                        help="With --dry-run: emit one machine-readable JSON summary to stdout instead of prose.")
+    parser.add_argument("--robot-dry-run", action="store_true",
+                        help="Alias for --dry-run --json-summary.")
     parser.add_argument("--runs-root", type=Path, default=REPO_ROOT / "runs",
                         help="Root for runs/<suite>/<case>/<arm>/ output (default: <repo>/runs).")
     parser.add_argument("--skills-root", type=Path, default=fx.DEFAULT_SKILLS_ROOT,
@@ -94,11 +129,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="Per-validator wall cap, seconds (default 120).")
     parser.add_argument("--keep-workspaces", action="store_true",
                         help="Keep scratch workspaces (printed) instead of deleting them.")
-    args = parser.parse_args(argv)
+    args = parser.parse_args(raw_argv)
+    if args.robot_dry_run:
+        args.dry_run = True
+        args.json_summary = True
     if args.replay and not args.dry_run:
         parser.error("--replay is a dry-run feature; pass --dry-run as well")
     if args.print_manifest and not args.dry_run:
         parser.error("--print-manifest is a dry-run feature; pass --dry-run as well")
+    if args.json_summary and not args.dry_run:
+        parser.error("--json-summary requires --dry-run")
+    if args.json_summary and args.print_manifest:
+        parser.error("--print-manifest cannot be used with --json-summary")
     return args
 
 
@@ -109,11 +151,20 @@ def main(argv: list[str] | None = None) -> int:
         cases = [mx.load_case(d) for d in case_dirs]
         specs = mx.build_matrix(cases, args.cases or None, args.arms or None)
     except mx.SuiteError as exc:
+        if args.json_summary:
+            emit_error("suite", str(exc), 2, suggested_command="uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --robot-dry-run")
+            return 2
         print(f"error: {exc}", file=sys.stderr)
         return 2
     if not specs:
+        if args.json_summary:
+            emit_error("matrix", "matrix is empty (case metadata declares no matching arms)", 2)
+            return 2
         print("error: matrix is empty (case metadata declares no matching arms)", file=sys.stderr)
         return 2
+
+    if args.dry_run and args.json_summary:
+        return run_dry_json(suite_name, Path(args.suite).resolve(), cases, specs, args)
 
     print(f"suite {suite_name!r}: {len(cases)} case(s), {len(specs)} run(s) [serial]")
     if args.dry_run:
@@ -122,6 +173,278 @@ def main(argv: list[str] | None = None) -> int:
 
 
 # --------------------------------------------------------------------------- dry run
+
+def run_dry_json(suite_name: str, suite_path: Path, cases: list[mx.Case], specs: list[mx.RunSpec], args: argparse.Namespace) -> int:
+    surface = px.canonical_surface()  # robot dry-run never probes the installed CLI
+    arms_by_case: dict[str, list[mx.Arm]] = {}
+    for spec in specs:
+        arms_by_case.setdefault(spec.case.id, []).append(spec.arm)
+
+    fixture_problems: dict[tuple[str, str], list[str]] = {}
+    fixture_records: list[dict] = []
+    for case in cases:
+        arms = arms_by_case.get(case.id)
+        if arms is None:
+            continue
+        case_problems: list[str] = []
+        for arm in arms:
+            problems = fx.validate_fixture(case, [arm], args.skills_root)
+            fixture_problems[(case.id, arm.name)] = problems
+            for problem in problems:
+                if problem not in case_problems:
+                    case_problems.append(problem)
+        fixture_records.append({
+            "case_id": case.id,
+            "status": "invalid" if case_problems else "ok",
+            "arms": [arm.name for arm in arms],
+            "problems": case_problems,
+        })
+
+    run_records: list[dict] = []
+    for spec in specs:
+        record = dry_run_one_record(suite_name, spec, surface, args, fixture_problems.get((spec.case.id, spec.arm.name), []))
+        run_records.append(record)
+    run_preview_failures = sum(1 for record in run_records if not record["ok"])
+
+    replay_records: list[dict] = []
+    replay_failures = 0
+    if args.replay:
+        for case in cases:
+            if case.id not in arms_by_case:
+                continue
+            if any(fixture_problems.get((case.id, arm.name)) for arm in arms_by_case[case.id]):
+                replay_records.append({
+                    "case_id": case.id,
+                    "status": "skipped",
+                    "expected_status": case.expected_status,
+                    "reason": "fixture invalid",
+                })
+                continue
+            replay_record = replay_case_record(case, args)
+            replay_records.append(replay_record)
+            if replay_record["status"] != "pass":
+                replay_failures += 1
+
+    fixture_invalid_cases = sum(
+        1
+        for case_id, arms in arms_by_case.items()
+        if any(fixture_problems.get((case_id, arm.name)) for arm in arms)
+    )
+    failures = run_preview_failures + replay_failures
+    summary = {
+        "schema_version": "eval-dry-run-summary.v1",
+        "ok": failures == 0,
+        "suite": {"name": suite_name, "path": display_path(suite_path)},
+        "filters": {"cases": args.cases or None, "arms": args.arms or None},
+        "counts": {
+            "cases_loaded": len(cases),
+            "runs_planned": len(specs),
+            "fixture_invalid_cases": fixture_invalid_cases,
+            "run_preview_failures": run_preview_failures,
+            "replay_failures": replay_failures,
+            "failures": failures,
+        },
+        "fixtures": fixture_records,
+        "runs": run_records,
+        "replays": replay_records,
+    }
+    errors = validate_instance(summary, "eval-dry-run-summary.v1")
+    if errors:
+        print("error: dry-run summary failed schema validation:", file=sys.stderr)
+        for error in errors:
+            print(f"  - {error}", file=sys.stderr)
+        return 1
+    print(json.dumps(summary, indent=2))
+    return 0 if summary["ok"] else 1
+
+
+def dry_run_one_record(
+    suite_name: str,
+    spec: mx.RunSpec,
+    surface: px.PoolSurface,
+    args: argparse.Namespace,
+    fixture_problems: list[str],
+) -> dict:
+    case, arm = spec.case, spec.arm
+    base = {
+        "label": spec.label,
+        "case_id": case.id,
+        "case_dir": display_path(case.case_dir),
+        "skill": case.skill or None,
+        "arm": arm.name,
+        "model_class": arm.model_class,
+        "agent_name": arm.agent_name,
+        "with_skill": arm.with_skill,
+    }
+    if fixture_problems:
+        return {
+            "ok": False,
+            **base,
+            "fixture": dry_run_fixture_record("invalid", fixture_problems, False, args.keep_workspaces, None),
+            "pool_command": None,
+            "environment": None,
+            "validator": None,
+            "manifest_preview": None,
+        }
+
+    try:
+        mat = fx.materialize(case, arm, args.skills_root, include_credentials=False)
+    except FileNotFoundError as exc:
+        return {
+            "ok": False,
+            **base,
+            "fixture": dry_run_fixture_record("error", [str(exc)], False, args.keep_workspaces, None),
+            "pool_command": None,
+            "environment": None,
+            "validator": None,
+            "manifest_preview": None,
+        }
+
+    ok = True
+    problems: list[str] = []
+    try:
+        skill_dest = mat.workspace / ".poolside" / "skills" / case.skill
+        if arm.with_skill:
+            if not (skill_dest / "SKILL.md").is_file():
+                problems.append(f"with-skill arm but {skill_dest}/SKILL.md missing")
+                ok = False
+            if (skill_dest / "evals").exists():
+                problems.append("skill evals/ leaked into workspace (gold contamination)")
+                ok = False
+        elif skill_dest.exists():
+            problems.append("baseline arm has a materialized skill")
+            ok = False
+
+        run_dir = args.runs_root / suite_name / case.id / arm.name  # not written in dry-run
+        run_id = robot_preview_run_id(suite_name, spec)
+        prompt_text = case.prompt_path.read_text(encoding="utf-8")
+        argv, cmd_debt, _ = px.build_pool_command(
+            surface, pool_bin=args.pool_bin, prompt_file=run_dir / "prompt.md", prompt_text=prompt_text,
+            workspace=mat.workspace, agent_name=arm.agent_name, run_id=run_id, api_url=args.api_url,
+        )
+        validator_argv = validator_command_argv(case, mat.workspace, run_dir / VALIDATOR_OUT_NAME)
+
+        skill_version, version_problem = art.read_skill_version(args.skills_root, case.skill)
+        now = "1970-01-01T00:00:00Z"
+        preview_debt = cmd_debt + [art.debt("hd-3"), art.debt("hd-7"), art.debt("isolation-residue"), art.debt("nljson-activation")]
+        if version_problem:
+            preview_debt.append({"kind": "skill-version-unresolved", "detail": version_problem})
+        preview = art.build_manifest(
+            run_id=run_id, skill_name=case.skill, skill_version=skill_version,
+            agent_name=arm.agent_name, pool_version="dry-run", command=argv, exit_code=0,
+            artifacts=planned_artifacts(), started_at=now, finished_at=now, duration_ms=0,
+            validator_result=make_error_result(case.id, 0),
+            harness_debt=preview_debt,
+        )
+        manifest_errors = validate_instance(preview, art.MANIFEST_SCHEMA)
+        if manifest_errors:
+            ok = False
+
+        normalized_argv = normalize_preview_paths(argv, mat)
+        normalized_validator_argv = normalize_preview_paths(validator_argv, mat)
+        normalized_preview = normalize_preview_paths(preview, mat)
+        return {
+            "ok": ok,
+            "run_id": run_id,
+            **base,
+            "fixture": dry_run_fixture_record("ok" if not problems else "invalid", problems, mat.skill_materialized, args.keep_workspaces, mat),
+            "pool_command": {"argv": normalized_argv, "shell": shell_join(normalized_argv), "debt": cmd_debt},
+            "environment": {
+                "home": "<home>" if args.keep_workspaces else None,
+                "xdg_state_home": "<xdg_state_home>" if args.keep_workspaces else None,
+                "poolside_token": "not-used-in-dry-run",
+                "credentials": "not-copied-in-dry-run",
+            },
+            "validator": {"argv": normalized_validator_argv, "expected_status": case.expected_status},
+            "manifest_preview": {"valid": not manifest_errors, "errors": manifest_errors, "manifest": normalized_preview},
+        }
+    finally:
+        if not args.keep_workspaces:
+            mat.cleanup()
+
+
+def replay_case_record(case: mx.Case, args: argparse.Namespace) -> dict:
+    workspace = fx.materialize_replay_workspace(case)
+    out_dir = Path(tempfile.mkdtemp(prefix=f"laguna-replay-out-{case.id}-"))
+    out_path = out_dir / VALIDATOR_OUT_NAME
+    try:
+        argv = validator_command_argv(case, workspace, out_path)
+        result = run_command(argv, cwd=REPO_ROOT, env=base_env(), timeout_s=args.validator_timeout)
+        instance, errors = load_validator_result(out_path)
+        if instance is None:
+            record = {
+                "case_id": case.id,
+                "status": "fail",
+                "expected_status": case.expected_status,
+                "actual_status": None,
+                "validator_exit_code": result.exit_code,
+                "timed_out": result.timed_out,
+                "errors": errors,
+            }
+            if result.stderr.strip():
+                record["stderr_tail"] = result.stderr_tail(500)
+            return record
+        status = "pass" if instance["status"] == case.expected_status else "fail"
+        return {
+            "case_id": case.id,
+            "status": status,
+            "expected_status": case.expected_status,
+            "actual_status": instance["status"],
+            "validator_exit_code": result.exit_code,
+            "timed_out": result.timed_out,
+            "errors": [],
+        }
+    finally:
+        if not args.keep_workspaces:
+            shutil.rmtree(workspace, ignore_errors=True)
+            shutil.rmtree(out_dir, ignore_errors=True)
+
+
+def dry_run_fixture_record(status: str, problems: list[str], skill_materialized: bool, scratch_kept: bool, mat: fx.MaterializedRun | None) -> dict:
+    normalized_problems = normalize_preview_paths(problems, mat) if mat is not None else problems
+    return {
+        "status": status,
+        "problems": normalized_problems,
+        "skill_materialized": skill_materialized,
+        "scratch_kept": scratch_kept,
+        "scratch": "<scratch>" if mat is not None and scratch_kept else None,
+        "workspace": "<workspace>" if mat is not None and scratch_kept else None,
+    }
+
+
+def display_path(path: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(REPO_ROOT))
+    except ValueError:
+        return str(resolved)
+
+
+def robot_preview_run_id(suite_name: str, spec: mx.RunSpec) -> str:
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"poolside-skills:{suite_name}:{spec.case.id}:{spec.arm.name}"))
+
+
+def normalize_preview_paths(value, mat: fx.MaterializedRun):
+    replacements = {
+        str(mat.workspace): "<workspace>",
+        str(mat.home): "<home>",
+        str(mat.state): "<xdg_state_home>",
+        str(mat.scratch): "<scratch>",
+    }
+
+    def normalize(item):
+        if isinstance(item, str):
+            for original, replacement in replacements.items():
+                item = item.replace(original, replacement)
+            return item
+        if isinstance(item, list):
+            return [normalize(child) for child in item]
+        if isinstance(item, dict):
+            return {key: normalize(child) for key, child in item.items()}
+        return item
+
+    return normalize(value)
+
 
 def run_dry(suite_name: str, cases: list[mx.Case], specs: list[mx.RunSpec], args: argparse.Namespace) -> int:
     failures = 0

@@ -1,12 +1,28 @@
 import { describe, expect, test } from "bun:test";
+import { chmodSync, existsSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
-function runBench(args: string[]) {
+function runBench(args: string[], options: { env?: Record<string, string> } = {}) {
   return Bun.spawnSync({
     cmd: ["bun", "ui/bench.ts", ...args],
     cwd: import.meta.dir + "/..",
     stdout: "pipe",
     stderr: "pipe",
+    env: options.env,
   });
+}
+
+function envWithPathPrefix(pathPrefix: string): Record<string, string> {
+  const env = Object.fromEntries(Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"));
+  env.PATH = `${pathPrefix}:${env.PATH ?? ""}`;
+  return env;
+}
+
+function optimizeStateFiles(): Set<string> {
+  const stateDir = join(import.meta.dir, "..", "runs", "optimize", ".state");
+  if (!existsSync(stateDir)) return new Set();
+  return new Set(readdirSync(stateDir).map((name) => join(stateDir, name)));
 }
 
 function stderrJson(result: ReturnType<typeof runBench>) {
@@ -16,6 +32,132 @@ function stderrJson(result: ReturnType<typeof runBench>) {
 }
 
 describe("bench invalid numeric CLI flags", () => {
+  test("eval-run rejects unknown flags before launching the harness", () => {
+    const result = runBench(["eval-run", "--suite", "evals/suites/smoke.json", "--jsno"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("Unknown flag for eval-run: --jsno");
+  });
+
+  test("eval-run suggests the closest known flag for a typo", () => {
+    const result = runBench(["eval-run", "--sutie", "evals/suites/smoke.json"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("Unknown flag for eval-run: --sutie");
+    expect(body.error).toContain("Did you mean --suite?");
+  });
+
+  test("eval-run rejects missing required flag values", () => {
+    const result = runBench(["eval-run", "--suite"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("--suite requires a value");
+  });
+
+  test("eval-run rejects duplicate scalar flags", () => {
+    const result = runBench(["eval-run", "--suite", "evals/suites/smoke.json", "--suite", "evals/suites/smoke.json"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("Duplicate flag for eval-run: --suite");
+  });
+
+  test("eval-run rejects values for boolean flags", () => {
+    const result = runBench(["eval-run", "--suite", "evals/suites/smoke.json", "--robot-dry-run", "false"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("--robot-dry-run does not take a value");
+  });
+
+  test("read-side commands reject unexpected positionals", () => {
+    const result = runBench(["skills", "extra"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("Unexpected positional argument(s): extra");
+  });
+
+  test("optimize-skill rejects unknown flags before launching the optimizer", () => {
+    const result = runBench(["optimize-skill", "--skill", "ci-log-reducer", "--badflag", "--smoke"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("Unknown flag for optimize-skill: --badflag");
+  });
+
+  test("optimize-skill rejects smoke with baseline-only before launching the optimizer", () => {
+    const fakeBin = mkdtempSync(join(tmpdir(), "bench-fake-uv-"));
+    const marker = join(fakeBin, "uv-invoked");
+    const fakeUv = join(fakeBin, "uv");
+    writeFileSync(fakeUv, `#!/bin/sh\nprintf invoked > ${JSON.stringify(marker)}\nexit 42\n`);
+    chmodSync(fakeUv, 0o755);
+
+    const beforeStateFiles = optimizeStateFiles();
+    let result: ReturnType<typeof runBench> | undefined;
+    let launchedFakeUv = false;
+    let newStateFiles: string[] = [];
+
+    try {
+      result = runBench(["optimize-skill", "--skill", "ci-log-reducer", "--smoke", "--baseline-only"], {
+        env: envWithPathPrefix(fakeBin),
+      });
+      launchedFakeUv = existsSync(marker);
+      newStateFiles = [...optimizeStateFiles()].filter((path) => !beforeStateFiles.has(path));
+    } finally {
+      for (const path of newStateFiles) rmSync(path, { force: true });
+      rmSync(fakeBin, { recursive: true, force: true });
+    }
+
+    expect(result).toBeDefined();
+    expect(result!.exitCode).not.toBe(0);
+    expect(result!.stdout.toString()).toBe("");
+    const body = stderrJson(result!);
+    expect(body.status).toBe(400);
+    expect(body.error).toBe("--smoke and --baseline-only are mutually exclusive");
+    expect(launchedFakeUv).toBe(false);
+    expect(newStateFiles).toEqual([]);
+  });
+
+  test("eval-run exposes a safe robot dry-run path", () => {
+    const result = runBench(["eval-run", "--suite", "evals/suites/smoke.json", "--robot-dry-run"]);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr.toString()).toBe("");
+    const body = JSON.parse(result.stdout.toString()) as { schema_version: string; ok: boolean; counts: { runs_planned: number } };
+    expect(body.schema_version).toBe("eval-dry-run-summary.v1");
+    expect(body.ok).toBe(true);
+    expect(body.counts.runs_planned).toBeGreaterThan(0);
+  });
+
+  test.each([
+    ["--run-id", "../bad", "runId"],
+    ["--run-id", "bad/path", "runId"],
+    ["--node-id", "..", "nodeId"],
+    ["--node-id", "bad\\path", "nodeId"],
+  ])("node-artifacts rejects unsafe %s with JSON stderr", (flagName, unsafeValue, label) => {
+    const args = ["node-artifacts", "--run-id", "run-1", "--node-id", "node-1"];
+    const replaceAt = args.indexOf(flagName) + 1;
+    args[replaceAt] = unsafeValue;
+
+    const result = runBench(args);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain(`invalid ${label}`);
+  });
+
   test("optimize-skill rejects invalid --max-metric-calls with JSON stderr", () => {
     const result = runBench([
       "optimize-skill",
@@ -58,6 +200,16 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.error).toContain("--n");
   });
 
+  test("eval-case-generate rejects duplicate scalar flags before launching the generator", () => {
+    const result = runBench(["eval-case-generate", "--skill", "repo-map", "--n", "1", "--n", "3"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("Duplicate flag for eval-case-generate: --n");
+    expect(body.error).toContain("--n is not repeatable");
+  });
+
   test("eval-case-generate rejects mixed validate and promote modes with JSON stderr", () => {
     const result = runBench([
       "eval-case-generate",
@@ -90,6 +242,46 @@ describe("bench invalid numeric CLI flags", () => {
     const body = stderrJson(result);
     expect(body.status).toBe(400);
     expect(body.error).toContain("--definitely-unknown");
+  });
+
+  test.each([
+    ["--source", ["onboard", "--source", "skills/ci-log-reducer", "--source", "skills/repo-map"]],
+    [
+      "--out-dir",
+      [
+        "onboard",
+        "--source",
+        "skills/ci-log-reducer",
+        "--out-dir",
+        "runs/onboard/first",
+        "--out-dir",
+        "runs/onboard/second",
+      ],
+    ],
+  ])("onboard rejects duplicate scalar flag %s before launching triage", (flagName, args) => {
+    const fakeBin = mkdtempSync(join(tmpdir(), "bench-fake-onboard-uv-"));
+    const marker = join(fakeBin, "uv-invoked");
+    const fakeUv = join(fakeBin, "uv");
+    writeFileSync(fakeUv, `#!/bin/sh\nprintf invoked > ${JSON.stringify(marker)}\nexit 42\n`);
+    chmodSync(fakeUv, 0o755);
+
+    let result: ReturnType<typeof runBench> | undefined;
+    let launchedFakeUv = false;
+    try {
+      result = runBench(args, { env: envWithPathPrefix(fakeBin) });
+      launchedFakeUv = existsSync(marker);
+    } finally {
+      rmSync(fakeBin, { recursive: true, force: true });
+    }
+
+    expect(result).toBeDefined();
+    expect(result!.exitCode).not.toBe(0);
+    expect(result!.stdout.toString()).toBe("");
+    const body = stderrJson(result!);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain(`Duplicate flag for onboard: ${flagName}`);
+    expect(body.error).toContain(`${flagName} is not repeatable`);
+    expect(launchedFakeUv).toBe(false);
   });
 
 });

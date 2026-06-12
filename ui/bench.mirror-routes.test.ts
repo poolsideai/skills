@@ -25,8 +25,12 @@ function mirrorsByCommand(commands: CommandDetail[]): Record<string, string[] | 
 describe("bench mirror route metadata", () => {
   const expectedMirrors = {
     runs: ["GET /api/runs"],
+    feed: ["GET /api/feed"],
     skills: ["GET /api/skills"],
+    "skill-detail": ["GET /api/skill-detail"],
+    proposals: ["GET /api/proposals"],
     "node-evals": ["GET /api/node-evals"],
+    "node-artifacts": ["GET /api/node-artifacts"],
   };
 
   test("commands output lists accurate server mirror routes for list commands", () => {

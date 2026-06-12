@@ -109,6 +109,22 @@ def utc_stamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%SZ")
 
 
+def validate_only_payload(case_dir: Path, violations: list[str], info: dict) -> dict:
+    payload = {
+        "schema_version": CASE_GENERATION_RESULT_SCHEMA,
+        "operation": "validate-only",
+        "case_id": case_dir.name,
+        "case_dir": str(case_dir),
+        "ok": not violations,
+        "violations": violations,
+    }
+    if info["replay_status"] is not None:
+        payload["replay_status"] = info["replay_status"]
+    if info["sensitivity_status"] is not None:
+        payload["sensitivity_status"] = info["sensitivity_status"]
+    return payload
+
+
 def clip(text: str, chars: int) -> str:
     if len(text) <= chars:
         return text
@@ -776,25 +792,43 @@ def main() -> int:
     ctx = SkillContext(args.skill, args.seed_example, bootstrap=bootstrap_context)
 
     if args.validate_only:
-        failures = 0
+        results = []
         for raw in args.validate_only:
             case_dir = Path(raw) if Path(raw).is_absolute() else REPO_ROOT / raw
             violations, info = gate_candidate(ctx, case_dir, args.validator_timeout)
-            failures += 1 if violations else 0
-            payload = {
-                "schema_version": CASE_GENERATION_RESULT_SCHEMA,
-                "operation": "validate-only",
-                "case_id": case_dir.name,
-                "case_dir": str(case_dir),
-                "ok": not violations,
-                "violations": violations,
-            }
-            if info["replay_status"] is not None:
-                payload["replay_status"] = info["replay_status"]
-            if info["sensitivity_status"] is not None:
-                payload["sensitivity_status"] = info["sensitivity_status"]
-            print(json.dumps(payload, indent=2))
-        return 0 if failures == 0 else 1
+            results.append(validate_only_payload(case_dir, violations, info))
+
+        if len(results) == 1:
+            print(json.dumps(results[0], indent=2))
+            return 0 if results[0]["ok"] else 1
+
+        failed = [result for result in results if not result["ok"]]
+        aggregate_violations = []
+        for result in failed:
+            if result["violations"]:
+                aggregate_violations.extend(
+                    f"{result['case_id']}: {violation}" for violation in result["violations"]
+                )
+            else:
+                aggregate_violations.append(
+                    f"{result['case_id']}: validation failed without reported violations"
+                )
+        payload = {
+            "schema_version": CASE_GENERATION_RESULT_SCHEMA,
+            "operation": "validate-only",
+            "case_id": "aggregate",
+            "case_dir": "aggregate",
+            "ok": not failed,
+            "violations": aggregate_violations,
+            "counts": {
+                "cases": len(results),
+                "ok": len(results) - len(failed),
+                "failed": len(failed),
+            },
+            "results": results,
+        }
+        print(json.dumps(payload, indent=2))
+        return 0 if not failed else 1
 
     if args.promote:
         failures = 0

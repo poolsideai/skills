@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="330" viewBox="0 0 980 330" role="img" aria-label="Agent ergonomics score heatmap">
+  <rect width="980" height="330" fill="#ffffff"/>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; fill: #111827; }
+    .h { font-weight: 700; }
+    .small { font-size: 11px; fill: #374151; }
+  </style>
+  <text x="24" y="32" class="h">Agent Ergonomics Heatmap</text>
+  <text x="260" y="32" class="small">green &gt;= 750, yellow &gt;= 650, orange &gt;= 550, red &lt; 550</text>
+  <g transform="translate(24,58)">
+    <text x="0" y="18" class="h">Surface</text>
+    <text x="360" y="18" class="h">Score</text>
+    <text x="430" y="18" class="h">Signal</text>
+    <g transform="translate(0,38)">
+      <text x="0" y="18">bench.discovery</text>
+      <rect x="360" y="2" width="79" height="22" fill="#15803d"/><text x="370" y="18" fill="#fff">786</text>
+      <text x="430" y="18">Strong JSON discovery; weak typo recovery.</text>
+    </g>
+    <g transform="translate(0,76)">
+      <text x="0" y="18">check_scripts</text>
+      <rect x="360" y="2" width="75" height="22" fill="#15803d"/><text x="370" y="18" fill="#fff">750</text>
+      <text x="430" y="18">Stable repo-check-result.v1; needs next-command metadata.</text>
+    </g>
+    <g transform="translate(0,114)">
+      <text x="0" y="18">runner.robot_dry_run</text>
+      <rect x="360" y="2" width="71" height="22" fill="#ca8a04"/><text x="370" y="18" fill="#111827">709</text>
+      <text x="430" y="18">Good success JSON; prose failures.</text>
+    </g>
+    <g transform="translate(0,152)">
+      <text x="0" y="18">bench.eval_case_generate</text>
+      <rect x="360" y="2" width="71" height="22" fill="#ca8a04"/><text x="370" y="18" fill="#111827">705</text>
+      <text x="430" y="18">Strict wrapper; promote inherits generator risks.</text>
+    </g>
+    <g transform="translate(0,190)">
+      <text x="0" y="18">generator.validate_promote</text>
+      <rect x="360" y="2" width="57" height="22" fill="#f97316"/><text x="370" y="18" fill="#111827">573</text>
+      <text x="430" y="18">Ad hoc schema and promote safety gaps.</text>
+    </g>
+    <g transform="translate(0,228)">
+      <text x="0" y="18">bench.eval_run</text>
+      <rect x="360" y="2" width="47" height="22" fill="#dc2626"/><text x="370" y="18" fill="#fff">473</text>
+      <text x="430" y="18">Unsupported safety flags can launch live detached work.</text>
+    </g>
+    <g transform="translate(0,266)">
+      <text x="0" y="18">bench.optimize_skill</text>
+      <rect x="360" y="2" width="46" height="22" fill="#dc2626"/><text x="370" y="18" fill="#fff">459</text>
+      <text x="430" y="18">Unknown flags can launch optimizer output.</text>
+    </g>
+  </g>
+</svg>

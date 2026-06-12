@@ -42,7 +42,15 @@ describe("bench discovery CLI contract", () => {
   test("capabilities emits the machine-readable CLI contract", () => {
     const output = expectJsonStdout<{
       schema_version: string;
-      contract: { invocation: string; stdout: string; stderr: string; exit_codes: Record<string, string> };
+      contract: {
+        invocation: string;
+        stdout: string;
+        stderr: string;
+        exit_codes: Record<string, string>;
+        strict_flags: boolean;
+        flag_precedence: string;
+        intent_hints: string;
+      };
       environment: { server_required: boolean; runtime: string };
       commands: { name: string }[];
       next_commands: string[];
@@ -53,9 +61,26 @@ describe("bench discovery CLI contract", () => {
     expect(output.contract.stdout).toContain("JSON");
     expect(output.contract.stderr).toContain("JSON");
     expect(output.contract.exit_codes["2"]).toContain("unknown command");
+    expect(output.contract.strict_flags).toBe(true);
+    expect(output.contract.flag_precedence).toContain("Non-repeatable duplicate flags are rejected");
+    expect(output.contract.flag_precedence).not.toContain("last occurrence wins");
+    expect(output.contract.intent_hints).toContain("did-you-mean");
     expect(output.environment).toMatchObject({ server_required: false, runtime: "bun" });
-    expect(commandNames(output.commands)).toEqual(expect.arrayContaining(["capabilities", "commands", "doctor", "onboard", "eval-case-generate", "eval-run"]));
+    expect(commandNames(output.commands)).toEqual(
+      expect.arrayContaining([
+        "capabilities",
+        "commands",
+        "doctor",
+        "feed",
+        "skill-detail",
+        "proposals",
+        "node-artifacts",
+        "eval-case-generate",
+        "eval-run",
+      ]),
+    );
     expect(output.next_commands).toContain("bun ui/bench.ts help eval-run");
+    expect(output.next_commands).toContain("bun ui/bench.ts eval-run --suite evals/suites/smoke.json --robot-dry-run");
     expect(output.next_commands).toContain("bun ui/bench.ts help eval-case-generate");
   });
 
@@ -70,9 +95,25 @@ describe("bench discovery CLI contract", () => {
     expect(byName.capabilities).toMatchObject({ usage: "bun ui/bench.ts capabilities", output: "bench-capabilities.v1" });
     expect(byName.commands).toMatchObject({ usage: "bun ui/bench.ts commands", output: "bench-command-catalog.v1" });
     expect(byName.doctor).toMatchObject({ usage: "bun ui/bench.ts doctor", output: "bench-doctor.v1" });
-    expect(byName.onboard).toMatchObject({
-      usage: "bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]",
-      output: "bench-onboard.v1",
+    expect(byName.feed).toMatchObject({
+      usage: "bun ui/bench.ts feed [--project <id>]",
+      output: "{ scorecard, records }",
+      mirrors: ["GET /api/feed"],
+    });
+    expect(byName["skill-detail"]).toMatchObject({
+      usage: "bun ui/bench.ts skill-detail <name>",
+      output: "SkillDetail",
+      mirrors: ["GET /api/skill-detail"],
+    });
+    expect(byName.proposals).toMatchObject({
+      usage: "bun ui/bench.ts proposals --skill <name>",
+      output: "{ proposals, pending }",
+      mirrors: ["GET /api/proposals"],
+    });
+    expect(byName["node-artifacts"]).toMatchObject({
+      usage: "bun ui/bench.ts node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>]",
+      output: "NodeArtifacts",
+      mirrors: ["GET /api/node-artifacts"],
     });
     expect(byName["eval-case-generate"]).toMatchObject({
       usage: 'bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
@@ -106,43 +147,56 @@ describe("bench discovery CLI contract", () => {
     const output = expectJsonStdout<{
       schema_version: string;
       command: { name: string; usage: string; output: string; flags?: { name: string; repeatable?: boolean }[] };
-      conventions: { stdout: string; stderr: string; repeatable_flags: string[] };
+      conventions: { stdout: string; stderr: string; repeatable_flags: string[]; flag_precedence: string };
     }>(runBench(["help", "eval-run"]));
 
     expect(output.schema_version).toBe("bench-command-help.v1");
     expect(output.command).toMatchObject({
       name: "eval-run",
-      usage: "bun ui/bench.ts eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]...",
-      output: "StartEvalRunResult",
+      usage: "bun ui/bench.ts eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... [--robot-dry-run|--dry-run --json-summary] [--replay]",
+      output: "StartEvalRunResult or eval-dry-run-summary.v1",
     });
-    expect(output.command.flags?.map((flag) => flag.name)).toEqual(expect.arrayContaining(["--suite", "--case", "--arm"]));
+    expect(output.command.flags?.map((flag) => flag.name)).toEqual(expect.arrayContaining(["--suite", "--case", "--arm", "--robot-dry-run", "--dry-run", "--json-summary"]));
     expect(output.command.flags?.filter((flag) => flag.repeatable).map((flag) => flag.name)).toEqual(
       expect.arrayContaining(["--case", "--arm"]),
     );
     expect(output.conventions.stdout).toContain("JSON");
     expect(output.conventions.stderr).toContain("JSON");
     expect(output.conventions.repeatable_flags).toEqual(expect.arrayContaining(["--case", "--arm"]));
+    expect(output.conventions.flag_precedence).toContain("Non-repeatable duplicate flags are rejected");
+    expect(output.conventions.flag_precedence).not.toContain("last occurrence wins");
   });
 
-  test("help onboard emits command-specific JSON help", () => {
-    const output = expectJsonStdout<{
+  test.each([
+    ["feed", "bun ui/bench.ts feed [--project <id>]", "{ scorecard, records }", ["--project"]],
+    ["skill-detail", "bun ui/bench.ts skill-detail <name>", "SkillDetail", ["--skill"]],
+    ["proposals", "bun ui/bench.ts proposals --skill <name>", "{ proposals, pending }", ["--skill"]],
+    [
+      "node-artifacts",
+      "bun ui/bench.ts node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>]",
+      "NodeArtifacts",
+      ["--run-id", "--node-id", "--project"],
+    ],
+  ])("help %s emits command-specific JSON help", (commandName, usage, output, expectedFlags) => {
+    const outputBody = expectJsonStdout<{
       schema_version: string;
-      command: { name: string; output: string; flags?: { name: string }[] };
-    }>(runBench(["help", "onboard"]));
+      command: { name: string; usage: string; output: string; flags?: { name: string }[]; mirrors?: string[] };
+      conventions: { stdout: string; stderr: string };
+    }>(runBench(["help", commandName]));
 
-    expect(output.schema_version).toBe("bench-command-help.v1");
-    expect(output.command).toMatchObject({
-      name: "onboard",
-      output: "bench-onboard.v1",
-    });
-    expect(output.command.flags?.map((flag) => flag.name)).toEqual(expect.arrayContaining(["--source", "--out-dir"]));
+    expect(outputBody.schema_version).toBe("bench-command-help.v1");
+    expect(outputBody.command).toMatchObject({ name: commandName, usage, output });
+    expect(outputBody.command.flags?.map((flag) => flag.name)).toEqual(expect.arrayContaining(expectedFlags));
+    expect(outputBody.command.mirrors?.[0]).toMatch(/^GET \/api\//);
+    expect(outputBody.conventions.stdout).toContain("JSON");
+    expect(outputBody.conventions.stderr).toContain("JSON");
   });
 
   test("help eval-case-generate emits command-specific JSON help", () => {
     const output = expectJsonStdout<{
       schema_version: string;
       command: { name: string; output: string; flags?: { name: string; repeatable?: boolean }[] };
-      conventions: { repeatable_flags: string[] };
+      conventions: { repeatable_flags: string[]; flag_precedence: string };
     }>(runBench(["help", "eval-case-generate"]));
 
     expect(output.schema_version).toBe("bench-command-help.v1");
@@ -159,21 +213,21 @@ describe("bench discovery CLI contract", () => {
     expect(output.conventions.repeatable_flags).toEqual(
       expect.arrayContaining(["--case", "--arm", "--spec", "--validate-only", "--promote"]),
     );
+    expect(output.conventions.flag_precedence).toContain("Non-repeatable duplicate flags are rejected");
+    expect(output.conventions.flag_precedence).not.toContain("last occurrence wins");
   });
 
-  test("onboard triages an existing skill directory", () => {
-    const result = runBench(["onboard", "--source", "skills/ci-log-reducer", "--out-dir", "runs/onboard/bench-cli-contract-test"]);
+  test.each([
+    ["skill-detail", [], "usage: skill-detail <name>"],
+    ["proposals", [], "usage: proposals --skill <name>"],
+    ["node-artifacts", ["--run-id", "run-1"], "usage: node-artifacts --run-id <runId> --node-id <nodeId>"],
+  ])("%s rejects missing required arguments with JSON stderr", (commandName, args, expectedMessage) => {
+    const result = runBench([commandName, ...args]);
 
-    const body = expectJsonStdout<{
-      schema_version: string;
-      ok: boolean;
-      mode: string;
-      stdout_json: { schema_version: string; counts: { skills: number; ready: number }; skills: { name: string; verdict: string }[] };
-    }>(result);
-    expect(body).toMatchObject({ schema_version: "bench-onboard.v1", ok: true, mode: "triage" });
-    expect(body.stdout_json.schema_version).toBe("onboard-triage.v1");
-    expect(body.stdout_json.counts.skills).toBe(1);
-    expect(body.stdout_json.skills[0]).toMatchObject({ name: "ci-log-reducer", verdict: "ready" });
+    expect(result.exitCode).toBe(1);
+    const body = expectJsonStderr<{ error: string; status: number }>(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain(expectedMessage);
   });
 
   test("eval-case-generate rejects unknown flags before invoking the generator", () => {
@@ -255,23 +309,16 @@ describe("bench discovery CLI contract", () => {
     expect(body.stderr_text).toContain("no such skill");
   });
 
-  test("eval-case-generate duplicate scalar flags use the last value", () => {
+  test("eval-case-generate rejects duplicate scalar flags before invoking the generator", () => {
     const result = runBench(["eval-case-generate", "--skill", "__missing_skill__", "--n", "1", "--n", "3"]);
 
-    expect(result.exitCode).toBe(1);
-    const body = expectJsonStderr<{ mode: string; command: string[]; stderr_text: string }>(result);
-    expect(body.mode).toBe("generate");
-    expect(body.command).toEqual([
-      "uv",
-      "run",
-      "harness/generate/gen_eval_cases.py",
-      "--skill",
-      "__missing_skill__",
-      "--n",
-      "3",
-    ]);
-    expect(body.command).not.toContain("1");
-    expect(body.stderr_text).toContain("no such skill");
+    expect(result.exitCode).not.toBe(0);
+    const body = expectJsonStderr<{ error: string; status: number; schema_version?: string; command?: string[] }>(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("Duplicate flag for eval-case-generate: --n");
+    expect(body.error).toContain("--n is not repeatable");
+    expect(body.schema_version).toBeUndefined();
+    expect(body.command).toBeUndefined();
   });
 
   test("eval-case-generate forwards all validate-only case dirs", () => {
@@ -328,9 +375,19 @@ describe("bench discovery CLI contract", () => {
     const result = runBench(["__definitely_unknown_command__"]);
 
     expect(result.exitCode).toBe(2);
-    const body = expectJsonStderr<{ error: string; usage: string; commands: string[] }>(result);
+    const body = expectJsonStderr<{ error: string; usage: string; commands: string[]; did_you_mean?: string }>(result);
     expect(body.error).toContain("Unknown command: __definitely_unknown_command__");
     expect(body.usage).toBe("bun ui/bench.ts <command>");
+    expect(body.did_you_mean).toBeUndefined();
     expect(body.commands).toEqual(expect.arrayContaining([expect.stringContaining("capabilities"), expect.stringContaining("commands")]));
+  });
+
+  test("unknown command includes a did-you-mean hint when the typo is close", () => {
+    const result = runBench(["evalrun", "--suite", "evals/suites/smoke.json"]);
+
+    expect(result.exitCode).toBe(2);
+    const body = expectJsonStderr<{ error: string; did_you_mean?: string }>(result);
+    expect(body.error).toContain("Unknown command: evalrun");
+    expect(body.did_you_mean).toBe("eval-run");
   });
 });

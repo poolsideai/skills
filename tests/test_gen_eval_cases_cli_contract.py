@@ -123,8 +123,75 @@ class GenEvalCasesCliContractTests(unittest.TestCase):
         self.assertEqual(payload["schema_version"], "case-generation-result.v1")
         self.assertEqual(payload["operation"], "validate-only")
         self.assertEqual(payload["case_id"], VALID_CASE.name)
+        self.assertNotIn("counts", payload)
+        self.assertNotIn("results", payload)
         self.assertTrue(payload["ok"])
         self.assertEqual(payload["violations"], [])
+
+    def test_validate_only_multiple_cases_emit_one_aggregate_json_document(self) -> None:
+        case_a = VALID_CASE
+        case_b = REPO_ROOT / "skills" / "ci-log-reducer" / "evals" / "ci-log-reducer-bun-flaky-retry"
+        result = self.run_generator("--skill", "ci-log-reducer", "--validate-only", str(case_a), str(case_b))
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stderr, "")
+        payloads = self.parse_json_objects(result.stdout)
+        self.assertEqual(len(payloads), 1, "multi-case validate-only must emit exactly one JSON document")
+        payload = json.loads(result.stdout)
+        errors = validate_instance(payload, RESULT_SCHEMA)
+        self.assertEqual(errors, [], errors)
+        self.assertEqual(payload["schema_version"], "case-generation-result.v1")
+        self.assertEqual(payload["operation"], "validate-only")
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["violations"], [])
+        self.assertEqual(payload["counts"], {"cases": 2, "ok": 2, "failed": 0})
+        self.assertEqual([entry["case_id"] for entry in payload["results"]], [case_a.name, case_b.name])
+        for entry, case_dir in zip(payload["results"], [case_a, case_b], strict=True):
+            self.assertEqual(entry["schema_version"], "case-generation-result.v1")
+            self.assertEqual(entry["operation"], "validate-only")
+            self.assertEqual(entry["case_id"], case_dir.name)
+            self.assertEqual(entry["case_dir"], str(case_dir))
+            self.assertTrue(entry["ok"])
+            self.assertEqual(entry["violations"], [])
+            self.assertNotIn("counts", entry)
+            self.assertNotIn("results", entry)
+
+    def test_validate_only_multiple_cases_aggregates_missing_case_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            missing_case = Path(tmp) / "ci-log-reducer-missing-case"
+            result = self.run_generator(
+                "--skill",
+                "ci-log-reducer",
+                "--validate-only",
+                str(VALID_CASE),
+                str(missing_case),
+            )
+
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertEqual(result.stderr, "")
+        payloads = self.parse_json_objects(result.stdout)
+        self.assertEqual(len(payloads), 1, "multi-case validate-only failures must emit one aggregate JSON document")
+        payload = json.loads(result.stdout)
+        errors = validate_instance(payload, RESULT_SCHEMA)
+        self.assertEqual(errors, [], errors)
+        self.assertEqual(payload["schema_version"], "case-generation-result.v1")
+        self.assertEqual(payload["operation"], "validate-only")
+        self.assertFalse(payload["ok"])
+        self.assertEqual(payload["counts"]["cases"], 2)
+        self.assertEqual(payload["counts"]["ok"], 1)
+        self.assertEqual(payload["counts"]["failed"], 1)
+        failing_results = [entry for entry in payload["results"] if not entry["ok"]]
+        self.assertEqual(len(failing_results), 1)
+        failing = failing_results[0]
+        self.assertEqual(failing["case_id"], missing_case.name)
+        self.assertEqual(failing["case_dir"], str(missing_case))
+        self.assertGreater(len(failing["violations"]), 0)
+        self.assertGreater(len(payload["violations"]), 0)
+        for violation in payload["violations"]:
+            self.assertTrue(
+                violation.startswith(f"{missing_case.name}: "),
+                f"top-level violation lacks failing case_id prefix: {violation}",
+            )
 
     def test_argument_shape_errors_are_reported_before_skill_context_loading(self) -> None:
         result = self.run_generator(

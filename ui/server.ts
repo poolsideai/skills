@@ -208,9 +208,9 @@ const server = Bun.serve({
           const runId = url.searchParams.get("runId");
           const nodeId = url.searchParams.get("nodeId");
           if (!runId || !nodeId) throw new HttpError(400, "runId and nodeId are required");
-          if (!/^[A-Za-z0-9._:-]+$/.test(runId)) throw new HttpError(400, "invalid runId");
-          if (!/^[A-Za-z0-9._:-]+$/.test(nodeId)) throw new HttpError(400, "invalid nodeId");
-          return json(nodeArtifacts(project(), runId, nodeId));
+          const safeRunId = requireSafeSegment(runId, "runId");
+          const safeNodeId = requireSafeSegment(nodeId, "nodeId");
+          return json(nodeArtifacts(project(), safeRunId, safeNodeId));
         }
         if (url.pathname === "/api/review/status") {
           return json({ url: `http://127.0.0.1:${REVIEW_PORT}/`, running: await reviewRunning() });

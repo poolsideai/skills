@@ -11,12 +11,15 @@
  *   bun ui/bench.ts projects
  *   bun ui/bench.ts models
  *   bun ui/bench.ts runs [--project <id>]
+ *   bun ui/bench.ts feed [--project <id>]
  *   bun ui/bench.ts run-show <runId> [--project <id>]
  *   bun ui/bench.ts workflows [--project <id>]
  *   bun ui/bench.ts workflow-graph <path> [--project <id>]
  *   bun ui/bench.ts workflow-generate --prompt "..." [--id <name>] [--model <agent>] [--project <id>]
  *   bun ui/bench.ts workflow-run <path> [--input '<json>'] [--project <id>]
  *   bun ui/bench.ts skills
+ *   bun ui/bench.ts skill-detail <name>
+ *   bun ui/bench.ts proposals --skill <name>
  *   bun ui/bench.ts skill-generate --name <name> --prompt "..." [--model <agent>]
  *   bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]
  *   bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."]
@@ -29,17 +32,19 @@
  *   bun ui/bench.ts optimize-runs
  *   bun ui/bench.ts optimize-propose --skill <name> [--run-dir <dir>]
  *   bun ui/bench.ts node-evals [--project <id>]
+ *   bun ui/bench.ts node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>]
  *   bun ui/bench.ts node-eval-insitu <runId> [--project <id>]
  *   bun ui/bench.ts node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>]
  *
  * Flags: only --case, --arm, --spec, --validate-only, and --promote are
- * repeatable (all occurrences used); for every other flag the LAST occurrence wins.
+ * repeatable (all occurrences used); duplicate non-repeatable flags are rejected.
  * Unknown commands exit 2 with
  * JSON on stderr; `help` (or no command) prints usage on stdout. Use
  * `help <command>` or `<command> --help` for command-specific JSON help.
  */
 
 import {
+  buildFeed,
   discoverProjects,
   evalNodeStandalone,
   evalWorkflowNodes,
@@ -53,11 +58,14 @@ import {
   listModels,
   listNodeEvals,
   listOptimizeRuns,
+  listProposals,
+  nodeArtifacts,
   proposalFromOptimizeRun,
   listRuns,
   listSkills,
   listWorkflows,
   runDetail,
+  skillDetail,
   skillEvalSummaries,
   startEvalRun,
   startOptimizeRun,
@@ -85,7 +93,7 @@ function parseArgs(argv: string[]): Flags {
 
 function flag(args: Flags, key: string): string | undefined {
   const values = args.flags[key];
-  return values?.[values.length - 1]; // last occurrence wins, like most CLIs
+  return values?.[values.length - 1]; // callers validate repeatability before scalar access
 }
 
 function positiveIntegerFlag(value: string | undefined, name: string): number | undefined {
@@ -113,6 +121,13 @@ function numberFlag(value: string | undefined, name: string): number | undefined
   return parsed;
 }
 
+function safeSegmentFlag(value: string, label: string): string {
+  if (!/^[A-Za-z0-9._:-]+$/.test(value) || value.includes("..") || value.includes("/") || value.includes("\\")) {
+    throw new HttpError(400, `invalid ${label}`);
+  }
+  return value;
+}
+
 function emit(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
 }
@@ -127,12 +142,15 @@ const USAGE = {
     "projects — list Smithers workflow projects",
     "models — list pool agent names usable as authoring/executor models",
     "runs [--project <id>] — workflow runs as TrajectoryRecords",
+    "feed [--project <id>] — run/eval/playground feed plus skill scorecard",
     "run-show <runId> [--project <id>] — node detail, outputs, pool captures",
     "workflows [--project <id>] — workflow .tsx files",
     "workflow-graph <path> [--project <id>] — DAG projection {nodes, edges}",
     'workflow-generate --prompt "..." [--id <name>] [--model <agent>] [--project <id>] — pool authors a workflow (verified)',
     "workflow-run <path> [--input '<json>'] [--project <id>] — start a run, returns runId immediately",
     "skills — skills catalog (frontmatter, validators, eval case counts)",
+    "skill-detail <name> — skill detail, eval cases, workflow usage, and recent node evals",
+    "proposals --skill <name> — improvement queue proposals and pending suggestion runs for a skill",
     'skill-generate --name <name> --prompt "..." [--model <agent>] — pool authors a skill, gated by check_skill_structure.py',
     "onboard --source <dir> [--out-dir <dir>] — triage foreign skill dirs into runs/onboard/ without LM or pool",
     "eval-case-generate --skill <name> [--n N|--spec '...'] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
@@ -143,6 +161,7 @@ const USAGE = {
     "optimize-runs — optimization processes + result.json summaries from runs/optimize/",
     "optimize-propose --skill <name> [--run-dir <dir>] — fold a finished GEPA run into the improvement queue (accept = version bump + checks + re-eval)",
     "node-evals [--project <id>] — node-level eval records (in-workflow + standalone)",
+    "node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>] — prompt, artifacts, grade, and gold reference for a run node",
     "node-eval-insitu <runId> [--project <id>] — grade every node of a finished run via its skill validator",
     "node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>] [--project <id>] — re-run a node standalone and grade each trial",
     "review-sync [--project <id>] — fold workflow node captures + node evals into runs/review/traces.json for the annotation app",
@@ -217,6 +236,15 @@ const COMMAND_DETAILS: CommandDetail[] = [
     mirrors: ["GET /api/runs"],
   },
   {
+    name: "feed",
+    category: "workflow",
+    summary: "List the read-side feed plus skill scorecard.",
+    usage: "bun ui/bench.ts feed [--project <id>]",
+    output: "{ scorecard, records }",
+    flags: [{ name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." }],
+    mirrors: ["GET /api/feed"],
+  },
+  {
     name: "run-show",
     category: "workflow",
     summary: "Show node detail, outputs, and pool captures for a workflow run.",
@@ -274,6 +302,25 @@ const COMMAND_DETAILS: CommandDetail[] = [
     usage: "bun ui/bench.ts skills",
     output: "SkillSummary[] with evalSummary",
     mirrors: ["GET /api/skills"],
+  },
+  {
+    name: "skill-detail",
+    category: "skills",
+    summary: "Show skill detail, eval cases, workflow usage, and recent node evals.",
+    usage: "bun ui/bench.ts skill-detail <name>",
+    output: "SkillDetail",
+    positional: [{ name: "name", description: "Skill directory/frontmatter name." }],
+    flags: [{ name: "--skill", value: "name", description: "Skill directory/frontmatter name; overrides positional name." }],
+    mirrors: ["GET /api/skill-detail"],
+  },
+  {
+    name: "proposals",
+    category: "skills",
+    summary: "List improvement queue proposals and pending suggestion runs for a skill.",
+    usage: "bun ui/bench.ts proposals --skill <name>",
+    output: "{ proposals, pending }",
+    flags: [{ name: "--skill", value: "name", description: "Skill directory name. Required." }],
+    mirrors: ["GET /api/proposals"],
   },
   {
     name: "skill-generate",
@@ -340,13 +387,17 @@ const COMMAND_DETAILS: CommandDetail[] = [
   {
     name: "eval-run",
     category: "evals",
-    summary: "Launch a detached harness run.",
-    usage: "bun ui/bench.ts eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]...",
-    output: "StartEvalRunResult",
+    summary: "Launch a detached harness run, or run the safe robot dry-run path.",
+    usage: "bun ui/bench.ts eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... [--robot-dry-run|--dry-run --json-summary] [--replay]",
+    output: "StartEvalRunResult or eval-dry-run-summary.v1",
     flags: [
       { name: "--suite", value: "path", description: "Repo-relative suite path. Required." },
       { name: "--case", value: "id", repeatable: true, description: "Case id filter. Repeatable." },
       { name: "--arm", value: "arm", repeatable: true, description: "Harness arm filter. Repeatable." },
+      { name: "--robot-dry-run", description: "Safe alias for --dry-run --json-summary; does not launch a detached harness." },
+      { name: "--dry-run", description: "With --json-summary, run the safe machine-readable dry-run path." },
+      { name: "--json-summary", description: "With --dry-run, emit eval-dry-run-summary.v1 JSON." },
+      { name: "--replay", description: "With a dry-run path, replay validators against expected artifacts." },
     ],
   },
   {
@@ -401,6 +452,19 @@ const COMMAND_DETAILS: CommandDetail[] = [
     mirrors: ["GET /api/node-evals"],
   },
   {
+    name: "node-artifacts",
+    category: "node evals",
+    summary: "Show prompt, artifacts, grade, and gold reference for a workflow run node.",
+    usage: "bun ui/bench.ts node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>]",
+    output: "NodeArtifacts",
+    flags: [
+      { name: "--run-id", value: "runId", description: "Workflow run id. Required." },
+      { name: "--node-id", value: "nodeId", description: "Workflow node id. Required." },
+      { name: "--project", value: "id", description: "Smithers project id; defaults to the primary project." },
+    ],
+    mirrors: ["GET /api/node-artifacts"],
+  },
+  {
     name: "node-eval-insitu",
     category: "node evals",
     summary: "Grade every node of a finished workflow run via its skill validator.",
@@ -434,6 +498,8 @@ const COMMAND_DETAILS: CommandDetail[] = [
 ];
 
 const COMMAND_BY_NAME = new Map(COMMAND_DETAILS.map((cmd) => [cmd.name, cmd]));
+const BESPOKE_ARG_COMMANDS = new Set(["onboard", "eval-case-generate"]);
+const GLOBAL_FLAGS = new Set(["help"]);
 
 class UnknownCommandError extends Error {
   constructor(command: string) {
@@ -447,6 +513,67 @@ class BenchCommandError extends Error {
   constructor(message: string, body: unknown) {
     super(message);
     this.body = body;
+  }
+}
+
+function editDistance(a: string, b: string): number {
+  const previous = Array.from({ length: b.length + 1 }, (_, i) => i);
+  const current = Array.from({ length: b.length + 1 }, () => 0);
+  for (let i = 1; i <= a.length; i++) {
+    current[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      current[j] = Math.min(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + cost);
+    }
+    for (let j = 0; j <= b.length; j++) previous[j] = current[j];
+  }
+  return previous[b.length];
+}
+
+function didYouMean(value: string, candidates: string[]): string | undefined {
+  const normalized = value.toLowerCase();
+  let best: { candidate: string; distance: number } | undefined;
+  for (const candidate of candidates) {
+    const distance = editDistance(normalized, candidate.toLowerCase());
+    if (!best || distance < best.distance) best = { candidate, distance };
+  }
+  if (!best) return undefined;
+  return best.distance <= 3 || best.candidate.toLowerCase().startsWith(normalized) ? best.candidate : undefined;
+}
+
+function validateArgsForCommand(commandName: string, args: Flags): void {
+  if (BESPOKE_ARG_COMMANDS.has(commandName)) return;
+  const command = COMMAND_BY_NAME.get(commandName);
+  if (!command) return;
+
+  const flagDefinitions = new Map((command.flags ?? []).map((f) => [f.name.replace(/^--/, ""), f]));
+  const allowedFlags = new Set([...flagDefinitions.keys(), ...GLOBAL_FLAGS]);
+  for (const key of Object.keys(args.flags)) {
+    if (!allowedFlags.has(key)) {
+      const suggestion = didYouMean(`--${key}`, [...allowedFlags].map((flagName) => `--${flagName}`));
+      const hint = suggestion ? ` Did you mean ${suggestion}?` : "";
+      throw new HttpError(400, `Unknown flag for ${commandName}: --${key}.${hint} Usage: ${command.usage}`);
+    }
+  }
+
+  for (const [key, values] of Object.entries(args.flags)) {
+    if (GLOBAL_FLAGS.has(key)) continue;
+    const definition = flagDefinitions.get(key);
+    if (!definition) continue;
+    if (!definition.repeatable && values.length > 1) {
+      throw new HttpError(400, `Duplicate flag for ${commandName}: --${key}. ${definition.name} is not repeatable. Usage: ${command.usage}`);
+    }
+    if (definition.value && values.some((value) => value === "true")) {
+      throw new HttpError(400, `${definition.name} requires a value. Usage: ${command.usage}`);
+    }
+    if (!definition.value && values.some((value) => value !== "true")) {
+      throw new HttpError(400, `${definition.name} does not take a value. Usage: ${command.usage}`);
+    }
+  }
+
+  const maxPositionals = command.positional?.length ?? 0;
+  if (args.positional.length > maxPositionals) {
+    throw new HttpError(400, `Unexpected positional argument(s): ${args.positional.slice(maxPositionals).join(", ")}. Usage: ${command.usage}`);
   }
 }
 
@@ -466,7 +593,9 @@ function commandHelp(name?: string): unknown {
       stdout: "JSON only on success.",
       stderr: "JSON only on error.",
       repeatable_flags: ["--case", "--arm", "--spec", "--validate-only", "--promote"],
-      flag_precedence: "For non-repeatable flags, the last occurrence wins.",
+      flag_precedence: "Non-repeatable duplicate flags are rejected.",
+      strict_flags: true,
+      intent_hints: "Unknown commands and flags include did-you-mean hints when a close match exists.",
     },
   };
 }
@@ -484,7 +613,9 @@ function capabilities(): unknown {
         2: "unknown command",
       },
       repeatable_flags: ["--case", "--arm", "--spec", "--validate-only", "--promote"],
-      flag_precedence: "For non-repeatable flags, the last occurrence wins.",
+      flag_precedence: "Non-repeatable duplicate flags are rejected.",
+      strict_flags: true,
+      intent_hints: "Unknown commands and flags include did-you-mean hints when a close match exists.",
     },
     environment: {
       cwd: "repo root",
@@ -506,6 +637,7 @@ function capabilities(): unknown {
       "bun ui/bench.ts commands",
       "bun ui/bench.ts help onboard",
       "bun ui/bench.ts help eval-run",
+      "bun ui/bench.ts eval-run --suite evals/suites/smoke.json --robot-dry-run",
       "bun ui/bench.ts help eval-case-generate",
     ],
   };
@@ -580,6 +712,10 @@ function parseOnboardArgs(argv: string[]): Flags {
     if (!ONBOARD_FLAGS.has(key)) {
       throw new HttpError(400, `Unknown flag for onboard: --${key}`);
     }
+    if ((out.flags[key]?.length ?? 0) > 0) {
+      const usage = COMMAND_BY_NAME.get("onboard")?.usage ?? "bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]";
+      throw new HttpError(400, `Duplicate flag for onboard: --${key}. --${key} is not repeatable. Usage: ${usage}`);
+    }
     const value = argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : undefined;
     if (value === undefined) {
       throw new HttpError(400, `--${key} requires a value`);
@@ -640,6 +776,7 @@ const EVAL_CASE_GENERATE_FLAGS = new Set([
   "validate-only",
   "promote",
 ]);
+const EVAL_CASE_GENERATE_REPEATABLE_FLAGS = new Set(["spec", "validate-only", "promote"]);
 
 function parseEvalCaseGenerateArgs(argv: string[]): Flags {
   const out: Flags = { positional: [], flags: {} };
@@ -653,6 +790,10 @@ function parseEvalCaseGenerateArgs(argv: string[]): Flags {
     const key = arg.slice(2);
     if (!EVAL_CASE_GENERATE_FLAGS.has(key)) {
       throw new HttpError(400, `Unknown flag for eval-case-generate: --${key}`);
+    }
+    if (!EVAL_CASE_GENERATE_REPEATABLE_FLAGS.has(key) && (out.flags[key]?.length ?? 0) > 0) {
+      const usage = COMMAND_BY_NAME.get("eval-case-generate")?.usage ?? "bun ui/bench.ts eval-case-generate --skill <name>";
+      throw new HttpError(400, `Duplicate flag for eval-case-generate: --${key}. --${key} is not repeatable. Usage: ${usage}`);
     }
 
     if (key === "validate-only" || key === "promote") {
@@ -738,6 +879,48 @@ function runEvalCaseGenerate(rawArgv: string[]): unknown {
     throw new BenchCommandError(`eval-case-generate failed with exit ${exitCode}`, payload);
   }
   return payload;
+}
+
+function runEvalRunRobot(args: Flags): unknown {
+  const suite = flag(args, "suite");
+  if (!suite) throw new HttpError(400, "--suite is required");
+
+  const argv = ["uv", "run", "harness/runner/run_eval.py", "--suite", suite, "--dry-run", "--json-summary"];
+  for (const c of args.flags["case"] ?? []) argv.push("--case", c);
+  for (const a of args.flags["arm"] ?? []) argv.push("--arm", a);
+  if (flag(args, "replay") === "true") argv.push("--replay");
+
+  const result = Bun.spawnSync({
+    cmd: argv,
+    cwd: process.cwd(),
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  const stdout = decode(result.stdout).trim();
+  const stderr = decode(result.stderr).trim();
+  const exitCode = result.exitCode ?? 1;
+  let stdoutJson: unknown = null;
+  if (stdout) {
+    try {
+      stdoutJson = JSON.parse(stdout);
+    } catch {
+      stdoutJson = null;
+    }
+  }
+  const payload = {
+    schema_version: "bench-eval-run.v1",
+    ok: exitCode === 0,
+    mode: "robot-dry-run",
+    command: argv,
+    exit_code: exitCode,
+    stdout_json: stdoutJson,
+    stdout_text: stdoutJson === null && stdout ? stdout : null,
+    stderr_text: stderr || null,
+  };
+  if (exitCode !== 0) {
+    throw new BenchCommandError(`eval-run robot dry-run failed with exit ${exitCode}`, payload);
+  }
+  return stdoutJson ?? payload;
 }
 
 type DoctorStatus = "ok" | "warn" | "fail";
@@ -843,6 +1026,7 @@ async function main() {
   const project = () => getProject(flag(args, "project") ?? null);
 
   if (command && flag(args, "help") === "true") return emit(commandHelp(command));
+  if (command) validateArgsForCommand(command, args);
 
   switch (command) {
     case "capabilities":
@@ -857,6 +1041,8 @@ async function main() {
       return emit(await listModels());
     case "runs":
       return emit(listRuns(project()));
+    case "feed":
+      return emit(buildFeed(project()));
     case "run-show": {
       const runId = args.positional[0];
       if (!runId) throw new HttpError(400, "usage: run-show <runId>");
@@ -905,6 +1091,16 @@ async function main() {
       const summaries = skillEvalSummaries();
       return emit(listSkills().map((s) => ({ ...s, evalSummary: summaries[s.name] ?? null })));
     }
+    case "skill-detail": {
+      const skill = flag(args, "skill") ?? args.positional[0];
+      if (!skill) throw new HttpError(400, "usage: skill-detail <name>");
+      return emit(skillDetail(skill));
+    }
+    case "proposals": {
+      const skill = flag(args, "skill");
+      if (!skill) throw new HttpError(400, "usage: proposals --skill <name>");
+      return emit(listProposals(skill));
+    }
     case "skill-generate": {
       const name = flag(args, "name");
       const prompt = flag(args, "prompt");
@@ -920,6 +1116,17 @@ async function main() {
     case "eval-run": {
       const suite = flag(args, "suite");
       if (!suite) throw new HttpError(400, "--suite is required");
+      const wantsRobotDryRun =
+        flag(args, "robot-dry-run") === "true" || flag(args, "dry-run") === "true" || flag(args, "json-summary") === "true" || flag(args, "replay") === "true";
+      if (wantsRobotDryRun) {
+        if (flag(args, "json-summary") === "true" && flag(args, "dry-run") !== "true" && flag(args, "robot-dry-run") !== "true") {
+          throw new HttpError(400, "--json-summary requires --dry-run or --robot-dry-run. Try: bun ui/bench.ts eval-run --suite <suite> --robot-dry-run");
+        }
+        if (flag(args, "replay") === "true" && flag(args, "dry-run") !== "true" && flag(args, "robot-dry-run") !== "true") {
+          throw new HttpError(400, "--replay requires --dry-run or --robot-dry-run. Try: bun ui/bench.ts eval-run --suite <suite> --robot-dry-run --replay");
+        }
+        return emit(runEvalRunRobot(args));
+      }
       const result = startEvalRun({
         suite,
         cases: args.flags["case"],
@@ -933,6 +1140,9 @@ async function main() {
       const skill = flag(args, "skill") ?? args.positional[0];
       if (!skill) throw new HttpError(400, "usage: optimize-skill --skill <name>");
       const maxMetricCalls = flag(args, "max-metric-calls");
+      const smoke = flag(args, "smoke") === "true";
+      const baselineOnly = flag(args, "baseline-only") === "true";
+      if (smoke && baselineOnly) throw new HttpError(400, "--smoke and --baseline-only are mutually exclusive");
       return emit(
         startOptimizeRun({
           skill,
@@ -940,8 +1150,8 @@ async function main() {
           maxMetricCalls: positiveIntegerFlag(maxMetricCalls, "--max-metric-calls"),
           reflectionLm: flag(args, "reflection-lm"),
           arms: args.flags["arm"],
-          smoke: flag(args, "smoke") === "true",
-          baselineOnly: flag(args, "baseline-only") === "true",
+          smoke,
+          baselineOnly,
         }),
       );
     }
@@ -960,6 +1170,16 @@ async function main() {
       return emit({ ok: true, ...syncReviewTraces(project()) });
     case "node-evals":
       return emit(listNodeEvals(project()));
+    case "node-artifacts": {
+      const runId = flag(args, "run-id");
+      const nodeId = flag(args, "node-id");
+      if (!runId || !nodeId) {
+        throw new HttpError(400, "usage: node-artifacts --run-id <runId> --node-id <nodeId>");
+      }
+      const safeRunId = safeSegmentFlag(runId, "runId");
+      const safeNodeId = safeSegmentFlag(nodeId, "nodeId");
+      return emit(nodeArtifacts(project(), safeRunId, safeNodeId));
+    }
     case "node-eval-insitu": {
       const runId = args.positional[0];
       if (!runId) throw new HttpError(400, "usage: node-eval-insitu <runId>");
@@ -980,7 +1200,7 @@ async function main() {
       // Unknown command is an ERROR: stderr + exit 2, so agent typos
       // (run vs workflow-run) never read as success. `help` / no command
       // gets USAGE on stdout with exit 0.
-      console.error(JSON.stringify({ error: `Unknown command: ${command}`, ...USAGE }));
+      console.error(JSON.stringify({ error: `Unknown command: ${command}`, did_you_mean: didYouMean(command, COMMAND_DETAILS.map((cmd) => cmd.name)), ...USAGE }));
       process.exit(2);
   }
 }
@@ -993,7 +1213,8 @@ main()
   })
   .catch((error) => {
     if (error instanceof UnknownCommandError) {
-      console.error(JSON.stringify({ error: error.message, ...USAGE }));
+      const unknown = error.message.replace(/^Unknown command: /, "");
+      console.error(JSON.stringify({ error: error.message, did_you_mean: didYouMean(unknown, COMMAND_DETAILS.map((cmd) => cmd.name)), ...USAGE }));
       process.exit(2);
     }
     if (error instanceof BenchCommandError) {
