@@ -9,22 +9,23 @@
 # ///
 """GEPA pilot driver for the skill-optimization track (Phase 1).
 
-Optimizes a skill's SKILL.md against the frozen eval harness using
+Optimizes selected skill authoring components against the frozen eval harness using
 gepa.optimize_anything (reflective text evolution + per-instance Pareto
 candidate selection — arXiv 2507.19457; same recipe as the GEPA team's
 `gskill` pipeline for coding-agent skills).
 
-THE GENOME IS SKILL.MD TEXT ONLY. Everything grading depends on is frozen and
-enforced mechanically per candidate, before any pool token is spent:
+By default the genome is SKILL.md text only. With `--components references`,
+reference files are mutable components too. Everything grading depends on is
+frozen and enforced mechanically per candidate, before any pool token is spent:
 
-  candidate text
+  candidate component text(s)
     -> materialized candidate skills root (full copy of the canonical skill
-       directory with SKILL.md swapped)
+       directory with selected component files swapped)
     -> harness/optimize/frozen_paths_gate.py   (byte-immutability of evals/,
        schemas/, scripts/validate_*)            [score 0 + feedback on failure]
     -> scripts/check_skill_structure.py checks (frontmatter, non-goals
        section, ...) via direct import          [score 0 + feedback on failure]
-    -> byte cap (--max-skill-bytes)             [score 0 + feedback on failure]
+    -> byte caps (--max-component-bytes/--max-total-bytes) [score 0 + feedback on failure]
     -> harness/optimize/fitness.py --case <id> --arm <arm>
        (real pool exec, frozen validator)       [validator score 0..1 +
                                                  repair_feedback as reflection
@@ -61,11 +62,11 @@ Outputs under runs/optimize/<skill>/<utc-stamp>/:
     gepa/         — gepa engine state (resumable run dir)
     candidates/   — materialized candidate payloads (gate-checked)
     result.json   — seed/best val scores, lineage, metric-call count
-    best/SKILL.md — best candidate text (gate-checked again on the way out)
-    best.diff     — unified diff seed -> best
+    best/         — best candidate component files (gate-checked again)
+    best.diff     — unified diff seed -> best across changed components
 
 Promotion is manual and stays inside the normal contract: review best.diff,
-bump metadata.version, open a PR, let CI structure checks + eval evidence
+bump metadata.version when SKILL.md changes, open a PR, let CI structure checks + eval evidence
 gate the merge. Eval-set caveat: GEPA guidance assumes ~50+ val instances;
 with a handful of cases treat any lift as directional only and lean on the
 adversarial cases in the val split as overfitting tripwires
@@ -117,23 +118,74 @@ def child_env() -> dict[str, str]:
     return env
 
 
+def parse_components(values: list[str]) -> list[str]:
+    selected = ["skill_md"]
+    for raw in values:
+        for item in raw.split(","):
+            item = item.strip()
+            if not item:
+                continue
+            if item in {"SKILL.md", "skill_md"}:
+                if "skill_md" not in selected:
+                    selected.append("skill_md")
+                continue
+            if item == "references":
+                if "references" not in selected:
+                    selected.append("references")
+                continue
+            raise SystemExit(f"unsupported --components value {item!r}; supported: SKILL.md, references")
+    return selected
+
+
+def component_relpath(component: str) -> Path:
+    if component == "skill_md":
+        return Path("SKILL.md")
+    if component.startswith("references/") and ".." not in Path(component).parts:
+        return Path(component)
+    raise ValueError(f"unsupported component: {component}")
+
+
+def load_seed_components(skill_dir: Path, selected: list[str]) -> dict[str, str]:
+    components = {"skill_md": (skill_dir / "SKILL.md").read_text(encoding="utf-8")}
+    if "references" in selected and (skill_dir / "references").is_dir():
+        for path in sorted(p for p in (skill_dir / "references").rglob("*") if p.is_file()):
+            components[path.relative_to(skill_dir).as_posix()] = path.read_text(encoding="utf-8")
+    return components
+
+
+def candidate_components(candidate: object) -> dict[str, str]:
+    if isinstance(candidate, dict):
+        return {str(k): str(v) for k, v in candidate.items()}
+    return {"skill_md": str(candidate)}
+
+
 class CandidateFactory:
     """Materializes + gate-checks candidate payloads, memoized by text hash."""
 
     COMMON_NAMES = {"ci.log", "ci-job.json", "SKILL.md", "metadata.json", "prompt.md"}
 
     def __init__(
-        self, skill: str, scratch: Path, max_bytes: int, case_dirs: list[Path], seed_text: str = ""
+        self,
+        skill: str,
+        scratch: Path,
+        component_caps: dict[str, int],
+        max_total_bytes: int,
+        case_dirs: list[Path],
+        seed_components: dict[str, str],
     ) -> None:
         self.skill = skill
         self.scratch = scratch
-        self.max_bytes = max_bytes
+        self.component_caps = component_caps
+        self.max_total_bytes = max_total_bytes
+        self.seed_components = dict(seed_components)
+        self.allowed_components = set(seed_components)
         self.canonical_skill = REPO_ROOT / "skills" / skill
         self._cache: dict[str, tuple[Path | None, list[str]]] = {}
         self._lock = threading.Lock()  # gepa may evaluate candidates in parallel
         # Grandfather literals the SEED already quotes (e.g. a deliberate
         # worked example citing its own easy case). The gate then means
         # "no NEW case-specific quotes" — the search cannot memorize further.
+        seed_text = "\n".join(seed_components.values())
         self.banned_literals = [
             (literal, why)
             for literal, why in self._collect_banned_literals(case_dirs)
@@ -174,36 +226,48 @@ class CandidateFactory:
                 unique.append((literal, why))
         return unique
 
-    def materialize(self, text: str) -> tuple[Path | None, list[str]]:
+    def materialize(self, candidate: object) -> tuple[Path | None, list[str]]:
         """Returns (candidate skills root, gate violations). Root is None only
         when materialization itself failed; gate violations leave the payload
         on disk for postmortems."""
-        key = hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+        raw_components = candidate_components(candidate)
+        unknown = sorted(set(raw_components) - self.allowed_components)
+        components = {name: raw_components.get(name, self.seed_components[name]) for name in self.seed_components}
+        key = hashlib.sha256(json.dumps({"components": components, "unknown": unknown}, sort_keys=True).encode("utf-8")).hexdigest()[:16]
         with self._lock:
-            return self._materialize_locked(key, text)
+            return self._materialize_locked(key, components, unknown)
 
-    def _materialize_locked(self, key: str, text: str) -> tuple[Path | None, list[str]]:
+    def _materialize_locked(self, key: str, components: dict[str, str], unknown: list[str]) -> tuple[Path | None, list[str]]:
         if key in self._cache:
             return self._cache[key]
 
         violations: list[str] = []
+        for name in unknown:
+            violations.append(f"component-scope: candidate returned unsupported component {name!r}; allowed: {sorted(self.allowed_components)}")
+        combined = "\n".join(components.values())
         for literal, why in self.banned_literals:
-            if literal in text:
+            if literal in combined:
                 violations.append(
                     f"anti-overfit: candidate quotes {why}. The skill must stay "
                     "general — describe procedures, never specific eval cases."
                 )
-        size = len(text.encode("utf-8"))
-        if size > self.max_bytes:
-            violations.append(
-                f"byte-cap: SKILL.md is {size} bytes; cap is {self.max_bytes}. "
-                "Tighten the prose — long skills bloat agent context and overfit."
-            )
+        total_size = 0
+        for name, text in components.items():
+            size = len(text.encode("utf-8"))
+            total_size += size
+            cap = self.component_caps.get(name, self.component_caps.get("skill_md", 32768))
+            if size > cap:
+                violations.append(f"byte-cap: {component_relpath(name)} is {size} bytes; cap is {cap}")
+        if total_size > self.max_total_bytes:
+            violations.append(f"byte-cap: selected components total {total_size} bytes; cap is {self.max_total_bytes}")
 
         root = self.scratch / f"cand-{key}" / "skills"
         if not (root / self.skill).is_dir():
             shutil.copytree(self.canonical_skill, root / self.skill)
-        (root / self.skill / "SKILL.md").write_text(text, encoding="utf-8")
+        for name, text in components.items():
+            dest = root / self.skill / component_relpath(name)
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(text, encoding="utf-8")
 
         gate = subprocess.run(
             [sys.executable, str(FROZEN_GATE), "--skill", self.skill, "--candidate-root", str(root)],
@@ -306,7 +370,7 @@ def split_cases(case_ids: list[str], train: list[str], val: list[str], buckets: 
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="GEPA optimization of a skill's SKILL.md against the frozen eval harness.")
+    parser = argparse.ArgumentParser(description="GEPA optimization of selected skill components against the frozen eval harness.")
     parser.add_argument("--skill", required=True)
     parser.add_argument("--suite", help="suite JSON (default: evals/suites/skill-<skill>.json)")
     parser.add_argument("--arm", action="append", default=[], dest="arms", choices=ARM_NAMES,
@@ -329,7 +393,13 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=1,
                         help="parallel evaluator calls (concurrent pool runs; default 1 = serial)")
     parser.add_argument("--max-skill-bytes", type=int, default=None,
-                        help="hard byte cap on candidate SKILL.md (default: max(32768, 2x seed))")
+                        help="deprecated alias for --max-component-bytes on SKILL.md")
+    parser.add_argument("--components", action="append", default=[],
+                        help="mutable component set: SKILL.md (default) and/or references; comma-separated values accepted")
+    parser.add_argument("--max-component-bytes", type=int, default=None,
+                        help="hard byte cap per selected component (default: max(32768, 2x seed component))")
+    parser.add_argument("--max-total-bytes", type=int, default=None,
+                        help="hard byte cap across selected components (default: max(sum caps, 2x seed total))")
     parser.add_argument("--out-dir", help="default: runs/optimize/<skill>/<utc-stamp>")
     parser.add_argument("--timeout", type=float, help="per-pool-run timeout (fitness passthrough)")
     parser.add_argument("--pool-bin")
@@ -367,14 +437,21 @@ def main() -> int:
     # Stable aliases keep raw case ids out of reflection side info.
     case_alias = {cid: f"case-{i + 1}" for i, cid in enumerate(sorted(case_ids))}
 
-    seed_text = skill_md.read_text(encoding="utf-8")
-    max_bytes = args.max_skill_bytes or max(32768, 2 * len(seed_text.encode("utf-8")))
+    component_selection = parse_components(args.components)
+    seed_components = load_seed_components(skill_dir, component_selection)
+    seed_text = seed_components["skill_md"]
+    component_caps = {
+        name: args.max_component_bytes or args.max_skill_bytes or max(32768, 2 * len(text.encode("utf-8")))
+        for name, text in seed_components.items()
+    }
+    seed_total_bytes = sum(len(text.encode("utf-8")) for text in seed_components.values())
+    max_total_bytes = args.max_total_bytes or max(sum(component_caps.values()), 2 * seed_total_bytes)
 
     out_dir = Path(args.out_dir).resolve() if args.out_dir else (
         REPO_ROOT / "runs" / "optimize" / args.skill / utc_stamp()
     )
     out_dir.mkdir(parents=True, exist_ok=True)
-    factory = CandidateFactory(args.skill, out_dir / "candidates", max_bytes, case_dirs, seed_text)
+    factory = CandidateFactory(args.skill, out_dir / "candidates", component_caps, max_total_bytes, case_dirs, seed_components)
 
     config = {
         "skill": args.skill,
@@ -386,7 +463,10 @@ def main() -> int:
         "reflection_lm": args.reflection_lm,
         "reflection_api_base": args.reflection_api_base,
         "reflection_api_key_env": args.reflection_api_key_env,
-        "max_skill_bytes": max_bytes,
+        "components": list(seed_components),
+        "component_caps": component_caps,
+        "max_total_bytes": max_total_bytes,
+        "max_skill_bytes": component_caps.get("skill_md"),
         "workers": args.workers,
         "seed": args.seed,
         "argv": sys.argv[1:],
@@ -398,7 +478,7 @@ def main() -> int:
     if args.smoke:
         import gepa  # noqa: F401  (proves the optimizer dependency resolves)
 
-        root, violations = factory.materialize(seed_text)
+        root, violations = factory.materialize(seed_components)
         dry = subprocess.run(
             ["uv", "run", str(FITNESS), "--suite", str(suite_path), "--dry-run", "--replay"],
             capture_output=True, text=True, cwd=REPO_ROOT, env=child_env(),
@@ -414,8 +494,8 @@ def main() -> int:
         }, indent=2))
         return 0 if ok else 1
 
-    def evaluate(text: str, case_id: str, arm: str) -> tuple[float, dict]:
-        root, violations = factory.materialize(text)
+    def evaluate(candidate: object, case_id: str, arm: str) -> tuple[float, dict]:
+        root, violations = factory.materialize(candidate)
         if violations or root is None:
             feedback = (
                 "Candidate REJECTED by repo gates before any agent run (score 0). "
@@ -441,7 +521,7 @@ def main() -> int:
         scores = []
         for case_id in val_ids:
             for arm in arms:
-                score, side = evaluate(seed_text, case_id, arm)
+                score, side = evaluate(seed_components, case_id, arm)
                 rows[f"{case_id}/{arm}"] = {"score": score, "feedback": side["Feedback"]}
                 scores.append(score)
         baseline = {
@@ -473,22 +553,21 @@ def main() -> int:
         )
 
     def evaluator(candidate, example=None, **_kwargs):
-        text = candidate["skill_md"] if isinstance(candidate, dict) else str(candidate)
-        return evaluate(text, example["case_id"], example["arm"])
+        return evaluate(candidate, example["case_id"], example["arm"])
 
     dataset = [{"case_id": c, "arm": a} for c in train_ids for a in arms]
     valset = [{"case_id": c, "arm": a} for c in val_ids for a in arms]
 
     objective = (
-        f"Rewrite the SKILL.md of the `{args.skill}` agent skill so that a small "
+        f"Rewrite the selected components of the `{args.skill}` agent skill ({list(seed_components)}) so that a small "
         "coding agent (pool CLI / Laguna models) with this skill installed reliably "
         "produces the exact gradeable artifact that the skill's FROZEN validator "
         "checks: right workspace path, schema-valid JSON, evidence-faithful content, "
         "safe suggested actions. Maximize the mean validator score across held-out "
         "eval cases. The skill must STAY GENERAL: never hardcode details of "
         "individual eval cases (ids, specific log lines, specific file names) — "
-        "improve the procedure, the output contract explanation, and the failure-"
-        "mode warnings instead."
+        "improve the procedure, the output contract explanation, reference guidance, "
+        "and the failure-mode warnings instead."
     )
     background = (
         "Authoring contract (mechanically enforced; violations score 0):\n"
@@ -498,15 +577,15 @@ def main() -> int:
         "- Keep a 'Do not use when' (non-goals) section.\n"
         "- Keep the deterministic output artifact path and the validator argv "
         "contract exactly as documented in the current SKILL.md.\n"
-        f"- Hard cap: SKILL.md <= {max_bytes} bytes.\n"
-        "- Only SKILL.md may change; eval cases, schemas, and validators are "
+        f"- Hard caps: per component <= {component_caps}; total <= {max_total_bytes} bytes.\n"
+        "- Only selected components may change; eval cases, schemas, and validators are "
         "frozen and byte-compared.\n"
         "- The runtime is `bun` for skill scripts; the agent may not have network "
         "access; validators grade workspace state + final message only."
     )
 
     result = optimize_anything(
-        seed_candidate={"skill_md": seed_text},
+        seed_candidate=seed_components,
         evaluator=evaluator,
         dataset=dataset,
         valset=valset,
@@ -531,21 +610,32 @@ def main() -> int:
         ),
     )
 
-    best = result.best_candidate
-    best_text = best["skill_md"] if isinstance(best, dict) else str(best)
-    _root, best_violations = factory.materialize(best_text)
+    raw_best_components = candidate_components(result.best_candidate)
+    best_components = {name: raw_best_components.get(name, seed_components[name]) for name in seed_components}
+    _root, best_violations = factory.materialize(raw_best_components)
     if best_violations:
         # Should be impossible (gated during search); refuse to ship it anyway.
         print(json.dumps({"error": "best candidate fails gates", "violations": best_violations}), file=sys.stderr)
         return 1
 
-    (out_dir / "best").mkdir(exist_ok=True)
-    (out_dir / "best" / "SKILL.md").write_text(best_text, encoding="utf-8")
-    diff = "".join(difflib.unified_diff(
-        seed_text.splitlines(keepends=True), best_text.splitlines(keepends=True),
-        fromfile=f"skills/{args.skill}/SKILL.md (seed)", tofile=f"skills/{args.skill}/SKILL.md (best)",
-    ))
-    (out_dir / "best.diff").write_text(diff, encoding="utf-8")
+    best_dir = out_dir / "best"
+    best_dir.mkdir(exist_ok=True)
+    diff_parts = []
+    changed_components = []
+    for name, text in best_components.items():
+        rel = component_relpath(name)
+        dest = best_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(text, encoding="utf-8")
+        seed = seed_components.get(name, "")
+        if text != seed:
+            changed_components.append(str(rel))
+        diff_parts.append("".join(difflib.unified_diff(
+            seed.splitlines(keepends=True), text.splitlines(keepends=True),
+            fromfile=f"skills/{args.skill}/{rel} (seed)",
+            tofile=f"skills/{args.skill}/{rel} (best)",
+        )))
+    (out_dir / "best.diff").write_text("\n".join(part for part in diff_parts if part), encoding="utf-8")
 
     val_scores = list(getattr(result, "val_aggregate_scores", []) or [])
     summary = {
@@ -560,7 +650,8 @@ def main() -> int:
         "n_candidates": len(getattr(result, "candidates", []) or []),
         "parents": getattr(result, "parents", None),
         "total_metric_calls": getattr(result, "total_metric_calls", None),
-        "best_changed": best_text != seed_text,
+        "best_changed": bool(changed_components),
+        "changed_components": changed_components,
         "out_dir": str(out_dir),
         "promotion": "review best.diff, bump metadata.version, open a PR (human merge)",
     }
