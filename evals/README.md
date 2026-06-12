@@ -159,20 +159,14 @@ its `expected_status`.
 
 ## Bootstrapping cases with the generator
 
-Writing three-plus cases per skill by hand is the slow part. `harness/generate/gen_eval_cases.py`
-(the gskill/SWE-smith recipe adapted for this repo) takes the grind out of it: an LM drafts whole
-candidate cases, each one is run through the same mechanical gates CI uses — including gold replay
-against your frozen validator — and survivors are quarantined under `runs/generate/` until you read
-and `--promote` them. You get a head start on coverage without the corpus ever leaving human hands.
+Writing cases by hand is the slow part. `harness/generate/gen_eval_cases.py` (the gskill/SWE-smith
+recipe adapted for this repo) LM-drafts whole candidate cases, gates each against your frozen
+validator, and quarantines the survivors until you review and `--promote` them — a head start on
+coverage that never leaves human hands. See the module docstring for flags and the gate list.
 
 ```sh
-uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --n 4          # draft candidates
-uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --promote <candidate-dir>
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --n 4
 ```
-
-Drafting needs an LM key; `--promote` is offline and refuses to land anything that fails the gates.
-Promotion never commits — review the diff yourself. Full flags and the gate list are in the
-generator's module docstring.
 
 ## Authoring checklist
 
