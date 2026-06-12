@@ -75,6 +75,8 @@ describe("bench discovery CLI contract", () => {
         "skill-detail",
         "proposals",
         "node-artifacts",
+        "onboard",
+        "onboard-prepare",
         "eval-case-generate",
         "eval-run",
       ]),
@@ -114,6 +116,10 @@ describe("bench discovery CLI contract", () => {
       usage: "bun ui/bench.ts node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>]",
       output: "NodeArtifacts",
       mirrors: ["GET /api/node-artifacts"],
+    });
+    expect(byName["onboard-prepare"]).toMatchObject({
+      usage: "bun ui/bench.ts onboard-prepare --source <dir> [--skill <name>] [--skip-cases]",
+      output: "bench-onboard-prepare.v1",
     });
     expect(byName["eval-case-generate"]).toMatchObject({
       usage: 'bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
@@ -222,6 +228,19 @@ describe("bench discovery CLI contract", () => {
     expect(outputBody.conventions.stderr).toContain("JSON");
   });
 
+  test("help onboard-prepare emits command-specific JSON help", () => {
+    const output = expectJsonStdout<{
+      schema_version: string;
+      command: { name: string; output: string; flags?: { name: string }[] };
+    }>(runBench(["help", "onboard-prepare"]));
+
+    expect(output.schema_version).toBe("bench-command-help.v1");
+    expect(output.command).toMatchObject({ name: "onboard-prepare", output: "bench-onboard-prepare.v1" });
+    expect(output.command.flags?.map((flag) => flag.name)).toEqual(
+      expect.arrayContaining(["--source", "--skill", "--model", "--skip-cases"]),
+    );
+  });
+
   test("help eval-case-generate emits command-specific JSON help", () => {
     const output = expectJsonStdout<{
       schema_version: string;
@@ -258,6 +277,35 @@ describe("bench discovery CLI contract", () => {
     const body = expectJsonStderr<{ error: string; status: number }>(result);
     expect(body.status).toBe(400);
     expect(body.error).toContain(expectedMessage);
+  });
+
+  test("onboard-prepare smoke path writes a quarantined review bundle", () => {
+    const result = runBench([
+      "onboard-prepare",
+      "--source",
+      "skills/ci-log-reducer",
+      "--out-dir",
+      "runs/onboard/bench-cli-contract-prepare-test",
+      "--skip-cases",
+      "--smoke",
+    ]);
+
+    expect(result.exitCode).toBe(0);
+    const body = expectJsonStdout<{
+      schema_version: string;
+      ok: boolean;
+      mode: string;
+      stdout_json: { schema_version: string; ok: boolean; review_queue: string[] };
+    }>(result);
+    expect(body).toMatchObject({ schema_version: "bench-onboard-prepare.v1", ok: true, mode: "prepare" });
+    expect(body.stdout_json).toMatchObject({ schema_version: "onboard-prepare.v1", ok: true });
+    expect(body.stdout_json.review_queue[0]).toContain("runs/onboard/bench-cli-contract-prepare-test/skill/ci-log-reducer");
+  });
+
+  test("onboard-prepare rejects missing source with JSON stderr", () => {
+    const result = runBench(["onboard-prepare"]);
+    expect(result.exitCode).toBe(1);
+    expect(expectJsonStderr<{ error: string }>(result).error).toContain("onboard-prepare --source");
   });
 
   test("eval-case-generate rejects unknown flags before invoking the generator", () => {
