@@ -25,6 +25,27 @@ skills (references/, preprocessor scripts).
   (no bootstrap mode yet). laguna-task-contract is the existing example of
   a multi-file skill (3 reference docs).
 
+## Finding 2026-06-12 (read first): contract-laden prompts cap skill lift
+
+First full-suite scoreboard (ci-log-reducer v0.1.1, 19 cases x 4 arms):
+without-skill arms score 0.959 mean / 36/40 pass; with-skill 0.868 / 30/40
+(-15pp pass-rate "lift"). Root causes, verified per-check: (a) eval prompts
+spell out the entire output contract (by design, for shared grading
+targets), so baselines are nearly saturated and the skill can only add
+process overhead on these prompts; (b) the skill's preprocessor workflow
+causes error-lines-verbatim regressions when used imperfectly (5 arms, both
+model classes) and two artifact-exists total failures (process overhead,
+artifact never written). GEPA's within-arm lift on val (0.694 -> 0.837)
+remains real; the with-vs-without comparison is structurally biased.
+
+### Work item 0 (new, before item 5): two-tier prompts
+Per case, add prompt_realistic.md: names the artifact path (so all arms can
+still be graded) but does NOT enumerate fields/rules — contract knowledge
+must come from the skill. Harness: --prompt-variant flag in matrix/run_eval
+(default current full prompts; realistic variant for lift measurement).
+Re-baseline ci-log-reducer both ways; report both numbers. Do NOT accept
+open GEPA proposals until realistic-variant evidence exists.
+
 ## Work items, in order
 
 ### 1. Getting-started packaging (no LM, no pool)
