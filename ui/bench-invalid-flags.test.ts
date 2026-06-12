@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { chmodSync, existsSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -19,10 +19,24 @@ function envWithPathPrefix(pathPrefix: string): Record<string, string> {
   return env;
 }
 
-function optimizeStateFiles(): Set<string> {
-  const stateDir = join(import.meta.dir, "..", "runs", "optimize", ".state");
-  if (!existsSync(stateDir)) return new Set();
-  return new Set(readdirSync(stateDir).map((name) => join(stateDir, name)));
+function collectTreePaths(root: string): Set<string> {
+  const paths = new Set<string>();
+  if (!existsSync(root)) return paths;
+
+  const visit = (path: string) => {
+    paths.add(path);
+    const stat = statSync(path);
+    if (!stat.isDirectory()) return;
+    for (const entry of readdirSync(path)) visit(join(path, entry));
+  };
+
+  visit(root);
+  return paths;
+}
+
+function optimizeArtifactFiles(skill = "ci-log-reducer"): Set<string> {
+  const roots = [join(import.meta.dir, "..", "runs", "optimize", ".state"), join(import.meta.dir, "..", "runs", "optimize", skill)];
+  return new Set(roots.flatMap((root) => [...collectTreePaths(root)]));
 }
 
 function stderrJson(result: ReturnType<typeof runBench>) {
@@ -49,6 +63,41 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.status).toBe(400);
     expect(body.error).toContain("Unknown flag for eval-run: --sutie");
     expect(body.error).toContain("Did you mean --suite?");
+  });
+
+  test.each([
+    ["onboard", ["onboard", "--sorce", "skills/ci-log-reducer"], "--sorce", "--source"],
+    ["eval-case-generate skill", ["eval-case-generate", "--skil", "repo-map", "--n", "1"], "--skil", "--skill"],
+    [
+      "eval-case-generate validate-only",
+      ["eval-case-generate", "--skill", "repo-map", "--validate-ony", "skills/repo-map/evals/repo-map-bun-cli-workspace"],
+      "--validate-ony",
+      "--validate-only",
+    ],
+  ])("bespoke parser suggests the closest known flag for %s", (_label, args, badFlag, suggestion) => {
+    const fakeBin = mkdtempSync(join(tmpdir(), "bench-fake-bespoke-uv-"));
+    const marker = join(fakeBin, "uv-invoked");
+    const fakeUv = join(fakeBin, "uv");
+    writeFileSync(fakeUv, `#!/bin/sh\nprintf invoked > ${JSON.stringify(marker)}\nexit 42\n`);
+    chmodSync(fakeUv, 0o755);
+
+    let result: ReturnType<typeof runBench> | undefined;
+    let launchedFakeUv = false;
+    try {
+      result = runBench(args, { env: envWithPathPrefix(fakeBin) });
+      launchedFakeUv = existsSync(marker);
+    } finally {
+      rmSync(fakeBin, { recursive: true, force: true });
+    }
+
+    expect(result).toBeDefined();
+    expect(result!.exitCode).not.toBe(0);
+    expect(result!.stdout.toString()).toBe("");
+    const body = stderrJson(result!);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain(badFlag);
+    expect(body.error).toContain(`Did you mean ${suggestion}?`);
+    expect(launchedFakeUv).toBe(false);
   });
 
   test("eval-run rejects missing required flag values", () => {
@@ -96,26 +145,29 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.error).toContain("Unknown flag for optimize-skill: --badflag");
   });
 
-  test("optimize-skill rejects smoke with baseline-only before launching the optimizer", () => {
+  test.each([
+    ["--skill form", ["optimize-skill", "--skill", "ci-log-reducer", "--smoke", "--baseline-only"]],
+    ["positional form", ["optimize-skill", "ci-log-reducer", "--smoke", "--baseline-only"]],
+  ])("optimize-skill rejects smoke with baseline-only before side effects (%s)", (_label, args) => {
     const fakeBin = mkdtempSync(join(tmpdir(), "bench-fake-uv-"));
     const marker = join(fakeBin, "uv-invoked");
     const fakeUv = join(fakeBin, "uv");
     writeFileSync(fakeUv, `#!/bin/sh\nprintf invoked > ${JSON.stringify(marker)}\nexit 42\n`);
     chmodSync(fakeUv, 0o755);
 
-    const beforeStateFiles = optimizeStateFiles();
+    const beforeArtifacts = optimizeArtifactFiles();
     let result: ReturnType<typeof runBench> | undefined;
     let launchedFakeUv = false;
-    let newStateFiles: string[] = [];
+    let newArtifacts: string[] = [];
 
     try {
-      result = runBench(["optimize-skill", "--skill", "ci-log-reducer", "--smoke", "--baseline-only"], {
+      result = runBench(args, {
         env: envWithPathPrefix(fakeBin),
       });
       launchedFakeUv = existsSync(marker);
-      newStateFiles = [...optimizeStateFiles()].filter((path) => !beforeStateFiles.has(path));
+      newArtifacts = [...optimizeArtifactFiles()].filter((path) => !beforeArtifacts.has(path));
     } finally {
-      for (const path of newStateFiles) rmSync(path, { force: true });
+      for (const path of newArtifacts.sort((a, b) => b.length - a.length)) rmSync(path, { recursive: true, force: true });
       rmSync(fakeBin, { recursive: true, force: true });
     }
 
@@ -126,7 +178,7 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.status).toBe(400);
     expect(body.error).toBe("--smoke and --baseline-only are mutually exclusive");
     expect(launchedFakeUv).toBe(false);
-    expect(newStateFiles).toEqual([]);
+    expect(newArtifacts).toEqual([]);
   });
 
   test("eval-run exposes a safe robot dry-run path", () => {
@@ -208,6 +260,36 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.status).toBe(400);
     expect(body.error).toContain("Duplicate flag for eval-case-generate: --n");
     expect(body.error).toContain("--n is not repeatable");
+  });
+
+  test.each([
+    ["--validate-only", ["eval-case-generate", "--skill", "x", "--validate-only", "a", "--validate-only", "b"]],
+    ["--promote", ["eval-case-generate", "--skill", "x", "--promote", "a", "--promote", "b"]],
+  ])("eval-case-generate accepts repeated %s values in argv order", (flagName, args) => {
+    const fakeBin = mkdtempSync(join(tmpdir(), "bench-fake-generate-uv-"));
+    const argvPath = join(fakeBin, "uv-argv.json");
+    const fakeUv = join(fakeBin, "uv");
+    writeFileSync(
+      fakeUv,
+      `#!/bin/sh\nnode -e 'require("fs").writeFileSync(process.argv[1], JSON.stringify(process.argv.slice(2)))' ${JSON.stringify(argvPath)} "$@"\nexit 42\n`,
+    );
+    chmodSync(fakeUv, 0o755);
+
+    let result: ReturnType<typeof runBench> | undefined;
+    let forwardedArgs: string[] = [];
+    try {
+      result = runBench(args, { env: envWithPathPrefix(fakeBin) });
+      forwardedArgs = existsSync(argvPath) ? (JSON.parse(readFileSync(argvPath, "utf8")) as string[]) : [];
+    } finally {
+      rmSync(fakeBin, { recursive: true, force: true });
+    }
+
+    expect(result).toBeDefined();
+    expect(result!.stdout.toString()).toBe("");
+    expect(result!.stderr.toString()).not.toContain("Duplicate flag for eval-case-generate");
+    const flagIndex = forwardedArgs.indexOf(flagName);
+    expect(flagIndex).not.toBe(-1);
+    expect(forwardedArgs.slice(flagIndex, flagIndex + 3)).toEqual([flagName, "a", "b"]);
   });
 
   test("eval-case-generate rejects mixed validate and promote modes with JSON stderr", () => {

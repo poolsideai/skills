@@ -197,7 +197,7 @@ def run_dry_json(suite_name: str, suite_path: Path, cases: list[mx.Case], specs:
             "case_id": case.id,
             "status": "invalid" if case_problems else "ok",
             "arms": [arm.name for arm in arms],
-            "problems": case_problems,
+            "problems": redact_robot_json(case_problems, args),
         })
 
     run_records: list[dict] = []
@@ -280,7 +280,7 @@ def dry_run_one_record(
         return {
             "ok": False,
             **base,
-            "fixture": dry_run_fixture_record("invalid", fixture_problems, False, args.keep_workspaces, None),
+            "fixture": dry_run_fixture_record("invalid", fixture_problems, False, args.keep_workspaces, None, args),
             "pool_command": None,
             "environment": None,
             "validator": None,
@@ -293,7 +293,7 @@ def dry_run_one_record(
         return {
             "ok": False,
             **base,
-            "fixture": dry_run_fixture_record("error", [str(exc)], False, args.keep_workspaces, None),
+            "fixture": dry_run_fixture_record("error", [str(exc)], False, args.keep_workspaces, None, args),
             "pool_command": None,
             "environment": None,
             "validator": None,
@@ -340,14 +340,14 @@ def dry_run_one_record(
         if manifest_errors:
             ok = False
 
-        normalized_argv = normalize_preview_paths(argv, mat)
-        normalized_validator_argv = normalize_preview_paths(validator_argv, mat)
-        normalized_preview = normalize_preview_paths(preview, mat)
+        normalized_argv = redact_robot_json(argv, args, mat)
+        normalized_validator_argv = redact_robot_json(validator_argv, args, mat)
+        normalized_preview = redact_robot_json(preview, args, mat)
         return {
             "ok": ok,
             "run_id": run_id,
             **base,
-            "fixture": dry_run_fixture_record("ok" if not problems else "invalid", problems, mat.skill_materialized, args.keep_workspaces, mat),
+            "fixture": dry_run_fixture_record("ok" if not problems else "invalid", problems, mat.skill_materialized, args.keep_workspaces, mat, args),
             "pool_command": {"argv": normalized_argv, "shell": shell_join(normalized_argv), "debt": cmd_debt},
             "environment": {
                 "home": "<home>" if args.keep_workspaces else None,
@@ -400,8 +400,15 @@ def replay_case_record(case: mx.Case, args: argparse.Namespace) -> dict:
             shutil.rmtree(out_dir, ignore_errors=True)
 
 
-def dry_run_fixture_record(status: str, problems: list[str], skill_materialized: bool, scratch_kept: bool, mat: fx.MaterializedRun | None) -> dict:
-    normalized_problems = normalize_preview_paths(problems, mat) if mat is not None else problems
+def dry_run_fixture_record(
+    status: str,
+    problems: list[str],
+    skill_materialized: bool,
+    scratch_kept: bool,
+    mat: fx.MaterializedRun | None,
+    args: argparse.Namespace,
+) -> dict:
+    normalized_problems = redact_robot_json(problems, args, mat)
     return {
         "status": status,
         "problems": normalized_problems,
@@ -424,26 +431,40 @@ def robot_preview_run_id(suite_name: str, spec: mx.RunSpec) -> str:
     return str(uuid.uuid5(uuid.NAMESPACE_URL, f"poolside-skills:{suite_name}:{spec.case.id}:{spec.arm.name}"))
 
 
-def normalize_preview_paths(value, mat: fx.MaterializedRun):
-    replacements = {
-        str(mat.workspace): "<workspace>",
-        str(mat.home): "<home>",
-        str(mat.state): "<xdg_state_home>",
-        str(mat.scratch): "<scratch>",
-    }
+def redact_robot_json(value, args: argparse.Namespace, mat: fx.MaterializedRun | None = None):
+    replacements: list[tuple[str, str]] = []
 
-    def normalize(item):
+    def add_path_replacement(path: Path, replacement: str) -> None:
+        for candidate in (path, path.resolve()):
+            text = str(candidate)
+            if text and (text, replacement) not in replacements:
+                replacements.append((text, replacement))
+
+    skills_root = Path(args.skills_root)
+    if skills_root.resolve() != fx.DEFAULT_SKILLS_ROOT.resolve():
+        add_path_replacement(skills_root, "<skills_root>")
+    runs_root = Path(args.runs_root)
+    if runs_root.resolve() != (REPO_ROOT / "runs").resolve():
+        add_path_replacement(runs_root, "<runs_root>")
+    if mat is not None:
+        add_path_replacement(mat.workspace, "<workspace>")
+        add_path_replacement(mat.home, "<home>")
+        add_path_replacement(mat.state, "<xdg_state_home>")
+        add_path_replacement(mat.scratch, "<scratch>")
+    replacements.sort(key=lambda item: len(item[0]), reverse=True)
+
+    def redact(item):
         if isinstance(item, str):
-            for original, replacement in replacements.items():
+            for original, replacement in replacements:
                 item = item.replace(original, replacement)
             return item
         if isinstance(item, list):
-            return [normalize(child) for child in item]
+            return [redact(child) for child in item]
         if isinstance(item, dict):
-            return {key: normalize(child) for key, child in item.items()}
+            return {key: redact(child) for key, child in item.items()}
         return item
 
-    return normalize(value)
+    return redact(value)
 
 
 def run_dry(suite_name: str, cases: list[mx.Case], specs: list[mx.RunSpec], args: argparse.Namespace) -> int:

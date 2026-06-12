@@ -1618,6 +1618,10 @@ export function startOptimizeRun(options: {
   smoke?: boolean;
   baselineOnly?: boolean;
 }) {
+  if (options.smoke && options.baselineOnly) {
+    throw new HttpError(400, "--smoke and --baseline-only are mutually exclusive");
+  }
+
   const skillDir = join(REPO_ROOT, "skills", options.skill);
   if (!existsSync(join(skillDir, "SKILL.md"))) {
     throw new HttpError(400, `skill not found: ${options.skill}`);

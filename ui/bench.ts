@@ -28,9 +28,9 @@
  *   bun ui/bench.ts eval-suites
  *   bun ui/bench.ts eval-run --suite <path> [--case <id>]... [--arm <arm>]...
  *   bun ui/bench.ts eval-runs
- *   bun ui/bench.ts optimize-skill --skill <name> [--max-metric-calls N] [--smoke|--baseline-only]
+ *   bun ui/bench.ts optimize-skill <name>|--skill <name> [--max-metric-calls N] [--smoke|--baseline-only]
  *   bun ui/bench.ts optimize-runs
- *   bun ui/bench.ts optimize-propose --skill <name> [--run-dir <dir>]
+ *   bun ui/bench.ts optimize-propose <name>|--skill <name> [--run-dir <dir>]
  *   bun ui/bench.ts node-evals [--project <id>]
  *   bun ui/bench.ts node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>]
  *   bun ui/bench.ts node-eval-insitu <runId> [--project <id>]
@@ -157,9 +157,9 @@ const USAGE = {
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
     "eval-runs — harness processes + per-arm results from runs/<suite>/<case>/<arm>/",
-    "optimize-skill --skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA SKILL.md optimization (harness/optimize/gepa_skill.py)",
+    "optimize-skill <skill>|--skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA SKILL.md optimization (harness/optimize/gepa_skill.py)",
     "optimize-runs — optimization processes + result.json summaries from runs/optimize/",
-    "optimize-propose --skill <name> [--run-dir <dir>] — fold a finished GEPA run into the improvement queue (accept = version bump + checks + re-eval)",
+    "optimize-propose <skill>|--skill <name> [--run-dir <dir>] — fold a finished GEPA run into the improvement queue (accept = version bump + checks + re-eval)",
     "node-evals [--project <id>] — node-level eval records (in-workflow + standalone)",
     "node-artifacts --run-id <runId> --node-id <nodeId> [--project <id>] — prompt, artifacts, grade, and gold reference for a run node",
     "node-eval-insitu <runId> [--project <id>] — grade every node of a finished run via its skill validator",
@@ -411,8 +411,9 @@ const COMMAND_DETAILS: CommandDetail[] = [
     name: "optimize-skill",
     category: "optimization",
     summary: "Launch detached GEPA SKILL.md optimization.",
-    usage: "bun ui/bench.ts optimize-skill --skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]",
+    usage: "bun ui/bench.ts optimize-skill <skill>|--skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]",
     output: "StartOptimizeRunResult",
+    positional: [{ name: "skill", description: "Skill directory name; alternative to --skill." }],
     flags: [
       { name: "--skill", value: "name", description: "Skill to optimize. Required unless supplied as the first positional arg." },
       { name: "--suite", value: "path", description: "Suite path override." },
@@ -434,8 +435,9 @@ const COMMAND_DETAILS: CommandDetail[] = [
     name: "optimize-propose",
     category: "optimization",
     summary: "Fold a finished GEPA run into the improvement queue.",
-    usage: "bun ui/bench.ts optimize-propose --skill <name> [--run-dir <dir>]",
+    usage: "bun ui/bench.ts optimize-propose <skill>|--skill <name> [--run-dir <dir>]",
     output: "OptimizeProposal",
+    positional: [{ name: "skill", description: "Skill directory name; alternative to --skill." }],
     flags: [
       { name: "--skill", value: "name", description: "Optimized skill. Required unless supplied as the first positional arg." },
       { name: "--run-dir", value: "dir", description: "Specific optimization run directory." },
@@ -541,6 +543,12 @@ function didYouMean(value: string, candidates: string[]): string | undefined {
   return best.distance <= 3 || best.candidate.toLowerCase().startsWith(normalized) ? best.candidate : undefined;
 }
 
+function unknownFlagError(commandName: string, key: string, allowedFlags: Iterable<string>, usage: string): HttpError {
+  const suggestion = didYouMean(`--${key}`, [...allowedFlags].map((flagName) => `--${flagName}`));
+  const hint = suggestion ? ` Did you mean ${suggestion}?` : "";
+  return new HttpError(400, `Unknown flag for ${commandName}: --${key}.${hint} Usage: ${usage}`);
+}
+
 function validateArgsForCommand(commandName: string, args: Flags): void {
   if (BESPOKE_ARG_COMMANDS.has(commandName)) return;
   const command = COMMAND_BY_NAME.get(commandName);
@@ -550,9 +558,7 @@ function validateArgsForCommand(commandName: string, args: Flags): void {
   const allowedFlags = new Set([...flagDefinitions.keys(), ...GLOBAL_FLAGS]);
   for (const key of Object.keys(args.flags)) {
     if (!allowedFlags.has(key)) {
-      const suggestion = didYouMean(`--${key}`, [...allowedFlags].map((flagName) => `--${flagName}`));
-      const hint = suggestion ? ` Did you mean ${suggestion}?` : "";
-      throw new HttpError(400, `Unknown flag for ${commandName}: --${key}.${hint} Usage: ${command.usage}`);
+      throw unknownFlagError(commandName, key, allowedFlags, command.usage);
     }
   }
 
@@ -698,6 +704,7 @@ function pushOptional(argv: string[], key: string, value: string | undefined): v
 }
 
 const ONBOARD_FLAGS = new Set(["source", "out-dir"]);
+const ONBOARD_REPEATABLE_FLAGS = new Set<string>();
 
 function parseOnboardArgs(argv: string[]): Flags {
   const out: Flags = { positional: [], flags: {} };
@@ -709,11 +716,11 @@ function parseOnboardArgs(argv: string[]): Flags {
     }
 
     const key = arg.slice(2);
+    const usage = COMMAND_BY_NAME.get("onboard")?.usage ?? "bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]";
     if (!ONBOARD_FLAGS.has(key)) {
-      throw new HttpError(400, `Unknown flag for onboard: --${key}`);
+      throw unknownFlagError("onboard", key, ONBOARD_FLAGS, usage);
     }
-    if ((out.flags[key]?.length ?? 0) > 0) {
-      const usage = COMMAND_BY_NAME.get("onboard")?.usage ?? "bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]";
+    if (!ONBOARD_REPEATABLE_FLAGS.has(key) && (out.flags[key]?.length ?? 0) > 0) {
       throw new HttpError(400, `Duplicate flag for onboard: --${key}. --${key} is not repeatable. Usage: ${usage}`);
     }
     const value = argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : undefined;
@@ -789,7 +796,8 @@ function parseEvalCaseGenerateArgs(argv: string[]): Flags {
 
     const key = arg.slice(2);
     if (!EVAL_CASE_GENERATE_FLAGS.has(key)) {
-      throw new HttpError(400, `Unknown flag for eval-case-generate: --${key}`);
+      const usage = COMMAND_BY_NAME.get("eval-case-generate")?.usage ?? "bun ui/bench.ts eval-case-generate --skill <name>";
+      throw unknownFlagError("eval-case-generate", key, EVAL_CASE_GENERATE_FLAGS, usage);
     }
     if (!EVAL_CASE_GENERATE_REPEATABLE_FLAGS.has(key) && (out.flags[key]?.length ?? 0) > 0) {
       const usage = COMMAND_BY_NAME.get("eval-case-generate")?.usage ?? "bun ui/bench.ts eval-case-generate --skill <name>";
@@ -1138,7 +1146,7 @@ async function main() {
       return emit({ harness: listHarnessProcesses(), runs: listEvalRuns() });
     case "optimize-skill": {
       const skill = flag(args, "skill") ?? args.positional[0];
-      if (!skill) throw new HttpError(400, "usage: optimize-skill --skill <name>");
+      if (!skill) throw new HttpError(400, "usage: optimize-skill <skill>|--skill <name>");
       const maxMetricCalls = flag(args, "max-metric-calls");
       const smoke = flag(args, "smoke") === "true";
       const baselineOnly = flag(args, "baseline-only") === "true";
@@ -1159,7 +1167,7 @@ async function main() {
       return emit(listOptimizeRuns());
     case "optimize-propose": {
       const skill = flag(args, "skill") ?? args.positional[0];
-      if (!skill) throw new HttpError(400, "usage: optimize-propose --skill <name> [--run-dir <dir>]");
+      if (!skill) throw new HttpError(400, "usage: optimize-propose <skill>|--skill <name> [--run-dir <dir>]");
       return emit(proposalFromOptimizeRun({ skill, runDir: flag(args, "run-dir") ?? undefined }));
     }
     case undefined:

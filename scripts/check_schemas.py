@@ -92,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
             report.fail(
                 COMMON_SCHEMAS_DIR / name,
                 "common-contract-exists",
-                "missing shared v0 contract schema (plan item 7)",
+                "missing required common contract schema",
             )
 
     schema_files = find_schema_files()

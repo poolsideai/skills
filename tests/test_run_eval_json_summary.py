@@ -79,6 +79,16 @@ class RunEvalJsonSummaryTests(unittest.TestCase):
         self.assertIsInstance(first_run["validator"]["argv"], list)
         self.assertTrue(first_run["manifest_preview"]["valid"], first_run["manifest_preview"])
 
+    def assert_any_argv_entry_contains(self, argv: list[str], placeholder: str) -> None:
+        self.assertTrue(any(placeholder in entry for entry in argv), argv)
+
+    def assert_no_raw_paths_in_run_fields(self, run: dict[str, Any], raw_paths: list[Path]) -> None:
+        fields = ["fixture", "pool_command", "validator", "manifest_preview"]
+        for field in fields:
+            field_json = json.dumps(run[field])
+            for raw_path in raw_paths:
+                self.assertNotIn(str(raw_path), field_json, f"raw path leaked in run[{field!r}]")
+
     def test_dry_run_json_summary_emits_exactly_one_parseable_summary_on_stdout(self) -> None:
         result = self.run_eval("--dry-run", "--json-summary")
 
@@ -181,6 +191,22 @@ class RunEvalJsonSummaryTests(unittest.TestCase):
             self.assertTrue(any(temp_root.iterdir()), "expected --keep-workspaces to leave test-owned temp dirs")
             self.assertNotIn(str(temp_root), result.stdout)
 
+    def test_robot_dry_run_custom_runs_root_redacts_robot_json(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="run-eval-runs-root-redaction-test-") as runs_root:
+            result = self.run_eval("--robot-dry-run", "--runs-root", runs_root)
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stderr, "")
+        payload = self.parse_single_stdout_json(result)
+        self.assert_summary_contract(payload)
+        self.assertNotIn(runs_root, result.stdout)
+        self.assertIn("<runs_root>", result.stdout)
+        first_run = payload["runs"][0]
+        self.assertIn("<runs_root>", first_run["pool_command"]["shell"])
+        self.assert_any_argv_entry_contains(first_run["pool_command"]["argv"], "<runs_root>")
+        self.assert_any_argv_entry_contains(first_run["validator"]["argv"], "<runs_root>")
+        self.assert_any_argv_entry_contains(first_run["manifest_preview"]["manifest"]["command"], "<runs_root>")
+
     def test_robot_dry_run_summary_does_not_depend_on_poolside_token_env(self) -> None:
         base_env = os.environ.copy()
         unset_env = {key: value for key, value in base_env.items() if key != "POOLSIDE_TOKEN"}
@@ -277,6 +303,8 @@ class RunEvalJsonSummaryTests(unittest.TestCase):
                 "--skills-root",
                 skills_root,
             )
+            self.assertNotIn(skills_root, result.stdout)
+            self.assertIn("<skills_root>", result.stdout)
 
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertEqual(result.stderr, "")
@@ -284,6 +312,8 @@ class RunEvalJsonSummaryTests(unittest.TestCase):
         errors = validate_instance(payload, SUMMARY_SCHEMA)
         self.assertEqual(errors, [], errors)
         runs_by_arm = {run["arm"]: run for run in payload["runs"]}
+        fixture_problems = json.dumps([run["fixture"]["problems"] for run in payload["runs"]])
+        self.assertIn("<skills_root>", fixture_problems)
         self.assertTrue(runs_by_arm["xs_without_skill"]["ok"])
         self.assertEqual(runs_by_arm["xs_without_skill"]["fixture"]["status"], "ok")
         self.assertFalse(runs_by_arm["xs_with_skill"]["ok"])
@@ -376,12 +406,14 @@ class RunEvalJsonSummaryTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory(prefix="laguna-fixture-problem-redaction-test-") as tmp:
             temp_root = Path(tmp)
+            materialized_paths: list[Path] = []
 
             def fake_materialize(case: mx.Case, arm: mx.Arm, skills_root: Path, **kwargs: Any) -> fx.MaterializedRun:
                 scratch = Path(tempfile.mkdtemp(prefix="laguna-invariant-test-", dir=temp_root))
                 workspace = scratch / "workspace"
                 home = scratch / "home"
                 state = scratch / "state"
+                materialized_paths[:] = [scratch, workspace, home, state]
                 skill_dest = workspace / ".poolside" / "skills" / case.skill
                 skill_dest.mkdir(parents=True)
                 home.mkdir()
@@ -413,9 +445,13 @@ class RunEvalJsonSummaryTests(unittest.TestCase):
             self.assertEqual(payload["counts"]["fixture_invalid_cases"], 0)
             self.assertEqual(payload["counts"]["run_preview_failures"], 1)
             self.assertFalse(payload["ok"])
-            problems = payload["runs"][0]["fixture"]["problems"]
-            self.assertTrue(problems, payload["runs"][0]["fixture"])
+            run = payload["runs"][0]
+            problems = run["fixture"]["problems"]
+            self.assertTrue(problems, run["fixture"])
+            self.assertEqual(run["environment"]["home"], "<home>")
+            self.assertEqual(run["environment"]["xdg_state_home"], "<xdg_state_home>")
             self.assertNotIn(str(temp_root), json.dumps(problems))
+            self.assert_no_raw_paths_in_run_fields(run, [temp_root, *materialized_paths])
 
     def test_json_summary_counts_invariant_failures_even_when_fixture_validation_passes(self) -> None:
         suite_name, case_dirs = mx.load_suite(SMOKE_SUITE)

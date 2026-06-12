@@ -90,21 +90,10 @@ class CheckScriptsJsonContractTests(unittest.TestCase):
         check_schemas = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(check_schemas)
 
-        required_names = (
-            "validator-result.v1.schema.json",
-            "eval-case.v1.schema.json",
-            "run-manifest.v0.schema.json",
-            "case-generation-result.v1.schema.json",
-            "eval-error.v1.schema.json",
-            "eval-dry-run-summary.v1.schema.json",
-        )
+        required_names = check_schemas.REQUIRED_COMMON_SCHEMAS
         valid_schema = '{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object"}\n'
 
-        for missing_name in (
-            "case-generation-result.v1.schema.json",
-            "eval-error.v1.schema.json",
-            "eval-dry-run-summary.v1.schema.json",
-        ):
+        for missing_name in required_names:
             with self.subTest(missing_name=missing_name), tempfile.TemporaryDirectory() as temp_dir:
                 temp_repo = Path(temp_dir)
                 common_dir = temp_repo / "schemas" / "common"
@@ -127,13 +116,19 @@ class CheckScriptsJsonContractTests(unittest.TestCase):
                 self.assertEqual(payload["schema_version"], "repo-check-result.v1")
                 self.assertEqual(payload["tool"], "check_schemas")
                 self.assertEqual(payload["status"], "fail")
-                self.assertTrue(
-                    any(
-                        str(violation.get("path", "")).endswith(f"schemas/common/{missing_name}")
-                        and violation.get("check") == "common-contract-exists"
-                        for violation in payload["violations"]
-                    ),
-                    payload,
+                self.assertNotIn("missing shared v0 contract schema", stdout.getvalue())
+                self.assertNotIn("plan item 7", stdout.getvalue())
+                matching_violations = [
+                    violation
+                    for violation in payload["violations"]
+                    if violation.get("check") == "common-contract-exists"
+                    and str(violation.get("path", "")).endswith(f"schemas/common/{missing_name}")
+                ]
+                self.assertEqual(len(matching_violations), 1, payload)
+                self.assertIn(missing_name, str(matching_violations[0].get("path", "")))
+                self.assertEqual(
+                    matching_violations[0].get("message"),
+                    "missing required common contract schema",
                 )
 
 

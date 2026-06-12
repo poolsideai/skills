@@ -168,6 +168,36 @@ describe("bench discovery CLI contract", () => {
   });
 
   test.each([
+    ["optimize-skill", "bun ui/bench.ts optimize-skill <skill>|--skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]"],
+    ["optimize-propose", "bun ui/bench.ts optimize-propose <skill>|--skill <name> [--run-dir <dir>]"],
+  ])("help %s exposes positional skill metadata", (commandName, usage) => {
+    const output = expectJsonStdout<{
+      schema_version: string;
+      command: {
+        name: string;
+        usage: string;
+        positional?: { name: string; description: string }[];
+        flags?: { name: string }[];
+      };
+    }>(runBench(["help", commandName]));
+
+    expect(output.schema_version).toBe("bench-command-help.v1");
+    expect(output.command.usage).toBe(usage);
+    expect(output.command.positional).toEqual([{ name: "skill", description: "Skill directory name; alternative to --skill." }]);
+    expect(output.command.flags?.map((flag) => flag.name)).toContain("--skill");
+  });
+
+  test("capabilities exposes optimizer positional skill metadata", () => {
+    const output = expectJsonStdout<{
+      commands: { name: string; positional?: { name: string; description: string }[] }[];
+    }>(runBench(["capabilities"]));
+
+    const byName = Object.fromEntries(output.commands.map((command) => [command.name, command]));
+    expect(byName["optimize-skill"].positional).toEqual([{ name: "skill", description: "Skill directory name; alternative to --skill." }]);
+    expect(byName["optimize-propose"].positional).toEqual([{ name: "skill", description: "Skill directory name; alternative to --skill." }]);
+  });
+
+  test.each([
     ["feed", "bun ui/bench.ts feed [--project <id>]", "{ scorecard, records }", ["--project"]],
     ["skill-detail", "bun ui/bench.ts skill-detail <name>", "SkillDetail", ["--skill"]],
     ["proposals", "bun ui/bench.ts proposals --skill <name>", "{ proposals, pending }", ["--skill"]],

@@ -138,13 +138,21 @@ class GenEvalCasesCliContractTests(unittest.TestCase):
         payloads = self.parse_json_objects(result.stdout)
         self.assertEqual(len(payloads), 1, "multi-case validate-only must emit exactly one JSON document")
         payload = json.loads(result.stdout)
+        self.assertEqual(payloads[0], payload)
         errors = validate_instance(payload, RESULT_SCHEMA)
         self.assertEqual(errors, [], errors)
+        self.assertEqual(
+            set(payload),
+            {"schema_version", "operation", "case_id", "case_dir", "ok", "violations", "counts", "results"},
+        )
         self.assertEqual(payload["schema_version"], "case-generation-result.v1")
         self.assertEqual(payload["operation"], "validate-only")
+        self.assertEqual(payload["case_id"], "aggregate")
+        self.assertEqual(payload["case_dir"], "aggregate")
         self.assertTrue(payload["ok"])
         self.assertEqual(payload["violations"], [])
         self.assertEqual(payload["counts"], {"cases": 2, "ok": 2, "failed": 0})
+        self.assertEqual(len(payload["results"]), 2)
         self.assertEqual([entry["case_id"] for entry in payload["results"]], [case_a.name, case_b.name])
         for entry, case_dir in zip(payload["results"], [case_a, case_b], strict=True):
             self.assertEqual(entry["schema_version"], "case-generation-result.v1")
@@ -172,14 +180,27 @@ class GenEvalCasesCliContractTests(unittest.TestCase):
         payloads = self.parse_json_objects(result.stdout)
         self.assertEqual(len(payloads), 1, "multi-case validate-only failures must emit one aggregate JSON document")
         payload = json.loads(result.stdout)
+        self.assertEqual(payloads[0], payload)
         errors = validate_instance(payload, RESULT_SCHEMA)
         self.assertEqual(errors, [], errors)
+        self.assertEqual(
+            set(payload),
+            {"schema_version", "operation", "case_id", "case_dir", "ok", "violations", "counts", "results"},
+        )
         self.assertEqual(payload["schema_version"], "case-generation-result.v1")
         self.assertEqual(payload["operation"], "validate-only")
+        self.assertEqual(payload["case_id"], "aggregate")
+        self.assertEqual(payload["case_dir"], "aggregate")
         self.assertFalse(payload["ok"])
         self.assertEqual(payload["counts"]["cases"], 2)
         self.assertEqual(payload["counts"]["ok"], 1)
         self.assertEqual(payload["counts"]["failed"], 1)
+        self.assertEqual(len(payload["results"]), 2)
+        self.assertEqual([entry["case_id"] for entry in payload["results"]], [VALID_CASE.name, missing_case.name])
+        passing_results = [entry for entry in payload["results"] if entry["ok"]]
+        self.assertEqual(len(passing_results), 1)
+        self.assertEqual(passing_results[0]["case_id"], VALID_CASE.name)
+        self.assertEqual(passing_results[0]["violations"], [])
         failing_results = [entry for entry in payload["results"] if not entry["ok"]]
         self.assertEqual(len(failing_results), 1)
         failing = failing_results[0]

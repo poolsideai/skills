@@ -39,9 +39,20 @@ uv run scripts/check_validator_robustness.py --json
 scripts/check_eval_cases.py --json fails for skills/workspace-inventory eval-case coverage.
 ```
 
-6. Treat unknown flags and duplicate non-repeatable flags as structured fast-fail behavior. In robot-facing paths, expect structured JSON errors rather than prose; repeatable flags are command-specific, and scalar duplicates should reject instead of silently using the last value.
+6. Treat unknown commands, unknown flags, and duplicate scalar flags as structured fast-fail behavior. Close command and flag typos include did-you-mean hints when a match exists, including bespoke bench parsers such as `onboard` and `eval-case-generate`. Repeatable flags are command-specific: `--case` and `--arm` on `eval-run`; `--spec`, `--validate-only`, and `--promote` on `eval-case-generate`. Other duplicates reject instead of silently using the last value.
 
-7. Avoid live optimizer spend unless the task intentionally launches a valid optimization. `optimize-skill --smoke --baseline-only` should fail before launch because the modes conflict.
+7. Avoid live optimizer spend unless the task intentionally launches a valid optimization. Use either optimizer skill form:
+
+```sh
+bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
+bun ui/bench.ts optimize-skill ci-log-reducer --smoke
+bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
+bun ui/bench.ts optimize-propose ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
+```
+
+`optimize-skill --smoke --baseline-only` rejects before optimizer launch, sidecar writes, or log creation because the modes conflict.
+
+8. Robot dry-run JSON redacts custom CLI roots and materialized workspace/home/state/scratch paths with placeholders. Human dry-run/debug prose is not globally redacted, so use robot JSON for machine-safe path output.
 
 ## Apply-Pass Entry Criteria
 
