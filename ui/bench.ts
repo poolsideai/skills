@@ -18,6 +18,7 @@
  *   bun ui/bench.ts workflow-run <path> [--input '<json>'] [--project <id>]
  *   bun ui/bench.ts skills
  *   bun ui/bench.ts skill-generate --name <name> --prompt "..." [--model <agent>]
+ *   bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]
  *   bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."]
  *   bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>
  *   bun ui/bench.ts eval-case-generate --skill <name> --promote <case-dir>
@@ -133,6 +134,7 @@ const USAGE = {
     "workflow-run <path> [--input '<json>'] [--project <id>] — start a run, returns runId immediately",
     "skills — skills catalog (frontmatter, validators, eval case counts)",
     'skill-generate --name <name> --prompt "..." [--model <agent>] — pool authors a skill, gated by check_skill_structure.py',
+    "onboard --source <dir> [--out-dir <dir>] — triage foreign skill dirs into runs/onboard/ without LM or pool",
     "eval-case-generate --skill <name> [--n N|--spec '...'] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
@@ -283,6 +285,21 @@ const COMMAND_DETAILS: CommandDetail[] = [
       { name: "--name", value: "name", description: "Skill directory/frontmatter name. Required." },
       { name: "--prompt", value: "text", description: "Skill authoring prompt. Required." },
       { name: "--model", value: "agent", description: "Authoring agent name." },
+    ],
+  },
+  {
+    name: "onboard",
+    category: "skills",
+    summary: "Triage foreign skill directories without LM or pool.",
+    usage: "bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]",
+    output: "bench-onboard.v1",
+    flags: [
+      { name: "--source", value: "dir", description: "Skill dir or directory containing skill dirs. Required." },
+      { name: "--out-dir", value: "dir", description: "Report directory under runs/onboard/." },
+    ],
+    notes: [
+      "This is a JSON-normalizing wrapper around `uv run harness/onboard/triage.py --json`.",
+      "Triage never synthesizes validators or eval cases; generated material belongs in later quarantined phases.",
     ],
   },
   {
@@ -487,6 +504,7 @@ function capabilities(): unknown {
     next_commands: [
       "bun ui/bench.ts doctor",
       "bun ui/bench.ts commands",
+      "bun ui/bench.ts help onboard",
       "bun ui/bench.ts help eval-run",
       "bun ui/bench.ts help eval-case-generate",
     ],
@@ -545,6 +563,65 @@ function parseJsonDocuments(text: string): unknown[] {
 
 function pushOptional(argv: string[], key: string, value: string | undefined): void {
   if (value !== undefined) argv.push(key, value);
+}
+
+const ONBOARD_FLAGS = new Set(["source", "out-dir"]);
+
+function parseOnboardArgs(argv: string[]): Flags {
+  const out: Flags = { positional: [], flags: {} };
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+    if (!arg.startsWith("--")) {
+      out.positional.push(arg);
+      continue;
+    }
+
+    const key = arg.slice(2);
+    if (!ONBOARD_FLAGS.has(key)) {
+      throw new HttpError(400, `Unknown flag for onboard: --${key}`);
+    }
+    const value = argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : undefined;
+    if (value === undefined) {
+      throw new HttpError(400, `--${key} requires a value`);
+    }
+    (out.flags[key] ??= []).push(value);
+  }
+  return out;
+}
+
+function runOnboard(rawArgv: string[]): unknown {
+  const args = parseOnboardArgs(rawArgv);
+  const source = flag(args, "source");
+  if (!source) throw new HttpError(400, "usage: onboard --source <dir> [--out-dir <dir>]");
+  if (args.positional.length > 0) {
+    throw new HttpError(400, `Unexpected positional argument(s): ${args.positional.join(", ")}`);
+  }
+
+  const argv = ["uv", "run", "harness/onboard/triage.py", "--source", source, "--json"];
+  pushOptional(argv, "--out-dir", flag(args, "out-dir"));
+
+  const result = Bun.spawnSync({
+    cmd: argv,
+    cwd: process.cwd(),
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  const stdout = decode(result.stdout).trim();
+  const stderr = decode(result.stderr).trim();
+  const stdoutJson = parseJsonDocuments(stdout);
+  const exitCode = result.exitCode ?? 1;
+  const payload = {
+    schema_version: "bench-onboard.v1",
+    ok: exitCode === 0,
+    mode: "triage",
+    command: argv,
+    exit_code: exitCode,
+    stdout_json: stdoutJson.length === 1 ? stdoutJson[0] : stdoutJson,
+    stdout_text: stdoutJson.length === 0 && stdout ? stdout : null,
+    stderr_text: stderr || null,
+  };
+  if (exitCode !== 0) throw new BenchCommandError(`onboard failed with exit ${exitCode}`, payload);
+  return payload;
 }
 
 const EVAL_CASE_GENERATE_FLAGS = new Set([
@@ -834,6 +911,8 @@ async function main() {
       if (!name || !prompt) throw new HttpError(400, "--name and --prompt are required");
       return emit(await generateSkill(name, prompt, { agentName: flag(args, "model") }));
     }
+    case "onboard":
+      return emit(runOnboard(rest));
     case "eval-case-generate":
       return emit(runEvalCaseGenerate(rest));
     case "eval-suites":

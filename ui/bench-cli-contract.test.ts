@@ -54,7 +54,7 @@ describe("bench discovery CLI contract", () => {
     expect(output.contract.stderr).toContain("JSON");
     expect(output.contract.exit_codes["2"]).toContain("unknown command");
     expect(output.environment).toMatchObject({ server_required: false, runtime: "bun" });
-    expect(commandNames(output.commands)).toEqual(expect.arrayContaining(["capabilities", "commands", "doctor", "eval-case-generate", "eval-run"]));
+    expect(commandNames(output.commands)).toEqual(expect.arrayContaining(["capabilities", "commands", "doctor", "onboard", "eval-case-generate", "eval-run"]));
     expect(output.next_commands).toContain("bun ui/bench.ts help eval-run");
     expect(output.next_commands).toContain("bun ui/bench.ts help eval-case-generate");
   });
@@ -70,6 +70,10 @@ describe("bench discovery CLI contract", () => {
     expect(byName.capabilities).toMatchObject({ usage: "bun ui/bench.ts capabilities", output: "bench-capabilities.v1" });
     expect(byName.commands).toMatchObject({ usage: "bun ui/bench.ts commands", output: "bench-command-catalog.v1" });
     expect(byName.doctor).toMatchObject({ usage: "bun ui/bench.ts doctor", output: "bench-doctor.v1" });
+    expect(byName.onboard).toMatchObject({
+      usage: "bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]",
+      output: "bench-onboard.v1",
+    });
     expect(byName["eval-case-generate"]).toMatchObject({
       usage: 'bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
       output: "bench-eval-case-generate.v1",
@@ -120,6 +124,20 @@ describe("bench discovery CLI contract", () => {
     expect(output.conventions.repeatable_flags).toEqual(expect.arrayContaining(["--case", "--arm"]));
   });
 
+  test("help onboard emits command-specific JSON help", () => {
+    const output = expectJsonStdout<{
+      schema_version: string;
+      command: { name: string; output: string; flags?: { name: string }[] };
+    }>(runBench(["help", "onboard"]));
+
+    expect(output.schema_version).toBe("bench-command-help.v1");
+    expect(output.command).toMatchObject({
+      name: "onboard",
+      output: "bench-onboard.v1",
+    });
+    expect(output.command.flags?.map((flag) => flag.name)).toEqual(expect.arrayContaining(["--source", "--out-dir"]));
+  });
+
   test("help eval-case-generate emits command-specific JSON help", () => {
     const output = expectJsonStdout<{
       schema_version: string;
@@ -141,6 +159,21 @@ describe("bench discovery CLI contract", () => {
     expect(output.conventions.repeatable_flags).toEqual(
       expect.arrayContaining(["--case", "--arm", "--spec", "--validate-only", "--promote"]),
     );
+  });
+
+  test("onboard triages an existing skill directory", () => {
+    const result = runBench(["onboard", "--source", "skills/ci-log-reducer", "--out-dir", "runs/onboard/bench-cli-contract-test"]);
+
+    const body = expectJsonStdout<{
+      schema_version: string;
+      ok: boolean;
+      mode: string;
+      stdout_json: { schema_version: string; counts: { skills: number; ready: number }; skills: { name: string; verdict: string }[] };
+    }>(result);
+    expect(body).toMatchObject({ schema_version: "bench-onboard.v1", ok: true, mode: "triage" });
+    expect(body.stdout_json.schema_version).toBe("onboard-triage.v1");
+    expect(body.stdout_json.counts.skills).toBe(1);
+    expect(body.stdout_json.skills[0]).toMatchObject({ name: "ci-log-reducer", verdict: "ready" });
   });
 
   test("eval-case-generate rejects unknown flags before invoking the generator", () => {

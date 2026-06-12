@@ -74,4 +74,22 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.status).toBe(400);
     expect(body.error).toContain("mutually exclusive");
   });
+  test("onboard rejects missing --source with JSON stderr", () => {
+    const result = runBench(["onboard"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("onboard --source");
+  });
+
+  test("onboard rejects unknown flags with JSON stderr", () => {
+    const result = runBench(["onboard", "--source", "skills/ci-log-reducer", "--definitely-unknown"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("--definitely-unknown");
+  });
+
 });
