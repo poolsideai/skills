@@ -4,177 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Workbench - Poolside Skills</title>
-    <meta
-      name="description"
-      content="Skills & workflow workbench: author skills and Smithers workflows with pool, run them, and watch evals live."
-    >
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ui/workbench.css">
   </head>
-  <body>
-    <header class="site-header">
-      <a class="brand" href="index.html" aria-label="Poolside Skills home">
-        <span class="brand-mark">ps</span>
-        <span>Poolside Skills</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="index.html#catalog">Catalog</a>
-        <a href="workflows.html" aria-current="page">Workbench</a>
-        <a href="#wf-evals-panel">Evals</a>
-        <a href="https://github.com/poolsideai/skills">GitHub</a>
+  <body class="workbench">
+    <header class="topbar">
+      <a class="brand" href="#/workflows"><span class="brand-mark">ps</span></a>
+      <nav id="top-nav" aria-label="Primary">
+        <a href="#/skills" data-view="skills">Skills</a>
+        <a href="#/workflows" data-view="workflows">Workflows</a>
+        <a href="#/runs" data-view="runs">Runs</a>
+        <a href="#/review" data-view="review">Review</a>
       </nav>
+      <select id="project-pick" title="Workflow project"></select>
+      <span style="flex:1"></span>
+      <button id="new-button" class="btn primary" type="button">+ New ⌘K</button>
     </header>
-
-    <main class="wf-main">
-      <section class="catalog-hero">
-        <div class="hero-copy">
-          <h1>Skills &amp; workflow workbench</h1>
-          <p>
-            Author skills and Smithers workflows in natural language (pool
-            writes the source, any tenant model can hold the pen), run
-            workflows with pool executing every node, and watch eval results
-            land live. Every run is a trajectory record.
-          </p>
-        </div>
-        <div class="wf-project-pick">
-          <label for="wf-project">Workflow project</label>
-          <select id="wf-project"></select>
-          <p class="wf-hint">Agents can drive all of this too: <code>bun ui/bench.ts</code></p>
-        </div>
-      </section>
-
-      <div id="wf-offline" class="wf-offline" hidden>
-        The local API server is not running. Start it with
-        <code>bun ui/server.ts</code> from the repo root, then reload.
-      </div>
-
-      <section class="wf-shell">
-        <aside class="wf-side">
-          <div class="wf-panel">
-            <h2>Workflows</h2>
-            <ul id="wf-list" class="wf-list"></ul>
-          </div>
-
-          <div class="wf-panel">
-            <h2>Workflow composer</h2>
-            <p class="wf-hint">
-              Describe a workflow; the selected model authors the Smithers
-              TSX (it can pull skills from the catalog into nodes), the server
-              verifies it with <code>smithers graph</code>.
-            </p>
-            <textarea
-              id="wf-compose-prompt"
-              rows="5"
-              placeholder="e.g. Map the fixture repo with the repo-map skill, scan its dependencies in parallel, then merge both into a report."
-            ></textarea>
-            <input id="wf-compose-id" type="text" placeholder="workflow id (optional)">
-            <label class="wf-model-label" for="wf-compose-model">Authoring model</label>
-            <select id="wf-compose-model"></select>
-            <button id="wf-compose-go" class="button primary" type="button">
-              Generate workflow
-            </button>
-            <div id="wf-compose-status" class="wf-compose-status"></div>
-          </div>
-
-          <div class="wf-panel">
-            <h2>Skills</h2>
-            <ul id="wf-skills" class="wf-list"></ul>
-            <details class="wf-author-details">
-              <summary>Author a new skill</summary>
-              <p class="wf-hint">
-                Pool writes the skill (SKILL.md + schema + validator) following
-                <code>docs/authoring-guide.md</code>; it only lands in
-                <code>skills/</code> if <code>check_skill_structure.py</code>
-                passes.
-              </p>
-              <input id="wf-skill-name" type="text" placeholder="skill name (kebab-case)">
-              <textarea
-                id="wf-skill-prompt"
-                rows="4"
-                placeholder="What should the skill do, and what artifact should it produce?"
-              ></textarea>
-              <label class="wf-model-label" for="wf-skill-model">Authoring model</label>
-              <select id="wf-skill-model"></select>
-              <button id="wf-skill-go" class="button primary" type="button">
-                Generate skill
-              </button>
-              <div id="wf-skill-status" class="wf-compose-status"></div>
-            </details>
-          </div>
-        </aside>
-
-        <div class="wf-content">
-          <div class="wf-panel">
-            <div class="wf-panel-head">
-              <h2 id="wf-graph-title">Graph</h2>
-              <button id="wf-run-go" class="button primary" type="button" hidden>
-                Run workflow
-              </button>
-            </div>
-            <div id="wf-graph" class="wf-graph">
-              <p class="wf-hint">Select a workflow to project its graph.</p>
-            </div>
-          </div>
-
-          <div class="wf-panel">
-            <div class="wf-panel-head">
-              <h2>Workflow runs</h2>
-              <span class="wf-hint" id="wf-runs-meta"></span>
-            </div>
-            <div id="wf-runs" class="wf-runs"></div>
-          </div>
-
-          <div id="wf-run-detail" class="wf-panel" hidden>
-            <div class="wf-panel-head">
-              <h2 id="wf-detail-title">Run detail</h2>
-              <span class="wf-detail-actions">
-                <button id="wf-grade-nodes" class="button secondary" type="button">
-                  Grade nodes
-                </button>
-                <span id="wf-detail-status"></span>
-              </span>
-            </div>
-            <div id="wf-detail-body"></div>
-          </div>
-
-          <div class="wf-panel" id="wf-evals-panel">
-            <div class="wf-panel-head">
-              <h2>Evals</h2>
-              <span class="wf-detail-actions">
-                <a id="wf-review-link" class="button secondary" target="_blank" rel="noreferrer" hidden>
-                  review traces ↗
-                </a>
-                <button id="wf-review-sync" class="button secondary" type="button">
-                  Sync workbench → review
-                </button>
-                <span class="wf-hint" id="wf-evals-meta"></span>
-              </span>
-            </div>
-            <div id="wf-eval-suites" class="wf-runs"></div>
-            <div id="wf-eval-harness" class="wf-hint"></div>
-            <div id="wf-eval-runs" class="wf-runs"></div>
-            <h3 class="wf-subhead">Node evals</h3>
-            <p class="wf-hint">
-              Per-node grades: in-workflow (a run's node workspace graded by
-              its skill validator) and standalone trials
-              (<code>bun ui/bench.ts node-eval-run &lt;workflow&gt; --node &lt;id&gt; --trials N</code>).
-            </p>
-            <div id="wf-node-evals" class="wf-runs"></div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div>
-        <strong>Poolside Skills</strong>
-        <p>Workbench: author, run, eval. Local-only; agent CLI: bun ui/bench.ts.</p>
-      </div>
-      <nav aria-label="Footer navigation">
-        <a href="index.html#catalog">Catalog</a>
-        <a href="workflows.html">Workbench</a>
-      </nav>
-    </footer>
-
-    <script src="ui/workflows.js"></script>
+    <div id="offline" class="offline-banner" hidden>
+      The local API server is not running. Start it with <code>bun ui/server.ts</code>, then reload.
+    </div>
+    <main id="view"></main>
+    <script type="module" src="ui/app.js"></script>
   </body>
 </html>

@@ -143,7 +143,7 @@ mitigated:
 ui/lib.ts          the substrate (projects, runs, workflows, models, skills, evals, node-evals, review sync)
 ui/server.ts       HTTP routes + static serving + review-app autostart + Origin gate
 ui/bench.ts        agent CLI
-ui/workflows.js    workbench frontend (vanilla JS)
+ui/app.js          workbench router/frontend entry (loads ui/views/*.js modules)
 ui/tsconfig.json   typecheck config (bun x tsc -p ui/tsconfig.json)
 workflows.html     the workbench page
 index.html         static GitHub Pages catalog (separate concern, untouched)

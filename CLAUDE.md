@@ -125,7 +125,7 @@ named in case `metadata.json`, speaking `validator-result.v1` JSON:
 
 `ui/lib.ts` is the substrate — projects, runs, workflows, models, skills, evals. `ui/server.ts`
 and `ui/bench.ts` are thin layers over it (HTTP routes + static serving; agent CLI). The web UI
-(`workflows.html` + `ui/workflows.js`) and `bench.ts` share identical semantics so an agent can
+(`workflows.html` + `ui/app.js` + `ui/views/*.js`) and `bench.ts` share identical semantics so an agent can
 drive the full author→run→eval loop from the shell.
 
 **Authoring gates** are enforced by the substrate, not just CI: `skill-generate` writes into a
@@ -226,5 +226,5 @@ annotation UI. `validators/` = harness-side result/schema helpers. Cross-cutting
   and `docs/trajectory-recovery-spike.md`).
 - `runs/` is gitignored. `index.html`, `skill.html`, `styles.css` are the static GitHub Pages
   catalog mockup — **not part of any skill, the harness, or any check**. `workflows.html` is the
-  live workbench frontend (served by `ui/server.ts` at port 4319); `ui/workflows.js` is its script.
-  The annotation app (`harness/review/`) runs on port **8901** and is auto-started by `ui/server.ts`.
+  live workbench frontend (served by `ui/server.ts` at port 4319); `ui/app.js` loads the routed
+  `ui/views/*.js` modules. The annotation app (`harness/review/`) runs on port **8901** and is auto-started by `ui/server.ts`.
