@@ -69,7 +69,7 @@ Trace annotation (error-analysis-first; the labels file feeds the failure taxono
 
 ```sh
 uv run harness/review/extract_traces.py        # flatten runs/ -> runs/review/traces.json (--demo for synthetic)
-uv run harness/review/serve.py                 # http://127.0.0.1:8901 (also auto-started by ui/server.ts)
+uv run harness/review/serve.py                 # http://127.0.0.1:8765 standalone (ui/server.ts auto-starts it on 8901)
 ```
 
 Workbench — skills + workflow authoring, eval integration, live run view (requires authenticated
@@ -227,4 +227,4 @@ annotation UI. `validators/` = harness-side result/schema helpers. Cross-cutting
 - `runs/` is gitignored. `index.html`, `skill.html`, `styles.css` are the static GitHub Pages
   catalog mockup — **not part of any skill, the harness, or any check**. `workflows.html` is the
   live workbench frontend (served by `ui/server.ts` at port 4319); `ui/app.js` loads the routed
-  `ui/views/*.js` modules. The annotation app (`harness/review/`) runs on port **8901** and is auto-started by `ui/server.ts`.
+  `ui/views/*.js` modules. The annotation app (`harness/review/`) defaults to port **8765** standalone and runs on **8901** when auto-started by `ui/server.ts`.

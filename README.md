@@ -12,6 +12,8 @@ This repo is for turning agent instructions into working, measurable tools. A sk
 
 The feedback loop is the product: visible behavior, concrete failures, and a diff you can accept or reject.
 
+New here? [`docs/getting-started.md`](docs/getting-started.md) walks the loop offline first, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary (Laguna, arms, gold replay, GEPA, …).
+
 ## What this gives you
 
 - **A skill library** for reusable Laguna behaviors, including CI log reduction, task scoping, and repo mapping.
@@ -257,13 +259,19 @@ schemas/common/          # shared JSON schemas
 evals/suites/            # suite definitions
 harness/                 # Python eval runner and review tools
 scripts/                 # repo checks and install helper
-docs/                    # authoring guide, eval method, plans, and spike notes
+docs/                    # docs index, getting started, authoring guide, eval method, plans, spikes
 ui/                      # local workbench
+plans/                   # workbench redesign implementation plans (done; see plans/README.md)
+experiments/             # spikes with their own setup, e.g. smithers-pool
+.resources/              # design handoff, investigations, and decision-register source material
 runs/                    # eval and review output, gitignored
 ```
 
 ## Authoring docs
 
+- [`docs/README.md`](docs/README.md): documentation index, organized by audience.
+- [`docs/getting-started.md`](docs/getting-started.md): first-session walkthrough, offline steps first.
+- [`docs/concepts.md`](docs/concepts.md): glossary and the offline-vs-credentials command matrix.
 - [`docs/authoring-guide.md`](docs/authoring-guide.md): binding skill authoring rules.
 - [`evals/README.md`](evals/README.md): case folder format and gold replay.
 - [`schemas/common/README.md`](schemas/common/README.md): shared schema contracts.
