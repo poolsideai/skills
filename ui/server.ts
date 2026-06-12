@@ -53,6 +53,8 @@ import {
 import { spawn } from "node:child_process";
 
 const PORT = Number(process.env.UI_PORT ?? 4319);
+const HOST = process.env.UI_HOST ?? "127.0.0.1";
+const PUBLIC_BASE_URL = process.env.UI_PUBLIC_BASE_URL;
 const REVIEW_PORT = Number(process.env.REVIEW_PORT ?? 8901);
 
 // --- harness/review companion server (the trace annotation app) -----------
@@ -128,7 +130,7 @@ function requireSkillName(value: string | undefined): string {
 
 const server = Bun.serve({
   port: PORT,
-  hostname: "127.0.0.1",
+  hostname: HOST,
   idleTimeout: 240,
   async fetch(req) {
     const url = new URL(req.url);
@@ -237,7 +239,14 @@ const server = Bun.serve({
           } catch {
             throw new HttpError(403, `malformed Origin: ${origin}`);
           }
-          if (host !== `127.0.0.1:${PORT}` && host !== `localhost:${PORT}`) {
+          const allowedHosts = new Set([
+            `127.0.0.1:${PORT}`,
+            `localhost:${PORT}`,
+            req.headers.get("host") ?? "",
+            req.headers.get("x-forwarded-host") ?? "",
+          ]);
+          if (PUBLIC_BASE_URL) allowedHosts.add(new URL(PUBLIC_BASE_URL).host);
+          if (!allowedHosts.has(host)) {
             throw new HttpError(403, `cross-origin POST rejected (origin ${origin})`);
           }
         }
@@ -415,7 +424,8 @@ const server = Bun.serve({
   },
 });
 
-console.log(`poolside skills workbench: http://127.0.0.1:${server.port}/workflows.html`);
+const localUrl = `http://${HOST}:${server.port}/workflows.html`;
+console.log(`poolside skills workbench: ${PUBLIC_BASE_URL ? `${PUBLIC_BASE_URL}/workflows.html (${localUrl})` : localUrl}`);
 void ensureReviewServer().then(async () => {
   console.log(
     `eval review app: http://127.0.0.1:${REVIEW_PORT}/ (${(await reviewRunning()) ? "running" : "starting…"})`,

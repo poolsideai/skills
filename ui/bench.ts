@@ -396,7 +396,7 @@ const COMMAND_DETAILS: CommandDetail[] = [
       { name: "--max-output-tokens", value: "N", description: "LM completion cap." },
       { name: "--temperature", value: "number", description: "LM sampling temperature." },
       { name: "--max-repair-rounds", value: "N", description: "LM repair rounds after gate rejection; zero is allowed." },
-      { name: "--bootstrap", description: "Allow generation for a skill with zero existing cases; no LM-free promotion." },
+      { name: "--bootstrap", description: "Allow zero-case generation, validation, or promotion using SKILL.md, schemas, and validator context." },
       { name: "--seed-example", value: "case-id", description: "Existing case id to use as the worked example." },
       { name: "--validator-timeout", value: "seconds", description: "Per-validator timeout used by mechanical gates." },
       { name: "--out-dir", value: "dir", description: "Output directory; default is runs/generate/<skill>/<utc-stamp>." },
@@ -1299,9 +1299,10 @@ async function main() {
       const path = args.positional[0];
       const nodeId = flag(args, "node");
       if (!path || !nodeId) throw new HttpError(400, "usage: node-eval-run <workflowPath> --node <id>");
+      const trials = positiveIntegerFlag(flag(args, "trials"), "--trials");
       return emit(
         await evalNodeStandalone(project(), path, nodeId, {
-          trials: positiveIntegerFlag(flag(args, "trials"), "--trials"),
+          trials,
           agentName: flag(args, "model"),
         }),
       );
