@@ -26,15 +26,15 @@
  *   bun ui/bench.ts eval-suites
  *   bun ui/bench.ts eval-run --suite <path> [--case <id>]... [--arm <arm>]...
  *   bun ui/bench.ts eval-runs
- *   bun ui/bench.ts optimize-skill --skill <name> [--max-metric-calls N] [--smoke|--baseline-only]
+ *   bun ui/bench.ts optimize-skill --skill <name> [--components references] [--max-metric-calls N] [--smoke|--baseline-only]
  *   bun ui/bench.ts optimize-runs
  *   bun ui/bench.ts optimize-propose --skill <name> [--run-dir <dir>]
  *   bun ui/bench.ts node-evals [--project <id>]
  *   bun ui/bench.ts node-eval-insitu <runId> [--project <id>]
  *   bun ui/bench.ts node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>]
  *
- * Flags: only --case, --arm, --spec, --validate-only, and --promote are
- * repeatable (all occurrences used); for every other flag the LAST occurrence wins.
+ * Flags: only --case, --arm, --components, --spec, --validate-only, and
+ * --promote are repeatable (all occurrences used); for every other flag the LAST occurrence wins.
  * Unknown commands exit 2 with
  * JSON on stderr; `help` (or no command) prints usage on stdout. Use
  * `help <command>` or `<command> --help` for command-specific JSON help.
@@ -141,7 +141,7 @@ const USAGE = {
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
     "eval-runs — harness processes + per-arm results from runs/<suite>/<case>/<arm>/",
-    "optimize-skill --skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA SKILL.md optimization (harness/optimize/gepa_skill.py)",
+    "optimize-skill --skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA component optimization (harness/optimize/gepa_skill.py)",
     "optimize-runs — optimization processes + result.json summaries from runs/optimize/",
     "optimize-propose --skill <name> [--run-dir <dir>] — fold a finished GEPA run into the improvement queue (accept = version bump + checks + re-eval)",
     "node-evals [--project <id>] — node-level eval records (in-workflow + standalone)",
@@ -384,14 +384,17 @@ const COMMAND_DETAILS: CommandDetail[] = [
   {
     name: "optimize-skill",
     category: "optimization",
-    summary: "Launch detached GEPA SKILL.md optimization.",
-    usage: "bun ui/bench.ts optimize-skill --skill <name> [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]",
+    summary: "Launch detached GEPA optimization for selected skill components.",
+    usage: "bun ui/bench.ts optimize-skill --skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]",
     output: "StartOptimizeRunResult",
     flags: [
       { name: "--skill", value: "name", description: "Skill to optimize. Required unless supplied as the first positional arg." },
       { name: "--suite", value: "path", description: "Suite path override." },
       { name: "--max-metric-calls", value: "N", description: "GEPA metric-call budget." },
       { name: "--reflection-lm", value: "id", description: "Reflection model id." },
+      { name: "--components", value: "set", repeatable: true, description: "Mutable component set; supported values: SKILL.md, references." },
+      { name: "--max-component-bytes", value: "N", description: "Per-component byte cap." },
+      { name: "--max-total-bytes", value: "N", description: "Total byte cap across selected components." },
       { name: "--arm", value: "arm", repeatable: true, description: "Harness arm filter. Repeatable." },
       { name: "--smoke", description: "Run the smoke-sized optimizer path." },
       { name: "--baseline-only", description: "Run baseline scoring without proposing improvements." },
@@ -490,7 +493,7 @@ function commandHelp(name?: string): unknown {
     conventions: {
       stdout: "JSON only on success.",
       stderr: "JSON only on error.",
-      repeatable_flags: ["--case", "--arm", "--spec", "--validate-only", "--promote"],
+      repeatable_flags: ["--case", "--arm", "--components", "--spec", "--validate-only", "--promote"],
       flag_precedence: "For non-repeatable flags, the last occurrence wins.",
     },
   };
@@ -508,7 +511,7 @@ function capabilities(): unknown {
         1: "runtime, validation, or HTTP-style command error",
         2: "unknown command",
       },
-      repeatable_flags: ["--case", "--arm", "--spec", "--validate-only", "--promote"],
+      repeatable_flags: ["--case", "--arm", "--components", "--spec", "--validate-only", "--promote"],
       flag_precedence: "For non-repeatable flags, the last occurrence wins.",
     },
     environment: {
@@ -1031,6 +1034,9 @@ async function main() {
           suite: flag(args, "suite"),
           maxMetricCalls: positiveIntegerFlag(maxMetricCalls, "--max-metric-calls"),
           reflectionLm: flag(args, "reflection-lm"),
+          components: args.flags["components"],
+          maxComponentBytes: positiveIntegerFlag(flag(args, "max-component-bytes"), "--max-component-bytes"),
+          maxTotalBytes: positiveIntegerFlag(flag(args, "max-total-bytes"), "--max-total-bytes"),
           arms: args.flags["arm"],
           smoke: flag(args, "smoke") === "true",
           baselineOnly: flag(args, "baseline-only") === "true",

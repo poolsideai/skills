@@ -130,6 +130,22 @@ describe("bench discovery CLI contract", () => {
     expect(output.conventions.repeatable_flags).toEqual(expect.arrayContaining(["--case", "--arm"]));
   });
 
+  test("help optimize-skill emits component flags", () => {
+    const output = expectJsonStdout<{
+      schema_version: string;
+      command: { name: string; output: string; flags?: { name: string; repeatable?: boolean }[] };
+    }>(runBench(["help", "optimize-skill"]));
+
+    expect(output.schema_version).toBe("bench-command-help.v1");
+    expect(output.command).toMatchObject({ name: "optimize-skill", output: "StartOptimizeRunResult" });
+    expect(output.command.flags?.map((flag) => flag.name)).toEqual(
+      expect.arrayContaining(["--skill", "--components", "--max-component-bytes", "--max-total-bytes"]),
+    );
+    expect(output.command.flags?.filter((flag) => flag.repeatable).map((flag) => flag.name)).toEqual(
+      expect.arrayContaining(["--components", "--arm"]),
+    );
+  });
+
   test("help onboard emits command-specific JSON help", () => {
     const output = expectJsonStdout<{
       schema_version: string;

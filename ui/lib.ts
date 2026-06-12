@@ -1615,6 +1615,9 @@ export function startOptimizeRun(options: {
   reflectionLm?: string;
   arms?: string[];
   workers?: number;
+  components?: string[];
+  maxComponentBytes?: number;
+  maxTotalBytes?: number;
   smoke?: boolean;
   baselineOnly?: boolean;
 }) {
@@ -1633,6 +1636,9 @@ export function startOptimizeRun(options: {
   if (options.maxMetricCalls) argv.push("--max-metric-calls", String(options.maxMetricCalls));
   if (options.reflectionLm) argv.push("--reflection-lm", options.reflectionLm);
   if (options.workers) argv.push("--workers", String(Math.max(1, Math.min(8, options.workers))));
+  for (const component of options.components ?? []) argv.push("--components", component);
+  if (options.maxComponentBytes) argv.push("--max-component-bytes", String(options.maxComponentBytes));
+  if (options.maxTotalBytes) argv.push("--max-total-bytes", String(options.maxTotalBytes));
   for (const a of options.arms ?? []) argv.push("--arm", a);
   if (options.smoke) argv.push("--smoke");
   if (options.baselineOnly) argv.push("--baseline-only");
