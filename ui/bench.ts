@@ -19,6 +19,7 @@
  *   bun ui/bench.ts skills
  *   bun ui/bench.ts skill-generate --name <name> --prompt "..." [--model <agent>]
  *   bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]
+ *   bun ui/bench.ts onboard-prepare --source <dir> [--skill <name>] [--skip-cases]
  *   bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."]
  *   bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>
  *   bun ui/bench.ts eval-case-generate --skill <name> --promote <case-dir>
@@ -135,6 +136,7 @@ const USAGE = {
     "skills — skills catalog (frontmatter, validators, eval case counts)",
     'skill-generate --name <name> --prompt "..." [--model <agent>] — pool authors a skill, gated by check_skill_structure.py',
     "onboard --source <dir> [--out-dir <dir>] — triage foreign skill dirs into runs/onboard/ without LM or pool",
+    "onboard-prepare --source <dir> [--skill <name>] [--skip-cases] — synthesize quarantined onboarding drafts under runs/onboard/",
     "eval-case-generate --skill <name> [--n N|--spec '...'] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
@@ -301,6 +303,28 @@ const COMMAND_DETAILS: CommandDetail[] = [
       "This is a JSON-normalizing wrapper around `uv run harness/onboard/triage.py --json`.",
       "Triage never synthesizes validators or eval cases; generated material belongs in later quarantined phases.",
     ],
+  },
+  {
+    name: "onboard-prepare",
+    category: "skills",
+    summary: "Synthesize quarantined onboarding drafts for human review.",
+    usage: "bun ui/bench.ts onboard-prepare --source <dir> [--skill <name>] [--skip-cases]",
+    output: "bench-onboard-prepare.v1",
+    flags: [
+      { name: "--source", value: "dir", description: "Skill dir or directory containing skill dirs. Required." },
+      { name: "--skill", value: "name", description: "Skill to prepare when --source contains multiple skills." },
+      { name: "--out-dir", value: "dir", description: "Review bundle directory under runs/onboard/." },
+      { name: "--model", value: "id", description: "litellm model id for contract and validator synthesis." },
+      { name: "--api-base", value: "url", description: "OpenAI-compatible endpoint base URL." },
+      { name: "--api-key-env", value: "name", description: "Environment variable holding the key for --api-base." },
+      { name: "--case-model", value: "id", description: "litellm model id for bootstrap case generation." },
+      { name: "--n-cases", value: "N", description: "Bootstrap case spec count, default 3." },
+      { name: "--max-repair-rounds", value: "N", description: "Repair rounds for quarantined case generation." },
+      { name: "--validator-timeout", value: "seconds", description: "Per-validator timeout used by mechanical gates." },
+      { name: "--skip-cases", description: "Prepare only the draft contract/schema/validator bundle." },
+      { name: "--smoke", description: "No LM: copy an existing source contract and run gates." },
+    ],
+    notes: ["Generated validators and cases remain under runs/onboard/ for human review; no promotion happens here."],
   },
   {
     name: "eval-suites",
@@ -567,6 +591,8 @@ function pushOptional(argv: string[], key: string, value: string | undefined): v
 }
 
 const ONBOARD_FLAGS = new Set(["source", "out-dir"]);
+const ONBOARD_PREPARE_FLAGS = new Set(["source", "skill", "out-dir", "model", "api-base", "api-key-env", "case-model", "n-cases", "max-repair-rounds", "validator-timeout", "skip-cases", "smoke"]);
+
 
 function parseOnboardArgs(argv: string[]): Flags {
   const out: Flags = { positional: [], flags: {} };
@@ -622,6 +648,62 @@ function runOnboard(rawArgv: string[]): unknown {
     stderr_text: stderr || null,
   };
   if (exitCode !== 0) throw new BenchCommandError(`onboard failed with exit ${exitCode}`, payload);
+  return payload;
+}
+
+function parseOnboardPrepareArgs(argv: string[]): Flags {
+  const out: Flags = { positional: [], flags: {} };
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+    if (!arg.startsWith("--")) {
+      out.positional.push(arg);
+      continue;
+    }
+    const key = arg.slice(2);
+    if (!ONBOARD_PREPARE_FLAGS.has(key)) {
+      throw new HttpError(400, `Unknown flag for onboard-prepare: --${key}`);
+    }
+    if (key === "skip-cases" || key === "smoke") {
+      (out.flags[key] ??= []).push("true");
+      continue;
+    }
+    const value = argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : undefined;
+    if (value === undefined) {
+      throw new HttpError(400, `--${key} requires a value`);
+    }
+    (out.flags[key] ??= []).push(value);
+  }
+  return out;
+}
+
+function runOnboardPrepare(rawArgv: string[]): unknown {
+  const args = parseOnboardPrepareArgs(rawArgv);
+  const source = flag(args, "source");
+  if (!source) throw new HttpError(400, "usage: onboard-prepare --source <dir> [--skill <name>] [--skip-cases]");
+  if (args.positional.length > 0) {
+    throw new HttpError(400, `Unexpected positional argument(s): ${args.positional.join(", ")}`);
+  }
+
+  const argv = ["uv", "run", "harness/onboard/prepare.py", "--source", source, "--json"];
+  pushOptional(argv, "--skill", flag(args, "skill"));
+  pushOptional(argv, "--out-dir", flag(args, "out-dir"));
+  pushOptional(argv, "--model", flag(args, "model"));
+  pushOptional(argv, "--api-base", flag(args, "api-base"));
+  pushOptional(argv, "--api-key-env", flag(args, "api-key-env"));
+  pushOptional(argv, "--case-model", flag(args, "case-model"));
+  pushOptional(argv, "--n-cases", flag(args, "n-cases"));
+  pushOptional(argv, "--max-repair-rounds", flag(args, "max-repair-rounds"));
+  pushOptional(argv, "--validator-timeout", flag(args, "validator-timeout"));
+  if (flag(args, "skip-cases") === "true") argv.push("--skip-cases");
+  if (flag(args, "smoke") === "true") argv.push("--smoke");
+
+  const result = Bun.spawnSync({ cmd: argv, cwd: process.cwd(), stdout: "pipe", stderr: "pipe" });
+  const stdout = decode(result.stdout).trim();
+  const stderr = decode(result.stderr).trim();
+  const stdoutJson = parseJsonDocuments(stdout);
+  const exitCode = result.exitCode ?? 1;
+  const payload = { schema_version: "bench-onboard-prepare.v1", ok: exitCode === 0, mode: "prepare", command: argv, exit_code: exitCode, stdout_json: stdoutJson.length === 1 ? stdoutJson[0] : stdoutJson, stdout_text: stdoutJson.length === 0 && stdout ? stdout : null, stderr_text: stderr || null };
+  if (exitCode !== 0) throw new BenchCommandError(`onboard-prepare failed with exit ${exitCode}`, payload);
   return payload;
 }
 
@@ -921,6 +1003,8 @@ async function main() {
     }
     case "onboard":
       return emit(runOnboard(rest));
+    case "onboard-prepare":
+      return emit(runOnboardPrepare(rest));
     case "eval-case-generate":
       return emit(runEvalCaseGenerate(rest));
     case "eval-suites":
