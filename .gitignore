@@ -11,3 +11,12 @@ node_modules/
 # macOS
 .DS_Store
 .gstack/
+
+# Local agent/runtime state
+.pi/
+prompt-exports/
+.claude/*.lock
+
+# Generated design handoff archives
+.resources/handoff/**/*.zip
+.resources/handoff/**/*.pdf
