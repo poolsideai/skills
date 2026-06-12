@@ -55,6 +55,47 @@ uv run scripts/check_eval_cases.py
 
 Expected today: this fails only for `workspace-inventory`, which has no cases yet.
 
+## What you can do here
+
+This repo supports the full skill loop:
+
+1. Author a validator-backed skill.
+2. Build eval cases with gold artifacts.
+3. Run the skill against Laguna models with and without the skill installed.
+4. Inspect failures in the workbench and review app.
+5. Use GEPA to propose better `SKILL.md` prose, then review and merge it manually.
+
+The workbench provides a local UI for browsing skills, launching runs, and inspecting outputs. The CLI is better for agents and repeatable runs.
+
+```bash
+bun ui/server.ts          # http://127.0.0.1:4319/workflows.html
+bun ui/bench.ts help      # JSON CLI over the same substrate
+```
+
+Common workbench CLI commands:
+
+```bash
+bun ui/bench.ts skills
+bun ui/bench.ts eval-suites
+bun ui/bench.ts eval-run --suite evals/suites/smoke.json --arm xs_with_skill
+bun ui/bench.ts eval-runs
+bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
+bun ui/bench.ts optimize-runs
+```
+
+For Smithers workflow experiments, initialize the demo project first:
+
+```bash
+cd experiments/smithers-pool
+bun install
+bun run setup
+mkdir -p .smithers
+cd ../..
+bun ui/server.ts
+```
+
+Then use the workbench to browse workflow runs, inspect nodes, grade nodes with skill validators, sync traces to review, and compare skill scorecards. Details: [`ui/README.md`](ui/README.md).
+
 ## Eval dry run
 
 Dry run validates fixtures, materialization, manifest shape, and gold replay. It does not call `pool` or any model.
@@ -91,6 +132,43 @@ runs/<suite>/<case>/<arm>/
 
 All v0 numbers are internal and directional. Do not publish lift claims from these runs; see [`docs/eval-methodology.md`](docs/eval-methodology.md).
 
+## Skill optimization
+
+The GEPA pilot rewrites only `SKILL.md` prose and grades candidates against frozen eval cases, schemas, and validators. It cannot change the grader. Gate failures score zero before any `pool` spend.
+
+Start with the offline smoke check:
+
+```bash
+uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
+```
+
+Live optimization needs Poolside CLI auth plus a reflection-model API key such as `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY`:
+
+```bash
+uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --max-metric-calls 60
+```
+
+Outputs land under `runs/optimize/<skill>/<stamp>/`, including `result.json`, `best/SKILL.md`, and `best.diff`. Promotion is manual: review the diff, turn it into a proposal if useful, then rerun the normal checks and eval suite.
+
+```bash
+bun ui/bench.ts optimize-skill --skill ci-log-reducer --baseline-only
+bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
+```
+
+These numbers are candidate-selection evidence only. Do not publish lift claims from optimization runs.
+
+## Eval-case generation
+
+Eval cases can be generated, but generated cases stay quarantined until a human reviews and promotes them. The generator runs the repo's mechanical gates, plus gold replay and a sensitivity probe that rejects cases whose validator passes on junk gold.
+
+```bash
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --n 4
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --validate-only <case-dir>
+uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --promote runs/generate/ci-log-reducer/<stamp>/candidates/<case-id>
+```
+
+Promotion copies the reviewed case into `skills/<skill>/evals/`, appends it to the per-skill suite, reruns checks, and rolls back on failure. Review the resulting diff before committing.
+
 ## Review runs
 
 The standalone review app flattens run directories into traces and serves a local annotation UI.
@@ -115,14 +193,14 @@ uv run harness/review/judge.py
 
 ## Local workbench
 
-The workbench is a localhost tool for browsing skills, workflows, eval runs, and review traces. It is separate from the static catalog prototype.
+The workbench is a localhost tool for browsing and operating the loop: skills, Smithers workflows, eval runs, node evals, playground runs, optimization runs, proposals, and review traces. It is separate from the static catalog prototype.
 
 ```bash
 bun ui/server.ts          # http://127.0.0.1:4319/workflows.html
 bun ui/bench.ts help
 ```
 
-The workbench auto-starts the review app on port `8901` by passing `--port 8901`; the standalone review app defaults to `8765`.
+The web UI exposes the main browse/review/run flows. `bun ui/bench.ts` also exposes agent-friendly commands for detached eval runs, GEPA optimization, and proposal creation. The workbench auto-starts the review app on port `8901` by passing `--port 8901`; the standalone review app defaults to `8765`.
 
 ## Repo layout
 

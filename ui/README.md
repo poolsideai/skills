@@ -28,9 +28,10 @@ Then open `http://127.0.0.1:4319/workflows.html`.
 ## Three surfaces, one substrate
 
 Everything lives in `ui/lib.ts`; the HTTP server (`ui/server.ts`) and the
-agent CLI (`ui/bench.ts`) are thin layers over it. An MCP server would be a
-third thin layer if we want one later — nothing in the substrate assumes a
-web page. An agent can run the whole loop from natural language:
+agent CLI (`ui/bench.ts`) are thin layers over it. `bench.ts` gives agents
+JSON commands for the main substrate operations. Some operations, notably GEPA
+optimization start/propose, are CLI-first today even when the web UI can show
+their status. An agent can run the whole loop from natural language:
 
 ```bash
 bun ui/bench.ts skills
@@ -42,6 +43,9 @@ bun ui/bench.ts runs --project experiments/smithers-pool
 bun ui/bench.ts run-show <runId> --project experiments/smithers-pool
 bun ui/bench.ts eval-run --suite evals/suites/smoke.json --case <id> --arm xs_with_skill
 bun ui/bench.ts eval-runs                    # live harness status + per-arm results
+bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
+bun ui/bench.ts optimize-runs
+bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
 ```
 
 ## The unifying data model

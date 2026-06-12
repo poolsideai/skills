@@ -12,6 +12,10 @@ Status: normative for v0 skill authors. Historical source notes live in the plan
 
 These are not style preferences. A skill that fails either gate does not merge.
 
+Workbench-generated skills are drafts until they pass both gates. `skill-generate` can create a
+structure-valid `SKILL.md`, schema, and validator, but publishable status still requires at least
+three eval cases, one adversarial case, and a green `uv run scripts/check_eval_cases.py` pass.
+
 **Gate 1 — schema and validator before prose.**
 The output schema (`schemas/*.schema.json`) and an executable validator
 (`scripts/validate_*.ts`) must exist and run before any `SKILL.md` body text is written.

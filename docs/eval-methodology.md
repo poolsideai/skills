@@ -124,6 +124,29 @@ Concretely: v0 readouts may say "directionally, `ci-log-reducer` improved valida
 internal suite" and feed prioritization. They may not appear in the README, catalog, or any external
 material as lift claims.
 
+GEPA optimization runs are candidate-selection evidence, not release evidence. They select a possible
+`SKILL.md` rewrite against a small train/validation split; accepting a candidate still requires human
+review, normal structure checks, and a full skill eval run. LM-generated eval cases are also internal
+until a human reviews and promotes them into `skills/<skill>/evals/`.
+
+## 8. Workbench and node-level evals
+
+The workbench broadens the operational surface without changing the v0 lift methodology above. It
+shows workflow runs, eval arms, playground records, and node evals as trajectory records. That is useful
+for diagnosis and iteration, but only the case × arm harness matrix above supports with-skill vs
+without-skill comparisons.
+
+Node-level evals have two modes:
+
+- **In-workflow:** grade nodes from a real Smithers run using the installed skill's validator when one
+  exists. This costs no model calls, but the node workspace can be overwritten by later runs.
+- **Standalone:** re-run one workflow node in fresh trial workspaces and grade each trial. This is a
+  prompt/skill tuning aid, not a publishable benchmark by itself.
+
+Use node-level results to find failures worth reading, create new eval cases, or decide which skill
+prose to improve. Do not report them as skill lift without promoting the scenario into the frozen eval
+corpus and running the normal harness matrix.
+
 ## References
 
 - Plan: `docs/plans/laguna-skills-v0-2026-06-10.md` (items 8, 10, 12)

@@ -20,7 +20,7 @@ Status: internal implementation tracker for the Skills Workbench redesign. Norma
 | 005 | [Skills page + playground](005-skills-page-playground.md) | 03 | L | MED | 001 (soft: 004) | DONE — skills/scorecard/tabs/zero-eval/playground/queue validated on refreshed 4319 server with screenshots |
 | 006 | [Runs feed + skill scorecard](006-runs-feed-scorecard.md) | 05 | L | LOW | 001 (soft: 003/005/008) | DONE — runs feed/scorecard/facets/review deep link validated on refreshed 4319 server with screenshots |
 | 007 | [⌘K launcher + background generation](007-cmdk-background-generation.md) | 04 | M | LOW-MED | 001 | DONE — launcher palette/typeahead validated on refreshed 4319 server with screenshots; POST generate smoke passed |
-| 008 | [Review mode absorbed + cleanup](008-review-mode-absorbed.md) | 06 | L | LOW | 001 (soft: 004; cleanup gated on 002–007) | BLOCKED — refreshed screenshot validation shows `#/review` renders workflow canvas/run-loop instead of distinct review mode |
+| 008 | [Review mode absorbed + cleanup](008-review-mode-absorbed.md) | 06 | L | LOW | 001 (soft: 004; cleanup gated on 002–007) | DONE — router maps `#/review` to `ui/views/review.js`; server proxies review traces/labels and syncs workbench records |
 
 Status values: TODO → IN PROGRESS → DONE / BLOCKED (with a note). Executors:
 update your row when you finish, and record any deviation in a one-line note.
