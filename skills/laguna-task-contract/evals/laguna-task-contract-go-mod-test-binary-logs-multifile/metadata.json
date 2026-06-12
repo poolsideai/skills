@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-go-mod-test-binary-logs-multifile",
+  "skill": "laguna-task-contract",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Go ecosystem case with binary test output. A `go test -v ./internal/cache` run fails with a race detector warning and a panic in cache.go:67, producing both stdout test results and a separate race.log.txt binary trace file. The contract must include both go.mod (to ground the Go ecosystem) and the binary log file in the context packet, scope to internal/cache/cache.go (single_file_patch with max_files_to_modify 1), and configure a `go test -race ./internal/cache` acceptance check. Tests Go toolchain representation, binary log files in context_packet, and -race flag in acceptance checks. Synthetic fixture; no customer data. Generated case."
+}

@@ -1,0 +1,38 @@
+[2024-02-08T10:23:14.892Z] Starting test run via bun test
+[2024-02-08T10:23:14.903Z] Found 3 test files
+[2024-02-08T10:23:14.915Z] 
+[2024-02-08T10:23:14.918Z] tests/validator.test.ts:
+[2024-02-08T10:23:15.042Z] ✓ validator accepts valid input (2ms)
+[2024-02-08T10:23:15.089Z] ✗ validator rejects invalid schema (47ms)
+[2024-02-08T10:23:15.091Z]   AssertionError: expected false to be true
+[2024-02-08T10:23:15.092Z]     at tests/validator.test.ts:45:23
+[2024-02-08T10:23:15.093Z]     at validateInput (src/validator.ts:78:5)
+[2024-02-08T10:23:15.094Z] 
+[2024-02-08T10:23:15.132Z] ✗ validator handles missing fields (38ms)
+[2024-02-08T10:23:15.134Z]   AssertionError: expected undefined to be object
+[2024-02-08T10:23:15.135Z]     at tests/validator.test.ts:58:18
+[2024-02-08T10:23:15.136Z]     at checkRequired (src/validator.ts:92:12)
+[2024-02-08T10:23:15.137Z] 
+[2024-02-08T10:23:15.174Z] ✓ validator preserves valid nested objects (37ms)
+[2024-02-08T10:23:15.211Z] ✗ validator enforces type constraints (37ms)
+[2024-02-08T10:23:15.213Z]   TypeError: Cannot read property 'type' of undefined
+[2024-02-08T10:23:15.214Z]     at tests/validator.test.ts:72:31
+[2024-02-08T10:23:15.215Z]     at enforceTypes (src/validator.ts:105:8)
+[2024-02-08T10:23:15.216Z] 
+[2024-02-08T10:23:15.218Z] tests/utils.test.ts:
+[2024-02-08T10:23:15.256Z] ✓ all utils tests pass (38ms)
+[2024-02-08T10:23:15.257Z] 
+[2024-02-08T10:23:15.259Z] tests/integration.test.ts:
+[2024-02-08T10:23:15.312Z] ✓ integration smoke test (53ms)
+[2024-02-08T10:23:15.313Z] 
+[2024-02-08T10:23:15.315Z] Summary:
+[2024-02-08T10:23:15.316Z]   5 passed
+[2024-02-08T10:23:15.317Z]   3 failed
+[2024-02-08T10:23:15.318Z]   8 total
+[2024-02-08T10:23:15.319Z] 
+[2024-02-08T10:23:15.320Z] Failures:
+[2024-02-08T10:23:15.321Z]   tests/validator.test.ts:45 - validator rejects invalid schema
+[2024-02-08T10:23:15.322Z]   tests/validator.test.ts:58 - validator handles missing fields
+[2024-02-08T10:23:15.323Z]   tests/validator.test.ts:72 - validator enforces type constraints
+[2024-02-08T10:23:15.324Z] 
+[2024-02-08T10:23:15.325Z] Test run failed with 3 failures

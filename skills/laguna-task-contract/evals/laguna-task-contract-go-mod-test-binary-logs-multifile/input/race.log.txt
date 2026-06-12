@@ -1,0 +1,32 @@
+==================
+WARNING: DATA RACE
+Write at 0x00c00012e0a0 by goroutine 23:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  main.(*Cache).Set()
+      /workspace/internal/cache/cache.go:45 +0x1c4
+  main.TestConcurrentAccess.func1()
+      /workspace/internal/cache/cache_test.go:94 +0x8c
+
+Previous read at 0x00c00012e0a0 by goroutine 21:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
+  main.(*Cache).Set()
+      /workspace/internal/cache/cache.go:37 +0x94
+  main.TestConcurrentAccess.func1()
+      /workspace/internal/cache/cache_test.go:94 +0x8c
+
+Goroutine 23 (running) created at:
+  main.TestConcurrentAccess()
+      /workspace/internal/cache/cache_test.go:92 +0x134
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x238
+
+Goroutine 21 (finished) created at:
+  main.TestConcurrentAccess()
+      /workspace/internal/cache/cache_test.go:92 +0x134
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x238
+==================
+Found 1 data race(s)
+exit status 66

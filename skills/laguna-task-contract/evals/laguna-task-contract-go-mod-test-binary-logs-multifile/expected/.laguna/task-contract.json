@@ -1,0 +1,64 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Add mutex synchronization to internal/cache/cache.go Cache.Set method to fix data race on cache map access.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "test-failure.md",
+        "why": "describes data race at cache.go:37 and cache.go:45 during concurrent Set calls; panic at cache.go:67 during eviction"
+      },
+      {
+        "path": "go.mod",
+        "why": "Go module definition grounding the Go 1.21 toolchain and testing context"
+      },
+      {
+        "path": "internal/cache/cache.go",
+        "why": "Cache.Set at lines 34-51 lacks synchronization; race occurs between line 37 existence check and line 50 insertion"
+      },
+      {
+        "path": "internal/cache/lru.go",
+        "why": "LRU implementation called from cache.go eviction path; provides context for evictOldest interaction"
+      }
+    ],
+    "commands": [
+      "go test -v -race ./internal/cache"
+    ],
+    "logs": [
+      "race.log.txt"
+    ]
+  },
+  "scope": {
+    "paths": [
+      "internal/cache/cache.go"
+    ],
+    "max_files_to_modify": 1
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": [
+      "change public API signatures",
+      "modify test files",
+      "alter LRU eviction policy logic",
+      "add external dependencies beyond sync package"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "patch_apply",
+        "target_path": "internal/cache/cache.go"
+      },
+      {
+        "type": "test_result",
+        "command": "go test -race ./internal/cache"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

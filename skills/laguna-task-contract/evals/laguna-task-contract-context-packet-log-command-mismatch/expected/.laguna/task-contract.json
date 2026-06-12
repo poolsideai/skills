@@ -1,0 +1,69 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "log_reduction",
+  "goal": "Reduce failure.log to a structured JSON summary of the bun test failures in src/validator.ts.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "test-failure-request.md",
+        "why": "investigation request citing npm test; conflicts with workspace evidence showing bun test"
+      },
+      {
+        "path": "failure.log",
+        "why": "bun test output at line 1 timestamp 2024-02-08T10:23:14.892Z showing 3 validator.test.ts failures at lines 45, 58, 72"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "why": "CI workflow at line 19 runs 'bun test' not npm test; grounds actual command"
+      },
+      {
+        "path": "package.json",
+        "why": "no test script defined at line 7; confirms npm test would fail"
+      },
+      {
+        "path": "src/validator.ts",
+        "why": "module under test with recent changes at lines 38, 52, 58 causing type check failures"
+      }
+    ],
+    "commands": [
+      "bun test"
+    ],
+    "logs": [
+      "failure.log"
+    ]
+  },
+  "scope": {
+    "paths": [
+      "failure.log"
+    ],
+    "max_files_to_modify": 0
+  },
+  "constraints": {
+    "output_format": "json",
+    "artifact_path": ".laguna/test-failure-summary.json",
+    "must_not": [
+      "modify repository files",
+      "invent log lines",
+      "cite the requester's incorrect npm test command",
+      "omit CI workflow evidence"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "command",
+        "command": "test -f .laguna/test-failure-summary.json"
+      },
+      {
+        "type": "command",
+        "command": "jq -e '.failures | length == 3' .laguna/test-failure-summary.json"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

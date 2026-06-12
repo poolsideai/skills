@@ -1,0 +1,52 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Fix src/auth.ts line 30 to reject login when storedHash is falsy.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "bug-report.md",
+        "why": "describes authentication bypass at line 23 (off by 7 from actual line 30) when storedHash is null/empty"
+      },
+      {
+        "path": "src/auth.ts",
+        "why": "contains validateLogin method with buggy condition at line 30 allowing bypass when passwordHash is falsy"
+      }
+    ],
+    "commands": [],
+    "logs": []
+  },
+  "scope": {
+    "paths": [
+      "src/auth.ts"
+    ],
+    "max_files_to_modify": 1
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": [
+      "change function signatures",
+      "modify session management logic",
+      "add new dependencies",
+      "change database query structure"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "patch_apply",
+        "target_path": "src/auth.ts"
+      },
+      {
+        "type": "command",
+        "command": "npm run integration-test && curl https://staging.example.com/health"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

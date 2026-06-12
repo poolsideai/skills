@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-task-type-diagnostic-run-no-modify",
+  "skill": "laguna-task-contract",
+  "bucket": "edge",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Boundary case exercising a read-only diagnostic task with profiling commands. A performance regression in db/query.ts must be analyzed before any fix; the request explicitly forbids modification until profiling data is collected. Contract must set task_type repo_map (the closest available read-only type for diagnostic work), max_files_to_modify 0, include commands[] showing how to run the profiler (node --prof server.js), set output_format json with artifact_path .laguna/profile-summary.json, and configure acceptance checks validating the artifact exists and contains expected profiling data. Tests the read-only contract path with diagnostic commands in context_packet, parallel to the existing log_reduction read-only case. Synthetic fixture; no customer data. Generated case."
+}

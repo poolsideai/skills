@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-context-packet-log-command-mismatch",
+  "skill": "laguna-task-contract",
+  "bucket": "edge",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Edge case where context_packet.commands and context_packet.logs tell conflicting stories. The request cites 'npm test failure' and provides failure.log, but workspace inspection shows package.json has no test script and failure.log timestamps match `bun test` invocations in .github/workflows/ci.yml. The contract must reconcile this by citing the ACTUAL command (`bun test`) in context_packet.commands, documenting the discrepancy in a context_packet.files[].why note for the log, and including ci.yml to ground the correction. Tests fidelity to workspace evidence over request prose when they conflict. Synthetic fixture; no customer data. Generated case."
+}

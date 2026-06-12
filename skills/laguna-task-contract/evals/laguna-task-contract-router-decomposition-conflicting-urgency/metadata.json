@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-router-decomposition-conflicting-urgency",
+  "skill": "laguna-task-contract",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Adversarial case: a router contract for a composite request containing both urgent production work (5xx errors in logs/error-5xx.log requiring immediate log reduction) and non-urgent work (code quality refactoring opportunity in api/handler.ts). The request emphasizes 'do everything now' but the router-contract schema permits exactly one chosen_skill and at most three one-level delegations \u2014 no parallel routing. Skilled decomposition requires choosing ci-log-reducer for the urgent log reduction first, documenting the deferred refactor in routing_decision.reason, and including escalation_required in stop_conditions so the non-urgent work surfaces after the urgent delegation completes. Tests priority extraction under time pressure, adherence to single-chosen-skill routing when request language implies parallel work, and proper use of stop_conditions to surface deferred work rather than attempting to cram both concerns into one contract. Synthetic fixture; no customer data. Generated case."
+}

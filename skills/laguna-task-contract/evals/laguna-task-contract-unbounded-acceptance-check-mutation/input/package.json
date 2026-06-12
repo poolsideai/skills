@@ -1,0 +1,26 @@
+{
+  "name": "auth-service",
+  "version": "2.1.0",
+  "description": "Authentication and session management service",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest --testPathPattern=unit",
+    "integration-test": "jest --testPathPattern=integration --runInBand",
+    "lint": "eslint src/",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.6",
+    "@types/pg": "^8.10.9",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "repo_map",
+  "goal": "Profile db/query.ts execution to identify the top 10 slowest functions and write summary to .laguna/profile-summary.json.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "perf-regression.md",
+        "why": "describes 300% query slowdown in v2.4.0; requests profiling before code changes"
+      },
+      {
+        "path": "db/query.ts",
+        "why": "query builder at line 23 and SQL construction at line 35 are suspected bottlenecks"
+      },
+      {
+        "path": "server.js",
+        "why": "application entry point for profiler run"
+      },
+      {
+        "path": "package.json",
+        "why": "shows load-test script for generating query workload"
+      }
+    ],
+    "commands": [
+      "node --prof server.js",
+      "node --prof-process isolate-*.log"
+    ],
+    "logs": []
+  },
+  "scope": {
+    "paths": [
+      "db/query.ts",
+      "server.js",
+      "package.json"
+    ],
+    "max_files_to_modify": 0
+  },
+  "constraints": {
+    "output_format": "json",
+    "artifact_path": ".laguna/profile-summary.json",
+    "must_not": [
+      "modify any repository files",
+      "change query.ts implementation",
+      "alter database configuration",
+      "skip profiling and guess at bottlenecks"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "schema",
+        "schema_path": ".poolside/skills/profiler/schemas/profile-summary.schema.json"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}
