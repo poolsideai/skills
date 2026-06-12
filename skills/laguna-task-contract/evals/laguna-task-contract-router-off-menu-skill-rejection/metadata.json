@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-router-off-menu-skill-rejection",
+  "skill": "laguna-task-contract",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "fail"
+  },
+  "notes": "Router contract case with an unsuitable skill menu: a clear log-reduction need (red CI with stack trace in ci.log) but candidate_skills contains only repo-map-builder, dependency-graph-analyzer, and test-generator \u2014 none appropriate for log reduction work. The gold artifact attempts to route to a skill not in the candidate_skills list (ci-log-reducer), which violates the closed-menu constraint. The validator rejects this with the chosen-skill-in-candidates check failing. Tests whether the validator correctly enforces on-menu routing even when the agent attempts to invent an appropriate but off-menu skill. Synthetic fixture; no customer data. Generated case."
+}

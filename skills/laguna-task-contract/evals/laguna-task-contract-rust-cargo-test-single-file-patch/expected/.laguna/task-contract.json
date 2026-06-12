@@ -1,0 +1,59 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Fix src/parser.rs first_token function to handle empty input without panicking.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "Cargo.toml",
+        "why": "project manifest showing Rust edition and dependencies"
+      },
+      {
+        "path": "src/parser.rs",
+        "why": "contains first_token function that panics on empty input at line 32"
+      },
+      {
+        "path": "test-output.txt",
+        "why": "shows parser::tests::parse_empty failure with panic at src/parser.rs:32:6"
+      }
+    ],
+    "commands": [
+      "cargo test parser::tests::parse_empty"
+    ],
+    "logs": [
+      "test-output.txt"
+    ]
+  },
+  "scope": {
+    "paths": [
+      "src/parser.rs"
+    ],
+    "max_files_to_modify": 1
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": [
+      "change function signatures",
+      "modify parse_tokens or other unrelated functions",
+      "add external dependencies"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "patch_apply",
+        "target_path": "src/parser.rs"
+      },
+      {
+        "type": "test_result",
+        "command": "cargo test parser::tests::parse_empty"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

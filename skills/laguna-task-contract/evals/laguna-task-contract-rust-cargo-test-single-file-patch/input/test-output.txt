@@ -1,0 +1,26 @@
+   Compiling text-processor v0.2.1 (/workspace)
+    Finished test [unoptimized + debuginfo] target(s) in 0.87s
+     Running unittests src/parser.rs (target/debug/deps/text_processor-a3f8b2c1d4e5f6a7)
+
+running 6 tests
+test parser::tests::parse_tokens_empty ... ok
+test parser::tests::parse_tokens_whitespace_only ... ok
+test parser::tests::parse_single_word ... ok
+test parser::tests::parse_multiple_words ... ok
+test parser::tests::parse_tokens_multiple ... ok
+test parser::tests::parse_empty ... FAILED
+
+failures:
+
+---- parser::tests::parse_empty stdout ----
+thread 'parser::tests::parse_empty' panicked at src/parser.rs:32:6:
+range end index 0 out of range for slice of length 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    parser::tests::parse_empty
+
+test result: FAILED. 5 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

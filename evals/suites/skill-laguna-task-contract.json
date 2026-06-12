@@ -1,12 +1,16 @@
 {
   "name": "skill-laguna-task-contract",
   "cases": [
+    "skills/laguna-task-contract/evals/laguna-task-contract-context-packet-nonexistent-file-escalation",
     "skills/laguna-task-contract/evals/laguna-task-contract-fix-whole-repo",
     "skills/laguna-task-contract/evals/laguna-task-contract-glob-ambiguity-two-valid-scopes",
     "skills/laguna-task-contract/evals/laguna-task-contract-m-router-ci-failure",
+    "skills/laguna-task-contract/evals/laguna-task-contract-max-repairs-exceeded-graceful-stop",
     "skills/laguna-task-contract/evals/laguna-task-contract-multi-concern-feature-request",
     "skills/laguna-task-contract/evals/laguna-task-contract-python-pytest-network-mock",
     "skills/laguna-task-contract/evals/laguna-task-contract-readonly-log-reduction",
+    "skills/laguna-task-contract/evals/laguna-task-contract-router-off-menu-skill-rejection",
+    "skills/laguna-task-contract/evals/laguna-task-contract-rust-cargo-test-single-file-patch",
     "skills/laguna-task-contract/evals/laguna-task-contract-xs-single-file-patch"
   ]
 }

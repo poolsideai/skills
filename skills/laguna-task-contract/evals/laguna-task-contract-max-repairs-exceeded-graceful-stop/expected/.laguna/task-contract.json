@@ -1,0 +1,46 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "log_reduction",
+  "goal": "Reduce build.log and ci-test-results.log to a structured failure summary identifying the root cause.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "build.log",
+        "why": "contains TypeScript compilation error at line 47 of user-handler.ts"
+      },
+      {
+        "path": "ci-test-results.log",
+        "why": "shows 2 test failures referencing the same user-handler.ts:47 location"
+      }
+    ],
+    "commands": [],
+    "logs": ["build.log", "ci-test-results.log"]
+  },
+  "scope": {
+    "paths": ["build.log", "ci-test-results.log"],
+    "max_files_to_modify": 0
+  },
+  "constraints": {
+    "output_format": "json",
+    "artifact_path": ".laguna/log-summary.json",
+    "must_not": [
+      "modify repository files",
+      "invent log lines not present in the input logs",
+      "run external commands"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "schema",
+        "schema_path": "schemas/log-summary.schema.json"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

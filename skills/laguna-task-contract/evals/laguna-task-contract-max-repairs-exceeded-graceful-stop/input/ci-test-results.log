@@ -1,0 +1,14 @@
+[2024-01-15 08:25:03] INFO: Test suite started (2847 tests)
+[2024-01-15 08:25:05] PASS: auth/test_login.py::test_valid_credentials
+[2024-01-15 08:25:06] PASS: auth/test_login.py::test_invalid_password
+[2024-01-15 08:25:07] PASS: auth/test_session.py::test_session_creation
+[2024-01-15 08:25:09] PASS: api/test_user_endpoints.py::test_get_user_by_id
+[2024-01-15 08:25:11] FAIL: api/test_user_endpoints.py::test_create_user_missing_email
+[2024-01-15 08:25:11] AssertionError: Expected 400 status code, got 500
+[2024-01-15 08:25:11]   at test_user_endpoints.py:89
+[2024-01-15 08:25:12] FAIL: api/test_user_endpoints.py::test_update_user_invalid_data
+[2024-01-15 08:25:12] TypeError: Cannot read property 'email' of undefined
+[2024-01-15 08:25:12]   at user-handler.ts:47
+[2024-01-15 08:25:14] PASS: api/test_product_endpoints.py::test_list_products
+[2024-01-15 08:25:16] INFO: Test suite completed: 2845 passed, 2 failed
+[2024-01-15 08:25:16] INFO: Total duration: 13s

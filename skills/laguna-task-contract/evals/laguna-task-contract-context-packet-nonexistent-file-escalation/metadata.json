@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-context-packet-nonexistent-file-escalation",
+  "skill": "laguna-task-contract",
+  "bucket": "adversarial",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Adversarial case: a bug report references src/database/connection.ts and logs/query-error.log, but the workspace contains only src/db/conn.ts (similar but wrong path) and no logs/ directory. Per the Escalation rules ('the request references files, commands, or logs that do not exist in the workspace: ask for them; never fabricate context-packet entries'), the agent must stop and report the missing files rather than guess or substitute similar paths. The gold contract includes only the files that actually exist (the bug report itself), documents the missing references in a note, and sets escalation to stop_and_report. Tests adherence to the 'never invent paths' rule and proper use of the escalation path when context is unavailable. Synthetic fixture; no customer data. Generated case."
+}

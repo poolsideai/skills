@@ -1,0 +1,50 @@
+==== CI Pipeline Run #8472 ====
+Branch: main
+Commit: a3f9d2e1
+Started: 2024-01-15T09:23:41Z
+
+[build] Running build step...
+[build] ✓ Compilation successful (2.3s)
+
+[lint] Running linter...
+[lint] ✓ No issues found (0.8s)
+
+[test] Running test suite...
+[test] Starting 127 tests across 18 files
+[test] ✓ auth/login.test.ts (8/8 passed)
+[test] ✓ auth/logout.test.ts (3/3 passed)
+[test] ✓ api/users.test.ts (12/12 passed)
+[test] ✗ api/payments.test.ts (4/6 passed, 2 failed)
+[test] 
+[test] FAIL api/payments.test.ts
+[test]   ● PaymentProcessor › processRefund › should handle partial refunds
+[test] 
+[test]     TypeError: Cannot read property 'amount' of null
+[test]       at PaymentProcessor.calculateRefund (src/payments/processor.ts:156:34)
+[test]       at PaymentProcessor.processRefund (src/payments/processor.ts:189:28)
+[test]       at Object.<anonymous> (tests/api/payments.test.ts:78:32)
+[test] 
+[test]   ● PaymentProcessor › processRefund › should validate refund amount
+[test] 
+[test]     TypeError: Cannot read property 'currency' of null
+[test]       at PaymentProcessor.validateRefund (src/payments/processor.ts:134:41)
+[test]       at PaymentProcessor.processRefund (src/payments/processor.ts:187:23)
+[test]       at Object.<anonymous> (tests/api/payments.test.ts:89:32)
+[test] 
+[test] ✓ api/subscriptions.test.ts (9/9 passed)
+[test] ✓ utils/validation.test.ts (15/15 passed)
+[test] ... (12 more test files, all passed)
+[test] 
+[test] Test Summary:
+[test]   Total: 127 tests
+[test]   Passed: 125
+[test]   Failed: 2
+[test]   Duration: 8.4s
+[test] 
+[test] ✗ Test suite failed
+
+[pipeline] ✗ Pipeline failed due to test failures
+[pipeline] Exit code: 1
+[pipeline] Duration: 14.2s
+
+Full logs archived at: /ci/runs/8472/

@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-rust-cargo-test-single-file-patch",
+  "skill": "laguna-task-contract",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Rust/Cargo ecosystem case. A failing `cargo test` shows a panic in src/parser.rs:23 due to an off-by-one slice index when parsing empty input. The contract must scope to exactly one file (src/parser.rs), include Cargo.toml in the context packet to ground the ecosystem, cite the test output verbatim, and configure a concrete `cargo test parser::tests::parse_empty` acceptance check. Task_type single_file_patch with max_files_to_modify 1. Tests Rust toolchain representation parallel to existing Python (pytest) and JS (bun) cases. Synthetic fixture; no customer data. Generated case."
+}

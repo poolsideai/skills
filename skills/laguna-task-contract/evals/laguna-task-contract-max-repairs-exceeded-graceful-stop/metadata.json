@@ -1,0 +1,21 @@
+{
+  "id": "laguna-task-contract-max-repairs-exceeded-graceful-stop",
+  "skill": "laguna-task-contract",
+  "bucket": "edge",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/laguna-task-contract/scripts/validate_contract.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Repair-budget exhaustion edge case: a request for log reduction with initially unbounded scope (src/**/*.log) and missing artifact_path. First repair fixes the scope but introduces a task_type/max_files_to_modify mismatch (sets max_files_to_modify=1 when log_reduction requires 0). After one repair the budget is exhausted per the Repair section; the agent must stop, write the best-effort contract, run the validator showing the remaining violation, and escalate with repair_feedback visible rather than attempting further repairs or silently giving up. Gold artifact shows the after-one-repair state passing most checks but failing scope-bounded due to the modify-cap mismatch, demonstrating correct repair-bound behavior and graceful escalation. Synthetic fixture; no customer data. Generated case."
+}

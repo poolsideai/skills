@@ -1,0 +1,12 @@
+[2024-01-15 08:23:14] INFO: Starting build pipeline
+[2024-01-15 08:23:15] INFO: Checking out commit a7f3c2d
+[2024-01-15 08:23:16] INFO: Installing dependencies...
+[2024-01-15 08:23:45] INFO: Dependencies installed (29s)
+[2024-01-15 08:23:46] INFO: Running linter
+[2024-01-15 08:23:58] WARN: Linter found 3 style issues (non-blocking)
+[2024-01-15 08:23:59] INFO: Building TypeScript sources
+[2024-01-15 08:24:12] ERROR: Compilation failed in src/api/handlers/user-handler.ts
+[2024-01-15 08:24:12] ERROR: Type 'string | undefined' is not assignable to type 'string'
+[2024-01-15 08:24:12] ERROR:   at line 47, column 5
+[2024-01-15 08:24:12] INFO: Build pipeline failed (exit code 1)
+[2024-01-15 08:24:12] INFO: Total duration: 58s

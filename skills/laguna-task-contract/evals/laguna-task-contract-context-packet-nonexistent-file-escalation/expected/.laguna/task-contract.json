@@ -1,0 +1,52 @@
+{
+  "schema_version": "task-contract.v1",
+  "model_mode": "laguna_xs_worker",
+  "task_type": "single_file_patch",
+  "goal": "Fix src/db/conn.ts executeQuery to release database connections on error path.",
+  "context_packet": {
+    "files": [
+      {
+        "path": "bug-report.md",
+        "why": "describes connection pool exhaustion; references missing files src/database/connection.ts and logs/query-error.log"
+      },
+      {
+        "path": "src/db/conn.ts",
+        "why": "actual connection manager; executeQuery at line 14 missing client.release() in catch block"
+      }
+    ],
+    "commands": [],
+    "logs": []
+  },
+  "scope": {
+    "paths": [
+      "src/db/conn.ts"
+    ],
+    "max_files_to_modify": 1
+  },
+  "constraints": {
+    "output_format": "unified_diff",
+    "must_not": [
+      "change function signatures",
+      "modify pool configuration",
+      "add external dependencies",
+      "modify unrelated methods"
+    ]
+  },
+  "acceptance": {
+    "checks": [
+      {
+        "type": "patch_apply",
+        "target_path": "src/db/conn.ts"
+      },
+      {
+        "type": "command",
+        "command": "grep -q 'finally' src/db/conn.ts"
+      }
+    ]
+  },
+  "repair_policy": {
+    "max_repairs": 1,
+    "return_only_corrected_output": true
+  },
+  "escalation": "stop_and_report"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": "router-contract.v1",
+  "model_mode": "laguna_m_router",
+  "user_goal": "Analyze the failed CI pipeline run to understand the two test failures in api/payments.test.ts (both TypeError: Cannot read property of null in PaymentProcessor refund methods) and determine the root cause.",
+  "candidate_skills": [
+    "repo-map-builder",
+    "dependency-graph-analyzer",
+    "test-generator"
+  ],
+  "routing_decision": {
+    "chosen_skill": "ci-log-reducer",
+    "reason": "The CI log contains structured failure output with stack traces that need to be reduced to a machine-readable summary for further analysis."
+  },
+  "delegations": [
+    {
+      "worker_model": "laguna_xs",
+      "task_contract": {
+        "schema_version": "task-contract.v1",
+        "model_mode": "laguna_xs_worker",
+        "task_type": "log_reduction",
+        "goal": "Reduce ci.log to a structured failure summary identifying the two TypeError failures in PaymentProcessor.",
+        "context_packet": {
+          "files": [
+            {
+              "path": "ci.log",
+              "why": "contains the full CI pipeline output with test failures and stack traces"
+            }
+          ],
+          "commands": ["npm test"],
+          "logs": ["ci.log"]
+        },
+        "scope": {
+          "paths": ["ci.log"],
+          "max_files_to_modify": 0
+        },
+        "constraints": {
+          "output_format": "json",
+          "artifact_path": ".laguna/ci-summary.json",
+          "must_not": [
+            "modify repository files",
+            "invent log lines",
+            "execute tests"
+          ]
+        },
+        "acceptance": {
+          "checks": [
+            {
+              "type": "command",
+              "command": "test -f .laguna/ci-summary.json"
+            }
+          ]
+        },
+        "repair_policy": {
+          "max_repairs": 1,
+          "return_only_corrected_output": true
+        },
+        "escalation": "stop_and_report"
+      }
+    }
+  ],
+  "stop_conditions": [
+    "validator_passed",
+    "escalation_required"
+  ]
+}

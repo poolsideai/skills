@@ -1,0 +1,9 @@
+[package]
+name = "text-processor"
+version = "0.2.1"
+edition = "2021"
+
+[dependencies]
+unicode-segmentation = "1.10"
+
+[dev-dependencies]

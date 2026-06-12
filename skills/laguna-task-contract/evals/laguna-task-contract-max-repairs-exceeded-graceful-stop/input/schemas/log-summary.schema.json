@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "analyzed_logs": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "failure_summary": {
+      "type": "object",
+      "properties": {
+        "total_failures": {"type": "integer"},
+        "root_cause": {"type": "string"},
+        "affected_files": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "required": ["total_failures", "root_cause", "affected_files"]
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "required": ["analyzed_logs", "failure_summary", "recommendations"]
+}
