@@ -7,7 +7,10 @@ stays a separate, static showcase; this is the working surface.
 
 ```
 bun ui/server.ts          # web UI  → http://127.0.0.1:4319/workflows.html
-bun ui/bench.ts <cmd>     # the same substrate for agents (JSON in/out)
+bun ui/bench.ts <cmd>     # agent CLI; JSON stdout on success, JSON stderr on errors
+bun ui/bench.ts doctor    # readiness snapshot with basic coverage checks
+bun ui/bench.ts commands  # machine-readable command catalog
+bun ui/bench.ts help <cmd> # command-specific JSON help; <cmd> --help also works
 ```
 
 ## Quick start
@@ -27,13 +30,25 @@ Then open `http://127.0.0.1:4319/workflows.html`.
 
 ## Three surfaces, one substrate
 
-Everything lives in `ui/lib.ts`; the HTTP server (`ui/server.ts`) and the
-agent CLI (`ui/bench.ts`) are thin layers over it. `bench.ts` gives agents
-JSON commands for the main substrate operations. Some operations, notably GEPA
-optimization start/propose, are CLI-first today even when the web UI can show
-their status. An agent can run the whole loop from natural language:
+Core workbench operations live in `ui/lib.ts`; the HTTP server (`ui/server.ts`)
+uses that substrate for browser routes. `ui/bench.ts` adds the agent CLI contract:
+command catalog, capabilities, doctor, command-specific help, flag parsing, and JSON
+error responses. Selected commands accept JSON-valued arguments such as
+`workflow-run --input`. Some operations, notably GEPA optimization start/propose,
+are CLI-first today even when the web UI can show their status.
+
+The CLI writes JSON to stdout on success and JSON to stderr on errors. Exit codes are
+`0` for success, `1` for runtime, validation, or command errors, and `2` for
+unknown commands. Use `bun ui/bench.ts commands` for the catalog,
+`bun ui/bench.ts capabilities` for output conventions and known CLI↔HTTP mirrors,
+and `bun ui/bench.ts help <command>` or `bun ui/bench.ts <command> --help` for
+command-specific help. Only `--case` and `--arm` are repeatable; for other flags,
+the last occurrence wins. `--max-metric-calls` and `--trials` must be positive integers.
+
+The main loop is available from the CLI:
 
 ```bash
+bun ui/bench.ts capabilities
 bun ui/bench.ts skills
 bun ui/bench.ts models                       # pool agents list (laguna first, then anthropic/*, ...)
 bun ui/bench.ts skill-generate --name my-skill --prompt "..." --model anthropic/claude-sonnet-4.6

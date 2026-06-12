@@ -55,7 +55,8 @@ doc, the linked doc wins.
 - **Smithers**: the TypeScript workflow engine used in workbench experiments; `pool` acts as a
   node executor via `PoolAgent`. Spike: [`../experiments/smithers-pool/README.md`](../experiments/smithers-pool/README.md).
 - **workbench**: the local UI (`bun ui/server.ts`, port 4319) and agent CLI (`bun ui/bench.ts`)
-  over one substrate for authoring, runs, evals, and review. Docs: [`../ui/README.md`](../ui/README.md).
+  over a shared substrate for authoring, runs, evals, and review. `bench.ts` also owns the
+  agent CLI contract, command catalog, and JSON error responses. Docs: [`../ui/README.md`](../ui/README.md).
 
 ## What runs offline vs what needs credentials
 

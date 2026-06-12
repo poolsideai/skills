@@ -22,7 +22,8 @@ Run from the repo root:
 
     uv run scripts/check_skill_structure.py
 
-Exits 0 when green, 1 with a per-violation report otherwise.
+Exits 0 when checks pass, 1 with a per-violation report, and 2 for argument or
+usage errors. Use --json for a repo-check-result.v1 payload on stdout.
 """
 
 from __future__ import annotations
@@ -40,6 +41,7 @@ from checklib import (
     SKILLS_DIR,
     Report,
     iter_skill_dirs,
+    parse_check_args,
     split_frontmatter,
 )
 
@@ -198,19 +200,20 @@ def check_skill(report: Report, skill_dir: Path) -> None:
         )
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    opts = parse_check_args(argv, __doc__ or "Check skill directory structure.")
     report = Report("check_skill_structure")
     if not SKILLS_DIR.is_dir():
         report.fail(SKILLS_DIR, "skills-dir", "missing skills/ directory at the repo root")
-        return report.finish()
+        return report.finish(json_output=opts.json)
 
     skill_dirs = iter_skill_dirs()
     if not skill_dirs:
         report.fail(SKILLS_DIR, "skills-present", "no skill directories found under skills/")
     for skill_dir in skill_dirs:
         check_skill(report, skill_dir)
-    return report.finish()
+    return report.finish(json_output=opts.json)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

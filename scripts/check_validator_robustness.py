@@ -28,7 +28,8 @@ Run from the repo root (requires bun, like the validators themselves):
 
     uv run scripts/check_validator_robustness.py
 
-Exits 0 when green, 1 with a per-violation report otherwise.
+Exits 0 when checks pass, 1 with a per-violation report, and 2 for argument or
+usage errors. Use --json for a repo-check-result.v1 payload on stdout.
 """
 
 from __future__ import annotations
@@ -43,7 +44,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from checklib import REPO_ROOT, Report, rel
+from checklib import REPO_ROOT, Report, parse_check_args, rel
 
 from harness.validators.command_result import base_env, run_command
 from harness.validators.validator_result import load_validator_result
@@ -178,15 +179,16 @@ def run_scenario(report: Report, scenario: Scenario) -> None:
         shutil.rmtree(out_dir, ignore_errors=True)
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    opts = parse_check_args(argv, __doc__ or "Check validator robustness.")
     report = Report("check_validator_robustness")
     if shutil.which("bun") is None:
         report.fail(rel(REPO_ROOT), "bun-missing", "bun is required to run the skill validators")
-        return report.finish()
+        return report.finish(json_output=opts.json)
     for scenario in SCENARIOS:
         run_scenario(report, scenario)
-    return report.finish()
+    return report.finish(json_output=opts.json)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

@@ -64,11 +64,28 @@ Known-good versions used while writing these docs: Python 3.11+, `bun` 1.3.14, a
 
 ## Start here
 
-Run the local workbench:
+Start with the repo and CLI contract:
+
+```bash
+bun ui/bench.ts doctor
+bun ui/bench.ts capabilities
+bun ui/bench.ts help eval-run
+```
+
+`doctor` reports tool availability plus basic skill-contract, eval-suite, and WIP
+coverage checks. It does not require the web server.
+
+`bench.ts` writes JSON to stdout on success and JSON to stderr on errors. Exit codes are
+`0` for success, `1` for runtime, validation, or command errors, and `2` for unknown
+commands. Use `bun ui/bench.ts help <command>` or `bun ui/bench.ts <command> --help` for
+command-specific JSON help; `capabilities` and `commands` list repeatable flags and known
+CLI↔HTTP mirrors.
+
+Run the local workbench when you want the browser UI:
 
 ```bash
 bun ui/server.ts          # http://127.0.0.1:4319/workflows.html
-bun ui/bench.ts help      # JSON CLI over the same substrate
+bun ui/bench.ts help      # JSON help for the agent CLI
 ```
 
 Use the workbench to browse skills, inspect workflows, launch evals, see GEPA optimization runs, review proposals, and sync traces into the review app. Details: [`ui/README.md`](ui/README.md).
@@ -76,6 +93,7 @@ Use the workbench to browse skills, inspect workflows, launch evals, see GEPA op
 Useful workbench CLI commands:
 
 ```bash
+bun ui/bench.ts commands
 bun ui/bench.ts skills
 bun ui/bench.ts eval-suites
 bun ui/bench.ts eval-run --suite evals/suites/smoke.json --arm xs_with_skill
@@ -109,7 +127,13 @@ Run eval-case validation when you are working on case coverage:
 uv run scripts/check_eval_cases.py
 ```
 
-Expected today: this fails only for `workspace-inventory`, which has no cases yet.
+Current state: this may flag WIP skills with incomplete eval-case coverage; currently
+`workspace-inventory` has no cases yet.
+
+Repo check scripts exit `0` when checks pass, `1` for check violations, and `2` for argument
+or usage errors. Use `--json` when another tool needs a `repo-check-result.v1` payload on
+stdout. The payload includes `schema_version`, `tool`, `status`, `counts`,
+`violation_count`, and `violations[]` entries with `path`, `check`, and `message`.
 
 ## Zero to one: optimize an existing skill for Laguna
 

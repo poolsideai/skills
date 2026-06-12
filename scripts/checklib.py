@@ -7,13 +7,17 @@ Run the checks from the repo root via:
     uv run scripts/check_eval_cases.py
     uv run scripts/check_schemas.py
 
-Each script exits 0 when green and 1 with a per-violation report otherwise.
+Each script exits 0 when checks pass, 1 with a per-violation report, and 2 for
+argument or usage errors. Use --json for a machine-readable repo-check-result.v1
+payload on stdout; JSON parse errors use the same payload shape.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -46,6 +50,11 @@ class Violation:
     message: str
 
 
+@dataclass
+class CheckCliOptions:
+    json: bool = False
+
+
 class Report:
     """Collects violations and renders a readable per-violation report."""
 
@@ -60,8 +69,29 @@ class Report:
     def count(self, what: str, n: int = 1) -> None:
         self._counts[what] = self._counts.get(what, 0) + n
 
-    def finish(self) -> int:
-        """Print the report and return the process exit code (0 green, 1 red)."""
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "schema_version": "repo-check-result.v1",
+            "tool": self.tool,
+            "status": "fail" if self.violations else "ok",
+            "counts": dict(self._counts),
+            "violation_count": len(self.violations),
+            "violations": [
+                {
+                    "path": violation.path,
+                    "check": violation.check,
+                    "message": violation.message,
+                }
+                for violation in self.violations
+            ],
+        }
+
+    def finish(self, json_output: bool = False) -> int:
+        """Print the report and return the process exit code (0 pass, 1 fail)."""
+        if json_output:
+            print(json.dumps(self.to_dict(), indent=2))
+            return 1 if self.violations else 0
+
         counted = ", ".join(f"{n} {what}" for what, n in self._counts.items())
         print(f"{self.tool}: checked {counted or 'nothing'}")
         for v in self.violations:
@@ -71,6 +101,37 @@ class Report:
             return 1
         print(f"{self.tool}: OK — 0 violations")
         return 0
+
+
+class CheckArgumentParser(argparse.ArgumentParser):
+    def __init__(self, *args: object, json_requested: bool, tool: str, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)
+        self.json_requested = json_requested
+        self.tool = tool
+
+    def error(self, message: str) -> None:
+        if self.json_requested:
+            report = Report(self.tool)
+            report.fail("argv", "invalid-arguments", message)
+            print(json.dumps(report.to_dict(), indent=2))
+            raise SystemExit(2)
+        super().error(message)
+
+
+def parse_check_args(argv: list[str] | None, description: str) -> CheckCliOptions:
+    args = sys.argv[1:] if argv is None else argv
+    parser = CheckArgumentParser(
+        description=description,
+        json_requested="--json" in args,
+        tool=Path(sys.argv[0]).stem,
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="emit repo-check-result.v1 JSON on stdout",
+    )
+    ns = parser.parse_args(args)
+    return CheckCliOptions(json=ns.json)
 
 
 def rel(path: Path | str) -> str:

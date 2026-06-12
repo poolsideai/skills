@@ -17,7 +17,8 @@ Run from the repo root:
 
     uv run scripts/check_schemas.py
 
-Exits 0 when green, 1 with a per-violation report otherwise.
+Exits 0 when checks pass, 1 with a per-violation report, and 2 for argument or
+usage errors. Use --json for a repo-check-result.v1 payload on stdout.
 """
 
 from __future__ import annotations
@@ -27,7 +28,7 @@ from pathlib import Path
 
 import jsonschema
 
-from checklib import COMMON_SCHEMAS_DIR, REPO_ROOT, Report, load_json
+from checklib import COMMON_SCHEMAS_DIR, REPO_ROOT, Report, load_json, parse_check_args
 
 EXCLUDED_DIRS = {
     ".git",
@@ -80,7 +81,8 @@ def check_schema_file(report: Report, path: Path) -> None:
         report.fail(path, "schema-valid", f"not a valid JSON Schema: {exc}")
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    opts = parse_check_args(argv, __doc__ or "Check JSON schemas.")
     report = Report("check_schemas")
 
     for name in REQUIRED_COMMON_SCHEMAS:
@@ -96,8 +98,8 @@ def main() -> int:
         report.fail(REPO_ROOT, "schemas-present", "no *.schema.json files found in the repo")
     for path in schema_files:
         check_schema_file(report, path)
-    return report.finish()
+    return report.finish(json_output=opts.json)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
