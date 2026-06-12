@@ -212,6 +212,43 @@ def check_skill_cases(
         )
 
 
+def check_suite(report: Report, suite_path: Path) -> None:
+    report.count("suite(s)")
+    suite, err = load_json(suite_path)
+    if err is not None:
+        report.fail(suite_path, "suite-json", err)
+        return
+    if not isinstance(suite, dict) or not isinstance(suite.get("cases"), list):
+        report.fail(suite_path, "suite-shape", "suite must be an object with a `cases` array")
+        return
+    for i, entry in enumerate(suite["cases"]):
+        if not isinstance(entry, str) or not entry:
+            report.fail(
+                suite_path, "suite-entry-type", f"cases[{i}] must be a non-empty string path"
+            )
+            continue
+        if entry.startswith(("/", "..")) or "/../" in entry:
+            report.fail(
+                suite_path,
+                "suite-entry-relative",
+                f"cases[{i}] {entry!r} must be a repo-root-relative path",
+            )
+            continue
+        case_dir = REPO_ROOT / entry
+        if not case_dir.is_dir():
+            report.fail(
+                suite_path,
+                "suite-entry-exists",
+                f"cases[{i}] {entry!r} does not reference an existing case directory",
+            )
+        elif not (case_dir / "metadata.json").is_file():
+            report.fail(
+                suite_path,
+                "suite-entry-case",
+                f"cases[{i}] {entry!r} exists but has no metadata.json (not a case)",
+            )
+
+
 def check_suites(report: Report) -> None:
     if not SUITES_DIR.is_dir():
         report.fail(SUITES_DIR, "suites-dir", "missing evals/suites/ directory")
@@ -222,40 +259,7 @@ def check_suites(report: Report) -> None:
         return
 
     for suite_path in suite_paths:
-        report.count("suite(s)")
-        suite, err = load_json(suite_path)
-        if err is not None:
-            report.fail(suite_path, "suite-json", err)
-            continue
-        if not isinstance(suite, dict) or not isinstance(suite.get("cases"), list):
-            report.fail(suite_path, "suite-shape", "suite must be an object with a `cases` array")
-            continue
-        for i, entry in enumerate(suite["cases"]):
-            if not isinstance(entry, str) or not entry:
-                report.fail(
-                    suite_path, "suite-entry-type", f"cases[{i}] must be a non-empty string path"
-                )
-                continue
-            if entry.startswith(("/", "..")) or "/../" in entry:
-                report.fail(
-                    suite_path,
-                    "suite-entry-relative",
-                    f"cases[{i}] {entry!r} must be a repo-root-relative path",
-                )
-                continue
-            case_dir = REPO_ROOT / entry
-            if not case_dir.is_dir():
-                report.fail(
-                    suite_path,
-                    "suite-entry-exists",
-                    f"cases[{i}] {entry!r} does not reference an existing case directory",
-                )
-            elif not (case_dir / "metadata.json").is_file():
-                report.fail(
-                    suite_path,
-                    "suite-entry-case",
-                    f"cases[{i}] {entry!r} exists but has no metadata.json (not a case)",
-                )
+        check_suite(report, suite_path)
 
 
 def main(argv: list[str] | None = None) -> int:

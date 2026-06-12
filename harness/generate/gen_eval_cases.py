@@ -98,6 +98,7 @@ DEFAULT_MODEL = (
 )
 MAX_FILE_BYTES = 256 * 1024
 MAX_CASE_BYTES = 1024 * 1024
+CASE_GENERATION_RESULT_SCHEMA = "case-generation-result.v1"
 CONTEXT_FILE_CHARS = 30_000
 EXAMPLE_INPUT_CHARS = 4_000
 SAFE_SEGMENT = re.compile(r"^[A-Za-z0-9._\-]+$")
@@ -128,8 +129,9 @@ def child_env() -> dict[str, str]:
 class SkillContext:
     """Everything the generator needs to know about one skill, read once."""
 
-    def __init__(self, skill: str, seed_example: str | None) -> None:
+    def __init__(self, skill: str, seed_example: str | None, *, bootstrap: bool = False) -> None:
         self.skill = skill
+        self.bootstrap = bootstrap
         self.skill_dir = REPO_ROOT / "skills" / skill
         if not (self.skill_dir / "SKILL.md").is_file():
             raise SystemExit(f"no such skill: {skill} ({self.skill_dir}/SKILL.md missing)")
@@ -145,14 +147,21 @@ class SkillContext:
         if not self.validators:
             raise SystemExit(f"skill {skill} has no scripts/validate_*.ts — not generatable")
 
+        evals_dir = self.skill_dir / "evals"
         self.cases = [
             mx.load_case(d)
-            for d in sorted(p for p in (self.skill_dir / "evals").iterdir() if p.is_dir())
-        ]
+            for d in sorted(p for p in evals_dir.iterdir() if p.is_dir())
+        ] if evals_dir.is_dir() else []
         clean = [c for c in self.cases if not c.errors]
-        if not clean:
-            raise SystemExit(f"skill {skill} has no loadable eval cases to seed from")
+        self.clean_cases = clean
+        self.has_clean_cases = bool(clean)
         self.existing_ids = {c.id for c in self.cases}
+        self.example: mx.Case | None = None
+        self.canonical_validator: list[str] | None = None
+        self.artifact_relpaths: list[str] = []
+
+        if not clean and (not bootstrap or seed_example):
+            raise SystemExit(f"skill {skill} has no loadable eval cases to seed from")
 
         # Byte-dedup index over every existing case's input files.
         self.input_hashes: dict[str, str] = {}
@@ -161,6 +170,9 @@ class SkillContext:
                 for f in sorted(p for p in case.input_dir.rglob("*") if p.is_file()):
                     digest = hashlib.sha256(f.read_bytes()).hexdigest()
                     self.input_hashes.setdefault(digest, f"{case.id}/input/{f.relative_to(case.input_dir)}")
+
+        if not clean:
+            return
 
         if seed_example:
             picks = [c for c in clean if c.id == seed_example]
@@ -188,6 +200,8 @@ class SkillContext:
         return "\n".join(rows)
 
     def example_block(self) -> str:
+        if self.example is None:
+            raise RuntimeError("example_block() requires a loadable seed example")
         parts = [f"### prompt.md\n{self.example.prompt_path.read_text(encoding='utf-8')}"]
         parts.append(
             "### metadata.json\n"
@@ -206,6 +220,16 @@ class SkillContext:
                 + clip(gold.read_text(encoding="utf-8", errors="replace"), EXAMPLE_INPUT_CHARS)
             )
         return "\n\n".join(parts)
+
+
+def skill_has_visible_case_dirs(skill: str) -> bool:
+    evals_dir = REPO_ROOT / "skills" / skill / "evals"
+    if not evals_dir.is_dir():
+        return False
+    return any(
+        p.is_dir() and not p.name.startswith(".")
+        for p in sorted(evals_dir.iterdir())
+    )
 
 
 # --------------------------------------------------------------------- LM prompts
@@ -474,6 +498,15 @@ def gate_candidate(ctx: SkillContext, case_dir: Path, timeout_s: float) -> tuple
     info: dict = {"replay_status": None, "sensitivity_status": None}
     case_dir = case_dir.resolve()
     is_canonical = case_dir.parent == (ctx.skill_dir / "evals").resolve()
+    if not case_dir.is_dir():
+        case = mx.load_case(case_dir)
+        for err in case.errors:
+            line = f"case-load: {err}"
+            if line not in violations:
+                violations.append(line)
+        if not violations:
+            violations.append(f"case-load: case directory missing: {case_dir}")
+        return violations, info
 
     # 1. CI parity: the exact checks scripts/check_eval_cases.py runs per case.
     report = Report("gen-eval-cases")
@@ -569,62 +602,123 @@ def gate_candidate(ctx: SkillContext, case_dir: Path, timeout_s: float) -> tuple
 # --------------------------------------------------------------------- promote
 
 
-def promote(ctx: SkillContext, case_dir: Path, timeout_s: float) -> bool:
+def promote(ctx: SkillContext, case_dir: Path, timeout_s: float, *, bootstrap: bool = False) -> bool:
     violations, info = gate_candidate(ctx, case_dir, timeout_s)
     case = mx.load_case(case_dir)
     if violations:
-        print(json.dumps({"promote": case.id, "ok": False, "violations": violations}, indent=2))
+        print(json.dumps({
+            "schema_version": CASE_GENERATION_RESULT_SCHEMA,
+            "operation": "promote",
+            "case_id": case.id,
+            "case_dir": str(case_dir),
+            "ok": False,
+            "violations": violations,
+        }, indent=2))
         return False
 
     dest = ctx.skill_dir / "evals" / case.id
     if dest.exists():
-        print(json.dumps({"promote": case.id, "ok": False, "violations": [f"destination exists: {dest}"]}, indent=2))
+        print(json.dumps({
+            "schema_version": CASE_GENERATION_RESULT_SCHEMA,
+            "operation": "promote",
+            "case_id": case.id,
+            "case_dir": str(case_dir),
+            "ok": False,
+            "violations": [f"destination exists: {dest}"],
+        }, indent=2))
         return False
     suite_path = REPO_ROOT / "evals" / "suites" / f"skill-{ctx.skill}.json"
     suite_original = suite_path.read_text(encoding="utf-8") if suite_path.is_file() else None
 
-    shutil.copytree(case_dir, dest)
-    entry = f"skills/{ctx.skill}/evals/{case.id}"
-    suite = json.loads(suite_original) if suite_original else {"name": f"skill-{ctx.skill}", "cases": []}
-    if entry not in suite["cases"]:
-        suite["cases"] = sorted({*suite["cases"], entry})
-    suite_path.write_text(json.dumps(suite, indent=2) + "\n", encoding="utf-8")
-
-    # Re-run the CI checks scoped to this skill + the suites (the repo-wide
-    # script would also fail on unrelated pre-existing violations, e.g. a
-    # different skill below its case minimum, and wrongly roll us back).
-    import check_eval_cases as cec  # noqa: PLC0415
-    from checklib import Report  # noqa: PLC0415
-
-    problems: list[str] = []
-    report = Report("gen-eval-cases-promote")
-    cec.check_skill_cases(report, ctx.skill_dir, cec.load_case_schema(report))
-    cec.check_suites(report)
-    problems += [f"post-promote check {v.check}: {v.path}: {v.message}" for v in report.violations]
-    dry = subprocess.run(
-        ["uv", "run", "harness/runner/run_eval.py", "--suite", str(suite_path),
-         "--dry-run", "--replay", "--case", case.id],
-        capture_output=True, text=True, cwd=REPO_ROOT, env=child_env(),
-    )
-    if dry.returncode != 0:
-        problems.append(f"run_eval --dry-run --replay failed:\n{dry.stdout[-2000:]}")
-
-    if problems:
+    def rollback() -> None:
         shutil.rmtree(dest, ignore_errors=True)
         if suite_original is None:
             suite_path.unlink(missing_ok=True)
         else:
             suite_path.write_text(suite_original, encoding="utf-8")
-        print(json.dumps({"promote": case.id, "ok": False, "rolled_back": True, "violations": problems}, indent=2))
+
+    def fail_rolled_back(problems: list[str]) -> bool:
+        rollback()
+        print(json.dumps({
+            "schema_version": CASE_GENERATION_RESULT_SCHEMA,
+            "operation": "promote",
+            "case_id": case.id,
+            "case_dir": str(case_dir),
+            "ok": False,
+            "rolled_back": True,
+            "violations": problems,
+        }, indent=2))
         return False
 
+    try:
+        shutil.copytree(case_dir, dest)
+        entry = f"skills/{ctx.skill}/evals/{case.id}"
+        if suite_original is None:
+            suite = {"name": f"skill-{ctx.skill}", "cases": []}
+        else:
+            try:
+                suite = json.loads(suite_original)
+            except json.JSONDecodeError as exc:
+                return fail_rolled_back([f"suite-json: {suite_path}: invalid JSON: {exc}"])
+        if not isinstance(suite, dict) or not isinstance(suite.get("cases"), list):
+            return fail_rolled_back([
+                f"suite-shape: {suite_path}: suite must be an object with a cases array"
+            ])
+        if not all(isinstance(existing, str) for existing in suite["cases"]):
+            return fail_rolled_back([
+                f"suite-entry-type: {suite_path}: all existing cases entries must be strings"
+            ])
+        if entry not in suite["cases"]:
+            suite["cases"] = sorted({*suite["cases"], entry})
+        suite_path.parent.mkdir(parents=True, exist_ok=True)
+        suite_path.write_text(json.dumps(suite, indent=2) + "\n", encoding="utf-8")
+
+        # Re-run the CI checks scoped to this skill + this suite. A repo-wide
+        # suite scan would fail on unrelated pre-existing suite violations and
+        # wrongly roll back an otherwise valid promotion.
+        import check_eval_cases as cec  # noqa: PLC0415
+        from checklib import Report  # noqa: PLC0415
+
+        problems: list[str] = []
+        report = Report("gen-eval-cases-promote")
+        schema_validator = cec.load_case_schema(report)
+        if bootstrap:
+            cec.check_case(report, ctx.skill_dir, dest, schema_validator)
+        else:
+            cec.check_skill_cases(report, ctx.skill_dir, schema_validator)
+        cec.check_suite(report, suite_path)
+        problems += [f"post-promote check {v.check}: {v.path}: {v.message}" for v in report.violations]
+        dry = subprocess.run(
+            ["uv", "run", "harness/runner/run_eval.py", "--suite", str(suite_path),
+             "--dry-run", "--replay", "--case", case.id],
+            capture_output=True, text=True, cwd=REPO_ROOT, env=child_env(),
+        )
+        if dry.returncode != 0:
+            problems.append(f"run_eval --dry-run --replay failed:\nstdout:\n{dry.stdout[-2000:]}\nstderr:\n{dry.stderr[-2000:]}")
+
+        if problems:
+            return fail_rolled_back(problems)
+    except Exception as exc:  # noqa: BLE001 — post-copy failures must leave no promoted residue
+        return fail_rolled_back([f"promote: post-copy update failed: {exc}"])
+
+    next_step = "review `git diff`/`git status`, then commit — promotion is a human decision"
+    if bootstrap:
+        next_step = (
+            "review `git diff`/`git status`, then add remaining bootstrap cases; "
+            "repo-wide check_eval_cases still requires ≥3 cases including ≥1 adversarial"
+        )
+
     print(json.dumps({
-        "promote": case.id,
+        "schema_version": CASE_GENERATION_RESULT_SCHEMA,
+        "operation": "promote",
+        "case_id": case.id,
+        "case_dir": str(case_dir),
         "ok": True,
+        "violations": [],
         "dest": str(dest.relative_to(REPO_ROOT)),
         "suite": str(suite_path.relative_to(REPO_ROOT)),
         "replay_status": info["replay_status"],
-        "next": "review `git diff`/`git status`, then commit — promotion is a human decision",
+        "next": next_step,
     }, indent=2))
     return True
 
@@ -654,6 +748,8 @@ def main() -> int:
                         help="LM repair rounds after a gate rejection (default 2)")
     parser.add_argument("--seed-example", help="case id to use as the worked example (default: first pass-status case)")
     parser.add_argument("--validator-timeout", type=float, default=120.0)
+    parser.add_argument("--bootstrap", action="store_true",
+                        help="allow validate/promote for a skill with no existing loadable eval cases")
     parser.add_argument("--out-dir", help="default: runs/generate/<skill>/<utc-stamp>")
     parser.add_argument("--validate-only", nargs="+", metavar="CASE_DIR",
                         help="no LM: run the mechanical gates against existing case dir(s)")
@@ -661,10 +757,23 @@ def main() -> int:
                         help="no LM: gate + copy candidate(s) into skills/<skill>/evals/ and the per-skill suite")
     args = parser.parse_args()
 
-    ctx = SkillContext(args.skill, args.seed_example)
-
     if args.validate_only and args.promote:
         parser.error("--validate-only and --promote are mutually exclusive")
+    if args.bootstrap and not (args.validate_only or args.promote):
+        parser.error("--bootstrap currently applies only to --validate-only or --promote")
+    if args.n < 1:
+        parser.error("--n must be at least 1")
+    if args.max_output_tokens < 1:
+        parser.error("--max-output-tokens must be at least 1")
+    if args.max_repair_rounds < 0:
+        parser.error("--max-repair-rounds must be non-negative")
+    if args.validator_timeout <= 0:
+        parser.error("--validator-timeout must be greater than 0")
+
+    is_validate_or_promote = bool(args.validate_only or args.promote)
+    started_from_true_zero = is_validate_or_promote and not skill_has_visible_case_dirs(args.skill)
+    bootstrap_context = args.bootstrap or started_from_true_zero
+    ctx = SkillContext(args.skill, args.seed_example, bootstrap=bootstrap_context)
 
     if args.validate_only:
         failures = 0
@@ -672,22 +781,33 @@ def main() -> int:
             case_dir = Path(raw) if Path(raw).is_absolute() else REPO_ROOT / raw
             violations, info = gate_candidate(ctx, case_dir, args.validator_timeout)
             failures += 1 if violations else 0
-            print(json.dumps({
+            payload = {
+                "schema_version": CASE_GENERATION_RESULT_SCHEMA,
+                "operation": "validate-only",
+                "case_id": case_dir.name,
                 "case_dir": str(case_dir),
                 "ok": not violations,
-                "replay_status": info["replay_status"],
-                "sensitivity_status": info["sensitivity_status"],
                 "violations": violations,
-            }, indent=2))
+            }
+            if info["replay_status"] is not None:
+                payload["replay_status"] = info["replay_status"]
+            if info["sensitivity_status"] is not None:
+                payload["sensitivity_status"] = info["sensitivity_status"]
+            print(json.dumps(payload, indent=2))
         return 0 if failures == 0 else 1
 
     if args.promote:
         failures = 0
+        promote_batch_bootstrap = bootstrap_context
         for raw in args.promote:
             case_dir = Path(raw) if Path(raw).is_absolute() else REPO_ROOT / raw
-            if not promote(ctx, case_dir, args.validator_timeout):
+            if not promote(ctx, case_dir, args.validator_timeout, bootstrap=promote_batch_bootstrap):
                 failures += 1
-            ctx = SkillContext(args.skill, args.seed_example)  # refresh ids/hashes after each promote
+            ctx = SkillContext(
+                args.skill,
+                args.seed_example,
+                bootstrap=bootstrap_context,
+            )  # refresh ids/hashes after each promote
         return 0 if failures == 0 else 1
 
     # ----------------------------------------------------------- generation
