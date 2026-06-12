@@ -96,6 +96,7 @@ Useful workbench CLI commands:
 bun ui/bench.ts commands
 bun ui/bench.ts skills
 bun ui/bench.ts eval-suites
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
 bun ui/bench.ts eval-run --suite evals/suites/smoke.json --arm xs_with_skill
 bun ui/bench.ts eval-runs
 bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
@@ -233,10 +234,16 @@ These numbers are candidate-selection evidence only. Do not publish lift claims 
 Eval cases can be generated, but generated cases stay quarantined until a human reviews and promotes them. The generator runs the repo's mechanical gates, plus gold replay and a sensitivity probe that rejects cases whose validator passes on junk gold.
 
 ```bash
-uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --n 4
-uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --validate-only <case-dir>
-uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer --promote runs/generate/ci-log-reducer/<stamp>/candidates/<case-id>
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --validate-only <case-dir>
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --promote runs/generate/ci-log-reducer/<stamp>/candidates/<case-id>
 ```
+
+`eval-case-generate` is the agent-facing bench wrapper around
+`uv run harness/generate/gen_eval_cases.py`. It preserves the generator's
+mechanical gates and human-review quarantine, while normalizing stdout/stderr
+to the bench JSON contract. The raw Python invocation remains supported for
+direct debugging.
 
 Promotion copies the reviewed case into `skills/<skill>/evals/`, appends it to the per-skill suite, reruns checks, and rolls back on failure. Review the resulting diff before committing.
 

@@ -157,6 +157,25 @@ the validator is wrong, or the Output contract path drifted. Fix the case, not t
 good-failure cases, "replays green" means the validator returns `fail` on the gold artifact — that is
 its `expected_status`.
 
+## Generated candidates
+
+Agents should use the bench wrapper for generation, validation, and promotion:
+
+```sh
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --validate-only <case-dir>
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --promote runs/generate/ci-log-reducer/<stamp>/candidates/<case-id>
+```
+
+This delegates to `uv run harness/generate/gen_eval_cases.py`, which remains
+available for direct debugging. Generated cases stay under `runs/generate/`
+until a human reviews them.
+
+`--promote` is repo-mutating, not just a copy into `skills/<skill>/evals/`: it
+updates `evals/suites/skill-<skill>.json`, reruns checks and dry-run replay as
+applicable, and rolls back on failure. A human must review the resulting diff
+before commit.
+
 ## Authoring checklist
 
 Per the hard gates in `docs/authoring-guide.md`:

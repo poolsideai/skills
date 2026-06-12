@@ -42,8 +42,10 @@ The CLI writes JSON to stdout on success and JSON to stderr on errors. Exit code
 unknown commands. Use `bun ui/bench.ts commands` for the catalog,
 `bun ui/bench.ts capabilities` for output conventions and known CLI↔HTTP mirrors,
 and `bun ui/bench.ts help <command>` or `bun ui/bench.ts <command> --help` for
-command-specific help. Only `--case` and `--arm` are repeatable; for other flags,
-the last occurrence wins. `--max-metric-calls` and `--trials` must be positive integers.
+command-specific help. `--case`, `--arm`, `--spec`, `--validate-only`, and
+`--promote` are repeatable; for other flags, the last occurrence wins.
+`--max-metric-calls`, `--trials`, and generation count flags must be valid
+numbers.
 
 The main loop is available from the CLI:
 
@@ -58,6 +60,8 @@ bun ui/bench.ts runs --project experiments/smithers-pool
 bun ui/bench.ts run-show <runId> --project experiments/smithers-pool
 bun ui/bench.ts eval-run --suite evals/suites/smoke.json --case <id> --arm xs_with_skill
 bun ui/bench.ts eval-runs                    # live harness status + per-arm results
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
+bun ui/bench.ts eval-case-generate --skill ci-log-reducer --validate-only <case-dir>
 bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-runs
 bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>

@@ -48,4 +48,30 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.status).toBe(400);
     expect(body.error).toContain("--trials");
   });
+
+  test("eval-case-generate rejects invalid --n with JSON stderr", () => {
+    const result = runBench(["eval-case-generate", "--skill", "repo-map", "--n", "0"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("--n");
+  });
+
+  test("eval-case-generate rejects mixed validate and promote modes with JSON stderr", () => {
+    const result = runBench([
+      "eval-case-generate",
+      "--skill",
+      "repo-map",
+      "--validate-only",
+      "skills/repo-map/evals/repo-map-bun-cli-workspace",
+      "--promote",
+      "runs/generate/repo-map/example",
+    ]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("mutually exclusive");
+  });
 });

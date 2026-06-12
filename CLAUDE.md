@@ -69,14 +69,19 @@ replay against the frozen validator -> quarantine under runs/generate/ -> human-
 `--promote`; never auto-merged into evals/):
 
 ```sh
-uv run harness/generate/gen_eval_cases.py --skill <name> --n 4                       # needs LM key
-uv run harness/generate/gen_eval_cases.py --skill <name> --validate-only <case-dir>  # offline, no LM
-uv run harness/generate/gen_eval_cases.py --skill <name> --promote <candidate-dir>   # gate + copy + suite
+bun ui/bench.ts eval-case-generate --skill <name> --n 4                       # needs LM key
+bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>  # offline, no LM
+bun ui/bench.ts eval-case-generate --skill <name> --promote <candidate-dir>   # gate + copy + suite
 ```
 
-LM selection for both tracks (`harness/llm.py`): any litellm id; OpenRouter via
-`openrouter/<provider>/<model>` + `OPENROUTER_API_KEY`; any OpenAI-compatible endpoint via
-`--api-base`/`--reflection-api-base` (+ `--api-key-env`/`--reflection-api-key-env`).
+The bench command delegates to `uv run harness/generate/gen_eval_cases.py`;
+use the raw Python script only when debugging the generator itself.
+
+LM selection (`harness/llm.py`): any litellm id; OpenRouter via
+`openrouter/<provider>/<model>` + `OPENROUTER_API_KEY`. For eval-case generation,
+OpenAI-compatible endpoints use `--api-base` (+ `--api-key-env`). Reflection endpoint
+flags (`--reflection-api-base`, `--reflection-api-key-env`) are for GEPA optimization
+reflection only.
 
 Trace annotation (error-analysis-first; the labels file feeds the failure taxonomy):
 

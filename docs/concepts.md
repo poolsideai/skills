@@ -65,10 +65,10 @@ doc, the linked doc wins.
 | `uv run scripts/check_*.py` (all four repo checks) | nothing (robustness check needs `bun` on PATH) |
 | `uv run harness/runner/run_eval.py --suite ... --dry-run --replay` | nothing |
 | `uv run harness/optimize/gepa_skill.py --skill <name> --smoke` | nothing |
-| `uv run harness/generate/gen_eval_cases.py --validate-only <case-dir>` | nothing |
+| `bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>` | nothing |
 | `uv run harness/review/extract_traces.py [--demo]` + `serve.py` | nothing |
 | `uv run harness/runner/run_eval.py --suite ...` (live) | `pool` auth (`POOLSIDE_TOKEN` or `~/.config/poolside/credentials.json`) |
 | `bun ui/server.ts` / `bun ui/bench.ts` run commands | `pool` auth for anything that executes models |
-| `uv run harness/generate/gen_eval_cases.py --skill <name> --n N` | an LM key (litellm id, e.g. `OPENROUTER_API_KEY`) |
+| `bun ui/bench.ts eval-case-generate --skill <name> --n N` | an LM key (litellm id, e.g. `OPENROUTER_API_KEY`) |
 | `uv run harness/optimize/gepa_skill.py` (live) | `pool` auth **and** a reflection LM key |
 | `uv run harness/review/judge.py` | `OPENROUTER_API_KEY` (optional reading aid only) |

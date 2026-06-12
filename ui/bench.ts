@@ -18,6 +18,9 @@
  *   bun ui/bench.ts workflow-run <path> [--input '<json>'] [--project <id>]
  *   bun ui/bench.ts skills
  *   bun ui/bench.ts skill-generate --name <name> --prompt "..." [--model <agent>]
+ *   bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."]
+ *   bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>
+ *   bun ui/bench.ts eval-case-generate --skill <name> --promote <case-dir>
  *   bun ui/bench.ts eval-suites
  *   bun ui/bench.ts eval-run --suite <path> [--case <id>]... [--arm <arm>]...
  *   bun ui/bench.ts eval-runs
@@ -28,8 +31,9 @@
  *   bun ui/bench.ts node-eval-insitu <runId> [--project <id>]
  *   bun ui/bench.ts node-eval-run <workflowPath> --node <id> [--trials N] [--model <agent>]
  *
- * Flags: only --case and --arm are repeatable (all occurrences used); for
- * every other flag the LAST occurrence wins. Unknown commands exit 2 with
+ * Flags: only --case, --arm, --spec, --validate-only, and --promote are
+ * repeatable (all occurrences used); for every other flag the LAST occurrence wins.
+ * Unknown commands exit 2 with
  * JSON on stderr; `help` (or no command) prints usage on stdout. Use
  * `help <command>` or `<command> --help` for command-specific JSON help.
  */
@@ -91,6 +95,23 @@ function positiveIntegerFlag(value: string | undefined, name: string): number | 
   return Number(value);
 }
 
+function nonNegativeIntegerFlag(value: string | undefined, name: string): number | undefined {
+  if (value === undefined) return undefined;
+  if (!/^(0|[1-9]\d*)$/.test(value)) {
+    throw new HttpError(400, `${name} must be a non-negative integer`);
+  }
+  return Number(value);
+}
+
+function numberFlag(value: string | undefined, name: string): number | undefined {
+  if (value === undefined) return undefined;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    throw new HttpError(400, `${name} must be a number`);
+  }
+  return parsed;
+}
+
 function emit(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
 }
@@ -112,6 +133,7 @@ const USAGE = {
     "workflow-run <path> [--input '<json>'] [--project <id>] — start a run, returns runId immediately",
     "skills — skills catalog (frontmatter, validators, eval case counts)",
     'skill-generate --name <name> --prompt "..." [--model <agent>] — pool authors a skill, gated by check_skill_structure.py',
+    "eval-case-generate --skill <name> [--n N|--spec '...'] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
     "eval-runs — harness processes + per-arm results from runs/<suite>/<case>/<arm>/",
@@ -271,6 +293,34 @@ const COMMAND_DETAILS: CommandDetail[] = [
     output: "EvalSuite[]",
   },
   {
+    name: "eval-case-generate",
+    category: "evals",
+    summary: "Generate, validate, or promote quarantined eval cases for a skill.",
+    usage: 'bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
+    output: "bench-eval-case-generate.v1",
+    flags: [
+      { name: "--skill", value: "name", description: "Skill directory name. Required unless supplied as the first positional arg." },
+      { name: "--n", value: "N", description: "Number of candidates to generate. Defaults to the generator default." },
+      { name: "--spec", value: "text-or-json", repeatable: true, description: "Explicit case spec. Repeatable; skips LM spec proposal." },
+      { name: "--model", value: "id", description: "litellm model id for generation." },
+      { name: "--api-base", value: "url", description: "OpenAI-compatible endpoint base URL." },
+      { name: "--api-key-env", value: "name", description: "Environment variable holding the API key for --api-base." },
+      { name: "--max-output-tokens", value: "N", description: "LM completion cap." },
+      { name: "--temperature", value: "number", description: "LM sampling temperature." },
+      { name: "--max-repair-rounds", value: "N", description: "LM repair rounds after gate rejection; zero is allowed." },
+      { name: "--seed-example", value: "case-id", description: "Existing case id to use as the worked example." },
+      { name: "--validator-timeout", value: "seconds", description: "Per-validator timeout used by mechanical gates." },
+      { name: "--out-dir", value: "dir", description: "Output directory; default is runs/generate/<skill>/<utc-stamp>." },
+      { name: "--validate-only", value: "case-dir", repeatable: true, description: "No LM: run mechanical gates against existing case dir(s)." },
+      { name: "--promote", value: "case-dir", repeatable: true, description: "No LM: gate and copy reviewed candidate(s) into the frozen eval set." },
+    ],
+    notes: [
+      "This is a JSON-normalizing wrapper around `uv run harness/generate/gen_eval_cases.py`; the raw Python invocation remains supported.",
+      "`--validate-only` and `--promote` are mutually exclusive.",
+      "Generated candidates remain quarantined under runs/generate/ until a human reviews and promotes them.",
+    ],
+  },
+  {
     name: "eval-run",
     category: "evals",
     summary: "Launch a detached harness run.",
@@ -374,6 +424,15 @@ class UnknownCommandError extends Error {
   }
 }
 
+class BenchCommandError extends Error {
+  body: unknown;
+
+  constructor(message: string, body: unknown) {
+    super(message);
+    this.body = body;
+  }
+}
+
 function commandHelp(name?: string): unknown {
   if (!name) {
     return {
@@ -389,7 +448,7 @@ function commandHelp(name?: string): unknown {
     conventions: {
       stdout: "JSON only on success.",
       stderr: "JSON only on error.",
-      repeatable_flags: ["--case", "--arm"],
+      repeatable_flags: ["--case", "--arm", "--spec", "--validate-only", "--promote"],
       flag_precedence: "For non-repeatable flags, the last occurrence wins.",
     },
   };
@@ -407,7 +466,7 @@ function capabilities(): unknown {
         1: "runtime, validation, or HTTP-style command error",
         2: "unknown command",
       },
-      repeatable_flags: ["--case", "--arm"],
+      repeatable_flags: ["--case", "--arm", "--spec", "--validate-only", "--promote"],
       flag_precedence: "For non-repeatable flags, the last occurrence wins.",
     },
     environment: {
@@ -429,8 +488,179 @@ function capabilities(): unknown {
       "bun ui/bench.ts doctor",
       "bun ui/bench.ts commands",
       "bun ui/bench.ts help eval-run",
+      "bun ui/bench.ts help eval-case-generate",
     ],
   };
+}
+
+function decode(bytes: { toString(encoding?: string): string }): string {
+  return bytes.toString("utf8");
+}
+
+function parseJsonDocuments(text: string): unknown[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+  try {
+    return [JSON.parse(trimmed)];
+  } catch {
+    // Some generator modes print one pretty JSON object per input case.
+  }
+
+  const docs: unknown[] = [];
+  let start = -1;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < trimmed.length; i++) {
+    const char = trimmed[i];
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+    if (char === '"') {
+      inString = true;
+      continue;
+    }
+    if (char === "{" || char === "[") {
+      if (depth === 0) start = i;
+      depth += 1;
+      continue;
+    }
+    if (char === "}" || char === "]") {
+      depth -= 1;
+      if (depth === 0 && start >= 0) {
+        docs.push(JSON.parse(trimmed.slice(start, i + 1)));
+        start = -1;
+      }
+    }
+  }
+  return docs;
+}
+
+function pushOptional(argv: string[], key: string, value: string | undefined): void {
+  if (value !== undefined) argv.push(key, value);
+}
+
+const EVAL_CASE_GENERATE_FLAGS = new Set([
+  "skill",
+  "n",
+  "spec",
+  "model",
+  "api-base",
+  "api-key-env",
+  "max-output-tokens",
+  "temperature",
+  "max-repair-rounds",
+  "seed-example",
+  "validator-timeout",
+  "out-dir",
+  "validate-only",
+  "promote",
+]);
+
+function parseEvalCaseGenerateArgs(argv: string[]): Flags {
+  const out: Flags = { positional: [], flags: {} };
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+    if (!arg.startsWith("--")) {
+      out.positional.push(arg);
+      continue;
+    }
+
+    const key = arg.slice(2);
+    if (!EVAL_CASE_GENERATE_FLAGS.has(key)) {
+      throw new HttpError(400, `Unknown flag for eval-case-generate: --${key}`);
+    }
+
+    if (key === "validate-only" || key === "promote") {
+      const values: string[] = [];
+      while (argv[i + 1] && !argv[i + 1].startsWith("--")) {
+        values.push(argv[++i]);
+      }
+      if (values.length === 0) {
+        throw new HttpError(400, `--${key} requires at least one case dir`);
+      }
+      (out.flags[key] ??= []).push(...values);
+      continue;
+    }
+
+    const value = argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : undefined;
+    if (value === undefined) {
+      throw new HttpError(400, `--${key} requires a value`);
+    }
+    (out.flags[key] ??= []).push(value);
+  }
+  return out;
+}
+
+function runEvalCaseGenerate(rawArgv: string[]): unknown {
+  const args = parseEvalCaseGenerateArgs(rawArgv);
+  const skillFromFlag = flag(args, "skill");
+  const skill = skillFromFlag ?? args.positional[0];
+  if (!skill) throw new HttpError(400, "usage: eval-case-generate --skill <name>");
+  const unexpectedPositionals = skillFromFlag ? args.positional : args.positional.slice(1);
+  if (unexpectedPositionals.length > 0) {
+    throw new HttpError(400, `Unexpected positional argument(s): ${unexpectedPositionals.join(", ")}`);
+  }
+  const validateOnly = args.flags["validate-only"] ?? [];
+  const promote = args.flags["promote"] ?? [];
+  if (validateOnly.length > 0 && promote.length > 0) {
+    throw new HttpError(400, "--validate-only and --promote are mutually exclusive");
+  }
+
+  const n = positiveIntegerFlag(flag(args, "n"), "--n");
+  const maxOutputTokens = positiveIntegerFlag(flag(args, "max-output-tokens"), "--max-output-tokens");
+  const maxRepairRounds = nonNegativeIntegerFlag(flag(args, "max-repair-rounds"), "--max-repair-rounds");
+  const validatorTimeout = numberFlag(flag(args, "validator-timeout"), "--validator-timeout");
+  const temperature = numberFlag(flag(args, "temperature"), "--temperature");
+
+  const argv = ["uv", "run", "harness/generate/gen_eval_cases.py", "--skill", skill];
+  if (n !== undefined) argv.push("--n", String(n));
+  for (const spec of args.flags["spec"] ?? []) argv.push("--spec", spec);
+  pushOptional(argv, "--model", flag(args, "model"));
+  pushOptional(argv, "--api-base", flag(args, "api-base"));
+  pushOptional(argv, "--api-key-env", flag(args, "api-key-env"));
+  if (maxOutputTokens !== undefined) argv.push("--max-output-tokens", String(maxOutputTokens));
+  if (temperature !== undefined) argv.push("--temperature", String(temperature));
+  if (maxRepairRounds !== undefined) argv.push("--max-repair-rounds", String(maxRepairRounds));
+  pushOptional(argv, "--seed-example", flag(args, "seed-example"));
+  if (validatorTimeout !== undefined) argv.push("--validator-timeout", String(validatorTimeout));
+  pushOptional(argv, "--out-dir", flag(args, "out-dir"));
+  if (validateOnly.length > 0) argv.push("--validate-only", ...validateOnly);
+  if (promote.length > 0) argv.push("--promote", ...promote);
+
+  const result = Bun.spawnSync({
+    cmd: argv,
+    cwd: process.cwd(),
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  const stdout = decode(result.stdout).trim();
+  const stderr = decode(result.stderr).trim();
+  const stdoutJson = parseJsonDocuments(stdout);
+  const mode = validateOnly.length > 0 ? "validate-only" : promote.length > 0 ? "promote" : "generate";
+  const exitCode = result.exitCode ?? 1;
+  const payload = {
+    schema_version: "bench-eval-case-generate.v1",
+    ok: exitCode === 0,
+    mode,
+    command: argv,
+    exit_code: exitCode,
+    stdout_json: stdoutJson.length === 1 ? stdoutJson[0] : stdoutJson,
+    stdout_text: stdoutJson.length === 0 && stdout ? stdout : null,
+    stderr_text: stderr || null,
+  };
+
+  if (exitCode !== 0) {
+    throw new BenchCommandError(`eval-case-generate failed with exit ${exitCode}`, payload);
+  }
+  return payload;
 }
 
 type DoctorStatus = "ok" | "warn" | "fail";
@@ -522,6 +752,7 @@ function doctor(): unknown {
     next_commands: [
       "uv run scripts/check_skill_structure.py --json",
       "uv run scripts/check_eval_cases.py --json",
+      "bun ui/bench.ts eval-case-generate --skill <name> --n 4",
       "uv run scripts/check_schemas.py --json",
       "uv run scripts/check_validator_robustness.py --json",
       "uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay",
@@ -603,6 +834,8 @@ async function main() {
       if (!name || !prompt) throw new HttpError(400, "--name and --prompt are required");
       return emit(await generateSkill(name, prompt, { agentName: flag(args, "model") }));
     }
+    case "eval-case-generate":
+      return emit(runEvalCaseGenerate(rest));
     case "eval-suites":
       return emit(listEvalSuites());
     case "eval-run": {
@@ -683,6 +916,10 @@ main()
     if (error instanceof UnknownCommandError) {
       console.error(JSON.stringify({ error: error.message, ...USAGE }));
       process.exit(2);
+    }
+    if (error instanceof BenchCommandError) {
+      console.error(JSON.stringify(error.body, null, 2));
+      process.exit(1);
     }
     const status = error instanceof HttpError ? error.status : 500;
     console.error(JSON.stringify({ error: error.message ?? String(error), status }));
