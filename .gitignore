@@ -16,6 +16,9 @@ node_modules/
 .pi/
 prompt-exports/
 .claude/*.lock
+smithers.db
+smithers.db-shm
+smithers.db-wal
 
 # Generated design handoff archives
 .resources/handoff/**/*.zip

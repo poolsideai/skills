@@ -99,6 +99,21 @@ bun ui/server.ts                               # web UI → http://127.0.0.1:431
 bun ui/bench.ts <cmd>                          # agent CLI (shared workbench ops, JSON I/O)
 ```
 
+Smithers: durable workflow orchestration for multi-step, long-running,
+approval-gated, or parallel agent work. Use `bunx smithers-orchestrator ...`
+(not `bunx smithers ...`). The root workflow pack is `.smithers/`; project
+Smithers setup notes live in `docs/smithers.md`; the older PoolAgent-specific
+spike remains `experiments/smithers-pool/`.
+
+```sh
+bunx smithers-orchestrator workflow doctor --format md
+bunx smithers-orchestrator workflow list --format md
+bunx smithers-orchestrator starters --format md
+bunx smithers-orchestrator workflow run plan --prompt "Plan the next skill hardening pass"
+bunx smithers-orchestrator ps
+bunx smithers-orchestrator inspect <runId> --format md
+```
+
 Key `bench.ts` commands:
 
 ```sh

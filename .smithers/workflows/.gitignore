@@ -1,0 +1,4 @@
+# Ignore log files in workflows
+*.log
+run-*.log
+*.bak-*

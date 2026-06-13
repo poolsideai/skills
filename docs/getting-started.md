@@ -149,6 +149,18 @@ Live steps need credentials. See the matrix in [`concepts.md`](concepts.md).
   `bun ui/bench.ts <command> --help` expose the machine-readable CLI catalog. Bench commands
   write JSON to stdout on success, JSON to stderr on errors, and exit `2` for unknown commands.
   See [`../ui/README.md`](../ui/README.md).
+- **Smithers orchestration** (agent-driven durable workflows): use the root
+  `.smithers/` workflow pack for multi-step, long-running, approval-gated, or
+  parallel work. Start with:
+
+  ```bash
+  bunx smithers-orchestrator workflow doctor --format md
+  bunx smithers-orchestrator workflow list --format md
+  bunx smithers-orchestrator starters --format md
+  ```
+
+  Project-local details are in [`smithers.md`](smithers.md). The older
+  `experiments/smithers-pool/` sandbox is still the PoolAgent-specific spike.
 - **GEPA optimization** (`pool` auth + reflection LM key) and **eval-case generation**
   (LM key): commands in the root README; method in
   [`plans/skill-optimization-gepa-2026-06-11.md`](plans/skill-optimization-gepa-2026-06-11.md).

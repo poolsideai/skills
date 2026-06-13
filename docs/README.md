@@ -11,6 +11,8 @@ vocabulary and the offline-vs-credentials matrix.
 - **Skill optimizer**: [`plans/skill-optimization-gepa-2026-06-11.md`](plans/skill-optimization-gepa-2026-06-11.md).
 - **Harness developer**: [`plans/laguna-skills-v0-2026-06-10.md`](plans/laguna-skills-v0-2026-06-10.md) + [`../harness/fixtures/README.md`](../harness/fixtures/README.md) + the two spike docs.
 - **Workbench / UI developer**: [`../ui/README.md`](../ui/README.md) + [`../plans/README.md`](../plans/README.md) (workbench redesign plans).
+- **Smithers workflow author/operator**: [`smithers.md`](smithers.md) + the root
+  `.smithers/` workflow pack.
 - **AI agent working in this repo**: [`../CLAUDE.md`](../CLAUDE.md) (binding).
 
 ## All docs
@@ -19,6 +21,8 @@ vocabulary and the offline-vs-credentials matrix.
 - [`concepts.md`](concepts.md): glossary + credentials matrix.
 - [`authoring-guide.md`](authoring-guide.md): binding skill authoring standard (the two hard gates).
 - [`eval-methodology.md`](eval-methodology.md): arms, isolation, metrics, reporting policy.
+- [`smithers.md`](smithers.md): repo-local Smithers setup, operating commands, and
+  the PoolAgent experiment boundary.
 - [`model-access-spike.md`](model-access-spike.md): agent-name → Laguna model mapping, quotas (spike + addenda).
 - [`trajectory-recovery-spike.md`](trajectory-recovery-spike.md): run-id → trajectory recovery (spike + addenda).
 - [`plans/`](plans/): plans of record (v0, GEPA optimization, onboarding/packaging).
