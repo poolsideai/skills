@@ -34,7 +34,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, join, normalize, resolve } from "node:path";
+import { basename, dirname, join, normalize, resolve } from "node:path";
 
 export const REPO_ROOT = resolve(import.meta.dir, "..");
 
@@ -51,20 +51,26 @@ export function runCommand(
   argv: string[],
   cwd: string,
   timeoutMs: number,
-  options: { scrubEnv?: boolean } = {},
+  options: { scrubEnv?: boolean; env?: Record<string, string | undefined> } = {},
 ): Promise<{ exitCode: number | null; stdout: string; stderr: string }> {
   // scrubEnv: minimal environment for sinks that execute MODEL-GENERATED
   // code (skill validators, smithers graph module imports) so generated code
   // doesn't inherit API tokens. Defense-in-depth, not a sandbox — see
   // ui/README.md security note.
-  const env = options.scrubEnv
+  const scrubPath = [
+    join(process.env.HOME ?? "", ".bun", "bin"),
+    dirname(process.execPath),
+    process.env.PATH ?? "/usr/bin:/bin",
+  ].filter(Boolean).join(":");
+  const baseEnv = options.scrubEnv
     ? {
-        PATH: process.env.PATH ?? "/usr/bin:/bin",
+        PATH: scrubPath,
         HOME: process.env.HOME ?? "/tmp",
         TMPDIR: process.env.TMPDIR ?? "/tmp",
         LANG: process.env.LANG ?? "en_US.UTF-8",
       }
     : process.env;
+  const env = { ...baseEnv, ...(options.env ?? {}) };
   return new Promise((resolvePromise, rejectPromise) => {
     const child = spawn(argv[0], argv.slice(1), {
       cwd,
@@ -114,7 +120,9 @@ export function discoverProjects(): Project[] {
   }
   if (existsSync(join(REPO_ROOT, ".smithers"))) candidates.add(REPO_ROOT);
   return [...candidates].sort().map((root) => {
-    const bin = join(root, "node_modules", ".bin", "smithers");
+    const rootBin = join(root, "node_modules", ".bin", "smithers");
+    const packBin = join(root, ".smithers", "node_modules", ".bin", "smithers");
+    const bin = existsSync(rootBin) ? rootBin : packBin;
     return {
       id: root === REPO_ROOT ? "." : root.slice(REPO_ROOT.length + 1),
       name: basename(root),
@@ -365,21 +373,114 @@ export function runDetail(project: Project, runId: string) {
 
 let modelsCache: { at: number; names: string[] } | null = null;
 
+function poolCredentialEnv(): Record<string, string> {
+  const env: Record<string, string> = {};
+  if (process.env.POOLSIDE_API_URL && process.env.POOLSIDE_TOKEN) return env;
+  const home = process.env.HOME;
+  if (!home) return env;
+  const path = join(home, ".config", "poolside", "credentials.json");
+  if (!existsSync(path)) return env;
+  try {
+    const raw = JSON.parse(readFileSync(path, "utf8")) as unknown;
+    const records = Array.isArray(raw)
+      ? raw
+      : raw && typeof raw === "object"
+        ? Object.values(raw as Record<string, unknown>)
+        : [];
+    const credential = records.find((entry) => {
+      return entry && typeof entry === "object" && typeof (entry as Record<string, unknown>).apiUrl === "string" && typeof (entry as Record<string, unknown>).token === "string";
+    }) as Record<string, string> | undefined;
+    if (!credential) return env;
+    if (!process.env.POOLSIDE_API_URL) env.POOLSIDE_API_URL = credential.apiUrl;
+    if (!process.env.POOLSIDE_TOKEN) env.POOLSIDE_TOKEN = credential.token;
+  } catch {
+    // Model discovery can still use static fallbacks below.
+  }
+  return env;
+}
+
+function fallbackModels(): string[] {
+  const configured = (process.env.POOLSIDE_MODEL_CHOICES || "")
+    .split(",")
+    .map((m) => m.trim())
+    .filter(Boolean);
+  return [
+    ...configured,
+    process.env.POOLSIDE_EVAL_AGENT_M,
+    process.env.POOLSIDE_EVAL_AGENT_XS,
+    process.env.ONBOARD_PREPARE_LM,
+    process.env.CASEGEN_LM,
+    process.env.GEPA_REFLECTION_LM,
+    "laguna-m.1",
+    "laguna-xs-polaris-base-bs256-s600-ctx256k",
+    "laguna-m-e0419-polaris-t3-mh-s700-ctx256k",
+    "laguna-m-nvfp4-mlp-fp8kv",
+    "openai/gpt-5.2-codex",
+    "openai/gpt-5.3-codex",
+    "openai/gpt-5.4",
+    "anthropic/claude-opus-4.8",
+    "anthropic/claude-sonnet-4.6",
+  ].filter((m): m is string => Boolean(m));
+}
+
+async function listPoolOpenAIModels(env: Record<string, string>): Promise<string[]> {
+  const apiUrl = process.env.POOLSIDE_API_URL || env.POOLSIDE_API_URL;
+  const token = process.env.POOLSIDE_TOKEN || env.POOLSIDE_TOKEN;
+  if (!apiUrl || !token) return [];
+  try {
+    const res = await fetch(`${apiUrl.replace(/\/$/, "")}/openai/v1/models`, {
+      headers: { authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!res.ok) return [];
+    const body = await res.json().catch(() => null) as { data?: unknown[] } | null;
+    return (body?.data || [])
+      .map((entry) => entry && typeof entry === "object" ? (entry as Record<string, unknown>).id : null)
+      .filter((id): id is string => typeof id === "string" && id.trim().length > 0);
+  } catch {
+    return [];
+  }
+}
+
 export async function listModels(): Promise<string[]> {
   if (modelsCache && Date.now() - modelsCache.at < 60_000) return modelsCache.names;
-  const result = await runCommand(["pool", "agents", "list"], REPO_ROOT, 30_000);
-  if (result.exitCode !== 0) {
-    throw new HttpError(500, `pool agents list failed: ${result.stderr.slice(0, 400)}`);
-  }
-  const names = result.stdout
-    .split("\n")
-    .map((l) => l.trim().replace(/ \(default\)$/, ""))
-    .filter(Boolean);
-  // Surface the relevant families first: laguna, then anthropic, then the rest.
-  const rank = (n: string) => (n.startsWith("laguna") ? 0 : n.startsWith("anthropic/") ? 1 : 2);
+  const credentialEnv = poolCredentialEnv();
+  const [result, servedModels] = await Promise.all([
+    runCommand(["pool", "agents", "list"], REPO_ROOT, 30_000, { env: credentialEnv }),
+    listPoolOpenAIModels(credentialEnv),
+  ]);
+  const discovered = result.exitCode === 0
+    ? result.stdout
+        .split("\n")
+        .map((l) => l.trim().replace(/ \(default\)$/, ""))
+        .filter(Boolean)
+    : [];
+  const names = [...new Set([...discovered, ...servedModels, ...fallbackModels()])];
+  if (!names.length) throw new HttpError(500, `pool agents list failed: ${result.stderr.slice(0, 400)}`);
+  // Surface the relevant families first: laguna, then Codex/OpenAI, then Anthropic, then the rest.
+  const rank = (n: string) => (n.startsWith("laguna") ? 0 : n.toLowerCase().includes("codex") || n.startsWith("openai/") ? 1 : n.startsWith("anthropic/") ? 2 : 3);
   names.sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
   modelsCache = { at: Date.now(), names };
   return names;
+}
+
+function normalizeOnboardModel(raw: string | undefined): string | undefined {
+  const model = raw?.trim();
+  if (!model) return undefined;
+  const aliases: Record<string, string> = {
+    "gpt-5.5": "openai/gpt-5.5",
+    "gpt-5.4": "openai/gpt-5.4",
+    "gpt-5.3-codex": "openai/gpt-5.3-codex",
+    "gpt-5.2-codex": "openai/gpt-5.2-codex",
+    "gpt-oss-120b": "openai/gpt-oss-120b",
+    "laguna-m.1": "laguna-m-e0419-polaris-t3-mh-s700-ctx256k",
+    "laguna-m.1-40k": "laguna-m-e0419-polaris-t3-mh-s700-ctx256k",
+  };
+  return aliases[model] || model;
+}
+
+function defaultOnboardModel(): string {
+  return normalizeOnboardModel(process.env.ONBOARD_PREPARE_LM) || normalizeOnboardModel(process.env.CASEGEN_LM) || "openai/gpt-5.5";
 }
 
 export const DEFAULT_AGENT = "laguna-m.1";
@@ -414,8 +515,25 @@ export function safeWorkflowPath(project: Project, relPath: string): string {
   return abs;
 }
 
-export type GraphNode = { id: string; label: string; kind: "task" | "control"; prompt?: string };
-export type GraphEdge = { from: string; to: string };
+export type GraphNode = {
+  id: string;
+  label: string;
+  kind: "task" | "control";
+  prompt?: string;
+  state?: "rendered" | "latent";
+  outputTableName?: string;
+  outputFields?: string[];
+  agentName?: string;
+};
+export type GraphEdge = { from: string; to: string; state?: "rendered" | "latent" };
+type GraphTask = {
+  nodeId: string;
+  outputTableName?: string;
+  outputTable?: Record<string, unknown>;
+  prompt?: string;
+  staticPayload?: unknown;
+  agent?: unknown;
+};
 type XmlNode = {
   kind: "element" | "text";
   tag?: string;
@@ -424,9 +542,91 @@ type XmlNode = {
   text?: string;
 };
 
-function projectGraph(xml: XmlNode): { nodes: GraphNode[]; edges: GraphEdge[] } {
+function taskAgentName(task?: GraphTask): string | undefined {
+  const agents = Array.isArray(task?.agent) ? task.agent : task?.agent ? [task.agent] : [];
+  const names = agents
+    .map((agent) => {
+      if (!agent || typeof agent !== "object") return null;
+      const record = agent as Record<string, unknown>;
+      return typeof record.model === "string" ? record.model : typeof record.id === "string" ? record.id : null;
+    })
+    .filter((name): name is string => Boolean(name));
+  if (!names.length) return undefined;
+  return names.length === 1 ? names[0] : names.join(", ");
+}
+
+function taskOutputFields(task?: GraphTask): string[] {
+  const fields = Object.keys(task?.outputTable ?? {}).filter((field) => !["runId", "nodeId", "iteration"].includes(field));
+  return fields;
+}
+
+function fallbackTaskPrompt(task?: GraphTask): string | undefined {
+  if (!task) return undefined;
+  if (typeof task.prompt === "string" && task.prompt.trim()) return task.prompt.trim();
+  if ("staticPayload" in task && task.staticPayload !== undefined) {
+    return `Static task output:\n\n${JSON.stringify(task.staticPayload, null, 2)}`;
+  }
+  const fields = taskOutputFields(task);
+  if (fields.length) {
+    return `Output contract: ${task.outputTableName ?? "task"} produces ${fields.join(", ")}.`;
+  }
+  if (task.outputTableName) return `Output contract: ${task.outputTableName}.`;
+  return undefined;
+}
+
+function taskMeta(task?: GraphTask): Pick<GraphNode, "prompt" | "outputTableName" | "outputFields" | "agentName"> {
+  const outputFields = taskOutputFields(task);
+  return {
+    prompt: fallbackTaskPrompt(task),
+    outputTableName: task?.outputTableName,
+    outputFields: outputFields.length ? outputFields : undefined,
+    agentName: taskAgentName(task),
+  };
+}
+
+function sourceTaskIds(source: string): string[] {
+  const ids = new Set<string>();
+  const exportIndex = source.indexOf("export default");
+  const orderedSource = exportIndex >= 0
+    ? source.slice(exportIndex) + "\n" + source.slice(0, exportIndex)
+    : source;
+  const taskLike = /<(?:Task|Approval|HumanTask)\b[^>]*\bid=["']([^"']+)["']/g;
+  for (const match of orderedSource.matchAll(taskLike)) ids.add(match[1]);
+  return [...ids];
+}
+
+function addLatentSourceTasks(
+  graph: { nodes: GraphNode[]; edges: GraphEdge[] },
+  source: string,
+): { nodes: GraphNode[]; edges: GraphEdge[] } {
+  const existing = new Set(graph.nodes.map((n) => n.id));
+  const latentIds = sourceTaskIds(source).filter((id) => !existing.has(id));
+  if (!latentIds.length) return graph;
+
+  const outgoing = new Set(graph.edges.map((e) => e.from));
+  const terminals = graph.nodes.filter((n) => !outgoing.has(n.id) && n.state !== "latent");
+  const anchors = terminals.length ? terminals : graph.nodes.filter((n) => n.state !== "latent").slice(-1);
+  const nodes = [
+    ...graph.nodes,
+    ...latentIds.map((id) => ({
+      id,
+      label: id,
+      kind: "task" as const,
+      state: "latent" as const,
+      prompt: "Latent source task. Smithers renders this after earlier workflow state exists.",
+    })),
+  ];
+  const edges = [
+    ...graph.edges,
+    ...anchors.flatMap((from) => latentIds.map((to) => ({ from: from.id, to, state: "latent" as const }))),
+  ];
+  return { nodes, edges };
+}
+
+function projectGraph(xml: XmlNode, source = "", tasks: GraphTask[] = []): { nodes: GraphNode[]; edges: GraphEdge[] } {
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
+  const tasksById = new Map(tasks.map((task) => [task.nodeId, task]));
   let controlSeq = 0;
 
   function walk(el: XmlNode): { entries: string[]; exits: string[] } {
@@ -441,7 +641,15 @@ function projectGraph(xml: XmlNode): { nodes: GraphNode[]; edges: GraphEdge[] } 
         .map((c) => c.text ?? "")
         .join("")
         .trim();
-      nodes.push({ id, label: el.props?.label ?? id, kind: "task", prompt: promptText || undefined });
+      const meta = taskMeta(tasksById.get(id));
+      nodes.push({
+        id,
+        label: el.props?.label ?? id,
+        kind: "task",
+        ...meta,
+        prompt: promptText || meta.prompt,
+        state: "rendered",
+      });
       return { entries: [id], exits: [id] };
     }
 
@@ -467,7 +675,7 @@ function projectGraph(xml: XmlNode): { nodes: GraphNode[]; edges: GraphEdge[] } 
     }
 
     const ctlId = `${tag}-${++controlSeq}`;
-    nodes.push({ id: ctlId, label: tag, kind: "control" });
+    nodes.push({ id: ctlId, label: tag, kind: "control", prompt: `Control: ${tag}`, state: "rendered" });
     let prevExits: string[] = [ctlId];
     for (const child of children) {
       const result = walk(child);
@@ -479,7 +687,7 @@ function projectGraph(xml: XmlNode): { nodes: GraphNode[]; edges: GraphEdge[] } 
   }
 
   walk(xml);
-  return { nodes, edges };
+  return addLatentSourceTasks({ nodes, edges }, source);
 }
 
 export async function workflowGraph(project: Project, relPath: string) {
@@ -494,8 +702,9 @@ export async function workflowGraph(project: Project, relPath: string) {
   if (result.exitCode !== 0) {
     throw new HttpError(500, `smithers graph failed: ${(result.stderr || result.stdout).slice(0, 800)}`);
   }
-  const snapshot = JSON.parse(result.stdout) as { xml: XmlNode };
-  return { path: relPath, ...projectGraph(snapshot.xml) };
+  const snapshot = JSON.parse(result.stdout) as { xml: XmlNode; tasks?: GraphTask[] };
+  const source = readFileSync(resolve(project.root, relPath), "utf8");
+  return { path: relPath, ...projectGraph(snapshot.xml, source, snapshot.tasks ?? []) };
 }
 
 // --- workflow authoring -----------------------------------------------------
@@ -1147,7 +1356,7 @@ export function startSuggest(options: {
   const fd = openSync(logPath, "a");
   const child = spawn(argv[0], argv.slice(1), {
     cwd: REPO_ROOT,
-    env: process.env,
+    env: { ...process.env, ...poolCredentialEnv() },
     stdio: ["ignore", fd, fd],
     detached: true,
   });
@@ -1236,6 +1445,9 @@ export function proposalFromOptimizeRun(options: { skill: string; runDir?: strin
   const skillMd = assertSkillExists(skill);
   const optimizeRoot = join(REPO_ROOT, "runs", "optimize", skill);
   let runDir = options.runDir ? resolve(REPO_ROOT, options.runDir) : null;
+  if (runDir && runDir !== optimizeRoot && !runDir.startsWith(optimizeRoot + "/")) {
+    throw new HttpError(400, `run dir must be under runs/optimize/${skill}`);
+  }
   if (!runDir) {
     const finished = existsSync(optimizeRoot)
       ? readdirSync(optimizeRoot)
@@ -1575,6 +1787,366 @@ export function startEvalRun(options: { suite: string; cases?: string[]; arms?: 
     startedAtMs: Date.now(),
   };
   writeFileSync(join(HARNESS_STATE_DIR, `harness-${tag}.json`), JSON.stringify(sidecar, null, 2));
+  return { ok: true, ...sidecar };
+}
+
+// ===========================================================================
+// Onboarding / bootstrap jobs
+
+type OnboardMode = "triage" | "prepare" | "review";
+
+type OnboardProcess = {
+  pid: number | null;
+  tag: string;
+  mode: OnboardMode | "scan";
+  source: string | null;
+  skill: string | null;
+  argv: string[];
+  logPath: string | null;
+  outDir: string;
+  startedAtMs: number;
+  running: boolean;
+  result?: unknown;
+  sourceKind?: "sidecar" | "scan";
+  relationKind?: "review-of" | "repair-from";
+  relationLabel?: string | null;
+  parentOutDir?: string | null;
+};
+
+const ONBOARD_ROOT = join(EVAL_RUNS_ROOT, "onboard");
+const ONBOARD_STATE_DIR = join(ONBOARD_ROOT, ".state");
+const ONBOARD_LOG_TAIL_CHARS = 4000;
+
+function slugForPath(input: string): string {
+  const base = basename(input.replace(/\/+$/, "")) || "skill";
+  return (
+    base
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 48) || "skill"
+  );
+}
+
+function readJsonFile(path: string): unknown {
+  try {
+    return JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function collectOnboardReports(dir: string, depth = 0): string[] {
+  if (!existsSync(dir) || depth > 4) return [];
+  const reports: string[] = [];
+  let entries: ReturnType<typeof readdirSync> = [];
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return reports;
+  }
+  for (const entry of entries) {
+    if (entry.name.startsWith(".") || entry.name === "skill" || entry.name === "cases") continue;
+    const abs = join(dir, entry.name);
+    if (entry.isFile() && entry.name === "report.json") {
+      reports.push(abs);
+    } else if (entry.isDirectory()) {
+      reports.push(...collectOnboardReports(abs, depth + 1));
+    }
+  }
+  return reports;
+}
+
+function reportOutDir(reportPath: string): string {
+  return reportPath.slice(REPO_ROOT.length + 1).replace(/\/report\.json$/, "");
+}
+
+function onboardMode(value: unknown): OnboardMode {
+  return value === "prepare" || value === "review" ? value : "triage";
+}
+
+function onboardResultPath(mode: OnboardMode, outDir: string): string {
+  return join(REPO_ROOT, outDir, mode === "review" ? "agent-review.json" : "report.json");
+}
+
+function argvValue(argv: string[], flag: string): string | null {
+  const index = argv.indexOf(flag);
+  return index >= 0 && argv[index + 1] ? argv[index + 1] : null;
+}
+
+function relativeOnboardRunDir(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  let value = raw.replace(/\/agent-review\.json$/, "").replace(/\/report\.json$/, "");
+  const abs = resolve(REPO_ROOT, value);
+  if (abs === ONBOARD_ROOT || abs.startsWith(ONBOARD_ROOT + "/")) {
+    value = abs.slice(REPO_ROOT.length + 1);
+  }
+  return value.startsWith("runs/onboard/") ? value : null;
+}
+
+function statMtimeMs(path: string): number | null {
+  try {
+    return statSync(path).mtimeMs;
+  } catch {
+    return null;
+  }
+}
+
+function freshOnboardResult(path: string, startedAtMs: number): unknown {
+  const mtimeMs = statMtimeMs(path);
+  if (mtimeMs === null || mtimeMs + 1000 < startedAtMs) return null;
+  return readJsonFile(path);
+}
+
+function onboardRelation(mode: OnboardMode, outDir: string, argv: string[], result: unknown): Pick<OnboardProcess, "relationKind" | "relationLabel" | "parentOutDir"> {
+  if (mode === "review") {
+    return {
+      relationKind: "review-of",
+      relationLabel: "Agent review of generated bundle",
+      parentOutDir: outDir,
+    };
+  }
+  const reviewDir = relativeOnboardRunDir(argvValue(argv, "--review-dir"));
+  const resultObj = result && typeof result === "object" ? result as Record<string, unknown> : null;
+  const reviewSource = typeof resultObj?.review_source === "string" ? relativeOnboardRunDir(resultObj.review_source) : null;
+  const parentOutDir = reviewDir || reviewSource;
+  if (mode === "prepare" && parentOutDir) {
+    return {
+      relationKind: "repair-from",
+      relationLabel: "Repair pass from agent review",
+      parentOutDir,
+    };
+  }
+  return { relationKind: undefined, relationLabel: null, parentOutDir: null };
+}
+
+function terminalOnboardResult(logPath: string | null): unknown {
+  let stderrText = "Process ended before writing report.json.";
+  if (logPath) {
+    const absoluteLogPath = resolve(REPO_ROOT, logPath);
+    if (absoluteLogPath.startsWith(REPO_ROOT + "/") && existsSync(absoluteLogPath)) {
+      const logText = readFileSync(absoluteLogPath, "utf8").trim();
+      if (logText) stderrText = logText.slice(-ONBOARD_LOG_TAIL_CHARS);
+    }
+  }
+  return {
+    schema_version: "onboard-terminal.v1",
+    ok: false,
+    stderr_text: stderrText,
+    reminder: stderrText,
+  };
+}
+
+export function listOnboardRuns(): OnboardProcess[] {
+  const runs: OnboardProcess[] = [];
+  const seen = new Set<string>();
+  const seenSidecars = new Set<string>();
+
+  if (existsSync(ONBOARD_STATE_DIR)) {
+    for (const file of readdirSync(ONBOARD_STATE_DIR).sort().reverse()) {
+      if (!file.endsWith(".json")) continue;
+      const sidecar = readJsonFile(join(ONBOARD_STATE_DIR, file)) as Partial<OnboardProcess> | null;
+      if (!sidecar || typeof sidecar !== "object" || !sidecar.outDir) continue;
+      const mode = onboardMode(sidecar.mode);
+      const sidecarKey = `${mode}:${String(sidecar.outDir)}`;
+      if (seenSidecars.has(sidecarKey)) continue;
+      seenSidecars.add(sidecarKey);
+      seen.add(String(sidecar.outDir));
+      const reportPath = onboardResultPath(mode, String(sidecar.outDir));
+      const startedAtMs = typeof sidecar.startedAtMs === "number" ? sidecar.startedAtMs : 0;
+      const argv = Array.isArray(sidecar.argv) ? sidecar.argv.map(String) : [];
+      const result = existsSync(reportPath) ? freshOnboardResult(reportPath, startedAtMs) : null;
+      const running = typeof sidecar.pid === "number" ? pidAlive(sidecar.pid) && !result : false;
+      const relation = onboardRelation(mode, String(sidecar.outDir), argv, result);
+      runs.push({
+        pid: typeof sidecar.pid === "number" ? sidecar.pid : null,
+        tag: String(sidecar.tag || file.replace(/^onboard-/, "").replace(/\.json$/, "")),
+        mode,
+        source: typeof sidecar.source === "string" ? sidecar.source : null,
+        skill: typeof sidecar.skill === "string" ? sidecar.skill : null,
+        argv,
+        logPath: typeof sidecar.logPath === "string" ? sidecar.logPath : null,
+        outDir: String(sidecar.outDir),
+        startedAtMs,
+        running,
+        result: result || (!running ? terminalOnboardResult(typeof sidecar.logPath === "string" ? sidecar.logPath : null) : null),
+        sourceKind: "sidecar",
+        ...relation,
+      });
+    }
+  }
+
+  for (const reportPath of collectOnboardReports(ONBOARD_ROOT).sort().reverse()) {
+    const outDir = reportOutDir(reportPath);
+    if (seen.has(outDir)) continue;
+    const result = readJsonFile(reportPath);
+    let startedAtMs = Date.now();
+    try {
+      startedAtMs = statSync(reportPath).mtimeMs;
+    } catch {
+      // keep fallback
+    }
+    const resultObj = result && typeof result === "object" ? (result as Record<string, unknown>) : {};
+    const mode = String(resultObj.schema_version || "").includes("prepare") ? "prepare" : "triage";
+    const relation = onboardRelation(mode, outDir, [], result);
+    runs.push({
+      pid: null,
+      tag: basename(outDir),
+      mode,
+      source: typeof resultObj.source === "string" ? resultObj.source : null,
+      skill: typeof resultObj.skill === "string" ? resultObj.skill : null,
+      argv: [],
+      logPath: null,
+      outDir,
+      startedAtMs,
+      running: false,
+      result,
+      sourceKind: "scan",
+      ...relation,
+    });
+  }
+
+  return runs.sort((a, b) => b.startedAtMs - a.startedAtMs);
+}
+
+export function listOnboardExamples() {
+  const examplesRoot = join(REPO_ROOT, "harness", "onboard", "examples");
+  const packs: unknown[] = [];
+  if (!existsSync(examplesRoot)) return packs;
+  for (const domain of readdirSync(examplesRoot)) {
+    const path = join(examplesRoot, domain, "cass-mined-examples.json");
+    if (existsSync(path)) {
+      const pack = readJsonFile(path);
+      if (pack) packs.push(pack);
+    }
+  }
+  return packs;
+}
+
+export function startOnboardRun(options: {
+  mode?: string;
+  source?: string;
+  skill?: string;
+  model?: string;
+  nCases?: number;
+  skipCases?: boolean;
+  smoke?: boolean;
+  importSource?: boolean;
+  reviewDir?: string;
+}) {
+  const mode: OnboardMode = options.mode === "prepare" ? "prepare" : "triage";
+  const source = options.source?.trim();
+  if (!source) throw new HttpError(400, "source is required");
+  const tag = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const bucket = skillSlug(options.skill) || slugForPath(source);
+  const outDir = join("runs", "onboard", bucket, `wb-${tag}`);
+
+  const argv =
+    mode === "prepare"
+      ? ["uv", "run", "harness/onboard/prepare.py", "--source", source, "--out-dir", outDir, "--json"]
+      : ["uv", "run", "harness/onboard/triage.py", "--source", source, "--out-dir", outDir, "--json"];
+  if (mode === "prepare") {
+    const skill = skillSlug(options.skill);
+    if (skill) argv.push("--skill", skill);
+    const model = normalizeOnboardModel(options.model) || defaultOnboardModel();
+    argv.push("--model", model);
+    const poolEnv = poolCredentialEnv();
+    const apiUrl = process.env.POOLSIDE_API_URL || poolEnv.POOLSIDE_API_URL;
+    if (apiUrl && !model.startsWith("openrouter/")) {
+      argv.push("--api-base", `${apiUrl.replace(/\/$/, "")}/openai/v1`, "--api-key-env", "POOLSIDE_TOKEN");
+    }
+    if (options.nCases) argv.push("--n-cases", String(options.nCases));
+    if (options.skipCases) argv.push("--skip-cases");
+    if (options.smoke) argv.push("--smoke");
+    if (options.importSource) argv.push("--import-source");
+    if (options.reviewDir?.trim()) argv.push("--review-dir", options.reviewDir.trim());
+  }
+
+  mkdirSync(ONBOARD_STATE_DIR, { recursive: true });
+  const logPath = join(ONBOARD_STATE_DIR, `onboard-${tag}.log`);
+  const fd = openSync(logPath, "a");
+  const child = spawn(argv[0], argv.slice(1), {
+    cwd: REPO_ROOT,
+    env: { ...process.env, ...poolCredentialEnv() },
+    stdio: ["ignore", fd, fd],
+    detached: true,
+  });
+  child.unref();
+  closeSync(fd);
+
+  const sidecar = {
+    pid: child.pid ?? -1,
+    tag,
+    mode,
+    source,
+    skill: options.skill || null,
+    argv,
+    logPath: logPath.slice(REPO_ROOT.length + 1),
+    outDir,
+    startedAtMs: Date.now(),
+    ...onboardRelation(mode, outDir, argv, null),
+  };
+  writeFileSync(join(ONBOARD_STATE_DIR, `onboard-${tag}.json`), JSON.stringify(sidecar, null, 2));
+  return { ok: true, ...sidecar };
+}
+
+export function startOnboardReviewRun(options: {
+  runDir?: string;
+  model?: string;
+  smoke?: boolean;
+}) {
+  const rawRunDir = options.runDir?.trim();
+  if (!rawRunDir) throw new HttpError(400, "runDir is required");
+  const absRunDir = resolve(REPO_ROOT, rawRunDir);
+  if (absRunDir !== ONBOARD_ROOT && !absRunDir.startsWith(ONBOARD_ROOT + "/")) {
+    throw new HttpError(400, "runDir must be under runs/onboard/");
+  }
+  if (!existsSync(absRunDir)) throw new HttpError(404, `runDir not found: ${rawRunDir}`);
+  const outDir = absRunDir.slice(REPO_ROOT.length + 1);
+  const tag = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const argv = ["uv", "run", "harness/onboard/review.py", "--run-dir", outDir, "--json"];
+  const model = normalizeOnboardModel(options.model) || defaultOnboardModel();
+  argv.push("--model", model);
+  const poolEnv = poolCredentialEnv();
+  const apiUrl = process.env.POOLSIDE_API_URL || poolEnv.POOLSIDE_API_URL;
+  if (apiUrl && !model.startsWith("openrouter/")) {
+    argv.push("--api-base", `${apiUrl.replace(/\/$/, "")}/openai/v1`, "--api-key-env", "POOLSIDE_TOKEN");
+  }
+  if (options.smoke) argv.push("--smoke");
+
+  mkdirSync(ONBOARD_STATE_DIR, { recursive: true });
+  const logPath = join(ONBOARD_STATE_DIR, `onboard-${tag}.log`);
+  const fd = openSync(logPath, "a");
+  const child = spawn(argv[0], argv.slice(1), {
+    cwd: REPO_ROOT,
+    env: { ...process.env, ...poolCredentialEnv() },
+    stdio: ["ignore", fd, fd],
+    detached: true,
+  });
+  child.unref();
+  closeSync(fd);
+
+  let source: string | null = null;
+  let skill: string | null = null;
+  const report = readJsonFile(join(absRunDir, "report.json"));
+  if (report && typeof report === "object") {
+    const obj = report as Record<string, unknown>;
+    source = typeof obj.source === "string" ? obj.source : null;
+    skill = typeof obj.skill === "string" ? obj.skill : null;
+  }
+  const sidecar = {
+    pid: child.pid ?? -1,
+    tag,
+    mode: "review" as const,
+    source,
+    skill,
+    argv,
+    logPath: logPath.slice(REPO_ROOT.length + 1),
+    outDir,
+    startedAtMs: Date.now(),
+    ...onboardRelation("review", outDir, argv, null),
+  };
+  writeFileSync(join(ONBOARD_STATE_DIR, `onboard-${tag}.json`), JSON.stringify(sidecar, null, 2));
   return { ok: true, ...sidecar };
 }
 

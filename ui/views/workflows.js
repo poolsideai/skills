@@ -168,7 +168,7 @@ export async function mount(container, ctx) {
         const y2 = b.y + H / 2;
         const mx = (x1 + x2) / 2;
         const hot = selected && (e.from === selected || e.to === selected);
-        return `<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}" class="workflow-edge${hot ? " selected" : ""}"/>`;
+        return `<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}" class="workflow-edge${e.state === "latent" ? " latent" : ""}${hot ? " selected" : ""}"/>`;
       })
       .join("");
     const nodes = state.graph.nodes
@@ -178,13 +178,14 @@ export async function mount(container, ctx) {
         const latest = fact?.lastEvals?.[0] ?? null;
         const status = latest?.status === "pass" ? "pass" : latest ? "fail" : "ungraded";
         const skill = fact?.skill || "no skill";
-        const model = fact?.agentName || DEFAULT_AGENT;
-        const desc = (node.prompt || node.label || "").split("\n").find(Boolean) || "No prompt text";
-        return `<button class="node-card ${node.kind === "control" ? "control" : ""} ${node.id === selected ? "selected" : ""}" type="button" data-node="${esc(node.id)}" style="left:${p.x}px;top:${p.y}px;width:${W}px;height:${H}px">
+        const model = fact?.agentName || node.agentName || DEFAULT_AGENT;
+        const isLatent = node.state === "latent";
+        const desc = isLatent ? "latent source task" : (node.prompt || node.label || "").split("\n").find(Boolean) || "No prompt text";
+        return `<button class="node-card ${node.kind === "control" ? "control" : ""} ${isLatent ? "latent" : ""} ${node.id === selected ? "selected" : ""}" type="button" data-node="${esc(node.id)}" style="left:${p.x}px;top:${p.y}px;width:${W}px;height:${H}px">
           <span class="node-status ${status}"></span>
           <strong>${esc(node.id)}</strong>
           <span class="node-desc">${esc(desc)}</span>
-          <span class="node-footer">${esc(model)} · ${esc(skill)}</span>
+          <span class="node-footer">${isLatent ? "renders after state" : `${esc(model)} · ${esc(skill)}`}</span>
         </button>`;
       })
       .join("");
@@ -219,7 +220,7 @@ export async function mount(container, ctx) {
     }
     const fact = factFor(node.id) || { nodeId: node.id, skill: null, agentName: null, lastEvals: [] };
     const skill = fact.skill;
-    const model = fact.agentName || DEFAULT_AGENT;
+    const model = fact.agentName || node.agentName || DEFAULT_AGENT;
     return `<aside class="node-inspector">
       <header class="inspector-head">
         <div><h2>${esc(node.label || node.id)}</h2><span class="pill">agent node</span></div>

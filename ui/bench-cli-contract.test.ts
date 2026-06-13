@@ -118,7 +118,7 @@ describe("bench discovery CLI contract", () => {
       mirrors: ["GET /api/node-artifacts"],
     });
     expect(byName["onboard-prepare"]).toMatchObject({
-      usage: "bun ui/bench.ts onboard-prepare --source <dir> [--skill <name>] [--skip-cases]",
+      usage: "bun ui/bench.ts onboard-prepare --source <dir> [--skill <name>] [--import-source] [--review-dir <dir>] [--skip-cases]",
       output: "bench-onboard-prepare.v1",
     });
     expect(byName["eval-case-generate"]).toMatchObject({
@@ -253,7 +253,7 @@ describe("bench discovery CLI contract", () => {
     expect(output.schema_version).toBe("bench-command-help.v1");
     expect(output.command).toMatchObject({ name: "onboard-prepare", output: "bench-onboard-prepare.v1" });
     expect(output.command.flags?.map((flag) => flag.name)).toEqual(
-      expect.arrayContaining(["--source", "--skill", "--model", "--skip-cases"]),
+      expect.arrayContaining(["--source", "--skill", "--model", "--review-dir", "--skip-cases"]),
     );
   });
 
