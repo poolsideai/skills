@@ -1,0 +1,34 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Choose the best Bead to work on next when graph insights show corrupted metrics.",
+  "mode": "triage",
+  "selected_bead": {
+    "id": "bd-302",
+    "title": "Fix metric calculation pipeline",
+    "status": "open",
+    "reason": "It has reliable complete metrics including high betweenness and unblocks three downstream Beads, while bd-301 had corrupted metrics in triage."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Initial triage to assess recommendations and readiness."
+    },
+    {
+      "command": "bv --robot-insights",
+      "why": "Cross-validate metrics after detecting incomplete data in triage."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "reliable_high_impact",
+    "signals": [
+      { "bead_id": "bd-302", "metric": "betweenness", "value": 0.72, "source_command": "bv --robot-insights" },
+      { "bead_id": "bd-302", "metric": "unblocks", "value": 3, "source_command": "bv --robot-insights" }
+    ],
+    "blockers": [],
+    "rejected_candidates": [
+      { "id": "bd-301", "reason": "Missing pagerank in triage and flagged for metric corruption in insights." }
+    ]
+  },
+  "next_action": { "command": "br update bd-302 --status in_progress", "destructive": false },
+  "caveats": []
+}

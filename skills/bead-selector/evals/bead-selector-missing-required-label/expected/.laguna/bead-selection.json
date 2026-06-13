@@ -1,0 +1,27 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Select a Bead to work on for the 'critical-bug' label.",
+  "mode": "label_focus",
+  "selected_bead": {
+    "id": "none",
+    "title": "No matching Beads",
+    "status": "none",
+    "reason": "Robot output confirms no Beads exist with the requested 'critical-bug' label. The graph contains only 'documentation' and 'refactor' labeled Beads."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-label-attention critical-bug",
+      "why": "Searched for Beads tagged with the requested label to determine if any match the user's request."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "label_not_found",
+    "signals": [
+      { "bead_id": "none", "metric": "label_match", "value": 0, "source_command": "bv --robot-label-attention critical-bug" }
+    ],
+    "blockers": [],
+    "rejected_candidates": []
+  },
+  "next_action": { "command": "none", "destructive": false },
+  "caveats": ["No Beads in the graph carry the 'critical-bug' label; user may need to create or re-label existing Beads."]
+}

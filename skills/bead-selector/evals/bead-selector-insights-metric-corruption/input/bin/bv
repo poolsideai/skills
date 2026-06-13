@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Deploy experimental feature",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "betweenness": 0.88
+    },
+    {
+      "id": "bd-302",
+      "title": "Fix metric calculation pipeline",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.67,
+      "betweenness": 0.72,
+      "unblocks": ["bd-301", "bd-303", "bd-304"]
+    },
+    {
+      "id": "bd-305",
+      "title": "Update documentation examples",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.23,
+      "betweenness": 0.11
+    }
+  ],
+  "blockers": [],
+  "health": { "cycles": [], "density": 0.15 }
+}
+JSON
+    ;;
+  --robot-insights)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Deploy experimental feature",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.12,
+      "betweenness": 0.88
+    },
+    {
+      "id": "bd-302",
+      "title": "Fix metric calculation pipeline",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.67,
+      "betweenness": 0.72,
+      "unblocks": ["bd-301", "bd-303", "bd-304"]
+    },
+    {
+      "id": "bd-305",
+      "title": "Update documentation examples",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.23,
+      "betweenness": 0.11
+    }
+  ],
+  "insights": {
+    "corruption_detected": ["bd-301"],
+    "note": "bd-301 pagerank was corrupted in triage"
+  }
+}
+JSON
+    ;;
+  *)
+    echo '{"error":"unsupported fixture command"}' >&2
+    exit 2
+    ;;
+esac

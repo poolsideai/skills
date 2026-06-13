@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  ready)
+    cat <<'JSON'
+[
+  { "id": "bd-303", "title": "Refactor legacy authentication module" },
+  { "id": "bd-304", "title": "Update README with new API docs" }
+]
+JSON
+    ;;
+  list)
+    cat <<'JSON'
+[
+  { "id": "bd-301", "status": "open" },
+  { "id": "bd-302", "status": "open" },
+  { "id": "bd-303", "status": "open" },
+  { "id": "bd-304", "status": "open" }
+]
+JSON
+    ;;
+  *)
+    echo "{\"ok\":true,\"note\":\"fixture br does not mutate\"}"
+    ;;
+esac

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  ready)
+    echo '[]'
+    ;;
+  list)
+    echo '[]'
+    ;;
+  *)
+    echo '{"ok":true,"note":"fixture br does not mutate"}'
+    ;;
+esac

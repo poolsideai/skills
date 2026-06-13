@@ -1,0 +1,31 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Identify Beads related to src/utils/format.ts with multiple matches.",
+  "mode": "search",
+  "selected_bead": {
+    "id": "bd-301",
+    "title": "Fix format.ts type error",
+    "status": "open",
+    "reason": "Direct modification required on src/utils/format.ts with highest pagerank among directly referenced Beads. It is ready and unblocked."
+  },
+  "commands_used": [
+    {
+      "command": "PATH=\"$PWD/bin:$PATH\" bv --robot-file-beads --path src/utils/format.ts",
+      "why": "Searched for Beads directly referencing the target file path."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "direct_file_reference",
+    "signals": [
+      { "bead_id": "bd-301", "metric": "pagerank", "value": 0.28, "source_command": "PATH=\"$PWD/bin:$PATH\" bv --robot-file-beads --path src/utils/format.ts" },
+      { "bead_id": "bd-301", "metric": "file_scope", "value": "direct", "source_command": "PATH=\"$PWD/bin:$PATH\" bv --robot-file-beads --path src/utils/format.ts" }
+    ],
+    "blockers": [],
+    "rejected_candidates": [
+      { "id": "bd-302", "reason": "Indirect reference to the file with lower pagerank, not the primary edit target." },
+      { "id": "bd-303", "reason": "Blocked and references file indirectly, cannot be primary selection." }
+    ]
+  },
+  "next_action": { "command": "br update bd-301 --status in_progress", "destructive": false },
+  "caveats": []
+}

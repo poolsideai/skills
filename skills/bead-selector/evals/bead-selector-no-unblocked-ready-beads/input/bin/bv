@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Implement secure config loader",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-305"],
+      "pagerank": 0.68,
+      "betweenness": 0.39,
+      "unblocks": ["bd-310"]
+    },
+    {
+      "id": "bd-305",
+      "title": "Add dependency injection framework",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["external-lib-update"],
+      "pagerank": 0.42,
+      "betweenness": 0.28,
+      "unblocks": ["bd-301"]
+    },
+    {
+      "id": "bd-308",
+      "title": "Refactor authentication middleware",
+      "status": "in_progress",
+      "ready": false,
+      "blocked": false,
+      "pagerank": 0.21,
+      "betweenness": 0.15
+    }
+  ],
+  "blockers": [
+    { "id": "bd-305", "blocks": ["bd-301"] }
+  ],
+  "health": { "cycles": [], "density": 0.31 }
+}
+JSON
+    ;;
+  --robot-plan)
+    cat <<'JSON'
+{
+  "tracks": [
+    {
+      "name": "auth-refactor",
+      "ready": [],
+      "blocked": ["bd-301", "bd-305"]
+    }
+  ]
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

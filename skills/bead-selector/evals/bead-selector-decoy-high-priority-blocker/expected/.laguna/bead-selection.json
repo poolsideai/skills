@@ -1,0 +1,34 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Pick the most impactful Bead to work on now.",
+  "mode": "cycle_break",
+  "selected_bead": {
+    "id": "bd-309",
+    "title": "Resolve context dependency loop",
+    "status": "open",
+    "reason": "Graph is in a cycle (bd-301->bd-303->bd-302->bd-301). This Bead is ready, has modest metrics, but breaks the cycle and unblocks all decoys with inflated priority values."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Detected cycle in health.cycles, identified ready cycle-breaking candidate."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "cycle_break_ready",
+    "signals": [
+      { "bead_id": "bd-309", "metric": "unblocks", "value": 3, "source_command": "bv --robot-triage" }
+    ],
+    "blockers": [
+      { "id": "bd-301", "blocks": ["bd-301", "bd-303"] },
+      { "id": "bd-303", "blocks": ["bd-302"] }
+    ],
+    "rejected_candidates": [
+      { "id": "bd-301", "reason": "Self-blocked and part of cycle; high PageRank but not actionable." },
+      { "id": "bd-302", "reason": "Blocked by bd-303 and part of cycle; 'CRITICAL BLOCKER' title is misleading." },
+      { "id": "bd-303", "reason": "Blocked by bd-301 and part of cycle; 'EMERGENCY PATCH' priority inflated artificially." }
+    ]
+  },
+  "next_action": { "command": "br update bd-309 --status in_progress", "destructive": false },
+  "caveats": []
+}

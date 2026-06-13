@@ -1,0 +1,34 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Choose the first Bead to handle when graph health looks suspicious.",
+  "mode": "cycle_break",
+  "selected_bead": {
+    "id": "bd-303",
+    "title": "Break stale import dependency cycle",
+    "status": "open",
+    "reason": "Robot insights reports a dependency cycle and recommends bd-303 as the cycle-break Bead before ordinary feature work."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Saw graph health warning and candidate recommendations."
+    },
+    {
+      "command": "bv --robot-insights",
+      "why": "Confirmed the dependency cycle and the recommended cycle-break Bead."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "cycle_break",
+    "signals": [
+      { "bead_id": "bd-303", "metric": "betweenness", "value": 0.67, "source_command": "bv --robot-insights" },
+      { "bead_id": "bd-303", "metric": "cycle_break_recommended", "value": true, "source_command": "bv --robot-insights" }
+    ],
+    "blockers": [],
+    "rejected_candidates": [
+      { "id": "bd-302", "reason": "Attractive feature work, but graph health must be repaired first." }
+    ]
+  },
+  "next_action": { "command": "br update bd-303 --status in_progress", "destructive": false },
+  "caveats": []
+}

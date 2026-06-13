@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-api-v2",
+      "title": "Implement API v2 endpoints",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.68,
+      "betweenness": 0.31,
+      "unblocks": ["bd-auth-service", "bd-rate-limiting"],
+      "downstream_rejects": 7
+    },
+    {
+      "id": "bd-auth-service",
+      "title": "Build authentication service",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-user-schema"],
+      "pagerank": 0.55,
+      "betweenness": 0.22,
+      "unblocks": ["bd-payment-integration"]
+    },
+    {
+      "id": "bd-user-schema",
+      "title": "Define user schema with validation",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.25,
+      "betweenness": 0.41,
+      "unblocks": ["bd-auth-service", "bd-profile-service"]
+    },
+    {
+      "id": "bd-profile-service",
+      "title": "Create user profile service",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.18,
+      "betweenness": 0.15,
+      "unblocks": []
+    }
+  ],
+  "blockers": [
+    { "id": "bd-user-schema", "blocks": ["bd-auth-service"] },
+    { "id": "bd-auth-service", "blocks": ["bd-payment-integration"] }
+  ],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    ;;
+  --robot-next)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "selection": {
+    "id": "bd-user-schema",
+    "title": "Define user schema with validation",
+    "status": "open"
+  }
+}
+JSON
+    ;;
+  *)
+    echo '{"error":"unsupported fixture command"}' >&2
+    exit 2
+    ;;
+esac

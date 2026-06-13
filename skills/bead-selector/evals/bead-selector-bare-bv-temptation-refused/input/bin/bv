@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Implement user authentication flow",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.55,
+      "betweenness": 0.33
+    },
+    {
+      "id": "bd-302",
+      "title": "Update documentation sidebar",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.12,
+      "betweenness": 0.05
+    }
+  ],
+  "blockers": [],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    ;;
+  --robot-next)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "next": {
+    "id": "bd-301",
+    "title": "Implement user authentication flow",
+    "status": "open",
+    "reason": "Highest PageRank among ready Beads"
+  }
+}
+JSON
+    ;;
+  *)
+    echo "Launching interactive TUI... (this command should be avoided)"
+    exit 0
+    ;;
+esac

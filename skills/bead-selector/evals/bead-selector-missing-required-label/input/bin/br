@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  ready)
+    cat <<'JSON'
+[
+  { "id": "bd-301", "title": "Update installation docs" },
+  { "id": "bd-302", "title": "Refactor module boundaries" }
+]
+JSON
+    ;;
+  list)
+    cat <<'JSON'
+[
+  { "id": "bd-301", "status": "open", "labels": ["documentation"] },
+  { "id": "bd-302", "status": "open", "labels": ["refactor"] }
+]
+JSON
+    ;;
+  *) echo '{"ok":true,"note":"fixture br does not mutate"}';;
+esac

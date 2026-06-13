@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  ready)
+    cat <<'JSON'
+[
+  {"id": "bd-305", "title": "Local configuration loader fix"}
+]
+JSON
+    ;;
+  list)
+    cat <<'JSON'
+[
+  {"id": "bd-301", "status": "open"},
+  {"id": "bd-305", "status": "open"},
+  {"id": "bd-310", "status": "open"}
+]
+JSON
+    ;;
+  *)
+    echo "{\"ok\":true,\"note\":\"fixture br does not mutate\"}"
+    ;;
+esac

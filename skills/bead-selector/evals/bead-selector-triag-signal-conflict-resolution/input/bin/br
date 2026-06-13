@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  list)
+    cat <<'JSON'
+[
+  { "id": "bd-api-v2", "status": "open" },
+  { "id": "bd-auth-service", "status": "open" },
+  { "id": "bd-user-schema", "status": "open" },
+  { "id": "bd-profile-service", "status": "open" }
+]
+JSON
+    ;;
+  ready)
+    cat <<'JSON'
+[
+  { "id": "bd-api-v2", "title": "Implement API v2 endpoints" },
+  { "id": "bd-user-schema", "title": "Define user schema with validation" },
+  { "id": "bd-profile-service", "title": "Create user profile service" }
+]
+JSON
+    ;;
+  *)
+    echo '{"ok":true,"note":"fixture br does not mutate"}'    ;;
+esac

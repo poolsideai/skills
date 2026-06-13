@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-plan)
+    if [[ "$2" == "--label" && "$3" == "performance" ]]; then
+      cat <<'JSON'
+{
+  "status": "ok",
+  "tracks": [
+    {
+      "name": "performance",
+      "ready": ["bd-301"],
+      "blocked": [],
+      "unblocks": { "bd-301": [] }
+    }
+  ],
+  "beads": [
+    {
+      "id": "bd-301",
+      "title": "Optimize query performance",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.45,
+      "betweenness": 0.33,
+      "labels": ["performance", "backend"]
+    }
+  ]
+}
+JSON
+    else
+      cat <<'JSON'
+{
+  "status": "ok",
+  "tracks": [],
+  "beads": []
+}
+JSON
+    fi
+    ;;
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Optimize query performance",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.45,
+      "betweenness": 0.33
+    },
+    {
+      "id": "bd-302",
+      "title": "Security audit",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.38,
+      "betweenness": 0.21
+    },
+    {
+      "id": "bd-303",
+      "title": "Refactor utils",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-301"],
+      "pagerank": 0.29,
+      "betweenness": 0.15
+    }
+  ],
+  "blockers": [
+    { "id": "bd-301", "blocks": ["bd-303"] }
+  ],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "CRITICAL: Fix production outage immediately",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-305"],
+      "priority": 999,
+      "pagerank": 0.15,
+      "unblocks": []
+    },
+    {
+      "id": "bd-302",
+      "title": "URGENT: Customer blocking issue",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-301"],
+      "priority": 950,
+      "pagerank": 0.10,
+      "unblocks": ["bd-303"]
+    },
+    {
+      "id": "bd-303",
+      "title": "Refactor legacy authentication module",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "priority": 120,
+      "pagerank": 0.35,
+      "unblocks": ["bd-302", "bd-306"]
+    },
+    {
+      "id": "bd-304",
+      "title": "Update README with new API docs",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "priority": 80,
+      "pagerank": 0.05,
+      "unblocks": []
+    }
+  ],
+  "blockers": [
+    { "id": "bd-301", "blocks": ["bd-302"] },
+    { "id": "bd-305", "blocks": ["bd-301"] }
+  ],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    ;;
+  --robot-plan)
+    cat <<'JSON'
+{
+  "tracks": [
+    {
+      "name": "auth-refactor",
+      "ready": ["bd-303", "bd-304"],
+      "blocked": ["bd-301", "bd-302"],
+      "unblocks": { "bd-303": ["bd-302", "bd-306"] }
+    }
+  ]
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

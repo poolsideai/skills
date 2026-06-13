@@ -1,0 +1,32 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Pick the next Bead to claim from the fixture backlog.",
+  "mode": "next",
+  "selected_bead": {
+    "id": "bd-102",
+    "title": "Stabilize validator result contract",
+    "status": "open",
+    "reason": "It is ready, has the highest PageRank among unblocked Beads, and unblocks bd-104 and bd-105."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Compared recommendations, blockers, readiness, and graph health."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "ready_high_pagerank",
+    "signals": [
+      { "bead_id": "bd-102", "metric": "pagerank", "value": 0.42, "source_command": "bv --robot-triage" },
+      { "bead_id": "bd-102", "metric": "unblocks", "value": 2, "source_command": "bv --robot-triage" }
+    ],
+    "blockers": [
+      { "id": "bd-102", "blocks": ["bd-101", "bd-104", "bd-105"] }
+    ],
+    "rejected_candidates": [
+      { "id": "bd-101", "reason": "Higher raw PageRank, but blocked by bd-102." }
+    ]
+  },
+  "next_action": { "command": "br update bd-102 --status in_progress", "destructive": false },
+  "caveats": []
+}

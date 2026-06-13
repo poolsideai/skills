@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Implement remote API integration",
+      "status": "open",
+      "ready": true,
+      "blocked": true,
+      "blocked_by": ["org/repo:bd-999"],
+      "pagerank": 0.65,
+      "betweenness": 0.38
+    },
+    {
+      "id": "bd-305",
+      "title": "Local configuration loader fix",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.42,
+      "betweenness": 0.21,
+      "unblocks": ["bd-310"]
+    },
+    {
+      "id": "bd-310",
+      "title": "UI component for settings",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-305"],
+      "pagerank": 0.31,
+      "betweenness": 0.15
+    }
+  ],
+  "blockers": [
+    {"id": "bd-305", "blocks": ["bd-310"]}
+  ],
+  "health": {"cycles": [], "density": 0.18}
+}
+JSON
+    ;;
+  --robot-insights)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "insights": [
+    {"type": "cross_repo_blocker", "bead_id": "bd-301", "remote_ref": "org/repo:bd-999"}
+  ]
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

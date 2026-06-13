@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-file-beads)
+    if [[ "${2:-}" == "--path" && "${3:-}" == "src/utils/format.ts" ]]; then
+      cat <<'JSON'
+{
+  "status": "ok",
+  "file_beads": [
+    {
+      "id": "bd-301",
+      "title": "Fix format.ts type error",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.28,
+      "file_references": [
+        { "path": "src/utils/format.ts", "scope": "direct", "line_range": "45-52" }
+      ],
+      "why": "direct modification needed on the specified file"
+    },
+    {
+      "id": "bd-302",
+      "title": "Update formatters to use new API",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.15,
+      "file_references": [
+        { "path": "src/utils/format.ts", "scope": "indirect", "line_range": "1-20" }
+      ]
+    },
+    {
+      "id": "bd-303",
+      "title": "Add tests for format utils",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-301"],
+      "pagerank": 0.19,
+      "file_references": [
+        { "path": "src/utils/format.ts", "scope": "usage", "line_range": "80-95" }
+      ]
+    }
+  ],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    else
+      cat <<'JSON'
+{
+  "status": "ok",
+  "file_beads": [],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    fi
+    ;;
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    { "id": "bd-301", "title": "Fix format.ts type error", "status": "open", "ready": true, "blocked": false, "pagerank": 0.28 }
+  ],
+  "blockers": [],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

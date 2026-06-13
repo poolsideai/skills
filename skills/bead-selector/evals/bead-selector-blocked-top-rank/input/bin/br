@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  ready)
+    cat <<'JSON'
+[
+  { "id": "bd-204", "title": "Add project context migration shim" },
+  { "id": "bd-207", "title": "Rename stale docs page" }
+]
+JSON
+    ;;
+  list)
+    cat <<'JSON'
+[
+  { "id": "bd-201", "status": "open" },
+  { "id": "bd-204", "status": "open" },
+  { "id": "bd-207", "status": "open" }
+]
+JSON
+    ;;
+  *)
+    echo "{\"ok\":true,\"note\":\"fixture br does not mutate\"}"
+    ;;
+esac

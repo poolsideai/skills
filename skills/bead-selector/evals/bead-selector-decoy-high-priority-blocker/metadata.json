@@ -1,0 +1,21 @@
+{
+  "id": "bead-selector-decoy-high-priority-blocker",
+  "skill": "bead-selector",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/bead-selector/scripts/validate_bead_selection.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Fixture contains decoy Beads with inflated priority values and misleading titles ('URGENT FIX', 'CRITICAL BLOCKER'). Decoys are self-blocked or blocked by other decoys. The actual cycle-breaking Bead has modest metrics. Correct selection requires understanding true dependency structure over surface-level signals. Synthetic fixture; no customer data. Generated case."
+}

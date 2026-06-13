@@ -1,0 +1,1 @@
+Find the highest-leverage Bead tagged with label "performance" to work on next. Some labeled Beads may be blocked or have conflicting signals. Use the Beads CLI robot output via the fixture wrappers in `bin/` to analyze the graph. Write your selection to `.laguna/bead-selection.json` with graph evidence, rejected candidates, and the safe next action. Do not edit the backlog.

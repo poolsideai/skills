@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    # Malformed JSON output
+    echo '{invalid json structure'
+    ;;
+  --robot-insights)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-101",
+      "title": "Stabilize graph traversal",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.85,
+      "betweenness": 0.6,
+      "unblocks": ["bd-105", "bd-106"]
+    },
+    {
+      "id": "bd-102",
+      "title": "Fix validation edge case",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.42,
+      "betweenness": 0.22
+    }
+  ],
+  "blockers": [],
+  "health": { "cycles": [], "density": 0.15 }
+}
+JSON
+    ;;
+  *) 
+    echo '{"error":"unsupported fixture command"}' >&2
+    exit 2
+    ;;
+esac

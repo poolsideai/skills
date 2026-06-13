@@ -1,0 +1,21 @@
+{
+  "id": "bead-selector-file-beads-exact-match",
+  "skill": "bead-selector",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/bead-selector/scripts/validate_bead_selection.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "A workspace with Beads where user queries a specific file. Only one Bead has exact file association, others have indirect references. Tests precise file-match selection. Synthetic fixture; no customer data. Generated case."
+}

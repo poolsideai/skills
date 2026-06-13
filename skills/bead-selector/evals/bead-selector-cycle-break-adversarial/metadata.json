@@ -1,0 +1,13 @@
+{
+  "id": "bead-selector-cycle-break-adversarial",
+  "skill": "bead-selector",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/bead-selector/scripts/validate_bead_selection.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Adversarial graph-health case: ordinary triage includes attractive feature work, but bv insights reports a dependency cycle. The correct selection is the cycle-break Bead."
+}
