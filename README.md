@@ -44,11 +44,33 @@ Publish-ready skills:
 - [`laguna-task-contract`](skills/laguna-task-contract/SKILL.md) turns a broad engineering request into a bounded worker or router contract.
 - [`repo-map`](skills/repo-map/SKILL.md) writes `.laguna/repo-map.json`, an evidence-backed map of a repository.
 
-Work in progress:
+Skills with rough evals:
 
-- [`workspace-inventory`](skills/workspace-inventory/SKILL.md) has a schema and validator, but no eval cases yet. Repo-wide `check_eval_cases.py` is expected to fail until it has at least three cases, including one adversarial case.
+- [`bead-selector`](skills/bead-selector/SKILL.md) writes `.laguna/bead-selection.json`, the validator-graded record of which local Bead to pick next from `bv`/`br` robot-mode output. The dedicated suite at [`evals/suites/skill-bead-selector.json`](evals/suites/skill-bead-selector.json) covers multiple cases including adversarial ones; treat the resulting numbers as internal/directional.
+- [`workspace-inventory`](skills/workspace-inventory/SKILL.md) writes `.laguna/workspace-inventory.json`. The dedicated suite at [`evals/suites/skill-workspace-inventory.json`](evals/suites/skill-workspace-inventory.json) covers six cases — flat workspaces, nested Python and Rust workspaces, and two adversarial "good-failure" cases (`.laguna` listed in entries, shallow-only counts on a Go monorepo). The validator enforces schema, entries-match-tree, lexicographic sorting of `entries[]`, recursive directory file counts, and `total_files`. Eval numbers are internal/directional.
 
 Plan of record: [`docs/plans/laguna-skills-v0-2026-06-10.md`](docs/plans/laguna-skills-v0-2026-06-10.md).
+
+## Task tracking and Beads
+
+This repo does not initialize a Beads tracker in the checkout. There is no
+`.beads/` directory here, and stabilization work does not run `br init` or copy
+`.beads` from another checkout. Beads shows up in two distinct, deliberate ways:
+
+- **Repo-local grading**: [`skills/bead-selector`](skills/bead-selector/SKILL.md)
+  is the authoritative repo truth for "what Bead should I pick next?" behavior.
+  Its eval suite synthesizes Beads graphs inside fixture workspaces and grades
+  the model's selection artifact; it does not depend on a live `.beads/` here.
+- **External source skills used by onboarding**: the workbench onboarding page
+  ([`ui/views/onboard.js`](ui/views/onboard.js)) starts readiness checks
+  against external Beads source skills under `~/.codex/skills/beads-bv` and
+  `~/.codex/skills/beads-workflow`. Those paths live outside this checkout. If
+  they are missing on a given machine, the onboarding run records the failure
+  rather than implying repo-local Beads state.
+
+If owning Beads inside this repo ever becomes the right choice, that is a
+separate, approval-gated decision made before any `.beads/` initialization or
+restore — not part of this stabilization pass.
 
 ## Prerequisites
 
@@ -105,16 +127,20 @@ bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-runs
 ```
 
-For Smithers workflow experiments, initialize the demo project first:
+Smithers is installed for this repo as a root workflow pack under `.smithers/`.
+Agents should use it for durable multi-step, long-running, approval-gated, or
+parallel work:
 
 ```bash
-cd experiments/smithers-pool
-bun install
-bun run setup
-mkdir -p .smithers
-cd ../..
-bun ui/server.ts
+bunx smithers-orchestrator workflow doctor --format md
+bunx smithers-orchestrator workflow list --format md
+bunx smithers-orchestrator starters --format md
 ```
+
+The project-scoped Smithers command skills live under `.agents/skills/`, with
+detected-agent symlink mirrors under `.claude/skills/`, `.goose/skills/`, and
+`.openhands/skills/`. The MCP registration is `.mcp.json`. Details and the
+PoolAgent experiment path are in [`docs/smithers.md`](docs/smithers.md).
 
 Run the checks that should be green now:
 
@@ -130,17 +156,30 @@ Run eval-case validation when you are working on case coverage:
 uv run scripts/check_eval_cases.py
 ```
 
-Current state: this may flag WIP skills with incomplete eval-case coverage; currently
-`workspace-inventory` has no cases yet.
+Current state: `check_eval_cases.py` is expected to pass for the v0 bundle —
+`ci-log-reducer`, `laguna-task-contract`, `repo-map`, `bead-selector`, and
+`workspace-inventory` all carry the required minimum cases (including
+adversarial cases). It will fail for any future WIP skill that lacks coverage.
 
 Repo check scripts exit `0` when checks pass, `1` for check violations, and `2` for argument
 or usage errors. Use `--json` when another tool needs a `repo-check-result.v1` payload on
 stdout. The payload includes `schema_version`, `tool`, `status`, `counts`,
 `violation_count`, and `violations[]` entries with `path`, `check`, and `message`.
 
-## Zero to one: optimize an existing skill for Laguna
+## Zero to one: onboard and optimize an existing skill for Laguna
 
-Today, importing a skill from outside this repo is a manual path. The planned `onboard --source <dir>` command is not shipped yet, so use this workflow:
+Use onboarding when the source skill is outside this repo or needs a quarantined
+review bundle before promotion:
+
+```bash
+bun ui/bench.ts onboard --source <dir>
+bun ui/bench.ts onboard-prepare --source <dir> --skill <name> --import-source
+bun ui/bench.ts onboard-review --run-dir runs/onboard/<name>/<stamp>
+```
+
+Onboarding writes reports, imported baselines, generated drafts, and agent
+reviews under `runs/onboard/`; it does not promote files automatically. For a
+fully manual path, use this workflow:
 
 1. **Create a skill folder.** Copy the existing skill into `skills/<name>/SKILL.md`. Keep the name lowercase and kebab-case.
 2. **Make the output gradeable.** Add an output schema in `skills/<name>/schemas/` and a validator in `skills/<name>/scripts/validate_*.ts`. If the skill cannot name a deterministic artifact or diff target, it is not ready for optimization here.
@@ -168,7 +207,9 @@ uv run harness/optimize/gepa_skill.py --skill <name> --max-metric-calls 60
 bun ui/bench.ts optimize-propose --skill <name> --run-dir runs/optimize/<name>/<stamp>
 ```
 
-If the existing skill has `references/` or helper scripts, copy them into `skills/<name>/` too. The current GEPA pilot optimizes `SKILL.md`; multi-file optimization is planned, not shipped.
+If the existing skill has `references/` or helper scripts, copy them into
+`skills/<name>/` too. GEPA can now work with multi-file skill components, but
+manual review and repo checks are still required before promotion.
 
 ## Eval dry run
 

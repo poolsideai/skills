@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  ready)
+    cat <<'JSON'
+[
+  { "id": "bd-309", "title": "Resolve context dependency loop" },
+  { "id": "bd-310", "title": "Update documentation" }
+]
+JSON
+    ;;
+  list)
+    cat <<'JSON'
+[
+  { "id": "bd-301", "status": "open" },
+  { "id": "bd-302", "status": "open" },
+  { "id": "bd-303", "status": "open" },
+  { "id": "bd-309", "status": "open" },
+  { "id": "bd-310", "status": "open" }
+]
+JSON
+    ;;
+  *)
+    echo "{\"ok\":true,\"note\":\"fixture br does not mutate\"}"
+    ;;
+esac

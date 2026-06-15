@@ -8,10 +8,11 @@ ids, so every litellm provider works out of the box:
 - OpenRouter:  ``openrouter/anthropic/claude-sonnet-4.5`` (OPENROUTER_API_KEY,
                optional OPENROUTER_API_BASE override)
 - Any OpenAI-compatible endpoint (vLLM, llama.cpp server, LiteLLM proxy,
-  OpenRouter-as-generic, tenant gateways): pass ``api_base`` and litellm's
-  ``openai/<served-model-name>`` convention is applied automatically when the
-  model id has no provider prefix. The key comes from ``api_key_env`` (your
-  choice of env var) or litellm's own resolution (OPENAI_API_KEY).
+  OpenRouter-as-generic, tenant gateways): pass ``api_base`` and the model id
+  that endpoint serves. The wrapper uses LiteLLM's custom OpenAI provider path
+  so ids such as ``openai/gpt-5.5`` are sent literally instead of being stripped
+  to ``gpt-5.5``. The key comes from ``api_key_env`` (your choice of env var)
+  or litellm's own resolution (OPENAI_API_KEY).
 
 This module deliberately has NO import-time litellm dependency cost beyond
 the callers that already declare it (PEP 723 scripts with ``litellm`` in
@@ -33,7 +34,9 @@ def resolve_model(model: str, api_base: str | None) -> str:
     """litellm routing: a bare model name + explicit api_base means an
     OpenAI-compatible endpoint, which litellm addresses as ``openai/<name>``.
     Ids that already carry a provider prefix (``openrouter/...``,
-    ``anthropic/...``, ``openai/...``) pass through untouched."""
+    ``anthropic/...``, ``openai/...``) pass through untouched. ``make_lm`` now
+    bypasses this helper for explicit api_base calls so gateway-served ids are
+    preserved literally."""
     if api_base and "/" not in model:
         return f"openai/{model}"
     return model
@@ -55,7 +58,11 @@ def make_lm(
     """
     import litellm  # deferred: callers are PEP 723 scripts that declare it
 
-    resolved = resolve_model(model, api_base)
+    # For explicit OpenAI-compatible gateways, LiteLLM's normal ``openai/...``
+    # provider route strips the provider prefix before sending the request. The
+    # Poolside gateway serves ids such as ``openai/gpt-5.5`` literally, so use
+    # the custom OpenAI provider path to preserve the caller's model id.
+    resolved = model if api_base else resolve_model(model, api_base)
     api_key: str | None = None
     if api_key_env:
         api_key = os.environ.get(api_key_env)
@@ -69,6 +76,7 @@ def make_lm(
         kwargs: dict[str, Any] = {}
         if api_base:
             kwargs["api_base"] = api_base
+            kwargs["custom_llm_provider"] = "custom_openai"
         if api_key:
             kwargs["api_key"] = api_key
         if max_tokens is not None:

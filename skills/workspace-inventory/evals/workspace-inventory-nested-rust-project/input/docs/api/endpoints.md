@@ -1,0 +1,3 @@
+# Endpoints
+
+Placeholder endpoint reference.

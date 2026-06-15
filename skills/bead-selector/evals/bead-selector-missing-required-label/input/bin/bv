@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    { "id": "bd-301", "title": "Update installation docs", "status": "open", "ready": true, "blocked": false, "pagerank": 0.18, "labels": ["documentation"] },
+    { "id": "bd-302", "title": "Refactor module boundaries", "status": "open", "ready": true, "blocked": false, "pagerank": 0.22, "labels": ["refactor"] }
+  ],
+  "blockers": [],
+  "health": { "cycles": [], "density": 0.15 }
+}
+JSON
+    ;;
+  --robot-label-attention)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "label": "critical-bug",
+  "recommendations": [],
+  "message": "No Beads found with label 'critical-bug'."
+}
+JSON
+    ;;
+  *)
+    echo '{"error":"unsupported fixture command"}' >&2
+    exit 2
+    ;;
+esac

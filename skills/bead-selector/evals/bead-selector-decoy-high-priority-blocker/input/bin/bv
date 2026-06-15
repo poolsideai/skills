@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "URGENT FIX",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-301"],
+      "pagerank": 0.95,
+      "betweenness": 0.88,
+      "priority": 100,
+      "unblocks": []
+    },
+    {
+      "id": "bd-302",
+      "title": "CRITICAL BLOCKER",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-303"],
+      "pagerank": 0.92,
+      "betweenness": 0.85,
+      "priority": 98,
+      "unblocks": ["bd-303"]
+    },
+    {
+      "id": "bd-303",
+      "title": "EMERGENCY PATCH",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-301"],
+      "pagerank": 0.89,
+      "betweenness": 0.82,
+      "priority": 95,
+      "unblocks": ["bd-302"]
+    },
+    {
+      "id": "bd-309",
+      "title": "Resolve context dependency loop",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.15,
+      "betweenness": 0.22,
+      "priority": 30,
+      "unblocks": ["bd-301", "bd-302", "bd-303"],
+      "why": "cycle breaker"
+    },
+    {
+      "id": "bd-310",
+      "title": "Update documentation",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.05,
+      "betweenness": 0.02,
+      "priority": 10,
+      "unblocks": []
+    }
+  ],
+  "blockers": [
+    { "id": "bd-301", "blocks": ["bd-301", "bd-303"] },
+    { "id": "bd-303", "blocks": ["bd-302"] }
+  ],
+  "health": {
+    "cycles": [["bd-301", "bd-302", "bd-303"]],
+    "density": 0.75,
+    "needs_cycle_breaking": true
+  }
+}
+JSON
+    ;;
+  --robot-insights)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "cycles": [["bd-301", "bd-302", "bd-303"]],
+  "recommendations": [
+    { "id": "bd-309", "reason": "breaks cycle and is ready" }
+  ]
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

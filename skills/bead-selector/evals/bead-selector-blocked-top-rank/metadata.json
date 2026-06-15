@@ -1,0 +1,13 @@
+{
+  "id": "bead-selector-blocked-top-rank",
+  "skill": "bead-selector",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/bead-selector/scripts/validate_bead_selection.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "The highest PageRank Bead is blocked. The correct pick is the unblocked dependency that clears it; this catches models that sort by priority or PageRank alone."
+}

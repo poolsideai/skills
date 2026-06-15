@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Optimize database query for user profiles",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "labels": ["performance"],
+      "pagerank": 0.25,
+      "betweenness": 0.18
+    },
+    {
+      "id": "bd-302",
+      "title": "Cache expensive report aggregation",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "labels": ["performance", "reports"],
+      "pagerank": 0.32,
+      "betweenness": 0.22
+    },
+    {
+      "id": "bd-303",
+      "title": "Refactor N+1 query in dashboard loader",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-304"],
+      "labels": ["performance"],
+      "pagerank": 0.41,
+      "betweenness": 0.35
+    }
+  ],
+  "blockers": [
+    { "id": "bd-304", "blocks": ["bd-303"] }
+  ],
+  "health": { "cycles": [], "density": 0.15 }
+}
+JSON
+    ;;
+  --robot-label-attention)
+    cat <<'JSON'
+{
+  "label": "performance",
+  "analysis": {
+    "ready_count": 2,
+    "blocked_count": 1,
+    "highest_pagerank_ready": "bd-302",
+    "highest_pagerank_blocked": "bd-303"
+  },
+  "beads": [
+    {
+      "id": "bd-301",
+      "title": "Optimize database query for user profiles",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "labels": ["performance"],
+      "pagerank": 0.25,
+      "betweenness": 0.18,
+      "unblocks": []
+    },
+    {
+      "id": "bd-302",
+      "title": "Cache expensive report aggregation",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "labels": ["performance", "reports"],
+      "pagerank": 0.32,
+      "betweenness": 0.22,
+      "unblocks": ["bd-315"]
+    },
+    {
+      "id": "bd-303",
+      "title": "Refactor N+1 query in dashboard loader",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "labels": ["performance"],
+      "pagerank": 0.41,
+      "betweenness": 0.35,
+      "blocked_by": ["bd-304"],
+      "unblocks": []
+    }
+  ],
+  "conflict_note": "bd-303 has highest PageRank but is blocked; bd-302 is highest PageRank among ready Beads"
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

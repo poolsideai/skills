@@ -1,0 +1,31 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Select Beads from the performance optimization area.",
+  "mode": "plan",
+  "selected_bead": {
+    "id": "bd-301",
+    "title": "Optimize query performance",
+    "status": "open",
+    "reason": "Only ready Bead in the performance area; ready, unblocked, and directly matches the requested label."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-plan --label performance",
+      "why": "Focused on the performance area as specified in the request."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "label_matched_ready_bead",
+    "signals": [
+      { "bead_id": "bd-301", "metric": "pagerank", "value": 0.45, "source_command": "bv --robot-plan --label performance" },
+      { "bead_id": "bd-301", "metric": "ready", "value": true, "source_command": "bv --robot-plan --label performance" }
+    ],
+    "blockers": [],
+    "rejected_candidates": [
+      { "id": "bd-302", "reason": "Not in the requested performance area despite being ready." },
+      { "id": "bd-303", "reason": "Blocked and not in the performance area." }
+    ]
+  },
+  "next_action": { "command": "br update bd-301 --status in_progress", "destructive": false },
+  "caveats": []
+}

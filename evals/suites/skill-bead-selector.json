@@ -1,0 +1,23 @@
+{
+  "name": "skill-bead-selector",
+  "cases": [
+    "skills/bead-selector/evals/bead-selector-bare-bv-temptation-refused",
+    "skills/bead-selector/evals/bead-selector-blocked-top-rank",
+    "skills/bead-selector/evals/bead-selector-cross-repository-dependency",
+    "skills/bead-selector/evals/bead-selector-cycle-break-adversarial",
+    "skills/bead-selector/evals/bead-selector-decoy-high-priority-blocker",
+    "skills/bead-selector/evals/bead-selector-decoy-priority-inflation",
+    "skills/bead-selector/evals/bead-selector-empty-graph-no-beads",
+    "skills/bead-selector/evals/bead-selector-file-beads-exact-match",
+    "skills/bead-selector/evals/bead-selector-file-beads-multiple-matches",
+    "skills/bead-selector/evals/bead-selector-foundation-next",
+    "skills/bead-selector/evals/bead-selector-insights-metric-corruption",
+    "skills/bead-selector/evals/bead-selector-label-focus-conflicting-signals",
+    "skills/bead-selector/evals/bead-selector-missing-required-label",
+    "skills/bead-selector/evals/bead-selector-no-unblocked-ready-beads",
+    "skills/bead-selector/evals/bead-selector-plan-specific-area-focus",
+    "skills/bead-selector/evals/bead-selector-robot-command-malformed-output",
+    "skills/bead-selector/evals/bead-selector-search-query-fuzzy-match",
+    "skills/bead-selector/evals/bead-selector-triag-signal-conflict-resolution"
+  ]
+}

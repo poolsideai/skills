@@ -1,8 +1,20 @@
 # Laguna Skills v0: Skill Library + Rough-but-Real Eval Loop
 
-> Status: Ready for execution (deep-plan 2026-06-10; design-critiqued — see `docs/reviews/laguna-skills-v0-critique-2026-06-10.md`)
+> Status: Historical plan of record (deep-plan 2026-06-10; design-critiqued — see `docs/reviews/laguna-skills-v0-critique-2026-06-10.md`)
 > Sources: `.resources/investigations/laguna-skills-and-harness-substrate-2026-06-10.md` (substrate),
 > `laguna-skills-plan-approach.md` (Plan A — what to build), `laguna-skills-plus-pool.md` (Plan B — PR1 only for v0).
+>
+> **Current deltas from this plan** (treat the body below as the original v0 scope):
+> - `bead-selector` was added after this plan and ships a full dedicated suite at
+>   `evals/suites/skill-bead-selector.json`.
+> - `workspace-inventory` has minimum eval coverage and a dedicated suite at
+>   `evals/suites/skill-workspace-inventory.json`; the validator now enforces
+>   lexicographic sorting of `entries[]` per the SKILL.md output contract.
+> - Eval evidence remains **internal and directional** under the v0 reporting
+>   policy (`docs/eval-methodology.md` §7) — no publishable lift claims.
+> - Smithers command policy is `bunx smithers-orchestrator ...`
+>   (`docs/smithers.md`); the workbench resolves the runner local-first with a
+>   `bunx` fallback (`ui/lib.ts → resolveSmithersRunner`).
 
 ## Goal
 

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [],
+  "blockers": [],
+  "health": {"cycles": [], "density": 0}
+}
+JSON
+    ;;
+  --robot-insights)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "insights": [],
+  "graph_notes": "empty graph - no beads present"
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

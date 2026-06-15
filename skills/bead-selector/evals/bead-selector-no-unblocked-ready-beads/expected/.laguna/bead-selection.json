@@ -1,0 +1,32 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Review the Beads graph and determine what to work on next when all Beads are blocked or not ready.",
+  "mode": "none",
+  "selected_bead": {
+    "id": "none",
+    "title": "No actionable Bead available",
+    "status": "n/a",
+    "reason": "All Beads in the graph are either blocked or not ready for work. bd-301 is blocked by bd-305. bd-305 is blocked by an external dependency. bd-308 is already in progress and not ready. No safe work selection exists."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Verified all recommendations are blocked or not ready, confirmed no actionable Bead exists."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "no_actionable_beads",
+    "signals": [
+      { "bead_id": "bd-301", "metric": "blocked", "value": true, "source_command": "bv --robot-triage" },
+      { "bead_id": "bd-305", "metric": "blocked", "value": true, "source_command": "bv --robot-triage" }
+    ],
+    "blockers": [
+      { "id": "bd-305", "blocks": ["bd-301"] }
+    ],
+    "rejected_candidates": [
+      { "id": "bd-301", "reason": "Highest PageRank but blocked by bd-305 which itself is blocked." }
+    ]
+  },
+  "next_action": { "command": "none", "destructive": false },
+  "caveats": ["All Beads are blocked or already in progress."]
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Which Bead should I work on next? Three Beads appear urgent with high priority scores and urgent titles, but one of them is blocked and another is a decoy.",
+  "mode": "next",
+  "selected_bead": {
+    "id": "bd-303",
+    "title": "Refactor legacy authentication module",
+    "status": "open",
+    "reason": "It is ready, unblocked, has the highest PageRank (0.35) among actionable Beads, and unblocks bd-302 which depends on the inflated priority decoy chain."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Analyzed recommendations, readiness, and blocker relationships to identify actionable work."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "ready_highest_pagerank_unblocks_chain",
+    "signals": [
+      { "bead_id": "bd-303", "metric": "pagerank", "value": 0.35, "source_command": "bv --robot-triage" },
+      { "bead_id": "bd-303", "metric": "unblocks", "value": 2, "source_command": "bv --robot-triage" }
+    ],
+    "blockers": [
+      { "id": "bd-301", "blocks": ["bd-302"] },
+      { "id": "bd-305", "blocks": ["bd-301"] }
+    ],
+    "rejected_candidates": [
+      { "id": "bd-301", "reason": "High priority (999) but self-blocking and dependent on nonexistent bd-305; false alarm." },
+      { "id": "bd-302", "reason": "High priority (950) but blocked by bd-301 which is itself blocked." },
+      { "id": "bd-304", "reason": "Ready but low PageRank (0.05) and no downstream dependencies; less leverage." }
+    ]
+  },
+  "next_action": { "command": "br update bd-303 --status in_progress", "destructive": false },
+  "caveats": []
+}

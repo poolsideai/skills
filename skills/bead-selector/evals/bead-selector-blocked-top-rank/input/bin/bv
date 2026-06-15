@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-201",
+      "title": "Ship unified project context index",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-204"],
+      "pagerank": 0.71,
+      "betweenness": 0.44,
+      "unblocks": ["bd-211", "bd-212"]
+    },
+    {
+      "id": "bd-204",
+      "title": "Add project context migration shim",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.36,
+      "betweenness": 0.52,
+      "unblocks": ["bd-201"],
+      "why": "ready bottleneck that clears the top-ranked work"
+    },
+    {
+      "id": "bd-207",
+      "title": "Rename stale docs page",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.09,
+      "betweenness": 0.01
+    }
+  ],
+  "blockers": [
+    { "id": "bd-204", "blocks": ["bd-201"] }
+  ],
+  "health": { "cycles": [], "density": 0.22 }
+}
+JSON
+    ;;
+  --robot-plan)
+    cat <<'JSON'
+{
+  "tracks": [
+    {
+      "name": "context-index",
+      "ready": ["bd-204"],
+      "blocked": ["bd-201"],
+      "unblocks": { "bd-204": ["bd-201"] }
+    }
+  ]
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

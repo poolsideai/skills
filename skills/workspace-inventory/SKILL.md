@@ -11,7 +11,7 @@ description: >-
   (entry names, kinds, file counts, total) is mechanically checkable against
   the real filesystem tree.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Workspace Inventory

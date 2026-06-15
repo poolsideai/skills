@@ -1,0 +1,32 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Select the best Bead to work on next given conflicting signals in triage output.",
+  "mode": "next",
+  "selected_bead": {
+    "id": "bd-user-schema",
+    "title": "Define user schema with validation",
+    "status": "open",
+    "reason": "It is ready, clears the blocker for bd-auth-service, and unblocks critical downstream work despite having lower PageRank than bd-api-v2."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Checked recommendations, readiness, blockers, and graph metrics."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "ready_blocks_critical_work",
+    "signals": [
+      { "bead_id": "bd-user-schema", "metric": "betweenness", "value": 0.41, "source_command": "bv --robot-triage" },
+      { "bead_id": "bd-user-schema", "metric": "unblocks", "value": 2, "source_command": "bv --robot-triage" }
+    ],
+    "blockers": [
+      { "id": "bd-user-schema", "blocks": ["bd-auth-service"] }
+    ],
+    "rejected_candidates": [
+      { "id": "bd-api-v2", "reason": "High PageRank but has 7 downstream rejected candidates and does not clear critical blockers." }
+    ]
+  },
+  "next_action": { "command": "br update bd-user-schema --status in_progress", "destructive": false },
+  "caveats": []
+}

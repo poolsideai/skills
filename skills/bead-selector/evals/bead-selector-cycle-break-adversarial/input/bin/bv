@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "warn",
+  "recommendations": [
+    {
+      "id": "bd-302",
+      "title": "Implement dashboard import UI",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.55,
+      "betweenness": 0.18
+    },
+    {
+      "id": "bd-303",
+      "title": "Break stale import dependency cycle",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.31,
+      "betweenness": 0.67,
+      "why": "graph health repair; cycle prevents reliable scheduling"
+    }
+  ],
+  "blockers": [],
+  "health": { "cycles": [["bd-301", "bd-302", "bd-303", "bd-301"]], "density": 0.34 }
+}
+JSON
+    ;;
+  --robot-insights)
+    cat <<'JSON'
+{
+  "status": "warn",
+  "Cycles": [["bd-301", "bd-302", "bd-303", "bd-301"]],
+  "density": 0.34,
+  "articulation": ["bd-303"],
+  "recommended_cycle_breaks": [
+    {
+      "id": "bd-303",
+      "title": "Break stale import dependency cycle",
+      "reason": "removes obsolete bd-303 -> bd-301 edge and restores acyclic plan"
+    }
+  ],
+  "metrics": {
+    "bd-302": { "pagerank": 0.55, "betweenness": 0.18 },
+    "bd-303": { "pagerank": 0.31, "betweenness": 0.67 }
+  }
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

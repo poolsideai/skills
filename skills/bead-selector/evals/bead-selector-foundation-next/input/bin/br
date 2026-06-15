@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  ready)
+    cat <<'JSON'
+[
+  { "id": "bd-102", "title": "Stabilize validator result contract" },
+  { "id": "bd-103", "title": "Refresh docs screenshots" }
+]
+JSON
+    ;;
+  list)
+    cat <<'JSON'
+[
+  { "id": "bd-101", "status": "open" },
+  { "id": "bd-102", "status": "open" },
+  { "id": "bd-103", "status": "open" }
+]
+JSON
+    ;;
+  *)
+    echo "{\"ok\":true,\"note\":\"fixture br does not mutate\"}"
+    ;;
+esac

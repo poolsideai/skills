@@ -1,0 +1,35 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Select the right Bead to work on next when --robot-triage returns malformed output.",
+  "mode": "triage",
+  "selected_bead": {
+    "id": "bd-101",
+    "title": "Stabilize graph traversal",
+    "status": "open",
+    "reason": "Selected after --robot-triage failed with malformed JSON. Fallback to --robot-insights identified bd-101 as ready with highest PageRank among unblocked candidates."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Initial triage command attempted but returned malformed output."
+    },
+    {
+      "command": "bv --robot-insights",
+      "why": "Fallback command used when --robot-triage failed to get valid graph data."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "ready_high_pagerank",
+    "signals": [
+      { "bead_id": "bd-101", "metric": "pagerank", "value": 0.85, "source_command": "bv --robot-insights" },
+      { "bead_id": "bd-101", "metric": "unblocks", "value": 2, "source_command": "bv --robot-insights" }
+    ],
+    "blockers": [],
+    "rejected_candidates": [{
+      "id": "bd-102",
+      "reason": "Lower PageRank than bd-101 and does not unblock other tasks."
+    }]
+  },
+  "next_action": { "command": "br update bd-101 --status in_progress", "destructive": false },
+  "caveats": ["--robot-triage returned malformed JSON; used --robot-insights as fallback"]
+}

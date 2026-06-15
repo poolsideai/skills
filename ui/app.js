@@ -2,8 +2,9 @@ import * as skillsView from "./views/skills.js";
 import * as workflowsView from "./views/workflows.js";
 import * as runsView from "./views/runs.js";
 import * as reviewView from "./views/review.js";
+import * as onboardView from "./views/onboard.js";
 
-const VIEWS = { skills: skillsView, workflows: workflowsView, runs: runsView, review: reviewView };
+const VIEWS = { skills: skillsView, workflows: workflowsView, runs: runsView, review: reviewView, onboard: onboardView };
 const PENDING_KEY = "wb-generate-pending";
 
 const state = {
@@ -12,6 +13,8 @@ const state = {
   skills: [],
   paletteOpen: false,
   watcher: null,
+  activityTimer: null,
+  activityLoading: false,
 };
 
 async function api(path, options) {
@@ -247,6 +250,238 @@ function showGenerateToast(item, result) {
   setTimeout(() => toast.remove(), 20_000);
 }
 
+function plural(count, singular, pluralForm = `${singular}s`) {
+  return `${count} ${count === 1 ? singular : pluralForm}`;
+}
+
+function basename(path) {
+  return String(path || "")
+    .split("/")
+    .filter(Boolean)
+    .pop() || "";
+}
+
+function suiteName(path) {
+  return basename(path).replace(/\.json$/i, "").replace(/^skill-/, "");
+}
+
+function parseTimeMs(value) {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Date.parse(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+}
+
+function newest(items, timeOf) {
+  return [...items].sort((a, b) => timeOf(b) - timeOf(a))[0] || null;
+}
+
+function recordRunning(record) {
+  return record?.verdict === "running" || (record?.children || []).some((child) => child.verdict === "running");
+}
+
+function progressText(progress) {
+  if (!progress) return "";
+  const done = progress.rolloutsDone ?? "?";
+  const total = progress.rolloutsTotal ?? "?";
+  const parts = [`${done}/${total}`];
+  if (progress.secPerRollout != null) parts.push(`~${Math.round(progress.secPerRollout)}s each`);
+  if (progress.nCandidates != null) parts.push(plural(progress.nCandidates, "candidate"));
+  return parts.join(" · ");
+}
+
+function activityChip({ href, tone = "", label, detail, title }) {
+  const tag = href ? "a" : "span";
+  const attrs = href ? ` href="${esc(href)}"` : "";
+  return `<${tag}${attrs} class="activity-chip ${tone}"${title ? ` title="${esc(title)}"` : ""}>
+    <strong>${esc(label)}</strong>${detail ? `<span>${esc(detail)}</span>` : ""}
+  </${tag}>`;
+}
+
+function activitySummary(source) {
+  const feedRecords = source.feed.status === "fulfilled" ? source.feed.value.records || [] : [];
+  const harness = source.evals.status === "fulfilled" ? source.evals.value.harness || [] : [];
+  const evalRuns = source.evals.status === "fulfilled" ? source.evals.value.runs || [] : [];
+  const optimizeRuns = source.optimize.status === "fulfilled" && Array.isArray(source.optimize.value) ? source.optimize.value : [];
+  const onboardRuns = source.onboard.status === "fulfilled" && Array.isArray(source.onboard.value) ? source.onboard.value : [];
+
+  const workflowRunning = feedRecords.filter(recordRunning);
+  const evalRunning = harness.filter((run) => run.running);
+  const optimizeRunning = optimizeRuns.filter((run) => run.running);
+  const onboardRunning = onboardRuns.filter((run) => run.running);
+  const activeCount = workflowRunning.length + evalRunning.length + optimizeRunning.length + onboardRunning.length;
+
+  const latestWorkflow = newest(feedRecords, (record) => parseTimeMs(record.atMs || record.startedAtMs || record.createdAtMs));
+  const latestEval = newest(evalRuns, (run) => parseTimeMs(run.finishedAt || run.startedAt));
+  const latestOptimize = newest(optimizeRuns, (run) => parseTimeMs(run.startedAtMs));
+  const latestOnboard = newest(onboardRuns, (run) => parseTimeMs(run.startedAtMs));
+  const errors = Object.entries(source)
+    .filter(([, result]) => result.status === "rejected")
+    .filter(([name, result]) => !(name === "feed" && /no Smithers projects/i.test(result.reason?.message || String(result.reason))))
+    .map(([name, result]) => ({ name, message: result.reason?.message || String(result.reason) }));
+
+  return {
+    activeCount,
+    workflowRunning,
+    evalRunning,
+    optimizeRunning,
+    onboardRunning,
+    latestWorkflow,
+    latestEval,
+    latestOptimize,
+    latestOnboard,
+    errors,
+  };
+}
+
+function renderActivityStrip(summary) {
+  const host = document.getElementById("activity-strip");
+  if (!host) return;
+  const active = summary.activeCount > 0;
+  const chips = [];
+
+  if (summary.workflowRunning.length) {
+    const run = summary.workflowRunning[0];
+    chips.push(activityChip({
+      href: "#/runs?verdict=running",
+      tone: "live",
+      label: plural(summary.workflowRunning.length, "workflow"),
+      detail: run.title || run.workflow || "run in progress",
+    }));
+  }
+  if (summary.evalRunning.length) {
+    const run = summary.evalRunning[0];
+    chips.push(activityChip({
+      href: "#/runs?type=eval&verdict=running",
+      tone: "live",
+      label: plural(summary.evalRunning.length, "eval harness", "eval harnesses"),
+      detail: suiteName(run.suite) || basename(run.logPath) || "running",
+    }));
+  }
+  if (summary.optimizeRunning.length) {
+    const run = summary.optimizeRunning[0];
+    chips.push(activityChip({
+      href: run.skill ? `#/skills/${encodeURIComponent(run.skill)}` : "#/skills",
+      tone: "live",
+      label: plural(summary.optimizeRunning.length, "GEPA run"),
+      detail: [run.skill, progressText(run.progress)].filter(Boolean).join(" · ") || "optimizing",
+    }));
+  }
+  if (summary.onboardRunning.length) {
+    const run = summary.onboardRunning[0];
+    chips.push(activityChip({
+      href: "#/onboard",
+      tone: "live",
+      label: plural(summary.onboardRunning.length, "bootstrap run"),
+      detail: [run.mode, basename(run.outDir)].filter(Boolean).join(" · ") || "running",
+    }));
+  }
+
+  if (!chips.length) {
+    chips.push(activityChip({ tone: "idle", label: "Idle now", detail: "no active workflow, eval, GEPA, or bootstrap jobs" }));
+    if (summary.latestOptimize) {
+      const run = summary.latestOptimize;
+      const status = run.running ? "running" : run.result ? "finished" : "incomplete";
+      chips.push(activityChip({
+        href: run.skill ? `#/skills/${encodeURIComponent(run.skill)}` : "#/skills",
+        tone: run.result ? "ok" : "warn",
+        label: "Latest GEPA",
+        detail: `${run.skill || "unknown"} · ${status} · ${fmtAgo(parseTimeMs(run.startedAtMs))}`,
+      }));
+    }
+    if (summary.latestEval) {
+      const run = summary.latestEval;
+      chips.push(activityChip({
+        href: "#/runs?type=eval",
+        tone: run.status === "pass" ? "ok" : run.status === "fail" || run.status === "error" ? "bad" : "",
+        label: "Latest eval",
+        detail: `${run.skill || suiteName(run.suite)} · ${run.status || "unknown"} · ${fmtAgo(parseTimeMs(run.finishedAt || run.startedAt))}`,
+      }));
+    }
+    if (summary.latestOnboard) {
+      const run = summary.latestOnboard;
+      const onboard = onboardStatus(run);
+      chips.push(activityChip({
+        href: "#/onboard",
+        tone: onboard.tone,
+        label: "Latest bootstrap",
+        detail: `${run.mode || "run"} · ${onboard.detail} · ${fmtAgo(parseTimeMs(run.startedAtMs))}`,
+      }));
+    }
+  }
+
+  for (const error of summary.errors) {
+    chips.push(activityChip({ tone: "warn", label: `${error.name} unavailable`, detail: error.message }));
+  }
+
+  host.classList.toggle("active", active);
+  host.innerHTML = `<div class="activity-strip-inner">
+    <div class="activity-heading"><span class="activity-dot"></span><span>${active ? "Active" : "Activity"}</span></div>
+    <div class="activity-chips">${chips.join("")}</div>
+  </div>`;
+}
+
+function onboardStatus(run) {
+  const result = run?.result;
+  if (!result) return { tone: "", detail: "incomplete" };
+  if (result.schema_version === "onboard-agent-review.v1") {
+    return {
+      tone: result.verdict === "approve" ? "ok" : result.verdict === "blocked" ? "bad" : "warn",
+      detail: `agent review ${result.verdict || "done"}`,
+    };
+  }
+  if (result.ok === true) {
+    return { tone: "ok", detail: result.triage_verdict || "finished" };
+  }
+  if (result.schema_version === "onboard-terminal.v1" || result.stderr_text) {
+    return { tone: "bad", detail: "failed before report" };
+  }
+  const violations = Array.isArray(result.gates?.violations) ? result.gates.violations.length : 0;
+  const payloadErrors = Array.isArray(result.payload_errors) ? result.payload_errors.length : 0;
+  if (violations || payloadErrors) {
+    return { tone: "warn", detail: `${violations + payloadErrors} gate issue${violations + payloadErrors === 1 ? "" : "s"}` };
+  }
+  return { tone: "warn", detail: result.triage_verdict ? `${result.triage_verdict}, not promoted` : "not promoted" };
+}
+
+function scheduleActivityPoll(ms) {
+  if (state.activityTimer) clearTimeout(state.activityTimer);
+  state.activityTimer = setTimeout(() => void loadActivity(), ms);
+}
+
+async function loadActivity() {
+  if (state.activityLoading) return;
+  const host = document.getElementById("activity-strip");
+  if (!host) return;
+  state.activityLoading = true;
+  const projectQuery = state.project ? `?project=${encodeURIComponent(state.project)}` : "";
+  try {
+    const [feed, evals, optimize, onboard] = await Promise.allSettled([
+      api(`/api/feed${projectQuery}`),
+      api("/api/evals/runs"),
+      api("/api/optimize/runs"),
+      api("/api/onboard/runs"),
+    ]);
+    const summary = activitySummary({ feed, evals, optimize, onboard });
+    renderActivityStrip(summary);
+    scheduleActivityPoll(summary.activeCount ? 3000 : 8000);
+  } catch (error) {
+    renderActivityStrip({
+      activeCount: 0,
+      workflowRunning: [],
+      evalRunning: [],
+      optimizeRunning: [],
+      onboardRunning: [],
+      errors: [{ name: "activity", message: error.message }],
+    });
+    scheduleActivityPoll(12_000);
+  } finally {
+    state.activityLoading = false;
+  }
+}
+
 async function pollGenerate() {
   const items = pendingList();
   if (!items.length) return;
@@ -373,6 +608,7 @@ async function loadProjects() {
   select.onchange = () => {
     state.project = select.value;
     localStorage.setItem("wb-project", state.project);
+    void loadActivity();
     void mountRoute();
   };
 }
@@ -405,6 +641,7 @@ async function boot() {
   window.addEventListener("hashchange", () => void mountRoute());
   state.watcher = setInterval(() => void pollGenerate(), 5000);
   void pollGenerate();
+  void loadActivity();
   await mountRoute();
 }
 

@@ -1,0 +1,37 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "What should I work on next in this project?",
+  "mode": "none",
+  "selected_bead": {
+    "id": "none",
+    "title": "No actionable Beads available",
+    "status": "none",
+    "reason": "The Beads graph is empty with zero recommendations; no work to select from."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Verified graph state and checked for available Beads."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "empty_graph",
+    "signals": [
+      {
+        "bead_id": "none",
+        "metric": "recommendation_count",
+        "value": 0,
+        "source_command": "bv --robot-triage"
+      }
+    ],
+    "blockers": [],
+    "rejected_candidates": []
+  },
+  "next_action": {
+    "command": "br update none --status none",
+    "destructive": false
+  },
+  "caveats": [
+    "The project contains no Beads in the graph."
+  ]
+}

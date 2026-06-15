@@ -101,11 +101,47 @@ def source_snapshot(skill_dir: Path) -> str:
     return clip("\n\n".join(chunks))
 
 
-def prepare_prompt(skill: str, triage: dict[str, Any], snapshot: str) -> str:
+def load_review_feedback(raw: str | None) -> dict[str, Any] | None:
+    if not raw:
+        return None
+    path = Path(raw)
+    if not path.is_absolute():
+        path = REPO_ROOT / path
+    resolved = path.resolve()
+    allowed = RUNS_ONBOARD.resolve()
+    if resolved != allowed and allowed not in resolved.parents:
+        raise SystemExit(f"--review-dir must be under {RUNS_ONBOARD}")
+    review_path = resolved / "agent-review.json" if resolved.is_dir() else resolved
+    if not review_path.exists():
+        raise SystemExit(f"agent review not found: {review_path}")
+    with review_path.open(encoding="utf-8") as handle:
+        data = json.load(handle)
+    if not isinstance(data, dict):
+        raise SystemExit(f"agent review is not a JSON object: {review_path}")
+    return {"path": rel_to_repo(review_path), "review": data}
+
+
+def prepare_prompt(skill: str, triage: dict[str, Any], snapshot: str, imported: bool = False, review_feedback: dict[str, Any] | None = None) -> str:
+    import_note = (
+        "- The source is external/upstream. Do not edit it in place; create a local project-owned candidate draft.\n"
+        if imported
+        else ""
+    )
+    review_note = ""
+    if review_feedback:
+        review_note = f"""
+Repair feedback:
+```json
+{json.dumps(review_feedback, indent=2)}
+```
+
+Use the review verdict and findings as blocking acceptance criteria. Return a revised complete candidate, not a prose response.
+"""
     return f"""Prepare a Poolside skill onboarding draft. Return ONLY JSON:
 {{"skill_md":"complete SKILL.md with YAML frontmatter", "schemas":{{"name.schema.json":"..."}}, "validators":{{"validate_name.ts":"..."}}, "case_specs":[{{"slug":"kebab","bucket":"easy|realistic|adversarial|edge","difficulty":"easy|medium|hard","expected_status":"pass","scenario":"3-6 sentences","target_gap":"coverage gap"}}], "review_notes":["..."]}}
 
 Rules:
+{import_note}- Treat the returned files as a new local candidate version, not a patch to the source directory.
 - frontmatter name must be `{skill}` and metadata.version must be semver.
 - SKILL.md must include Output contract and Do not use when/non-goals sections.
 - Output contract must name a deterministic `.laguna/*.json` artifact path.
@@ -123,6 +159,7 @@ Source:
 ```text
 {snapshot}
 ```
+{review_note}
 """
 
 
@@ -136,6 +173,42 @@ def smoke_payload(skill_dir: Path) -> dict[str, Any]:
         "case_specs": [],
         "review_notes": ["smoke copied from an existing skill; no LM call"],
     }
+
+
+def import_source_baseline(source: Path, out_dir: Path, skill: str) -> dict[str, str]:
+    baseline_dir = out_dir / "import" / "baseline" / skill
+    shutil.rmtree(baseline_dir, ignore_errors=True)
+    baseline_dir.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(
+        source,
+        baseline_dir,
+        ignore=shutil.ignore_patterns(".git", "node_modules", "__pycache__"),
+    )
+    manifest = {
+        "source": str(source),
+        "baseline": rel_to_repo(baseline_dir),
+        "candidate": rel_to_repo(out_dir / "skill" / skill),
+        "note": "Baseline is a read-only snapshot of the external source; generated candidate files stay inside this run.",
+    }
+    manifest_path = out_dir / "import" / "manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return manifest
+
+
+def payload_filename(name: object, directory: str) -> str | None:
+    if not isinstance(name, str) or "\\" in name or name.startswith("/"):
+        return None
+    parts = name.split("/")
+    if len(parts) == 2 and parts[0] == directory:
+        leaf = parts[1]
+    elif len(parts) == 1:
+        leaf = parts[0]
+    else:
+        return None
+    if leaf in {"", ".", ".."} or not SAFE_FILE.fullmatch(leaf):
+        return None
+    return leaf
 
 
 def normalize_payload(raw: object, skill: str) -> tuple[dict[str, Any] | None, list[str]]:
@@ -156,23 +229,25 @@ def normalize_payload(raw: object, skill: str) -> tuple[dict[str, Any] | None, l
         problems.append("schemas must be a non-empty object")
     else:
         for name, text in schemas.items():
-            if not isinstance(name, str) or not SAFE_FILE.fullmatch(name) or not name.endswith(".schema.json"):
+            clean_name = payload_filename(name, "schemas")
+            if clean_name is None or not clean_name.endswith(".schema.json"):
                 problems.append(f"bad schema filename: {name!r}")
             elif not isinstance(text, str) or not text.strip():
                 problems.append(f"schema {name} is empty")
             else:
-                clean_schemas[name] = text
+                clean_schemas[clean_name] = text
     clean_validators: dict[str, str] = {}
     if not isinstance(validators, dict) or not validators:
         problems.append("validators must be a non-empty object")
     else:
         for name, text in validators.items():
-            if not isinstance(name, str) or not SAFE_FILE.fullmatch(name) or not name.startswith("validate_") or not name.endswith(".ts"):
+            clean_name = payload_filename(name, "scripts")
+            if clean_name is None or not clean_name.startswith("validate_") or not clean_name.endswith(".ts"):
                 problems.append(f"bad validator filename: {name!r}")
             elif not isinstance(text, str) or not text.strip():
                 problems.append(f"validator {name} is empty")
             else:
-                clean_validators[name] = text
+                clean_validators[clean_name] = text
     if not isinstance(specs, list):
         specs = []
     if not isinstance(notes, list):
@@ -183,7 +258,7 @@ def normalize_payload(raw: object, skill: str) -> tuple[dict[str, Any] | None, l
         "skill_md": skill_md,
         "schemas": clean_schemas,
         "validators": clean_validators,
-        "case_specs": [s for s in specs if isinstance(s, dict)][:3],
+        "case_specs": [s for s in specs if isinstance(s, dict)][:20],
         "review_notes": [str(n) for n in notes if isinstance(n, str)],
     }, []
 
@@ -272,14 +347,20 @@ def bootstrap_cases(skill_dir: Path, out_dir: Path, payload: dict[str, Any], arg
     if args.skip_cases:
         return {"ok": True, "skipped": True, "reason": "--skip-cases"}
     repo_skill = REPO_ROOT / "skills" / skill_dir.name
-    if repo_skill.exists():
-        return {"ok": False, "skipped": True, "reason": f"skills/{skill_dir.name} already exists; refusing temp overlay"}
     specs = payload["case_specs"][: args.n_cases]
     if not specs:
         return {"ok": False, "skipped": True, "reason": "payload has no case_specs"}
     case_out = out_dir / "cases"
+    copied_overlay = False
     try:
-        shutil.copytree(skill_dir, repo_skill)
+        if repo_skill.exists():
+            raw_source = Path(args.source)
+            source_path = raw_source if raw_source.is_absolute() else REPO_ROOT / raw_source
+            if source_path.resolve() != repo_skill.resolve() and repo_skill.resolve() != skill_dir.resolve():
+                return {"ok": False, "skipped": True, "reason": f"skills/{skill_dir.name} already exists; refusing temp overlay"}
+        else:
+            shutil.copytree(skill_dir, repo_skill)
+            copied_overlay = True
         cmd = ["uv", "run", "harness/generate/gen_eval_cases.py", "--skill", skill_dir.name, "--bootstrap", "--out-dir", str(case_out), "--model", args.case_model or args.model, "--max-repair-rounds", str(args.max_repair_rounds), "--validator-timeout", str(args.validator_timeout)]
         if args.api_base:
             cmd.extend(["--api-base", args.api_base])
@@ -290,7 +371,8 @@ def bootstrap_cases(skill_dir: Path, out_dir: Path, payload: dict[str, Any], arg
         proc = subprocess.run(cmd, cwd=REPO_ROOT, text=True, capture_output=True, env=os.environ.copy())
         return {"ok": proc.returncode == 0, "skipped": False, "command": cmd, "exit_code": proc.returncode, "out_dir": rel_to_repo(case_out), "stdout_tail": proc.stdout[-3000:], "stderr_tail": proc.stderr[-3000:]}
     finally:
-        shutil.rmtree(repo_skill, ignore_errors=True)
+        if copied_overlay:
+            shutil.rmtree(repo_skill, ignore_errors=True)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -308,6 +390,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--validator-timeout", type=float, default=120.0)
     parser.add_argument("--skip-cases", action="store_true")
     parser.add_argument("--smoke", action="store_true", help="no LM; copy existing source contract and run gates")
+    parser.add_argument("--import-source", action="store_true", help="copy external/advisory source into the run as a baseline before generating a local candidate")
+    parser.add_argument("--review-dir", help="previous onboarding run or agent-review.json whose findings should guide this repair pass")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
 
@@ -316,20 +400,22 @@ def main(argv: list[str] | None = None) -> int:
     out_dir = resolve_out_dir(args.out_dir, skill)
     out_dir.mkdir(parents=True, exist_ok=True)
     triage = triage_skill(source, source.parent)
-    if triage["verdict"] == "advice-only" and not args.smoke:
-        raise SystemExit("advice-only skills need a human contract sketch before prepare can synthesize a validator")
+    review_feedback = load_review_feedback(args.review_dir)
+    imported_source = import_source_baseline(source, out_dir, skill) if args.import_source else None
+    if triage["verdict"] == "advice-only" and not args.smoke and not args.import_source:
+        raise SystemExit("advice-only skills need a local candidate import before prepare can synthesize a validator; rerun with --import-source")
 
     if args.smoke:
         raw = smoke_payload(source)
     else:
         lm = make_lm(args.model, api_base=args.api_base, api_key_env=args.api_key_env, max_tokens=args.max_output_tokens)
-        response = lm(prepare_prompt(skill, triage, source_snapshot(source)))
+        response = lm(prepare_prompt(skill, triage, source_snapshot(source), imported=bool(args.import_source), review_feedback=review_feedback))
         (out_dir / "lm-response.txt").write_text(response, encoding="utf-8")
         raw = extract_json(response)
     payload, errors = normalize_payload(raw, skill)
     (out_dir / "triage.json").write_text(json.dumps(triage, indent=2) + "\n", encoding="utf-8")
     if payload is None:
-        report = {"schema_version": "onboard-prepare.v1", "ok": False, "skill": skill, "out_dir": rel_to_repo(out_dir), "payload_errors": errors, "review_queue": []}
+        report = {"schema_version": "onboard-prepare.v1", "ok": False, "skill": skill, "source": str(source), "out_dir": rel_to_repo(out_dir), "mode": "smoke" if args.smoke else "lm", "triage_verdict": triage["verdict"], "imported_source": imported_source, "review_source": review_feedback["path"] if review_feedback else None, "payload_errors": errors, "review_queue": [], "reminder": "No source files were modified. Imported baselines and generated candidates stay quarantined under runs/onboard/."}
         (out_dir / "report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(report, indent=2))
         return 1
@@ -341,7 +427,7 @@ def main(argv: list[str] | None = None) -> int:
     candidates = out_dir / "cases" / "candidates"
     if candidates.is_dir():
         queue.extend(rel_to_repo(p) for p in sorted(candidates.iterdir()) if p.is_dir())
-    report = {"schema_version": "onboard-prepare.v1", "ok": gates["ok"] and cases.get("ok") is True, "skill": skill, "source": str(source), "out_dir": rel_to_repo(out_dir), "mode": "smoke" if args.smoke else "lm", "triage_verdict": triage["verdict"], "gates": gates, "case_generation": cases, "review_queue": queue, "reminder": "Human review required: generated validators and eval cases are quarantined under runs/onboard/."}
+    report = {"schema_version": "onboard-prepare.v1", "ok": gates["ok"] and cases.get("ok") is True, "skill": skill, "source": str(source), "out_dir": rel_to_repo(out_dir), "mode": "smoke" if args.smoke else "lm", "triage_verdict": triage["verdict"], "imported_source": imported_source, "review_source": review_feedback["path"] if review_feedback else None, "gates": gates, "case_generation": cases, "review_queue": queue, "reminder": "Human review required: generated validators and eval cases are quarantined under runs/onboard/."}
     (out_dir / "report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2) if args.json else f"onboard prepare: {skill}\nreport: {rel_to_repo(out_dir / 'report.json')}\ngates: {'ok' if gates['ok'] else 'fail'}\ncase generation: {cases.get('reason') or ('ok' if cases.get('ok') else 'fail')}\nreview queue:\n" + "\n".join(f"- {p}" for p in queue))
     return 0 if report["ok"] else 1

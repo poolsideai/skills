@@ -1,0 +1,146 @@
+{
+  "schema_version": "cass-mined-beads-workflow-examples.v1",
+  "source_skill": "beads-workflow",
+  "mined_at": "2026-06-12",
+  "purpose": "Seed examples for converting Beads workflow polishing sessions into Laguna skill/eval fixtures.",
+  "examples": [
+    {
+      "id": "artifact-viewer-hardening-polish",
+      "kind": "bead_graph_polish",
+      "quality": "strong",
+      "agent": "claude_code",
+      "workspace": "/data/projects/poolside-studio",
+      "session_path": "/home/ben/.claude/projects/-data-projects-poolside-studio/987efd12-182a-422a-bc8d-adda6a481ae0.jsonl",
+      "source_lines": {
+        "prompt": 3,
+        "first_repair_note": 221,
+        "second_repair_note": 223,
+        "verification_start": 231,
+        "final_summary": 238
+      },
+      "target_graph": {
+        "parent": "bd-artifact-viewer-pane-hardening-j5jh",
+        "lane_epics": [
+          "bd-artifact-viewer-local-link-safety-7ud0",
+          "bd-artifact-viewer-state-race-safety-thbq",
+          "bd-artifact-viewer-filesystem-preview-safety-al6v",
+          "bd-artifact-viewer-e2e-coverage-restoration-j661"
+        ],
+        "implementation_beads": [
+          "bd-renderer-local-link-contract-ndrj",
+          "bd-electron-navigation-policy-fails-closed-8py4",
+          "bd-latest-intent-file-open-requests-b5pt",
+          "bd-workspace-keyed-browser-loads-reset-gbk9",
+          "bd-viewer-scoped-file-listing-api-2vzf",
+          "bd-bounded-preview-api-oversized-binary-states-p2i6",
+          "bd-renderer-capped-browser-results-9vos",
+          "bd-chat-convert-scheduled-task-e2e-428d",
+          "bd-connector-search-provider-persistence-e2e-dj0g"
+        ]
+      },
+      "commands_observed": [
+        "br show <target-id>",
+        "br update <target-id> --notes <focused coordination note>",
+        "br lint <all target ids>",
+        "br dep cycles --json",
+        "bv --robot-insights --json"
+      ],
+      "successful_changes": [
+        {
+          "id": "bd-latest-intent-file-open-requests-b5pt",
+          "change_type": "coordination_note",
+          "summary": "Marked as a gating prerequisite for workspace-keyed browser reset work and scoped ownership to open/openArtifact/openFilePath plus #openRequestId."
+        },
+        {
+          "id": "bd-workspace-keyed-browser-loads-reset-gbk9",
+          "change_type": "coordination_note",
+          "summary": "Sequenced after latest-intent work and scoped ownership to loadFileBrowser, resetWorkspaceState, openFileSearch, #fileBrowserRequestId, and shell workspace-change effects."
+        },
+        {
+          "id": "bd-bounded-preview-api-oversized-binary-states-p2i6",
+          "change_type": "coordination_note",
+          "summary": "Clarified shared files with capped-browser work while assigning preview-state union and preview-region ownership."
+        },
+        {
+          "id": "bd-renderer-capped-browser-results-9vos",
+          "change_type": "coordination_note",
+          "summary": "Clarified ownership of listArtifactViewerFiles call-site, truncated/limit metadata, and file-list truncation banner."
+        }
+      ],
+      "notable_self_correction": "The agent initially called latest-intent and workspace-keyed work parallel, then re-checked the graph, found the sequencing edge, and rewrote both notes.",
+      "verification_result": {
+        "br_lint": "clean",
+        "cycles": 0,
+        "robot_insights_summary": "No hardening-subgraph orphan/bottleneck surprises; parent and lane epics were expected articulation points."
+      },
+      "expected_eval_signals": [
+        "targeted_scope_only",
+        "uses_br_for_mutation",
+        "uses_bv_robot_for_graph_evidence",
+        "adds_implementation_ready_notes",
+        "repairs_dependency_misread",
+        "summarizes_ready_frontier",
+        "records_concurrent_agent_cautions"
+      ]
+    },
+    {
+      "id": "artifact-viewer-plan-review-before-beads",
+      "kind": "plan_to_beads_seed",
+      "quality": "strong",
+      "agent": "claude_code",
+      "workspace": "/data/projects/poolside-studio",
+      "session_path": "/home/ben/.claude/projects/-data-projects-poolside-studio/78de6693-5add-410f-b42b-b3217d2e22b1.jsonl",
+      "source_lines": {
+        "prompt": 3,
+        "review": 25
+      },
+      "review_findings_to_preserve": [
+        "per-artifact storage isolation",
+        "CSP and trusted widget runtime placement",
+        "symlink-aware traversal defense",
+        "Electron protocol/session API distinction",
+        "streaming or explicit size constraints",
+        "same-artifact navigation carve-outs",
+        "thumbnail capture timing",
+        "artifact schemaVersion",
+        "non-optional shell.openExternal policy"
+      ],
+      "expected_eval_signals": [
+        "turns_review_findings_into_acceptance_criteria",
+        "adds_first_red_tests",
+        "names_verification_commands",
+        "splits_parallelizable_children",
+        "keeps_scope_to_plan"
+      ]
+    },
+    {
+      "id": "good-bead-style-pack",
+      "kind": "style_reference",
+      "quality": "strong",
+      "agent": "codex",
+      "workspace": "/data/projects/skills",
+      "session_path": "/home/ben/.codex/sessions/2026/06/06/rollout-2026-06-06T16-52-06-019e9dd9-54ff-7d01-99b1-d44240f99073.jsonl",
+      "source_lines": {
+        "good_bead_examples_artifact": 80
+      },
+      "style_requirements": [
+        "background and rationale",
+        "implementation slicing note",
+        "scope",
+        "non-goals",
+        "acceptance criteria",
+        "validation commands",
+        "expected files likely touched",
+        "blocking prerequisites",
+        "parallelization notes"
+      ],
+      "expected_eval_signals": [
+        "bead_owns_one_behavior",
+        "explicit_non_goals",
+        "first_red_tests",
+        "validation_commands",
+        "dependency_notes_grounded_in_graph"
+      ]
+    }
+  ]
+}

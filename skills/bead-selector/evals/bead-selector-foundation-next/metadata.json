@@ -1,0 +1,13 @@
+{
+  "id": "bead-selector-foundation-next",
+  "skill": "bead-selector",
+  "bucket": "easy",
+  "difficulty": "easy",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/bead-selector/scripts/validate_bead_selection.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Synthetic Beads graph fixture: the correct next Bead is the highest-ranked unblocked foundation task. The model must use bv robot output and write .laguna/bead-selection.json."
+}

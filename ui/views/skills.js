@@ -16,6 +16,7 @@ export async function mount(container, ctx) {
     playground: { records: [], pending: [] },
     proposals: null,
     proposalsUnavailable: false,
+    onboardRuns: [],
     models: ["laguna-m.1"],
     evalRuns: [],
     notice: null,
@@ -52,13 +53,14 @@ export async function mount(container, ctx) {
   return cleanup;
 
   async function loadSelected(skill) {
-    const [detailRes, playgroundRes, modelsRes, proposalsRes, evalRunsRes, optimizeRes] = await Promise.allSettled([
+    const [detailRes, playgroundRes, modelsRes, proposalsRes, evalRunsRes, optimizeRes, onboardRes] = await Promise.allSettled([
       api(`/api/skill-detail?name=${encodeURIComponent(skill)}`),
       api(`/api/playground?skill=${encodeURIComponent(skill)}`),
       api("/api/models"),
       api(`/api/proposals?skill=${encodeURIComponent(skill)}`),
       api("/api/evals/runs"),
       api("/api/optimize/runs"),
+      api("/api/onboard/runs"),
     ]);
     if (detailRes.status === "rejected") throw detailRes.reason;
     state.detail = detailRes.value;
@@ -74,6 +76,7 @@ export async function mount(container, ctx) {
     state.evalRuns = evalRunsRes.status === "fulfilled" ? evalRunsRes.value?.runs || [] : [];
     state.harness = evalRunsRes.status === "fulfilled" ? evalRunsRes.value?.harness || [] : [];
     state.optimizeRuns = optimizeRes.status === "fulfilled" ? optimizeRes.value || [] : [];
+    state.onboardRuns = onboardRes.status === "fulfilled" ? onboardRes.value || [] : [];
   }
 
   async function refreshPlayground() {
@@ -290,13 +293,79 @@ export async function mount(container, ctx) {
       return `<section class="panel queue-panel"><div class="right-panel-head"><span class="mono-label">IMPROVEMENT QUEUE</span></div><p class="muted">Improvement queue lands with plan 004.</p></section>`;
     }
     const pending = state.proposals?.pending || [];
-    const proposals = (state.proposals?.proposals || []).filter((p) => p.status === "open");
+    const allProposals = state.proposals?.proposals || [];
+    const proposals = allProposals.filter((p) => p.status === "open");
+    const optimizeCandidates = finishedOptimizeCandidates(allProposals);
+    const bootstrapCandidate = latestBootstrapCandidate(allProposals);
     return `<section class="panel queue-panel">
       <div class="right-panel-head"><span class="mono-label">IMPROVEMENT QUEUE</span><span>${esc(String(proposals.length))} open</span></div>
       ${pending.map((p) => `<div class="proposal-pending"><span class="pill live">suggesting</span><span>${esc(p.model)}</span><span>${esc(fmtAgo(p.startedAtMs))}</span></div>`).join("")}
-      ${proposals.map(renderProposal).join("") || (!pending.length ? `<p class="muted">No open proposals.</p>` : "")}
+      ${optimizeCandidates.map(renderOptimizeCandidate).join("")}
+      ${bootstrapCandidate ? renderBootstrapCandidate(bootstrapCandidate) : ""}
+      ${proposals.map(renderProposal).join("") || (!pending.length && !optimizeCandidates.length && !bootstrapCandidate ? `<p class="muted">No open proposals.</p>` : "")}
       <p class="rail-caption">Accepting creates a draft version and re-runs the skill's eval suite.</p>
     </section>`;
+  }
+
+  function finishedOptimizeCandidates(existingProposals) {
+    const name = state.detail?.skill?.name;
+    if (!name) return [];
+    const existing = new Set(existingProposals.map((p) => p.id));
+    return (state.optimizeRuns || [])
+      .filter((run) => run.skill === name && run.result && run.result.best_changed !== false && run.outDir)
+      .filter((run) => !existing.has(proposalIdForOptimizeRun(run)))
+      .sort((a, b) => Number(b.startedAtMs || 0) - Number(a.startedAtMs || 0))
+      .slice(0, 2);
+  }
+
+  function proposalIdForOptimizeRun(run) {
+    const base = String(run.outDir || "").split("/").filter(Boolean).pop() || "run";
+    return `proposal-gepa-${base.toLowerCase().replace(/[^a-z0-9-]/g, "-")}`;
+  }
+
+  function renderOptimizeCandidate(run) {
+    const result = run.result || {};
+    const seed = typeof result.seed_val_score === "number" ? result.seed_val_score.toFixed(3) : "n/a";
+    const best = typeof result.best_val_score === "number" ? result.best_val_score.toFixed(3) : "n/a";
+    const lift = typeof result.seed_val_score === "number" && typeof result.best_val_score === "number"
+      ? result.best_val_score - result.seed_val_score
+      : null;
+    const liftText = lift == null ? "" : ` (${lift >= 0 ? "+" : ""}${lift.toFixed(3)})`;
+    const calls = result.total_metric_calls ?? "?";
+    return `<article class="proposal-card optimize-ready">
+      <div class="proposal-ready-head"><span class="pill ok">GEPA finished</span><span>${esc(fmtAgo(run.startedAtMs))}</span></div>
+      <p>Best candidate ready: val ${esc(seed)} -> ${esc(best)}${esc(liftText)} across ${esc(String(calls))} rollout metric call(s).</p>
+      <small class="muted">Draft this as an improvement proposal, then accept it to bump the skill version and re-run the eval suite.</small>
+      <div class="proposal-actions">
+        <button class="btn suggest" type="button" data-action="draft-optimize-proposal" data-run-dir="${esc(run.outDir)}">Draft proposed version</button>
+      </div>
+    </article>`;
+  }
+
+  function latestBootstrapCandidate(existingProposals) {
+    const name = state.detail?.skill?.name;
+    if (!name) return null;
+    const hasOpenProposal = existingProposals.some((p) => p.status === "open");
+    if (hasOpenProposal) return null;
+    return (state.onboardRuns || [])
+      .filter((run) => run.skill === name && run.mode === "prepare" && run.result)
+      .sort((a, b) => Number(b.startedAtMs || 0) - Number(a.startedAtMs || 0))[0] || null;
+  }
+
+  function renderBootstrapCandidate(run) {
+    const result = run.result || {};
+    const violations = Array.isArray(result.gates?.violations) ? result.gates.violations : [];
+    const payloadErrors = Array.isArray(result.payload_errors) ? result.payload_errors : [];
+    const issues = [...payloadErrors, ...violations].slice(0, 3);
+    const ok = result.ok === true;
+    return `<article class="proposal-card bootstrap-ready ${ok ? "" : "blocked"}">
+      <div class="proposal-ready-head"><span class="pill ${ok ? "ok" : "warn"}">bootstrap ${ok ? "ready" : "blocked"}</span><span>${esc(fmtAgo(run.startedAtMs))}</span></div>
+      <p>${ok ? "Bootstrap produced a reviewable draft, but it has not been converted into a proposal yet." : "Bootstrap produced a draft, but gates failed before it could become a proposed version."}</p>
+      ${issues.length ? `<ul class="bootstrap-issues">${issues.map((issue) => `<li>${esc(String(issue))}</li>`).join("")}</ul>` : ""}
+      <div class="proposal-actions">
+        <a class="btn" href="#/onboard">Open bootstrap run</a>
+      </div>
+    </article>`;
   }
 
   function renderProposal(proposal) {
@@ -372,6 +441,7 @@ export async function mount(container, ctx) {
     if (action === "dismiss-notice") state.notice = null;
     if (action === "toggle-evidence") toggleEvidence(button.dataset.id);
     if (action === "promote-playground") await promote(button.dataset.id);
+    if (action === "draft-optimize-proposal") await draftOptimizeProposal(button.dataset.runDir);
     if (action === "accept-proposal") await accept(button.dataset.id);
     if (action === "dismiss-proposal") await dismiss(button.dataset.id);
     render();
@@ -401,6 +471,19 @@ export async function mount(container, ctx) {
         state.notice = { kind: "ok", html: `accepted as v${esc(result.newVersion)} — suite re-running` };
         await refreshSkill();
       }
+    } catch (error) {
+      state.notice = { kind: "bad", html: esc(error.message || String(error)) };
+    }
+  }
+
+  async function draftOptimizeProposal(runDir) {
+    try {
+      const proposal = await postJson("/api/proposals/from-optimize", {
+        skill: state.detail.skill.name,
+        runDir,
+      });
+      state.notice = { kind: "ok", html: `drafted proposed version from GEPA evidence: <code>${esc(proposal.id)}</code>` };
+      await refreshSkill();
     } catch (error) {
       state.notice = { kind: "bad", html: esc(error.message || String(error)) };
     }

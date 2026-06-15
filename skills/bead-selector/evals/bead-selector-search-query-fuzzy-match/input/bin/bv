@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-search)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "query": "auth refactor",
+  "results": [
+    {
+      "id": "bd-301",
+      "title": "Auth refactor core module",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "relevance": 0.92,
+      "unblocks": ["bd-303"],
+      "why": "Highest relevance, ready, unblocks downstream auth work"
+    },
+    {
+      "id": "bd-303",
+      "title": "Migrate user service to new auth",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-301"],
+      "relevance": 0.85,
+      "pagerank": 0.55
+    },
+    {
+      "id": "bd-305",
+      "title": "Update auth documentation",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "relevance": 0.41,
+      "pagerank": 0.12
+    }
+  ],
+  "blockers": [
+    { "id": "bd-301", "blocks": ["bd-303"] }
+  ]
+}
+JSON
+    ;;
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    { "id": "bd-301", "title": "Auth refactor core module", "status": "open", "ready": true, "pagerank": 0.45 }
+  ],
+  "blockers": [],
+  "health": { "cycles": [], "density": 0.15 }
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

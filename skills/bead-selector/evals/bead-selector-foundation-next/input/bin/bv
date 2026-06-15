@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-102",
+      "title": "Stabilize validator result contract",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.42,
+      "betweenness": 0.31,
+      "unblocks": ["bd-104", "bd-105"],
+      "why": "ready foundation work with highest unblocked PageRank"
+    },
+    {
+      "id": "bd-101",
+      "title": "Publish CLI polish follow-up",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-102"],
+      "pagerank": 0.48,
+      "betweenness": 0.08
+    },
+    {
+      "id": "bd-103",
+      "title": "Refresh docs screenshots",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.11,
+      "betweenness": 0.02
+    }
+  ],
+  "blockers": [
+    { "id": "bd-102", "blocks": ["bd-101", "bd-104", "bd-105"] }
+  ],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    ;;
+  --robot-next)
+    cat <<'JSON'
+{
+  "id": "bd-102",
+  "title": "Stabilize validator result contract",
+  "claim_command": "br update bd-102 --status in_progress",
+  "reason": "ready and highest leverage"
+}
+JSON
+    ;;
+  *)
+    echo "{\"error\":\"unsupported fixture command\"}" >&2
+    exit 2
+    ;;
+esac

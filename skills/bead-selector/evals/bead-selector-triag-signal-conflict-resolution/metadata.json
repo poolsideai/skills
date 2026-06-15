@@ -1,0 +1,21 @@
+{
+  "id": "bead-selector-triag-signal-conflict-resolution",
+  "skill": "bead-selector",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/bead-selector/scripts/validate_bead_selection.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Synthetic fixture; no customer data. Generated case."
+}

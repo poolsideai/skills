@@ -1,0 +1,21 @@
+{
+  "id": "bead-selector-insights-metric-corruption",
+  "skill": "bead-selector",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/bead-selector/scripts/validate_bead_selection.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Graph insights command returns corrupted or incomplete metric data for some Beads. Agent must use multiple robot commands to cross-validate information and still make a correct selection based on reliable subset of evidence. Synthetic fixture; no customer data. Generated case."
+}

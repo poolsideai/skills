@@ -5,11 +5,10 @@
  *   bun ui/server.ts            # http://127.0.0.1:4319/workflows.html
  */
 
-import { existsSync, readFileSync, realpathSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { join } from "node:path";
 import {
   acceptProposal,
-  listOptimizeRuns,
   appendEvidence,
   DEFAULT_AGENT,
   buildFeed,
@@ -28,6 +27,9 @@ import {
   listHarnessProcesses,
   listModels,
   listNodeEvals,
+  listOnboardExamples,
+  listOnboardRuns,
+  listOptimizeRuns,
   listPlayground,
   nodeArtifacts,
   listProposals,
@@ -35,6 +37,7 @@ import {
   listSkills,
   listWorkflows,
   promotePlayground,
+  proposalFromOptimizeRun,
   REPO_ROOT,
   revertWorkflow,
   runDetail,
@@ -43,6 +46,8 @@ import {
   skillEvalSummaries,
   startEvalRun,
   startGenerate,
+  startOnboardReviewRun,
+  startOnboardRun,
   startPlayground,
   startRun,
   startSuggest,
@@ -109,6 +114,13 @@ function contentType(path: string): string {
   return "application/octet-stream";
 }
 
+function staticHeaders(path: string): HeadersInit {
+  return {
+    "content-type": contentType(path),
+    "cache-control": "no-store",
+  };
+}
+
 function json(value: unknown, status = 200): Response {
   return new Response(JSON.stringify(value, null, 2), {
     status,
@@ -128,6 +140,32 @@ function requireSkillName(value: string | undefined): string {
   return value;
 }
 
+function onboardFile(path: string | null): Response {
+  if (!path) throw new HttpError(400, "path is required");
+  const requested = join(REPO_ROOT, path);
+  if (!existsSync(requested)) throw new HttpError(404, `file not found: ${path}`);
+  const abs = realpathSync(requested);
+  const runsRoot = realpathSync(join(REPO_ROOT, "runs", "onboard"));
+  const skillsRoot = realpathSync(join(REPO_ROOT, "skills"));
+  if (abs !== runsRoot && !abs.startsWith(runsRoot + "/") && abs !== skillsRoot && !abs.startsWith(skillsRoot + "/")) {
+    throw new HttpError(400, "path must be under runs/onboard/ or skills/");
+  }
+  const stat = statSync(abs);
+  if (stat.isDirectory()) {
+    const entries = readdirSync(abs, { withFileTypes: true })
+      .filter((entry) => !entry.name.startsWith("."))
+      .map((entry) => `${entry.isDirectory() ? "dir " : "file"} ${entry.name}`)
+      .sort()
+      .join("\n");
+    return new Response(`${path}\n\n${entries}\n`, {
+      headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
+    });
+  }
+  return new Response(readFileSync(abs, "utf8"), {
+    headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
+  });
+}
+
 const server = Bun.serve({
   port: PORT,
   hostname: HOST,
@@ -142,7 +180,7 @@ const server = Bun.serve({
           const uiRoot = realpathSync(join(REPO_ROOT, "ui"));
           const realAbs = realpathSync(abs);
           if (realAbs.startsWith(uiRoot + "/")) {
-            return new Response(Bun.file(realAbs), { headers: { "content-type": contentType(realAbs) } });
+            return new Response(Bun.file(realAbs), { headers: staticHeaders(realAbs) });
           }
         }
       }
@@ -150,7 +188,7 @@ const server = Bun.serve({
       const staticFile = STATIC_FILES[url.pathname];
       if (staticFile && req.method === "GET") {
         return new Response(Bun.file(join(REPO_ROOT, staticFile)), {
-          headers: { "content-type": contentType(staticFile) },
+          headers: staticHeaders(staticFile),
         });
       }
 
@@ -162,6 +200,9 @@ const server = Bun.serve({
         if (url.pathname === "/api/models") return json(await listModels());
         if (url.pathname === "/api/runs") return json(listRuns(project()));
         if (url.pathname === "/api/feed") return json(buildFeed(project()));
+        if (url.pathname === "/api/onboard/examples") return json(listOnboardExamples());
+        if (url.pathname === "/api/onboard/runs") return json(listOnboardRuns());
+        if (url.pathname === "/api/onboard/file") return onboardFile(url.searchParams.get("path"));
         if (url.pathname === "/api/optimize/runs") return json(listOptimizeRuns());
         const runMatch = url.pathname.match(/^\/api\/runs\/([A-Za-z0-9._:-]+)$/);
         if (runMatch) return json(runDetail(project(), runMatch[1]));
@@ -325,6 +366,29 @@ const server = Bun.serve({
           if (!body.suite) throw new HttpError(400, "suite is required");
           return json(startEvalRun({ suite: body.suite, cases: body.cases, arms: body.arms }));
         }
+        if (url.pathname === "/api/onboard/start") {
+          const body = (await req.json()) as {
+            mode?: string;
+            source?: string;
+            skill?: string;
+            model?: string;
+            nCases?: number;
+            skipCases?: boolean;
+            smoke?: boolean;
+            importSource?: boolean;
+            reviewDir?: string;
+            parentRunDir?: string;
+          };
+          return json(startOnboardRun(body));
+        }
+        if (url.pathname === "/api/onboard/review/start") {
+          const body = (await req.json()) as {
+            runDir?: string;
+            model?: string;
+            smoke?: boolean;
+          };
+          return json(startOnboardReviewRun(body));
+        }
         if (url.pathname === "/api/playground/run") {
           const body = (await req.json()) as {
             skill?: string;
@@ -359,6 +423,14 @@ const server = Bun.serve({
             refs: body.refs,
             note: body.note,
             smoke: body.smoke,
+          }));
+        }
+        if (url.pathname === "/api/proposals/from-optimize") {
+          const body = (await req.json()) as { skill?: string; runDir?: string };
+          if (!body.skill) throw new HttpError(400, "skill is required");
+          return json(proposalFromOptimizeRun({
+            skill: requireSkillName(body.skill),
+            runDir: body.runDir,
           }));
         }
         if (url.pathname === "/api/proposals/evidence") {

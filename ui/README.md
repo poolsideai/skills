@@ -32,6 +32,21 @@ bun ui/server.ts
 
 Then open `http://127.0.0.1:4319/workflows.html`.
 
+### Onboarding and Beads sources
+
+The onboarding view (`ui/views/onboard.js`) wires its "Check Beads workflow
+skill" and "Check Beads priority graph skill" quick-starts to external Beads
+source skills under `~/.codex/skills/beads-bv` and
+`~/.codex/skills/beads-workflow`. Those paths live outside this checkout. If
+they are missing on your machine, the readiness run writes the failure into
+`runs/onboard/` rather than implying a local tracker exists. The
+"Create bead-selector eval cases" quick-start, in contrast, targets the
+repo-local [`skills/bead-selector`](../skills/bead-selector/SKILL.md), which
+is the authoritative repo truth for graded Bead-selection behavior. This repo
+does not initialize a Beads tracker (`.beads/` is absent on purpose); see
+the root [`README.md`](../README.md) "Task tracking and Beads" section for
+the full narrative.
+
 ## Three surfaces, one substrate
 
 Core workbench operations live in `ui/lib.ts`; the HTTP server (`ui/server.ts`)
@@ -96,6 +111,18 @@ quarantined draft contracts, validators, and optional bootstrap cases under
 `optimize-skill` mutates `SKILL.md` by default, and `--components references`
 adds `references/**` files to the mutable GEPA component set.
 
+### Onboarding and external Beads source skills
+
+The onboarding panel runs readiness checks against external Beads source
+skills under `~/.codex/skills/beads-bv` and `~/.codex/skills/beads-workflow`.
+Those paths live outside this repo and are not the source of truth for any
+in-repo behavior — if they are missing on a given machine, the onboarding run
+records the failure and stops rather than treating the absence as repo-local
+state. Repo-local "what Bead to pick next?" behavior is owned by
+[`skills/bead-selector`](../skills/bead-selector/SKILL.md) and graded through
+fixture workspaces, not a live `.beads/` tracker; the workbench does not
+initialize `.beads/` here.
+
 ## The unifying data model
 
 "An eval is basically any trajectory." Everything the bench lists reduces to
@@ -119,9 +146,13 @@ models, `anthropic/claude-*`, etc.) as the author, via pool's `--agent-name`:
   `experiments/smithers-pool/example.workflow.tsx` as reference, plus the
   current skills catalog so it can install a skill into a node
   (`PoolAgent { skill: { name, from } }`). Output is only saved after
-  `smithers graph` verifies it; one repair round on failure. Rule learned
-  live: upstream rows flow via `ctx.latest(outputs.key, "node-id")`; a
-  `deps={}` function child breaks static graph projection.
+  `bunx smithers-orchestrator graph` verifies it; one repair round on failure.
+  The verifier is resolved by `resolveSmithersRunner()` — local
+  `.smithers/node_modules/.bin/smithers` fast path, with a
+  `bunx smithers-orchestrator` fallback for fresh checkouts (see
+  [`docs/smithers.md`](../docs/smithers.md) → Runner resolution). Rule
+  learned live: upstream rows flow via `ctx.latest(outputs.key, "node-id")`;
+  a `deps={}` function child breaks static graph projection.
 - **Skills**: the author works in a scratch dir seeded with the BINDING
   `docs/authoring-guide.md` and the repo-map skill as an exemplar, and must
   produce `SKILL.md` + `schemas/*.schema.json` + `scripts/validate_*.ts`
@@ -200,7 +231,7 @@ mitigated:
   website you visit while it runs can't drive code-gen/exec on your machine.
   No Origin (curl, the CLI) is allowed.
 - **Generated-code execution**: validator scripts (`bun validate_*.ts`) and
-  workflow module imports (`smithers graph`/`up`) run model-authored code.
+  workflow module imports (`bunx smithers-orchestrator graph`/`up`) run model-authored code.
   Those sinks now spawn with a **scrubbed env** (PATH/HOME/TMPDIR/LANG only),
   so generated code doesn't inherit `$POOLSIDE_TOKEN`. This is
   defense-in-depth, not a sandbox. A `<a href="javascript:">` from capture

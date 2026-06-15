@@ -1,0 +1,33 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Search the Beads graph for items related to 'auth refactor' and select the best one to work on.",
+  "mode": "search",
+  "selected_bead": {
+    "id": "bd-301",
+    "title": "Auth refactor core module",
+    "status": "open",
+    "reason": "Highest relevance score (0.92) among search results, is ready, and unblocks bd-303 which has lower relevance but higher PageRank."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-search auth refactor",
+      "why": "Searched for beads matching 'auth refactor' to find relevant work."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "highest_relevance_ready_unblocks",
+    "signals": [
+      { "bead_id": "bd-301", "metric": "relevance", "value": 0.92, "source_command": "bv --robot-search auth refactor" },
+      { "bead_id": "bd-301", "metric": "unblocks", "value": 1, "source_command": "bv --robot-search auth refactor" }
+    ],
+    "blockers": [
+      { "id": "bd-301", "blocks": ["bd-303"] }
+    ],
+    "rejected_candidates": [
+      { "id": "bd-303", "reason": "Lower relevance (0.85) than bd-301 and blocked by it." },
+      { "id": "bd-305", "reason": "Lowest relevance (0.41) and less strategic impact." }
+    ]
+  },
+  "next_action": { "command": "br update bd-301 --status in_progress", "destructive": false },
+  "caveats": []
+}

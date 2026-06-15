@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --robot-file-beads)
+    if [ "${2:-}" = "--file" ]; then
+      file="${3:-}"
+    else
+      file=""
+    fi
+    case "$file" in
+      "src/api/handlers/user.ts")
+        cat <<'JSON'
+{
+  "status": "ok",
+  "file": "src/api/handlers/user.ts",
+  "matching_beads": [
+    {
+      "id": "bd-305",
+      "title": "Implement user handler authentication",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.28,
+      "betweenness": 0.15,
+      "file_match_type": "exact",
+      "path": "src/api/handlers/user.ts"
+    }
+  ],
+  "related_beads": [
+    {
+      "id": "bd-301",
+      "title": "Refactor auth middleware in src/api/handlers/",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-305"],
+      "pagerank": 0.45,
+      "betweenness": 0.33,
+      "file_match_type": "parent_dir",
+      "path": "src/api/handlers/"
+    },
+    {
+      "id": "bd-303",
+      "title": "Update docs mentioning user.ts authentication",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.08,
+      "betweenness": 0.02,
+      "file_match_type": "description_reference",
+      "path": null
+    }
+  ],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+        ;;
+      *)
+        cat <<'JSON'
+{
+  "status": "ok",
+  "file": "$file",
+  "matching_beads": [],
+  "related_beads": [],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+        ;;
+    esac
+    ;;
+  --robot-triage)
+    cat <<'JSON'
+{
+  "status": "ok",
+  "recommendations": [
+    {
+      "id": "bd-301",
+      "title": "Refactor auth middleware in src/api/handlers/",
+      "status": "open",
+      "ready": false,
+      "blocked": true,
+      "blocked_by": ["bd-305"],
+      "pagerank": 0.45,
+      "betweenness": 0.33
+    },
+    {
+      "id": "bd-305",
+      "title": "Implement user handler authentication",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.28,
+      "betweenness": 0.15
+    },
+    {
+      "id": "bd-303",
+      "title": "Update docs mentioning user.ts authentication",
+      "status": "open",
+      "ready": true,
+      "blocked": false,
+      "pagerank": 0.08,
+      "betweenness": 0.02
+    }
+  ],
+  "blockers": [
+    { "id": "bd-305", "blocks": ["bd-301"] }
+  ],
+  "health": { "cycles": [], "density": 0.18 }
+}
+JSON
+    ;;
+  *)
+    echo '{"error":"unsupported fixture command"}' >&2
+    exit 2
+    ;;
+esac

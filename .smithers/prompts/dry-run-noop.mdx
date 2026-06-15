@@ -1,0 +1,31 @@
+# Dry-run no-op
+
+You are the dry-run placeholder for the U3, U4, and U5 editing stages. The
+workflow was invoked with `dry_run = true`, so no edits should land. Confirm
+the discovery scope and emit a clean no-op result so verification still runs
+and the final report can quote the planned (but unexecuted) work.
+
+## Discovery (already produced)
+
+```json
+{JSON.stringify(props.discovery ?? null, null, 2)}
+```
+
+## What to do
+
+- Do **not** edit any files.
+- Restate what U3, U4, and U5 *would* have done, drawing only from
+  `discovery.scopeByUnit` and `discovery.filesByUnit`.
+- Flag anything in discovery's `openQuestions` that should be resolved
+  before a real run.
+
+## What to return
+
+- `summary` — one paragraph summarising the dry-run plan.
+- `filesChanged` — `[]` (always empty in a dry run).
+- `diffNotes` — bullets describing what each unit *would* have changed.
+- `noOp` — `true`.
+- `evidence` — the discovery fields you grounded the plan in.
+
+REQUIRED OUTPUT:
+{props.schema}

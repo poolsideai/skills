@@ -1,0 +1,32 @@
+{
+  "schema_version": "bead-selection.v1",
+  "request": "Choose the best Bead to work on next when the top-ranked item is blocked.",
+  "mode": "next",
+  "selected_bead": {
+    "id": "bd-204",
+    "title": "Add project context migration shim",
+    "status": "open",
+    "reason": "It is ready, has high betweenness, and directly unblocks the higher-PageRank bd-201."
+  },
+  "commands_used": [
+    {
+      "command": "bv --robot-triage",
+      "why": "Checked recommendations, readiness, blockers, and graph metrics."
+    }
+  ],
+  "graph_evidence": {
+    "primary_signal": "ready_bottleneck_unblocks_top_rank",
+    "signals": [
+      { "bead_id": "bd-204", "metric": "betweenness", "value": 0.52, "source_command": "bv --robot-triage" },
+      { "bead_id": "bd-204", "metric": "unblocks", "value": 1, "source_command": "bv --robot-triage" }
+    ],
+    "blockers": [
+      { "id": "bd-204", "blocks": ["bd-201"] }
+    ],
+    "rejected_candidates": [
+      { "id": "bd-201", "reason": "Highest PageRank but blocked by bd-204." }
+    ]
+  },
+  "next_action": { "command": "br update bd-204 --status in_progress", "destructive": false },
+  "caveats": []
+}

@@ -1,0 +1,21 @@
+{
+  "id": "bead-selector-empty-graph-no-beads",
+  "skill": "bead-selector",
+  "bucket": "edge",
+  "difficulty": "easy",
+  "arms": [
+    "xs_without_skill",
+    "xs_with_skill",
+    "m_without_skill",
+    "m_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/bead-selector/scripts/validate_bead_selection.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "Empty graph state handling and 'none' selection. Synthetic fixture; no customer data. Generated case."
+}

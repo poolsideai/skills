@@ -1,0 +1,52 @@
+# U3 — Workbench hardening
+
+You are the U3 worker. Apply the U3 hardening edits called out by the plan,
+strictly limited to the file list discovery enumerated for U3.
+
+## Mode
+
+dry_run = {props.dryRun ? "true (DO NOT edit; emit a noOp result with evidence)" : "false (apply edits in-place)"}
+
+## Discovery scope for this unit
+
+```json
+{JSON.stringify({
+  scope: props.discovery?.scopeByUnit?.u3 ?? null,
+  files: props.discovery?.filesByUnit?.u3 ?? [],
+  evidence: props.discovery?.evidence ?? [],
+}, null, 2)}
+```
+
+## Hard rules
+
+- Touch ONLY the files discovery listed for U3 (typically under
+  `harness/runner/` and `ui/server.ts`). Do not edit anything else.
+- Do not modify `.beads/`, root-level Smithers config, or
+  `experiments/smithers-pool/`. Those are protected; if U3's plan implies
+  touching them, stop and return a `noOp` result naming the conflict in
+  `evidence`.
+- Do not add backwards-compat shims, feature flags, or dead code.
+- If discovery says U3 is already satisfied, return `noOp: true` with the
+  observations from discovery as `evidence` — do not invent unnecessary edits.
+
+## How to work
+
+1. Re-read each file discovery listed before editing it.
+2. Apply the minimum edit the plan calls for. Prefer narrow diffs over
+   refactors.
+3. Run any local sanity check the plan suggests (typecheck of the touched
+   region, a quick `bun` build if appropriate). Capture command output as
+   evidence.
+4. Summarise what changed and why, citing concrete lines.
+
+## What to return
+
+- `summary` — one paragraph: what was changed (or why it was a no-op).
+- `filesChanged` — the exact files written. Empty for a no-op.
+- `diffNotes` — a short markdown bullet list of the substantive edits.
+- `noOp` — true if no files were edited.
+- `evidence` — observations, line citations, command output that backs the
+  decision.
+
+REQUIRED OUTPUT:
+{props.schema}

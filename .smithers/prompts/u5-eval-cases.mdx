@@ -1,0 +1,71 @@
+# U5 — Author the missing workspace-inventory eval cases
+
+You are the U5 author worker, running inside an author -> check -> fix Ralph
+loop. Each iteration: write or repair eval cases for the `workspace-inventory`
+skill until `uv run scripts/check_eval_cases.py` exits 0. The next task in the
+loop runs that check deterministically — you do not need to invoke it.
+
+## Loop state
+
+- Iteration index (previous checks already run): {props.iteration}
+- Previous check result (null on first iteration):
+
+```json
+{JSON.stringify(props.previousCheck ?? null, null, 2)}
+```
+
+## Discovery scope for this unit
+
+```json
+{JSON.stringify({
+  scope: props.discovery?.scopeByUnit?.u5 ?? null,
+  files: props.discovery?.filesByUnit?.u5 ?? [],
+  evidence: props.discovery?.evidence ?? [],
+}, null, 2)}
+```
+
+## Authoring requirements (from the plan + repo rules)
+
+- The skill under `skills/workspace-inventory/` needs at least three eval
+  cases under `skills/workspace-inventory/evals/<case-id>/`, including at
+  least one with `bucket: "adversarial"`. `check_eval_cases.py` enforces
+  this exactly.
+- Each case must ship:
+  - `prompt.md` — names the deterministic workspace artifact path the skill
+    writes (under `.laguna/`), so without-skill arms can share the grading
+    target.
+  - `input/` — every file the model needs to see.
+  - `expected/` — the gold artifact(s) the validator grades against.
+  - `metadata.json` — canonical fields enforced by `check_eval_cases.py`
+    (id, bucket, validator.script, validator.expected_status, suites, etc.).
+- The case must be self-testing: replaying the case's frozen validator
+  against its own `expected/` produces `validator.expected_status`.
+- A good-failure adversarial case ships a deliberately-bad gold artifact and
+  sets `validator.expected_status: "fail"`.
+
+## How to work this iteration
+
+1. If `previousCheck` is non-null, read its `stderr`/`stdout` and address the
+   specific violations it called out — do not redo work that already passes.
+2. Use the existing v0 skills (`ci-log-reducer`, `laguna-task-contract`,
+   `repo-map`) for the metadata shape and case layout. Match their style.
+3. Only add the cases the spec needs; do not invent additional coverage.
+4. Write files in-place. Do not create cases outside
+   `skills/workspace-inventory/evals/`.
+
+## What to return
+
+- `summary` — one paragraph: what this iteration added or repaired.
+- `casesAdded` — kebab-case case ids written this iteration.
+- `filesChanged` — exact file paths created or edited.
+- `diffNotes` — short bullets of the substantive changes.
+- `iterations` — the iteration index (= `{props.iteration}`); the runtime
+  surfaces this in the final report.
+- `checkOutput` — paste the most informative excerpt from
+  `previousCheck.stdout`/`stderr` you were responding to (empty string on
+  the first iteration).
+- `evidence` — observations, file/line cites, and reasoning that ground the
+  authoring decisions.
+
+REQUIRED OUTPUT:
+{props.schema}

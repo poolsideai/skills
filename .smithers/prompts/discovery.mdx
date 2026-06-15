@@ -1,0 +1,60 @@
+# Discovery: scope the U3-U5 stabilization work
+
+You are the discovery step of the "skills-repo-stabilization" pipeline. Read the
+plan at `{props.planPath}` plus the current repo state and produce a precise,
+file-level scope for every later stage. Do **not** edit any files yet — this
+stage is read-only.
+
+## Operator notes (may be empty)
+
+{props.notes || "(none)"}
+
+## Mode
+
+dry_run = {props.dryRun ? "true (no edits will run; later stages are noops)" : "false (real edits will run)"}
+
+## What to inspect
+
+1. The plan file at `{props.planPath}`. Pay close attention to the U3, U4, U5,
+   and U6 sections — those are the only units this workflow drives.
+2. The current state of the paths each unit touches:
+   - **U3 — workbench hardening**: `harness/runner/`, `ui/server.ts`, and
+     anything the plan calls out under those. Confirm whether the U3 edits are
+     already applied or still pending.
+   - **U4 — Beads docs**: docs that describe Beads (`.beads/` lineage,
+     `docs/`-level explainers). U4 is **docs only** — `.beads/` itself,
+     root-level Smithers config, and `experiments/smithers-pool/` are
+     protected and must not be modified by U4.
+   - **U5 — eval cases**: `skills/workspace-inventory/evals/`. Note which cases
+     exist, which are missing (especially adversarial), and what
+     `uv run scripts/check_eval_cases.py` currently says.
+   - **U6 — status docs**: the status/overview docs the plan names for the U6
+     refresh. Discovery only enumerates them; the U6 task is what edits them
+     later, and only after verification is green.
+
+## What to return
+
+Use the schema to populate:
+
+- `summary` — one paragraph describing overall scope.
+- `scopeByUnit` — an object keyed by `u3`, `u4`, `u5`, `u6`, each value a short
+  description of what that unit will do (or "no-op" with a reason).
+- `filesByUnit` — same keys, each value an array of concrete file paths the
+  unit will touch. Empty array = nothing to change.
+- `openQuestions` — anything you cannot resolve from the plan + repo that must
+  be answered before edits land. Leave empty if there are none.
+- `evidence` — the specific lines, commands, or current-state observations
+  that ground each scope decision.
+- `touchesBeads` — true if any unit would write under `.beads/`.
+- `touchesRootSmithers` — true if any unit would write to the root-level
+  Smithers config (NOT `.smithers/` itself, which is the workflow pack).
+- `touchesExperimentsSmithersPool` — true if any unit would write under
+  `experiments/smithers-pool/`.
+- `touchesProtected` — true if any of the three protected flags above is true.
+
+Be precise and grounded — every file path you list must exist or be the exact
+new path the unit will create. If a unit's work is already done, set its
+`filesByUnit` to `[]` and explain in `scopeByUnit` that it is a no-op.
+
+REQUIRED OUTPUT:
+{props.schema}

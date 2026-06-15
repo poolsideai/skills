@@ -1,0 +1,13 @@
+{
+  "id": "workspace-inventory-flat-mixed",
+  "skill": "workspace-inventory",
+  "bucket": "easy",
+  "difficulty": "easy",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/workspace-inventory/scripts/validate_workspace_inventory.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Minimal flat workspace: three top-level files (LICENSE, README.md, package.json) and one src/ directory with two files. Exercises the happy path — lexicographic ordering of mixed file/directory entries, file_count on a shallow directory, and total_files as the simple sum. Synthetic fixture."
+}

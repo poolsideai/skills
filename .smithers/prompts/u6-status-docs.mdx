@@ -1,0 +1,55 @@
+# U6 — Refresh the status / overview docs
+
+You are the U6 worker, running only after verification is green and a human
+has approved the U6 commit. Refresh the status/overview docs the plan names
+to reflect the U3-U5 outcomes, citing actual evidence collected by the
+earlier stages.
+
+## Discovery scope for this unit
+
+```json
+{JSON.stringify({
+  scope: props.discovery?.scopeByUnit?.u6 ?? null,
+  files: props.discovery?.filesByUnit?.u6 ?? [],
+}, null, 2)}
+```
+
+## Evidence to draw from
+
+U3 result:
+```json
+{JSON.stringify(props.u3 ?? null, null, 2)}
+```
+
+U4 result:
+```json
+{JSON.stringify(props.u4 ?? null, null, 2)}
+```
+
+Verification result:
+```json
+{JSON.stringify(props.verification ?? null, null, 2)}
+```
+
+## Hard rules
+
+- Only touch the doc files discovery enumerated for U6.
+- Every claim you add must trace to a concrete file change, command output,
+  or evidence line from U3/U4/U5/verification. No marketing prose; no
+  invented status.
+- Keep the existing doc voice + structure. Edit in place; do not rewrite a
+  whole page when a section update suffices.
+- Do not modify code, schemas, validators, or eval cases — those are
+  authoritative as of verification green.
+
+## What to return
+
+- `summary` — one paragraph: which docs were updated and what the updates
+  say.
+- `filesChanged` — exact doc paths edited.
+- `diffNotes` — bullets of the substantive prose changes.
+- `evidence` — explicit cites of the U3/U4/U5/verification evidence each
+  paragraph leans on.
+
+REQUIRED OUTPUT:
+{props.schema}

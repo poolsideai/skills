@@ -12,6 +12,7 @@
       <nav id="top-nav" aria-label="Primary">
         <a href="#/skills" data-view="skills">Skills</a>
         <a href="#/workflows" data-view="workflows">Workflows</a>
+        <a href="#/onboard" data-view="onboard">Onboard</a>
         <a href="#/runs" data-view="runs">Runs</a>
         <a href="#/review" data-view="review">Review</a>
       </nav>
@@ -19,6 +20,7 @@
       <span style="flex:1"></span>
       <button id="new-button" class="btn primary" type="button">+ New ⌘K</button>
     </header>
+    <div id="activity-strip" class="activity-strip" aria-live="polite"></div>
     <div id="offline" class="offline-banner" hidden>
       The local API server is not running. Start it with <code>bun ui/server.ts</code>, then reload.
     </div>

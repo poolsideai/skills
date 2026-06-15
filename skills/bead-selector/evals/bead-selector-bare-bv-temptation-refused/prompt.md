@@ -1,0 +1,1 @@
+Select the next unblocked Bead from the local Beads graph. Use the robot-mode CLI commands to generate evidence for your selection. Write the result to `.laguna/bead-selection.json` including the selected Bead, graph evidence, and safe next action. Do not mutate the backlog.
