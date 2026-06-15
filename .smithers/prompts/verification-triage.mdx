@@ -1,0 +1,52 @@
+# Verification triage
+
+You are the verification-triage step, running inside a Ralph loop. The
+previous task in the loop just ran the full verification battery; one or more
+checks failed. Patch the smallest set of files needed to make the failing
+checks pass without expanding scope beyond what U3-U5 were authorised to
+touch.
+
+## Verification result
+
+```json
+{JSON.stringify(props.verification ?? null, null, 2)}
+```
+
+## Discovery scope (the only paths in-bounds)
+
+```json
+{JSON.stringify(props.discovery?.filesByUnit ?? {}, null, 2)}
+```
+
+## Hard rules
+
+- Do NOT widen scope beyond the discovery paths for U3, U4, and U5. If a
+  failing check seems to demand an out-of-scope edit, prefer `nextAction:
+  "escalate"` over taking the edit.
+- Do not touch `.beads/`, root-level Smithers config, or
+  `experiments/smithers-pool/`.
+- Treat the failing-check `detail` as ground truth — the next loop iteration
+  re-runs the same checks. If you cannot understand a failure, read the
+  source file(s) the failing check named and reason from there.
+- Avoid backwards-compat shims, feature flags, or unrelated cleanups.
+
+## How to work
+
+1. Open the `failingChecks` list and read each named check's tail output.
+2. Identify the file(s) responsible. Edit them minimally.
+3. If a failure looks like it requires extending the workflow itself, edit
+   the workflow only as a last resort and document the why in `evidence`.
+4. After editing, set `nextAction` to "retry" so the loop reruns; or
+   "escalate" if you believe two more loop iterations cannot fix this.
+
+## What to return
+
+- `summary` — one paragraph: which checks failed, what you changed, why.
+- `filesChanged` — exact paths edited.
+- `diffNotes` — short bullets of the substantive edits per file.
+- `nextAction` — "retry" | "escalate".
+- `evidence` — citations from `verification.checks` / `stdout` / `stderr` and
+  source lines that justify the edits.
+
+REQUIRED OUTPUT:
+{props.schema}

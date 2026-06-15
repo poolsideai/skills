@@ -1,0 +1,51 @@
+# U4 — Beads documentation refresh
+
+You are the U4 worker. Update the docs that describe Beads as the
+source-of-truth for skill/eval state. This unit is **docs-only** — you must
+not touch `.beads/`, initialize a Beads DB, copy/restore Beads state, or
+modify the root Smithers config / `experiments/smithers-pool/`.
+
+## Mode
+
+dry_run = {props.dryRun ? "true (DO NOT edit; emit a noOp result with evidence)" : "false (apply edits in-place)"}
+
+## Discovery scope for this unit
+
+```json
+{JSON.stringify({
+  scope: props.discovery?.scopeByUnit?.u4 ?? null,
+  files: props.discovery?.filesByUnit?.u4 ?? [],
+  evidence: props.discovery?.evidence ?? [],
+}, null, 2)}
+```
+
+## Hard rules — HARD STOPS
+
+- Never write under `.beads/`. If the plan's intent looks like a Beads DB
+  touch, stop, return `noOp: true`, and record the attempted path in
+  `evidence` with the literal string `HARD STOP: .beads/ write requires
+  human approval`.
+- Never modify root-level Smithers config or `experiments/smithers-pool/`.
+- Stick to the file list discovery enumerated for U4 (docs files only).
+- Do not introduce new commands, scripts, or tooling — this is a prose pass.
+
+## How to work
+
+1. Read each doc discovery listed.
+2. Update prose so it matches the current Beads-as-source-of-truth story
+   the plan describes. Use the existing docs' voice and structure.
+3. Cross-link other docs only where the plan calls for it.
+4. Do not invent unverified claims about Beads behavior — if the plan does
+   not justify a claim, leave it out.
+
+## What to return
+
+- `summary` — one paragraph: what doc edits landed (or why this was a no-op).
+- `filesChanged` — the exact doc files written. Empty for a no-op.
+- `diffNotes` — short markdown bullets of the substantive prose changes.
+- `noOp` — true if no files were edited (or a hard stop triggered).
+- `evidence` — citations from the plan + doc lines that ground the edits, or
+  the hard-stop record above.
+
+REQUIRED OUTPUT:
+{props.schema}
