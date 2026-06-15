@@ -1,11 +1,11 @@
 ---
 name: smithers-retry-task
-description: Retry a specific task within a run, then resume the workflow. Run `smithers retry-task --help` for usage details.
-requires_bin: smithers
-command: smithers retry-task
+description: Retry a specific task within a run, then resume the workflow. Run `bunx smithers-orchestrator retry-task --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator retry-task
 ---
 
-# smithers retry-task
+# bunx smithers-orchestrator retry-task
 
 Retry a specific task within a run, then resume the workflow.
 

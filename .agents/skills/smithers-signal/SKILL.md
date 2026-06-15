@@ -1,11 +1,11 @@
 ---
 name: smithers-signal
-description: Deliver a durable signal to a run waiting on <Signal> or <WaitForEvent>. Run `smithers signal --help` for usage details.
-requires_bin: smithers
-command: smithers signal
+description: Deliver a durable signal to a run waiting on <Signal> or <WaitForEvent>. Run `bunx smithers-orchestrator signal --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator signal
 ---
 
-# smithers signal
+# bunx smithers-orchestrator signal
 
 Deliver a durable signal to a run waiting on <Signal> or <WaitForEvent>.
 

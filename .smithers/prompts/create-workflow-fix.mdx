@@ -1,6 +1,6 @@
 # Fix the workflow until its graph renders
 
-The new workflow failed to render its graph. `smithers graph` loads the module
+The new workflow failed to render its graph. `bunx smithers-orchestrator graph` loads the module
 (catching TypeScript / import / JSX errors) and renders one frame without
 executing it (catching structural errors). Read the error, fix the files, and
 make it load. You have file + shell tools.

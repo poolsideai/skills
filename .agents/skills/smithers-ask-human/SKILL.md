@@ -1,11 +1,11 @@
 ---
 name: smithers-ask-human
-description: Raise a blocking human-approval request from inside a run and wait for the decision. Use when blocked, uncertain, or about to do something irreversible — never guess. Run `smithers ask-human --help` for usage details.
-requires_bin: smithers
-command: smithers ask-human
+description: Raise a blocking human-approval request from inside a run and wait for the decision. Use when blocked, uncertain, or about to do something irreversible — never guess. Run `bunx smithers-orchestrator ask-human --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator ask-human
 ---
 
-# smithers ask-human
+# bunx smithers-orchestrator ask-human
 
 Raise a blocking human-approval request from inside a run and wait for the decision. Use when blocked, uncertain, or about to do something irreversible — never guess.
 

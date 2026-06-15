@@ -1,11 +1,11 @@
 ---
 name: smithers-logs
-description: Tail the event log of a specific run. Run `smithers logs --help` for usage details.
-requires_bin: smithers
-command: smithers logs
+description: Tail the event log of a specific run. Run `bunx smithers-orchestrator logs --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator logs
 ---
 
-# smithers logs
+# bunx smithers-orchestrator logs
 
 Tail the event log of a specific run.
 

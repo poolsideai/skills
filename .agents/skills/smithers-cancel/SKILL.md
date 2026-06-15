@@ -1,11 +1,11 @@
 ---
 name: smithers-cancel
-description: Safely halt agents and terminate a run. Run `smithers cancel --help` for usage details.
-requires_bin: smithers
-command: smithers cancel
+description: Safely halt agents and terminate a run. Run `bunx smithers-orchestrator cancel --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator cancel
 ---
 
-# smithers cancel
+# bunx smithers-orchestrator cancel
 
 Safely halt agents and terminate a run.
 

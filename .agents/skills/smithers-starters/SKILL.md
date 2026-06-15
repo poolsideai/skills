@@ -1,11 +1,11 @@
 ---
 name: smithers-starters
-description: Show plain-English starter workflows with copy-paste commands. Run `smithers starters --help` for usage details.
-requires_bin: smithers
-command: smithers starters
+description: Show plain-English starter workflows with copy-paste commands. Run `bunx smithers-orchestrator starters --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator starters
 ---
 
-# smithers starters
+# bunx smithers-orchestrator starters
 
 Show plain-English starter workflows with copy-paste commands.
 

@@ -1,11 +1,11 @@
 ---
 name: smithers-ask
-description: Ask a question about Smithers using your installed agent and the Smithers MCP server. Run `smithers ask --help` for usage details.
-requires_bin: smithers
-command: smithers ask
+description: Ask a question about Smithers using your installed agent and the Smithers MCP server. Run `bunx smithers-orchestrator ask --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator ask
 ---
 
-# smithers ask
+# bunx smithers-orchestrator ask
 
 Ask a question about Smithers using your installed agent and the Smithers MCP server.
 

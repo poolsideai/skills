@@ -5,11 +5,11 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "gateway": "bun ./gateway.ts",
-    "workflow:list": "smithers workflow list",
-    "workflow:run": "smithers workflow run",
-    "workflow:implement": "smithers workflow implement",
-    "workflow:inspect": "smithers workflow inspect",
-    "workflow:skills": "smithers workflow skills"
+    "workflow:list": "cd .. && .smithers/node_modules/.bin/smithers workflow list",
+    "workflow:run": "cd .. && .smithers/node_modules/.bin/smithers workflow run",
+    "workflow:implement": "cd .. && .smithers/node_modules/.bin/smithers workflow implement",
+    "workflow:inspect": "cd .. && .smithers/node_modules/.bin/smithers workflow inspect",
+    "workflow:skills": "cd .. && .smithers/node_modules/.bin/smithers workflow skills"
   },
   "dependencies": {
     "react": "19.2.7",

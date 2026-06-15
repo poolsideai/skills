@@ -1,11 +1,11 @@
 ---
 name: smithers-memory
-description: View and query cross-run memory facts. Run `smithers memory --help` for usage details.
-requires_bin: smithers
-command: smithers memory
+description: View and query cross-run memory facts. Run `bunx smithers-orchestrator memory --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator memory
 ---
 
-# smithers memory list
+# bunx smithers-orchestrator memory list
 
 List all memory facts in a namespace.
 

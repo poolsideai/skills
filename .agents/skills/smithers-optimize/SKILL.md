@@ -1,11 +1,11 @@
 ---
 name: smithers-optimize
-description: Run GEPA prompt optimization over a workflow eval suite and write an optimized prompt artifact. Run `smithers optimize --help` for usage details.
-requires_bin: smithers
-command: smithers optimize
+description: Run GEPA prompt optimization over a workflow eval suite and write an optimized prompt artifact. Run `bunx smithers-orchestrator optimize --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator optimize
 ---
 
-# smithers optimize
+# bunx smithers-orchestrator optimize
 
 Run GEPA prompt optimization over a workflow eval suite and write an optimized prompt artifact.
 

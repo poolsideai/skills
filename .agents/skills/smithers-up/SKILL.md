@@ -1,11 +1,11 @@
 ---
 name: smithers-up
-description: Start a workflow execution. Use -d for detached (background) mode. Run `smithers up --help` for usage details.
-requires_bin: smithers
-command: smithers up
+description: Start a workflow execution. Use -d for detached (background) mode. Run `bunx smithers-orchestrator up --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator up
 ---
 
-# smithers up
+# bunx smithers-orchestrator up
 
 Start a workflow execution. Use -d for detached (background) mode.
 

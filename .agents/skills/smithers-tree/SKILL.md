@@ -1,11 +1,11 @@
 ---
 name: smithers-tree
-description: Print DevTools snapshot as XML tree. Run `smithers tree --help` for usage details.
-requires_bin: smithers
-command: smithers tree
+description: Print DevTools snapshot as XML tree. Run `bunx smithers-orchestrator tree --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator tree
 ---
 
-# smithers tree
+# bunx smithers-orchestrator tree
 
 Print DevTools snapshot as XML tree.
 

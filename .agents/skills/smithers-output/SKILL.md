@@ -1,11 +1,11 @@
 ---
 name: smithers-output
-description: Print node output row. Run `smithers output --help` for usage details.
-requires_bin: smithers
-command: smithers output
+description: Print node output row. Run `bunx smithers-orchestrator output --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator output
 ---
 
-# smithers output
+# bunx smithers-orchestrator output
 
 Print node output row.
 

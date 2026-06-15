@@ -1,11 +1,11 @@
 ---
 name: smithers-timetravel
-description: Time-travel to a previous task state by reverting filesystem state, resetting DB state, and optionally resuming. Run `smithers timetravel --help` for usage details.
-requires_bin: smithers
-command: smithers timetravel
+description: Time-travel to a previous task state by reverting filesystem state, resetting DB state, and optionally resuming. Run `bunx smithers-orchestrator timetravel --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator timetravel
 ---
 
-# smithers timetravel
+# bunx smithers-orchestrator timetravel
 
 Time-travel to a previous task state by reverting filesystem state, resetting DB state, and optionally resuming.
 

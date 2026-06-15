@@ -1,11 +1,11 @@
 ---
 name: smithers-observability
-description: Start the local observability stack (Grafana, Prometheus, Tempo, OTLP Collector) via Docker Compose. Run `smithers observability --help` for usage details.
-requires_bin: smithers
-command: smithers observability
+description: Start the local observability stack (Grafana, Prometheus, Tempo, OTLP Collector) via Docker Compose. Run `bunx smithers-orchestrator observability --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator observability
 ---
 
-# smithers observability
+# bunx smithers-orchestrator observability
 
 Start the local observability stack (Grafana, Prometheus, Tempo, OTLP Collector) via Docker Compose.
 

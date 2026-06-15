@@ -1,11 +1,11 @@
 ---
 name: smithers-why
-description: Explain why a run is currently blocked or paused. Run `smithers why --help` for usage details.
-requires_bin: smithers
-command: smithers why
+description: Explain why a run is currently blocked or paused. Run `bunx smithers-orchestrator why --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator why
 ---
 
-# smithers why
+# bunx smithers-orchestrator why
 
 Explain why a run is currently blocked or paused.
 

@@ -1,11 +1,11 @@
 ---
 name: smithers-rewind
-description: Rewind a run to a previous frame. Run `smithers rewind --help` for usage details.
-requires_bin: smithers
-command: smithers rewind
+description: Rewind a run to a previous frame. Run `bunx smithers-orchestrator rewind --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator rewind
 ---
 
-# smithers rewind
+# bunx smithers-orchestrator rewind
 
 Rewind a run to a previous frame.
 

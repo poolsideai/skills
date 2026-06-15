@@ -1,11 +1,11 @@
 ---
 name: smithers-alerts
-description: List and manage durable alert instances. Run `smithers alerts --help` for usage details.
-requires_bin: smithers
-command: smithers alerts
+description: List and manage durable alert instances. Run `bunx smithers-orchestrator alerts --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator alerts
 ---
 
-# smithers alerts
+# bunx smithers-orchestrator alerts
 
 List and manage durable alert instances.
 

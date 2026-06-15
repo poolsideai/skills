@@ -1,11 +1,11 @@
 ---
 name: smithers-chat
-description: Show agent chat output for the latest run or a specific run. Run `smithers chat --help` for usage details.
-requires_bin: smithers
-command: smithers chat
+description: Show agent chat output for the latest run or a specific run. Run `bunx smithers-orchestrator chat --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator chat
 ---
 
-# smithers chat
+# bunx smithers-orchestrator chat
 
 Show agent chat output for the latest run or a specific run.
 

@@ -1,11 +1,11 @@
 ---
 name: smithers-ps
-description: List active, paused, and recently completed runs. Run `smithers ps --help` for usage details.
-requires_bin: smithers
-command: smithers ps
+description: List active, paused, and recently completed runs. Run `bunx smithers-orchestrator ps --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator ps
 ---
 
-# smithers ps
+# bunx smithers-orchestrator ps
 
 List active, paused, and recently completed runs.
 

@@ -1,11 +1,11 @@
 ---
 name: smithers-restore
-description: Restore a worktree to a durability checkpoint (latest for the node, or --seq). Run `smithers restore --help` for usage details.
-requires_bin: smithers
-command: smithers restore
+description: Restore a worktree to a durability checkpoint (latest for the node, or --seq). Run `bunx smithers-orchestrator restore --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator restore
 ---
 
-# smithers restore
+# bunx smithers-orchestrator restore
 
 Restore a worktree to a durability checkpoint (latest for the node, or --seq).
 

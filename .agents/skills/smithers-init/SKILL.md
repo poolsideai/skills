@@ -1,11 +1,11 @@
 ---
 name: smithers-init
-description: Install the local Smithers workflow pack into .smithers/. Run `smithers init --help` for usage details.
-requires_bin: smithers
-command: smithers init
+description: Install the local Smithers workflow pack into .smithers/. Run `bunx smithers-orchestrator init --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator init
 ---
 
-# smithers init
+# bunx smithers-orchestrator init
 
 Install the local Smithers workflow pack into .smithers/.
 

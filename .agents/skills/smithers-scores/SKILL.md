@@ -1,11 +1,11 @@
 ---
 name: smithers-scores
-description: View scorer results for a specific run. Run `smithers scores --help` for usage details.
-requires_bin: smithers
-command: smithers scores
+description: View scorer results for a specific run. Run `bunx smithers-orchestrator scores --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator scores
 ---
 
-# smithers scores
+# bunx smithers-orchestrator scores
 
 View scorer results for a specific run.
 

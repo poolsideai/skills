@@ -1,11 +1,11 @@
 ---
 name: smithers-snapshot-hook
-description: "Internal: PostToolUse hook that requests a Tier 1 durability snapshot. Run `smithers snapshot-hook --help` for usage details."
-requires_bin: smithers
-command: smithers snapshot-hook
+description: "Internal: PostToolUse hook that requests a Tier 1 durability snapshot. Run `bunx smithers-orchestrator snapshot-hook --help` for usage details."
+requires_bin: bunx
+command: bunx smithers-orchestrator snapshot-hook
 ---
 
-# smithers snapshot-hook
+# bunx smithers-orchestrator snapshot-hook
 
 Internal: PostToolUse hook that requests a Tier 1 durability snapshot.
 

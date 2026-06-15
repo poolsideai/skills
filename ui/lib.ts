@@ -147,6 +147,31 @@ export function getProject(id: string | null | undefined): Project {
   return project;
 }
 
+// ---------------------------------------------------------------------------
+// Smithers runner resolution
+//
+// Prefer the project-local `.smithers/node_modules/.bin/smithers` binary: it is
+// the fast path (no npm/bunx network hit) and the documented install. Fall
+// back to `bunx smithers-orchestrator` only when no local binary is present —
+// that path is slower on first call but predictable on a fresh checkout where
+// the user has not yet run `bun install` inside `.smithers/`.
+//
+// Graph and verification operations pass `{ scrubEnv: true }` to `runCommand`
+// at their call sites; this resolver does not change that policy. Detached
+// `startRun` intentionally keeps `process.env` so the workflow nodes can reach
+// the model — credential inheritance there is documented in docs/smithers.md.
+// ---------------------------------------------------------------------------
+
+export type SmithersRunner = {
+  argv: string[];
+  via: "local" | "bunx";
+};
+
+export function resolveSmithersRunner(project: Project): SmithersRunner {
+  if (project.smithersBin) return { argv: [project.smithersBin], via: "local" };
+  return { argv: ["bunx", "smithers-orchestrator"], via: "bunx" };
+}
+
 // ===========================================================================
 // Workflow runs → TrajectoryRecords
 
@@ -704,16 +729,19 @@ function projectGraph(xml: XmlNode, source = "", tasks: GraphTask[] = []): { nod
 }
 
 export async function workflowGraph(project: Project, relPath: string) {
-  if (!project.smithersBin) throw new HttpError(400, `${project.id} has no local smithers install`);
   safeWorkflowPath(project, relPath);
+  const runner = resolveSmithersRunner(project);
   const result = await runCommand(
-    [project.smithersBin, "graph", relPath, "--format", "json"],
+    [...runner.argv, "graph", relPath, "--format", "json"],
     project.root,
     60_000,
     { scrubEnv: true }, // graph imports the (possibly model-authored) module
   );
   if (result.exitCode !== 0) {
-    throw new HttpError(500, `smithers graph failed: ${(result.stderr || result.stdout).slice(0, 800)}`);
+    throw new HttpError(
+      500,
+      `smithers graph failed (runner=${runner.via}): ${(result.stderr || result.stdout).slice(0, 800)}`,
+    );
   }
   const snapshot = JSON.parse(result.stdout) as { xml: XmlNode; tasks?: GraphTask[] };
   const source = readFileSync(resolve(project.root, relPath), "utf8");
@@ -790,7 +818,7 @@ export async function generateWorkflow(
   request: string,
   options: { id?: string; agentName?: string } = {},
 ) {
-  if (!project.smithersBin) throw new HttpError(400, `${project.id} has no local smithers install`);
+  const runner = resolveSmithersRunner(project);
   const agentName = options.agentName || DEFAULT_AGENT;
   const workflowId =
     (options.id || request)
@@ -823,14 +851,14 @@ export async function generateWorkflow(
     writeFileSync(target, source, "utf8");
 
     const verify = await runCommand(
-      [project.smithersBin, "graph", relPath, "--format", "json"],
+      [...runner.argv, "graph", relPath, "--format", "json"],
       project.root,
       90_000,
       { scrubEnv: true }, // verification imports freshly generated code
     );
     if (verify.exitCode === 0) {
       attempts.push({ kind: "verify", ok: true });
-      return { ok: true, workflowId, path: relPath, agentName, attempts };
+      return { ok: true, workflowId, path: relPath, agentName, attempts, runner: runner.via };
     }
     const detail = (verify.stderr || verify.stdout).slice(0, 1200);
     attempts.push({ kind: "verify", ok: false, detail });
@@ -896,7 +924,7 @@ export async function editWorkflow(
   instruction: string,
   options: { agentName?: string } = {},
 ) {
-  if (!project.smithersBin) throw new HttpError(400, `${project.id} has no local smithers install`);
+  const runner = resolveSmithersRunner(project);
   const target = safeWorkflowPath(project, relPath);
   if (!existsSync(target)) throw new HttpError(404, `workflow not found: ${relPath}`);
   const before = readFileSync(target, "utf8");
@@ -929,14 +957,14 @@ export async function editWorkflow(
     writeFileSync(target, source, "utf8");
 
     const verify = await runCommand(
-      [project.smithersBin, "graph", relPath, "--format", "json"],
+      [...runner.argv, "graph", relPath, "--format", "json"],
       project.root,
       90_000,
       { scrubEnv: true },
     );
     if (verify.exitCode === 0) {
       attempts.push({ kind: "verify", ok: true });
-      return { ok: true, path: relPath, backup: tag, before, after: source, attempts };
+      return { ok: true, path: relPath, backup: tag, before, after: source, attempts, runner: runner.via };
     }
     const detail = (verify.stderr || verify.stdout).slice(0, 1200);
     attempts.push({ kind: "verify", ok: false, detail });
@@ -966,11 +994,18 @@ export async function startRun(
   relPath: string,
   input?: Record<string, unknown>,
 ) {
-  if (!project.smithersBin) throw new HttpError(400, `${project.id} has no local smithers install`);
   safeWorkflowPath(project, relPath);
+  // Detached `smithers up` runs the workflow's nodes and must keep
+  // `process.env` so model-driven nodes can reach the tenant (POOLSIDE_TOKEN,
+  // OPENROUTER_API_KEY, etc.). This is the deliberate counterpart to the
+  // scrubbed env used by graph/verify; see docs/smithers.md "Detached run
+  // credentials". The bunx fallback keeps the same env policy so a fresh
+  // checkout without `.smithers/node_modules` still works once `bunx`
+  // resolves smithers-orchestrator.
+  const runner = resolveSmithersRunner(project);
   mkdirSync(join(project.root, ".smithers"), { recursive: true });
   const runId = crypto.randomUUID();
-  const argv = [project.smithersBin, "up", relPath, "--run-id", runId, "--format", "json"];
+  const argv = [...runner.argv, "up", relPath, "--run-id", runId, "--format", "json"];
   if (input && Object.keys(input).length) argv.push("--input", JSON.stringify(input));
   const child = spawn(argv[0], argv.slice(1), {
     cwd: project.root,
@@ -979,7 +1014,7 @@ export async function startRun(
     detached: true,
   });
   child.unref();
-  return { ok: true, runId, project: project.id, path: relPath };
+  return { ok: true, runId, project: project.id, path: relPath, runner: runner.via };
 }
 
 // ===========================================================================

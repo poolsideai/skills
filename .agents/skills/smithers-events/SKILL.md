@@ -1,11 +1,11 @@
 ---
 name: smithers-events
-description: Query run event history with filters, grouping, and NDJSON output. Run `smithers events --help` for usage details.
-requires_bin: smithers
-command: smithers events
+description: Query run event history with filters, grouping, and NDJSON output. Run `bunx smithers-orchestrator events --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator events
 ---
 
-# smithers events
+# bunx smithers-orchestrator events
 
 Query run event history with filters, grouping, and NDJSON output.
 

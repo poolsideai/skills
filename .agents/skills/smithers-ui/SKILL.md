@@ -1,11 +1,11 @@
 ---
 name: smithers-ui
-description: Open the custom UI for a workflow run in your browser. Run `smithers ui --help` for usage details.
-requires_bin: smithers
-command: smithers ui
+description: Open the custom UI for a workflow run in your browser. Run `bunx smithers-orchestrator ui --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator ui
 ---
 
-# smithers ui
+# bunx smithers-orchestrator ui
 
 Open the custom UI for a workflow run in your browser.
 

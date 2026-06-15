@@ -1,11 +1,11 @@
 ---
 name: smithers-diff
-description: Print DiffBundle as unified diff. Run `smithers diff --help` for usage details.
-requires_bin: smithers
-command: smithers diff
+description: Print DiffBundle as unified diff. Run `bunx smithers-orchestrator diff --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator diff
 ---
 
-# smithers diff
+# bunx smithers-orchestrator diff
 
 Print DiffBundle as unified diff.
 

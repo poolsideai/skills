@@ -1,11 +1,11 @@
 ---
 name: smithers-approve
-description: Approve a paused approval gate. Auto-detects the pending node if only one exists. Run `smithers approve --help` for usage details.
-requires_bin: smithers
-command: smithers approve
+description: Approve a paused approval gate. Auto-detects the pending node if only one exists. Run `bunx smithers-orchestrator approve --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator approve
 ---
 
-# smithers approve
+# bunx smithers-orchestrator approve
 
 Approve a paused approval gate. Auto-detects the pending node if only one exists.
 

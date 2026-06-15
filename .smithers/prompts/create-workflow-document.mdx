@@ -33,9 +33,12 @@ The body must tell an agent:
    `bunx smithers-orchestrator workflow run {props.workflowName} --prompt "…"`
    (or `--input '{…}'` for structured inputs).
 4. How to run it detached and watch it: `-d` to detach, then
-   `smithers ps`, `smithers logs <runId> -f`, `smithers inspect <runId>`.
-5. How to handle blocked states: `smithers approve <runId>` for approval gates,
-   `smithers why <runId>` for signal waits, `smithers cancel <runId>` to stop.
+   `bunx smithers-orchestrator ps`,
+   `bunx smithers-orchestrator logs <runId> -f`,
+   `bunx smithers-orchestrator inspect <runId>`.
+5. How to handle blocked states: `bunx smithers-orchestrator approve <runId>`
+   for approval gates, `bunx smithers-orchestrator why <runId>` for signal
+   waits, `bunx smithers-orchestrator cancel <runId>` to stop.
 
 Keep it practical and short — no marketing copy. Match the style of any existing
 files in `{props.skillsDir}` and update rather than duplicate if one already

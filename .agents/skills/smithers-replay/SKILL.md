@@ -1,11 +1,11 @@
 ---
 name: smithers-replay
-description: Fork from a checkpoint and resume execution (time travel). Run `smithers replay --help` for usage details.
-requires_bin: smithers
-command: smithers replay
+description: Fork from a checkpoint and resume execution (time travel). Run `bunx smithers-orchestrator replay --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator replay
 ---
 
-# smithers replay
+# bunx smithers-orchestrator replay
 
 Fork from a checkpoint and resume execution (time travel).
 

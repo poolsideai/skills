@@ -1,11 +1,11 @@
 ---
 name: smithers-deny
-description: Deny a paused approval gate. Run `smithers deny --help` for usage details.
-requires_bin: smithers
-command: smithers deny
+description: Deny a paused approval gate. Run `bunx smithers-orchestrator deny --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator deny
 ---
 
-# smithers deny
+# bunx smithers-orchestrator deny
 
 Deny a paused approval gate.
 

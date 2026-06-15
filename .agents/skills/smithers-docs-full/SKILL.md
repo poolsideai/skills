@@ -1,11 +1,11 @@
 ---
 name: smithers-docs-full
-description: Print llms-full.txt (full docs bundle for LLMs) for this CLI version. Run `smithers docs-full --help` for usage details.
-requires_bin: smithers
-command: smithers docs-full
+description: Print llms-full.txt (full docs bundle for LLMs) for this CLI version. Run `bunx smithers-orchestrator docs-full --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator docs-full
 ---
 
-# smithers docs-full
+# bunx smithers-orchestrator docs-full
 
 Print llms-full.txt (full docs bundle for LLMs) for this CLI version.
 

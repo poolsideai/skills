@@ -1,11 +1,11 @@
 ---
 name: smithers-usage
-description: Show how much rate limit / subscription quota each registered account has used. Run `smithers usage --help` for usage details.
-requires_bin: smithers
-command: smithers usage
+description: Show how much rate limit / subscription quota each registered account has used. Run `bunx smithers-orchestrator usage --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator usage
 ---
 
-# smithers usage
+# bunx smithers-orchestrator usage
 
 Show how much rate limit / subscription quota each registered account has used.
 

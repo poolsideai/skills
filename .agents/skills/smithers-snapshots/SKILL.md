@@ -1,11 +1,11 @@
 ---
 name: smithers-snapshots
-description: List durability snapshots (workspace checkpoints) for a run. Run `smithers snapshots --help` for usage details.
-requires_bin: smithers
-command: smithers snapshots
+description: List durability snapshots (workspace checkpoints) for a run. Run `bunx smithers-orchestrator snapshots --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator snapshots
 ---
 
-# smithers snapshots
+# bunx smithers-orchestrator snapshots
 
 List durability snapshots (workspace checkpoints) for a run.
 

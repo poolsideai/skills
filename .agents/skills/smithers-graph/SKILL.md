@@ -1,11 +1,11 @@
 ---
 name: smithers-graph
-description: Render the workflow graph without executing it. Run `smithers graph --help` for usage details.
-requires_bin: smithers
-command: smithers graph
+description: Render the workflow graph without executing it. Run `bunx smithers-orchestrator graph --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator graph
 ---
 
-# smithers graph
+# bunx smithers-orchestrator graph
 
 Render the workflow graph without executing it.
 

@@ -1,11 +1,11 @@
 ---
 name: smithers-node
-description: Show enriched node details for debugging retries, tool calls, and output. Run `smithers node --help` for usage details.
-requires_bin: smithers
-command: smithers node
+description: Show enriched node details for debugging retries, tool calls, and output. Run `bunx smithers-orchestrator node --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator node
 ---
 
-# smithers node
+# bunx smithers-orchestrator node
 
 Show enriched node details for debugging retries, tool calls, and output.
 

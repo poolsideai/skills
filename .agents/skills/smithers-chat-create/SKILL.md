@@ -1,11 +1,11 @@
 ---
 name: smithers-chat-create
-description: Create and start a one-task auto-hijacked chat run. Run `smithers chat-create --help` for usage details.
-requires_bin: smithers
-command: smithers chat-create
+description: Create and start a one-task auto-hijacked chat run. Run `bunx smithers-orchestrator chat-create --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator chat-create
 ---
 
-# smithers chat-create
+# bunx smithers-orchestrator chat-create
 
 Create and start a one-task auto-hijacked chat run.
 

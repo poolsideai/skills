@@ -1,11 +1,11 @@
 ---
 name: smithers-docs
-description: Print llms.txt (concise docs index for LLMs) for this CLI version. Run `smithers docs --help` for usage details.
-requires_bin: smithers
-command: smithers docs
+description: Print llms.txt (concise docs index for LLMs) for this CLI version. Run `bunx smithers-orchestrator docs --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator docs
 ---
 
-# smithers docs
+# bunx smithers-orchestrator docs
 
 Print llms.txt (concise docs index for LLMs) for this CLI version.
 

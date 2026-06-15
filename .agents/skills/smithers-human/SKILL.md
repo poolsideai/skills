@@ -1,11 +1,11 @@
 ---
 name: smithers-human
-description: List and resolve durable human requests. Run `smithers human --help` for usage details.
-requires_bin: smithers
-command: smithers human
+description: List and resolve durable human requests. Run `bunx smithers-orchestrator human --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator human
 ---
 
-# smithers human
+# bunx smithers-orchestrator human
 
 List and resolve durable human requests.
 

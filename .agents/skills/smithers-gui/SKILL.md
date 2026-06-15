@@ -1,11 +1,11 @@
 ---
 name: smithers-gui
-description: Open a directory as a workspace in Smithers GUI. Run `smithers gui --help` for usage details.
-requires_bin: smithers
-command: smithers gui
+description: Open a directory as a workspace in Smithers GUI. Run `bunx smithers-orchestrator gui --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator gui
 ---
 
-# smithers gui
+# bunx smithers-orchestrator gui
 
 Open a directory as a workspace in Smithers GUI
 

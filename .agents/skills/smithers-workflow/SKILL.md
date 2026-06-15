@@ -1,11 +1,11 @@
 ---
 name: smithers-workflow
-description: Discover local workflows from .smithers/workflows. Run `smithers workflow --help` for usage details.
-requires_bin: smithers
-command: smithers workflow
+description: Discover local workflows from .smithers/workflows. Run `bunx smithers-orchestrator workflow --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator workflow
 ---
 
-# smithers workflow create
+# bunx smithers-orchestrator workflow create
 
 Create a new flat workflow scaffold in .smithers/workflows (or the global ~/.smithers with --global).
 
@@ -23,7 +23,7 @@ Create a new flat workflow scaffold in .smithers/workflows (or the global ~/.smi
 
 ---
 
-# smithers workflow doctor
+# bunx smithers-orchestrator workflow doctor
 
 Inspect workflow discovery, preload files, and detected agents.
 
@@ -35,7 +35,7 @@ Inspect workflow discovery, preload files, and detected agents.
 
 ---
 
-# smithers workflow inspect
+# bunx smithers-orchestrator workflow inspect
 
 Show workflow metadata and an agent-facing skill preview.
 
@@ -47,13 +47,13 @@ Show workflow metadata and an agent-facing skill preview.
 
 ---
 
-# smithers workflow list
+# bunx smithers-orchestrator workflow list
 
 List discovered local workflows.
 
 ---
 
-# smithers workflow path
+# bunx smithers-orchestrator workflow path
 
 Resolve a workflow ID to its entry file.
 
@@ -65,7 +65,7 @@ Resolve a workflow ID to its entry file.
 
 ---
 
-# smithers workflow run
+# bunx smithers-orchestrator workflow run
 
 Run a discovered workflow by ID.
 
@@ -111,7 +111,7 @@ Run a discovered workflow by ID.
 
 ---
 
-# smithers workflow skills
+# bunx smithers-orchestrator workflow skills
 
 Generate agent-facing skill docs for local workflows.
 

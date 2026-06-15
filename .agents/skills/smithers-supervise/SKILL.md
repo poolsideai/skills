@@ -1,11 +1,11 @@
 ---
 name: smithers-supervise
-description: Watch for stale running runs and auto-resume them. Run `smithers supervise --help` for usage details.
-requires_bin: smithers
-command: smithers supervise
+description: Watch for stale running runs and auto-resume them. Run `bunx smithers-orchestrator supervise --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator supervise
 ---
 
-# smithers supervise
+# bunx smithers-orchestrator supervise
 
 Watch for stale running runs and auto-resume them.
 

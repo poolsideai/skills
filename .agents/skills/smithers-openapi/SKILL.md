@@ -1,11 +1,11 @@
 ---
 name: smithers-openapi
-description: Generate AI SDK tools from OpenAPI specs. Run `smithers openapi --help` for usage details.
-requires_bin: smithers
-command: smithers openapi
+description: Generate AI SDK tools from OpenAPI specs. Run `bunx smithers-orchestrator openapi --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator openapi
 ---
 
-# smithers openapi list
+# bunx smithers-orchestrator openapi list
 
 Preview tools that would be generated from an OpenAPI spec.
 

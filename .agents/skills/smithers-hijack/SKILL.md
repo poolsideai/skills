@@ -1,11 +1,11 @@
 ---
 name: smithers-hijack
-description: Hand off the latest resumable agent session or conversation for a run. Run `smithers hijack --help` for usage details.
-requires_bin: smithers
-command: smithers hijack
+description: Hand off the latest resumable agent session or conversation for a run. Run `bunx smithers-orchestrator hijack --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator hijack
 ---
 
-# smithers hijack
+# bunx smithers-orchestrator hijack
 
 Hand off the latest resumable agent session or conversation for a run.
 

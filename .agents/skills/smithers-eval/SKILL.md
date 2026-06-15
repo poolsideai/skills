@@ -1,11 +1,11 @@
 ---
 name: smithers-eval
-description: Run a workflow over a JSON/JSONL eval suite and write a regression report. Run `smithers eval --help` for usage details.
-requires_bin: smithers
-command: smithers eval
+description: Run a workflow over a JSON/JSONL eval suite and write a regression report. Run `bunx smithers-orchestrator eval --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator eval
 ---
 
-# smithers eval
+# bunx smithers-orchestrator eval
 
 Run a workflow over a JSON/JSONL eval suite and write a regression report.
 

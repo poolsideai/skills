@@ -1,11 +1,11 @@
 ---
 name: smithers-cron
-description: Manage and run background schedule triggers. Run `smithers cron --help` for usage details.
-requires_bin: smithers
-command: smithers cron
+description: Manage and run background schedule triggers. Run `bunx smithers-orchestrator cron --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator cron
 ---
 
-# smithers cron add
+# bunx smithers-orchestrator cron add
 
 Register a new workflow cron schedule.
 
@@ -18,13 +18,13 @@ Register a new workflow cron schedule.
 
 ---
 
-# smithers cron list
+# bunx smithers-orchestrator cron list
 
 List all registered background cron schedules.
 
 ---
 
-# smithers cron rm
+# bunx smithers-orchestrator cron rm
 
 Delete an existing cron schedule by ID.
 
@@ -36,6 +36,6 @@ Delete an existing cron schedule by ID.
 
 ---
 
-# smithers cron start
+# bunx smithers-orchestrator cron start
 
 Start the background scheduler loop in the current terminal.

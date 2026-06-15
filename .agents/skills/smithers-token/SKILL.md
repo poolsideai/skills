@@ -1,11 +1,11 @@
 ---
 name: smithers-token
-description: Issue and revoke short-lived Gateway bearer tokens. Run `smithers token --help` for usage details.
-requires_bin: smithers
-command: smithers token
+description: Issue and revoke short-lived Gateway bearer tokens. Run `bunx smithers-orchestrator token --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator token
 ---
 
-# smithers token issue
+# bunx smithers-orchestrator token issue
 
 Issue a local short-lived Gateway bearer token grant.
 
@@ -20,7 +20,7 @@ Issue a local short-lived Gateway bearer token grant.
 
 ---
 
-# smithers token revoke
+# bunx smithers-orchestrator token revoke
 
 Revoke a locally issued Gateway bearer token.
 

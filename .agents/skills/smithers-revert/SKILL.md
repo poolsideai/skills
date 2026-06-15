@@ -1,11 +1,11 @@
 ---
 name: smithers-revert
-description: Revert the workspace to a previous task attempt's filesystem state. Run `smithers revert --help` for usage details.
-requires_bin: smithers
-command: smithers revert
+description: Revert the workspace to a previous task attempt's filesystem state. Run `bunx smithers-orchestrator revert --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator revert
 ---
 
-# smithers revert
+# bunx smithers-orchestrator revert
 
 Revert the workspace to a previous task attempt's filesystem state.
 

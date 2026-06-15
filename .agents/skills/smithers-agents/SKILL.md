@@ -1,11 +1,11 @@
 ---
 name: smithers-agents
-description: Inspect and register subscriptions and api keys. Run `smithers agents --help` for usage details.
-requires_bin: smithers
-command: smithers agents
+description: Inspect and register subscriptions and api keys. Run `bunx smithers-orchestrator agents --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator agents
 ---
 
-# smithers agents add
+# bunx smithers-orchestrator agents add
 
 Register a Smithers agent account (interactive wizard, or non-interactive via flags).
 
@@ -25,13 +25,13 @@ Register a Smithers agent account (interactive wizard, or non-interactive via fl
 
 ---
 
-# smithers agents capabilities
+# bunx smithers-orchestrator agents capabilities
 
 Print a JSON report of the built-in CLI agent capability registries.
 
 ---
 
-# smithers agents doctor
+# bunx smithers-orchestrator agents doctor
 
 Validate built-in CLI agent capability registries and command-surface contracts.
 
@@ -43,13 +43,13 @@ Validate built-in CLI agent capability registries and command-surface contracts.
 
 ---
 
-# smithers agents list
+# bunx smithers-orchestrator agents list
 
 List all registered Smithers agent accounts. Use --format json for machine output.
 
 ---
 
-# smithers agents remove
+# bunx smithers-orchestrator agents remove
 
 Remove a Smithers agent account by label.
 
@@ -67,7 +67,7 @@ Remove a Smithers agent account by label.
 
 ---
 
-# smithers agents test
+# bunx smithers-orchestrator agents test
 
 Spawn the account's underlying CLI with --version to verify it is reachable.
 

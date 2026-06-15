@@ -1,11 +1,11 @@
 ---
 name: smithers-timeline
-description: View execution timeline for a run and its forks (time travel). Run `smithers timeline --help` for usage details.
-requires_bin: smithers
-command: smithers timeline
+description: View execution timeline for a run and its forks (time travel). Run `bunx smithers-orchestrator timeline --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator timeline
 ---
 
-# smithers timeline
+# bunx smithers-orchestrator timeline
 
 View execution timeline for a run and its forks (time travel).
 

@@ -1,11 +1,11 @@
 ---
 name: smithers-fork
-description: Create a branched run from a snapshot checkpoint (time travel). Run `smithers fork --help` for usage details.
-requires_bin: smithers
-command: smithers fork
+description: Create a branched run from a snapshot checkpoint (time travel). Run `bunx smithers-orchestrator fork --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator fork
 ---
 
-# smithers fork
+# bunx smithers-orchestrator fork
 
 Create a branched run from a snapshot checkpoint (time travel).
 

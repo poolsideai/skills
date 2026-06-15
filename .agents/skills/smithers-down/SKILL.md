@@ -1,11 +1,11 @@
 ---
 name: smithers-down
-description: Cancel all active runs. Like 'docker compose down' for workflows. Run `smithers down --help` for usage details.
-requires_bin: smithers
-command: smithers down
+description: Cancel all active runs. Like 'docker compose down' for workflows. Run `bunx smithers-orchestrator down --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator down
 ---
 
-# smithers down
+# bunx smithers-orchestrator down
 
 Cancel all active runs. Like 'docker compose down' for workflows.
 

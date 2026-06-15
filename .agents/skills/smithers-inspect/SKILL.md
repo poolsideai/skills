@@ -1,11 +1,11 @@
 ---
 name: smithers-inspect
-description: Output detailed run state, including steps, agents, approvals, and outputs. Run `smithers inspect --help` for usage details.
-requires_bin: smithers
-command: smithers inspect
+description: Output detailed run state, including steps, agents, approvals, and outputs. Run `bunx smithers-orchestrator inspect --help` for usage details.
+requires_bin: bunx
+command: bunx smithers-orchestrator inspect
 ---
 
-# smithers inspect
+# bunx smithers-orchestrator inspect
 
 Output detailed run state, including steps, agents, approvals, and outputs.
 

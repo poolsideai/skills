@@ -23,7 +23,7 @@ A Smithers eval suite is a `.jsonl` file where each line is one case. A case has
   `output` (exact match of a node's output), and `outputContains` (partial match,
   e.g. `{ "analysis": [{ "riskLevel": "low" }] }`).
 
-`smithers eval` runs the workflow once per case and checks the `expected`
+`bunx smithers-orchestrator eval` runs the workflow once per case and checks the `expected`
 assertions, so every case must be runnable input plus a checkable expectation.
 
 ## What to decide
