@@ -1,6 +1,6 @@
-# Laguna Skills
+# Poolside Skills
 
-A validator-first skill library and external eval harness for Poolside's Laguna models. This repo is the place to bring a directory of skills, make each skill gradeable, measure it with `pool`, and optimize the instructions with GEPA without changing the grader.
+A validator-first skill library and external eval harness for Poolside's models. This repo is the place to bring a directory of skills, make each skill gradeable, measure it with `pool`, and optimize the instructions with GEPA without changing the grader.
 
 In this repo, a skill is a contract: `SKILL.md` prose, a deterministic output
 schema, an executable validator, eval cases including an adversarial case, and
