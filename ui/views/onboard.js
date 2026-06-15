@@ -69,6 +69,8 @@ export async function mount(container, ctx) {
     const running = state.runs.filter((r) => r.running).length;
     const prepared = state.runs.filter((r) => r.mode === "prepare").length;
     const triaged = state.runs.filter((r) => r.mode === "triage").length;
+    const journeys = onboardJourneys(state.runs);
+    const milestoneCount = journeys.reduce((sum, journey) => sum + (journey.milestones || journey.runs).length, 0);
     container.innerHTML = `<section class="onboard-page">
       <header class="onboard-head">
         <div>
@@ -92,10 +94,10 @@ export async function mount(container, ctx) {
         </aside>
         <main class="onboard-main panel">
           <div class="right-panel-head">
-            <span class="mono-label">RUN HISTORY</span>
-            <span>${esc(String(state.runs.length))} total</span>
+            <span class="mono-label">SKILL JOURNEYS</span>
+            <span>${esc(String(journeys.length))} skills · ${esc(String(milestoneCount))} milestones · ${esc(String(state.runs.length))} runs</span>
           </div>
-          ${state.runs.length ? `<div class="onboard-run-list">${state.runs.map(renderRun).join("")}</div>` : `<p class="muted">No bootstrap runs yet.</p>`}
+          ${journeys.length ? `<div class="onboard-journey-list">${journeys.map(renderJourney).join("")}</div>` : `<p class="muted">No bootstrap runs yet.</p>`}
         </main>
       </section>
     </section>`;
@@ -188,32 +190,264 @@ export async function mount(container, ctx) {
     </section>`;
   }
 
-  function renderRun(run) {
+  function onboardJourneys(runs) {
+    const groups = new Map();
+    for (const run of runs || []) {
+      const key = runSkillName(run);
+      const current = groups.get(key) || { key, skill: key, runs: [], startedAtMs: 0 };
+      current.runs.push(run);
+      current.startedAtMs = Math.max(current.startedAtMs, Number(run.startedAtMs || 0));
+      groups.set(key, current);
+    }
+    return [...groups.values()]
+      .map((journey) => {
+        journey.runs = journey.runs.sort((a, b) => Number(a.startedAtMs || 0) - Number(b.startedAtMs || 0));
+        journey.milestones = compactJourneyRuns(journey.runs);
+        journey.latest = journey.runs[journey.runs.length - 1] || null;
+        journey.current = [...journey.runs].reverse().find((run) => nextStep(run, run.result && typeof run.result === "object" ? run.result : null)) || journey.latest;
+        return journey;
+      })
+      .sort((a, b) => Number(b.startedAtMs || 0) - Number(a.startedAtMs || 0));
+  }
+
+  function compactJourneyRuns(runs) {
+    const milestones = [];
+    for (const run of runs) {
+      const key = duplicateRunKey(run);
+      const latest = milestones[milestones.length - 1];
+      if (latest?.key === key) {
+        latest.runs.push(run);
+        latest.run = run;
+        continue;
+      }
+      milestones.push({ key, run, runs: [run] });
+    }
+    return milestones;
+  }
+
+  function renderJourney(journey, index) {
+    const latest = journey.latest;
+    const current = journey.current || latest;
+    const currentResult = current?.result && typeof current.result === "object" ? current.result : null;
+    const step = current ? nextStep(current, currentResult) : null;
+    const open = index === 0 || journey.runs.some((run) => run.running);
+    const summary = journeySummary(journey, step);
+    const milestones = journey.milestones || journey.runs.map((run) => ({ run, runs: [run] }));
+    const condensed = journey.runs.length - milestones.length;
+    return `<details class="onboard-journey" ${open ? "open" : ""}>
+      <summary>
+        <div class="onboard-journey-title">
+          <span class="mono-label">SKILL</span>
+          <strong>${esc(journey.skill)}</strong>
+          <span>${esc(String(milestones.length))} ${milestones.length === 1 ? "milestone" : "milestones"} from ${esc(String(journey.runs.length))} ${journey.runs.length === 1 ? "run" : "runs"}</span>
+          ${condensed ? `<span class="onboard-condensed-count">${esc(String(condensed))} similar hidden</span>` : ""}
+        </div>
+        <div class="onboard-journey-state">
+          ${statusPill(journeyStatus(journey))}
+          <span>${esc(fmtAgo(latest?.startedAtMs))}</span>
+        </div>
+      </summary>
+      <div class="onboard-journey-body">
+        <section class="onboard-golden-path ${esc(step?.tone || "")}">
+          <span class="mono-label">CURRENT PATH</span>
+          <strong>${esc(summary.title)}</strong>
+          <span>${esc(summary.detail)}</span>
+          ${renderStepPath(step)}
+          ${renderStepAction(step, current)}
+        </section>
+        <div class="onboard-timeline">
+          ${milestones.map((milestone, runIndex) => renderTimelineRun(milestone, runIndex, milestones.length)).join("")}
+        </div>
+      </div>
+    </details>`;
+  }
+
+  function renderTimelineRun(milestone, index, total) {
+    const run = milestone.run;
+    const siblings = milestone.runs || [run];
     const result = run.result && typeof run.result === "object" ? run.result : null;
     const status = run.running ? "running" : result ? (result.ok === false ? "failed" : "finished") : "pending";
-    const summary = runSummary(run, result);
-    const skills = Array.isArray(result?.skills) ? result.skills.slice(0, 3) : [];
-    return `<article class="onboard-run ${run.relationKind ? `related ${esc(run.relationKind)}` : ""}">
-      <div class="onboard-run-head">
-        <div>${statusPill(status)}<strong>${esc(modeLabel(run.mode))}</strong><span>${esc(fmtAgo(run.startedAtMs))}</span></div>
-        <strong>${esc(run.skill || skillNameFromPath(run.source) || skillNameFromPath(run.outDir) || "skill run")}</strong>
+    const attempt = attemptLabel(run);
+    const duplicateCount = siblings.length - 1;
+    return `<div class="onboard-timeline-row">
+      <div class="onboard-timeline-marker">
+        <span>${esc(String(index + 1))}</span>
+        ${index + 1 < total ? "<i></i>" : ""}
       </div>
-      ${renderRunRelation(run)}
-      <p class="onboard-run-summary">${esc(summary)}</p>
-      ${skills.length ? `<ul class="onboard-skills">${skills.map((s) => `<li><span class="pill ${s.verdict === "ready" ? "ok" : s.verdict === "advice-only" ? "warn" : ""}">${esc(verdictLabel(s.verdict))}</span><code>${esc(s.name)}</code><small>${esc((s.recommendations || [])[0] || "")}</small></li>`).join("")}</ul>` : ""}
-      ${renderNextStep(run, result)}
-      <details class="onboard-run-files">
-        <summary>Run files</summary>
-        <div class="onboard-run-meta">
-          <span>Source path: <code>${esc(run.source || "unknown")}</code></span>
-          <span>Output directory: <code>${esc(run.outDir)}</code></span>
-          ${run.parentOutDir ? `<span>Related run: <code>${esc(run.parentOutDir)}</code></span>` : ""}
-          ${run.logPath ? `<span>Log file: <code>${esc(run.logPath)}</code></span>` : ""}
-          ${Array.isArray(result?.review_queue) && result.review_queue.length ? `<span>Review queue: ${result.review_queue.map((p) => `<code>${esc(p)}</code>`).join(" ")}</span>` : ""}
+      <div class="onboard-timeline-card">
+        <div class="onboard-timeline-head">
+          <div>${statusPill(status)}<strong>${esc(modeLabel(run.mode))}</strong><span>${esc(milestoneTimeLabel(siblings))}</span>${duplicateCount ? `<span class="onboard-condensed-count">${esc(String(duplicateCount))} similar</span>` : ""}</div>
+          <code>${esc(attempt)}</code>
         </div>
-      </details>
-      ${result?.stderr_text ? `<pre class="record-note">${esc(result.stderr_text)}</pre>` : ""}
-    </article>`;
+        ${renderRunRelation(run)}
+        <p class="onboard-run-summary">${esc(runSummary(run, result))}</p>
+        ${duplicateCount ? renderDuplicateRuns(siblings) : ""}
+        ${renderRunReviewArtifacts(run, result)}
+        ${renderNextStep(run, result)}
+        <details class="onboard-run-files">
+          <summary>Run files</summary>
+          <div class="onboard-run-meta">
+            <span>Source: ${pathLink(run.source, run.source || "unknown")}</span>
+            <span>Output: ${pathLink(run.outDir)}</span>
+            ${run.parentOutDir ? `<span>Related: ${pathLink(run.parentOutDir)}</span>` : ""}
+            ${run.logPath ? `<span>Log: ${pathLink(run.logPath)}</span>` : ""}
+            ${runFileLinks(run, result)}
+          </div>
+        </details>
+        ${renderRunErrorDetails(result)}
+      </div>
+    </div>`;
+  }
+
+  function renderDuplicateRuns(runs) {
+    return `<details class="onboard-duplicates">
+      <summary>${esc(String(runs.length))} attempts with the same outcome</summary>
+      <div>
+        ${runs.map((run) => {
+          const result = run.result && typeof run.result === "object" ? run.result : null;
+          const status = run.running ? "running" : result ? (result.ok === false ? "failed" : "finished") : "pending";
+          return `<div class="onboard-duplicate-row">
+            ${statusPill(status)}
+            <span>${esc(modeLabel(run.mode))}</span>
+            <span>${esc(fmtAgo(run.startedAtMs))}</span>
+            ${pathLink(run.outDir, attemptLabel(run))}
+          </div>`;
+        }).join("")}
+      </div>
+    </details>`;
+  }
+
+  function runSkillName(run) {
+    const result = run.result && typeof run.result === "object" ? run.result : null;
+    const firstSkill = Array.isArray(result?.skills) ? result.skills[0] : null;
+    return run.skill || firstSkill?.name || skillNameFromPath(run.source) || skillNameFromPath(run.outDir) || "unknown-skill";
+  }
+
+  function journeyStatus(journey) {
+    if (journey.runs.some((run) => run.running)) return "running";
+    const latest = journey.latest;
+    const result = latest?.result && typeof latest.result === "object" ? latest.result : null;
+    if (!result) return "pending";
+    return result.ok === false ? "failed" : "finished";
+  }
+
+  function journeySummary(journey, step) {
+    if (step) return { title: step.title, detail: step.detail };
+    const latest = journey.latest;
+    if (!latest) {
+      return {
+        title: "No runs yet",
+        detail: "Start with a readiness check or build a review bundle.",
+      };
+    }
+    return {
+      title: "No automatic next step",
+      detail: "The latest run has no recommended action. Open its report files below to decide whether to promote, rerun, or leave it archived.",
+    };
+  }
+
+  function renderStepPath(step) {
+    if (!step?.path) return "";
+    return `<div class="onboard-step-files">${pathLink(step.path)}</div>`;
+  }
+
+  function renderStepAction(step, run) {
+    if (!step?.action || !run) return "";
+    return `<button class="btn" type="button" data-action="${esc(step.action)}" data-source="${esc(step.source || run.source || "")}" data-skill="${esc(step.skill || run.skill || skillNameFromPath(run.source) || "")}" data-run-dir="${esc(step.runDir || run.outDir || "")}" data-parent-run-dir="${esc(run.outDir || "")}">${esc(step.actionLabel || "Run next step")}</button>`;
+  }
+
+  function renderRunReviewArtifacts(run, result) {
+    const queue = Array.isArray(result?.review_queue) ? result.review_queue : [];
+    if (!queue.length) return "";
+    return `<div class="onboard-review-artifacts">
+      <span class="mono-label">REVIEW THESE</span>
+      <div>${queue.map((path) => pathLink(path)).join("")}</div>
+    </div>`;
+  }
+
+  function runFileLinks(run, result) {
+    const links = [];
+    if (run.outDir) {
+      if (run.mode === "review" || result?.schema_version === "onboard-agent-review.v1") {
+        links.push(pathLink(`${run.outDir}/agent-review.json`, "agent-review.json"));
+      } else {
+        links.push(pathLink(`${run.outDir}/report.json`, "report.json"));
+      }
+      if (run.mode === "prepare") {
+        links.push(pathLink(`${run.outDir}/triage.json`, "triage.json"));
+      }
+      links.push(`${pathLink(run.outDir, "run directory")}`);
+    }
+    const queue = Array.isArray(result?.review_queue) ? result.review_queue : [];
+    links.push(...queue.map((path, index) => pathLink(path, `review item ${index + 1}`)));
+    return links.length ? `<span>Files: ${links.join(" ")}</span>` : "";
+  }
+
+  function attemptLabel(run) {
+    const parts = String(run.outDir || "").split("/").filter(Boolean);
+    return parts.slice(-1)[0] || run.tag || run.mode || "run";
+  }
+
+  function milestoneTimeLabel(runs) {
+    const first = runs[0];
+    const last = runs[runs.length - 1];
+    if (!first || first === last) return fmtAgo(last?.startedAtMs);
+    const firstLabel = fmtAgo(first.startedAtMs);
+    const lastLabel = fmtAgo(last.startedAtMs);
+    if (firstLabel === lastLabel) return lastLabel;
+    return `${firstLabel} - ${lastLabel}`;
+  }
+
+  function duplicateRunKey(run) {
+    const result = run.result && typeof run.result === "object" ? run.result : null;
+    const step = nextStep(run, result);
+    const status = run.running ? "running" : result ? (result.ok === false ? "failed" : "finished") : "pending";
+    const skillVerdicts = Array.isArray(result?.skills)
+      ? result.skills.map((skill) => `${skill.name || ""}:${skill.verdict || ""}`).join("|")
+      : "";
+    const reviewQueueShape = Array.isArray(result?.review_queue)
+      ? result.review_queue.map(reviewQueueKind).join("|")
+      : "";
+    return [
+      run.mode || "",
+      status,
+      result?.schema_version || "",
+      result?.verdict || "",
+      run.relationKind || "",
+      normalizeDuplicateText(runSummary(run, result)),
+      step?.title || "",
+      step?.action || "",
+      step?.tone || "",
+      skillVerdicts,
+      reviewQueueShape,
+      result?.gates?.ok === false ? "gates-failed" : "",
+      Array.isArray(result?.payload_errors) && result.payload_errors.length ? "payload-errors" : "",
+    ].join("::");
+  }
+
+  function reviewQueueKind(path) {
+    const value = String(path || "");
+    if (value.includes("/cases/candidates/")) return "candidate-case";
+    if (value.includes("/skill/")) return "candidate-skill";
+    return value.split("/").filter(Boolean).slice(-2, -1)[0] || "review-item";
+  }
+
+  function normalizeDuplicateText(value) {
+    return String(value || "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+
+  function repoRelativePath(path) {
+    const value = String(path || "");
+    const prefix = "/data/projects/poolside/skills/";
+    return value.startsWith(prefix) ? value.slice(prefix.length) : value;
+  }
+
+  function pathLink(path, label = path) {
+    const rel = repoRelativePath(path);
+    if (!rel || rel === "unknown") return `<code>${esc(label || "unknown")}</code>`;
+    const allowed = rel.startsWith("runs/onboard/") || rel.startsWith("skills/");
+    if (!allowed) return `<code>${esc(label || rel)}</code>`;
+    return `<a class="onboard-file-link" href="/api/onboard/file?path=${encodeURIComponent(rel)}" target="_blank" rel="noopener">${esc(label || rel)}</a>`;
   }
 
   function renderRunRelation(run) {
@@ -222,20 +456,78 @@ export async function mount(container, ctx) {
     return `<div class="onboard-run-relation">
       <span class="mono-label">${esc(label)}</span>
       <strong>${esc(run.relationLabel)}</strong>
-      ${run.parentOutDir ? `<code>${esc(run.parentOutDir)}</code>` : ""}
+      ${run.parentOutDir ? pathLink(run.parentOutDir) : ""}
     </div>`;
   }
 
   function renderNextStep(run, result) {
     const step = nextStep(run, result);
     if (!step) return "";
+    const child = childRunForStep(run, step);
+    if (child) return renderChildRunStatus(step, child);
     return `<div class="onboard-next-step ${esc(step.tone || "")}">
       <span class="mono-label">NEXT STEP</span>
       <strong>${esc(step.title)}</strong>
       <span>${esc(step.detail)}</span>
-      ${step.path ? `<code>${esc(step.path)}</code>` : ""}
-      ${step.action ? `<button class="btn" type="button" data-action="${esc(step.action)}" data-source="${esc(step.source || run.source || "")}" data-skill="${esc(step.skill || run.skill || skillNameFromPath(run.source) || "")}" data-run-dir="${esc(step.runDir || run.outDir || "")}">${esc(step.actionLabel || "Run next step")}</button>` : ""}
+      ${renderStepPath(step)}
+      ${renderStepAction(step, run)}
     </div>`;
+  }
+
+  function renderChildRunStatus(step, child) {
+    const result = child.result && typeof child.result === "object" ? child.result : null;
+    const running = Boolean(child.running);
+    const failed = !running && result?.ok === false;
+    const tone = running ? "" : failed ? "bad" : "ok";
+    const label = running ? "RUNNING" : failed ? "FINISHED WITH ISSUE" : "FINISHED";
+    return `<div class="onboard-next-step ${esc(tone)}">
+      <span class="mono-label">${label}</span>
+      <strong>${esc(childRunTitle(step, child, result))}</strong>
+      <span>${esc(childRunDetail(child, result))}</span>
+      <div class="onboard-step-files">
+        ${pathLink(child.outDir, "output")}
+        ${child.logPath ? pathLink(child.logPath, "log") : ""}
+        ${child.mode === "review" ? pathLink(`${child.outDir}/agent-review.json`, "agent-review.json") : ""}
+        ${child.mode !== "review" && !running ? pathLink(`${child.outDir}/report.json`, "report.json") : ""}
+      </div>
+    </div>`;
+  }
+
+  function childRunForStep(run, step) {
+    if (!step?.action) return null;
+    const parent = step.runDir || run.outDir;
+    const candidates = (state.runs || []).filter((candidate) => isChildRunForStep(candidate, run, step, parent));
+    return candidates.sort((a, b) => Number(b.startedAtMs || 0) - Number(a.startedAtMs || 0))[0] || null;
+  }
+
+  function isChildRunForStep(candidate, run, step, parent) {
+    if (!candidate || candidate === run || Number(candidate.startedAtMs || 0) <= Number(run.startedAtMs || 0)) return false;
+    if (candidate.parentOutDir && parent && candidate.parentOutDir === parent) return true;
+    if (step.action === "agent-review-from-run") {
+      return candidate.mode === "review" && candidate.outDir === parent;
+    }
+    if (step.action === "repair-from-review") {
+      return candidate.mode === "prepare" && candidate.parentOutDir === parent;
+    }
+    if (step.action === "prepare-from-run" || step.action === "prepare-import-from-run") {
+      const sameSkill = runSkillName(candidate) === (step.skill || runSkillName(run));
+      const sameSource = repoRelativePath(candidate.source) === repoRelativePath(step.source || run.source);
+      const unlinkedPrepare = candidate.mode === "prepare" && !candidate.parentOutDir;
+      return unlinkedPrepare && sameSkill && sameSource;
+    }
+    return false;
+  }
+
+  function childRunTitle(step, child, result) {
+    if (child.running) return `${modeLabel(child.mode)} running`;
+    if (child.mode === "review" && result?.verdict) return `Agent review ${result.verdict}`;
+    if (child.mode === "prepare") return "Review bundle finished";
+    return `${step.actionLabel || modeLabel(child.mode)} finished`;
+  }
+
+  function childRunDetail(child, result) {
+    if (child.running) return `Started ${fmtAgo(child.startedAtMs)}. This row will update when the run writes its report.`;
+    return runSummary(child, result);
   }
 
   function nextStep(run, result) {
@@ -338,7 +630,7 @@ export async function mount(container, ctx) {
       return {
         tone: "bad",
         title: "Retry agent judge",
-        detail: "The review process failed before writing an agent verdict. Retry the judge after fixing the model or runtime error shown below.",
+        detail: failureAdvice(result),
         action: "agent-review-from-run",
         actionLabel: "Retry agent judge",
         runDir: run.outDir,
@@ -369,6 +661,7 @@ export async function mount(container, ctx) {
     const button = event.target.closest("button[data-action]");
     if (!button) return;
     const action = button.dataset.action;
+    if (startsOnboardProcess(action)) markButtonStarting(button);
     if (action === "refresh") await load();
     if (action === "dismiss-notice") {
       state.notice = null;
@@ -387,6 +680,7 @@ export async function mount(container, ctx) {
         skill: button.dataset.skill || undefined,
         model: defaultModel(),
         nCases: DEFAULT_CASE_COUNT,
+        parentRunDir: button.dataset.parentRunDir || undefined,
       });
     }
     if (action === "prepare-import-from-run") {
@@ -397,12 +691,13 @@ export async function mount(container, ctx) {
         model: defaultModel(),
         nCases: DEFAULT_CASE_COUNT,
         importSource: true,
+        parentRunDir: button.dataset.parentRunDir || undefined,
       });
     }
     if (action === "agent-review-from-run") {
       await startReview({
         runDir: button.dataset.runDir || "",
-        model: defaultModel(),
+        model: reviewDefaultModel(),
       });
     }
     if (action === "repair-from-review") {
@@ -416,6 +711,24 @@ export async function mount(container, ctx) {
         reviewDir: button.dataset.runDir || "",
       });
     }
+  }
+
+  function startsOnboardProcess(action) {
+    return new Set([
+      "triage-beads-workflow",
+      "triage-beads",
+      "prepare-bead-selector",
+      "prepare-from-run",
+      "prepare-import-from-run",
+      "agent-review-from-run",
+      "repair-from-review",
+    ]).has(action);
+  }
+
+  function markButtonStarting(button) {
+    button.disabled = true;
+    button.dataset.originalLabel = button.textContent || "";
+    button.textContent = "Starting...";
   }
 
   function onPointerDown(event) {
@@ -599,6 +912,10 @@ export async function mount(container, ctx) {
     return preferred.find((model) => all.includes(model)) || all.find((model) => model.startsWith("openai/")) || all[0] || "openai/gpt-5.5";
   }
 
+  function reviewDefaultModel() {
+    return "openai/gpt-5.5";
+  }
+
   function updateFormMode(form) {
     const mode = String(new FormData(form).get("mode") || "triage");
     const copy = MODE_COPY[mode] || MODE_COPY.triage;
@@ -696,6 +1013,9 @@ export async function mount(container, ctx) {
   function runSummary(run, result) {
     if (run.running) return "Running now. Results will appear here when the report finishes.";
     if (!result) return "No report has been written yet.";
+    if (result.schema_version === "onboard-terminal.v1" || result.stderr_text) {
+      return failureSummary(result);
+    }
     if (result.schema_version === "onboard-agent-review.v1") {
       const findings = Array.isArray(result.findings) ? result.findings.length : 0;
       return `Agent review: ${result.verdict || "unknown"}. ${result.summary || ""}${findings ? ` ${findings} finding${findings === 1 ? "" : "s"}.` : ""}`;
@@ -723,6 +1043,47 @@ export async function mount(container, ctx) {
     }
     if (result.reminder) return result.reminder;
     return result.ok === false ? "Failed. Open the run files for the report and log." : "Finished. Outputs are quarantined under runs/onboard/ for human review.";
+  }
+
+  function renderRunErrorDetails(result) {
+    const text = String(result?.stderr_text || "").trim();
+    if (!text) return "";
+    return `<details class="onboard-error-details">
+      <summary>Failure details</summary>
+      <pre class="record-note">${esc(text)}</pre>
+    </details>`;
+  }
+
+  function failureSummary(result) {
+    const text = String(result?.stderr_text || "");
+    if (modelNotFound(text)) return `Failed: selected model is not available to the review runner (${missingModelName(text) || "model not found"}).`;
+    if (text.includes("payload")) return "Failed: generated payload could not be used. Open failure details or the log for the exact message.";
+    const firstLine = text.split("\n").map((line) => line.trim()).find(Boolean);
+    return firstLine ? `Failed: ${truncateText(cleanTraceLine(firstLine), 180)}` : "Failed before writing a report. Open failure details or the log.";
+  }
+
+  function failureAdvice(result) {
+    const text = String(result?.stderr_text || "");
+    if (modelNotFound(text)) return "The review runner rejected the selected model. Retry agent judge; new retries use GPT-5.5 instead of the stale alias.";
+    return "The review process failed before writing an agent verdict. Retry the judge after checking the failure details or log.";
+  }
+
+  function modelNotFound(text) {
+    return /model_not_found|model ['"][^'"]+['"] not found|NotFoundError/i.test(String(text || ""));
+  }
+
+  function missingModelName(text) {
+    const match = String(text || "").match(/model ['"]([^'"]+)['"] not found/i);
+    return match?.[1] || null;
+  }
+
+  function cleanTraceLine(line) {
+    return String(line || "").replace(/\^+/g, "").replace(/~+/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  function truncateText(value, max) {
+    const text = String(value || "");
+    return text.length > max ? `${text.slice(0, max - 1)}...` : text;
   }
 
   function verdictLabel(verdict) {

@@ -483,6 +483,19 @@ function defaultOnboardModel(): string {
   return normalizeOnboardModel(process.env.ONBOARD_PREPARE_LM) || normalizeOnboardModel(process.env.CASEGEN_LM) || "openai/gpt-5.5";
 }
 
+function defaultOnboardReviewModel(): string {
+  return normalizeOnboardModel(process.env.ONBOARD_REVIEW_LM) || "openai/gpt-5.5";
+}
+
+function normalizeOnboardReviewModel(raw: string | undefined): string {
+  const model = normalizeOnboardModel(raw);
+  if (!model) return defaultOnboardReviewModel();
+  if (model === "laguna-m-e0419-polaris-t3-mh-s700-ctx256k" || model.startsWith("laguna-m.1")) {
+    return defaultOnboardReviewModel();
+  }
+  return model;
+}
+
 export const DEFAULT_AGENT = "laguna-m.1";
 
 // ===========================================================================
@@ -1808,7 +1821,7 @@ type OnboardProcess = {
   running: boolean;
   result?: unknown;
   sourceKind?: "sidecar" | "scan";
-  relationKind?: "review-of" | "repair-from";
+  relationKind?: "review-of" | "repair-from" | "started-from";
   relationLabel?: string | null;
   parentOutDir?: string | null;
 };
@@ -2033,6 +2046,7 @@ export function startOnboardRun(options: {
   smoke?: boolean;
   importSource?: boolean;
   reviewDir?: string;
+  parentRunDir?: string;
 }) {
   const mode: OnboardMode = options.mode === "prepare" ? "prepare" : "triage";
   const source = options.source?.trim();
@@ -2074,6 +2088,15 @@ export function startOnboardRun(options: {
   child.unref();
   closeSync(fd);
 
+  const relation = onboardRelation(mode, outDir, argv, null);
+  const parentRunDir = relativeOnboardRunDir(options.parentRunDir);
+  const parentRelation = parentRunDir && !relation.parentOutDir
+    ? {
+        relationKind: "started-from" as const,
+        relationLabel: mode === "prepare" ? "Review bundle from readiness milestone" : "Started from onboarding milestone",
+        parentOutDir: parentRunDir,
+      }
+    : relation;
   const sidecar = {
     pid: child.pid ?? -1,
     tag,
@@ -2084,7 +2107,7 @@ export function startOnboardRun(options: {
     logPath: logPath.slice(REPO_ROOT.length + 1),
     outDir,
     startedAtMs: Date.now(),
-    ...onboardRelation(mode, outDir, argv, null),
+    ...parentRelation,
   };
   writeFileSync(join(ONBOARD_STATE_DIR, `onboard-${tag}.json`), JSON.stringify(sidecar, null, 2));
   return { ok: true, ...sidecar };
@@ -2105,7 +2128,7 @@ export function startOnboardReviewRun(options: {
   const outDir = absRunDir.slice(REPO_ROOT.length + 1);
   const tag = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const argv = ["uv", "run", "harness/onboard/review.py", "--run-dir", outDir, "--json"];
-  const model = normalizeOnboardModel(options.model) || defaultOnboardModel();
+  const model = normalizeOnboardReviewModel(options.model);
   argv.push("--model", model);
   const poolEnv = poolCredentialEnv();
   const apiUrl = process.env.POOLSIDE_API_URL || poolEnv.POOLSIDE_API_URL;
