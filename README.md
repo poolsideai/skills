@@ -44,11 +44,33 @@ Publish-ready skills:
 - [`laguna-task-contract`](skills/laguna-task-contract/SKILL.md) turns a broad engineering request into a bounded worker or router contract.
 - [`repo-map`](skills/repo-map/SKILL.md) writes `.laguna/repo-map.json`, an evidence-backed map of a repository.
 
-Work in progress:
+Skills with rough evals:
 
-- [`workspace-inventory`](skills/workspace-inventory/SKILL.md) has a schema and validator, but no eval cases yet. Repo-wide `check_eval_cases.py` is expected to fail until it has at least three cases, including one adversarial case.
+- [`bead-selector`](skills/bead-selector/SKILL.md) writes `.laguna/bead-selection.json`, the validator-graded record of which local Bead to pick next from `bv`/`br` robot-mode output. The dedicated suite at [`evals/suites/skill-bead-selector.json`](evals/suites/skill-bead-selector.json) covers multiple cases including adversarial ones; treat the resulting numbers as internal/directional.
+- [`workspace-inventory`](skills/workspace-inventory/SKILL.md) writes `.laguna/workspace-inventory.json`. The dedicated suite at [`evals/suites/skill-workspace-inventory.json`](evals/suites/skill-workspace-inventory.json) covers six cases — flat workspaces, nested Python and Rust workspaces, and two adversarial "good-failure" cases (`.laguna` listed in entries, shallow-only counts on a Go monorepo). The validator enforces schema, entries-match-tree, lexicographic sorting of `entries[]`, recursive directory file counts, and `total_files`. Eval numbers are internal/directional.
 
 Plan of record: [`docs/plans/laguna-skills-v0-2026-06-10.md`](docs/plans/laguna-skills-v0-2026-06-10.md).
+
+## Task tracking and Beads
+
+This repo does not initialize a Beads tracker in the checkout. There is no
+`.beads/` directory here, and stabilization work does not run `br init` or copy
+`.beads` from another checkout. Beads shows up in two distinct, deliberate ways:
+
+- **Repo-local grading**: [`skills/bead-selector`](skills/bead-selector/SKILL.md)
+  is the authoritative repo truth for "what Bead should I pick next?" behavior.
+  Its eval suite synthesizes Beads graphs inside fixture workspaces and grades
+  the model's selection artifact; it does not depend on a live `.beads/` here.
+- **External source skills used by onboarding**: the workbench onboarding page
+  ([`ui/views/onboard.js`](ui/views/onboard.js)) starts readiness checks
+  against external Beads source skills under `~/.codex/skills/beads-bv` and
+  `~/.codex/skills/beads-workflow`. Those paths live outside this checkout. If
+  they are missing on a given machine, the onboarding run records the failure
+  rather than implying repo-local Beads state.
+
+If owning Beads inside this repo ever becomes the right choice, that is a
+separate, approval-gated decision made before any `.beads/` initialization or
+restore — not part of this stabilization pass.
 
 ## Prerequisites
 
@@ -134,8 +156,10 @@ Run eval-case validation when you are working on case coverage:
 uv run scripts/check_eval_cases.py
 ```
 
-Current state: this may flag WIP skills with incomplete eval-case coverage; currently
-`workspace-inventory` has no cases yet.
+Current state: `check_eval_cases.py` is expected to pass for the v0 bundle —
+`ci-log-reducer`, `laguna-task-contract`, `repo-map`, `bead-selector`, and
+`workspace-inventory` all carry the required minimum cases (including
+adversarial cases). It will fail for any future WIP skill that lacks coverage.
 
 Repo check scripts exit `0` when checks pass, `1` for check violations, and `2` for argument
 or usage errors. Use `--json` when another tool needs a `repo-check-result.v1` payload on

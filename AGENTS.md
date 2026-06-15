@@ -52,9 +52,30 @@ While working on eval cases:
 uv run scripts/check_eval_cases.py
 ```
 
-That eval-case check may fail for WIP skills with incomplete coverage. See
-`README.md` and `CLAUDE.md` for live evals, GEPA optimization, trace review, and
+The v0 bundle — `ci-log-reducer`, `laguna-task-contract`, `repo-map`,
+`bead-selector`, and `workspace-inventory` — is expected to pass that check;
+it will only flag a new WIP skill that lacks coverage. See `README.md` and
+`CLAUDE.md` for live evals, GEPA optimization, trace review, and
 case-generation commands.
+
+## Task tracking (Beads)
+
+This checkout does not initialize a Beads tracker. `.beads/` is absent here on
+purpose: stabilization work must not run `br init` or copy `.beads` from
+another checkout without an explicit, approval-gated source-of-truth decision.
+
+- Repo-local "what Bead to pick next?" truth lives in
+  [`skills/bead-selector`](skills/bead-selector/SKILL.md); its eval suite at
+  `evals/suites/skill-bead-selector.json` grades selection artifacts against
+  synthesized Beads graphs and does not need a live `.beads/` here.
+- The workbench onboarding page reaches external Beads source skills under
+  `~/.codex/skills/beads-bv` and `~/.codex/skills/beads-workflow`. Those paths
+  live outside this repo; missing paths must surface as a clear onboarding
+  failure rather than be interpreted as repo-local Beads state.
+
+If you are tempted to run `bv` or `br` against this checkout and see no graph,
+that is expected. Use the `bead-selector` fixtures for grading, and treat any
+move toward repo-owned Beads as separate work.
 
 ## Smithers
 
@@ -121,8 +142,9 @@ agent CLI surface.
 
 ## Local Safety
 
-- Treat generated validators, generated workflows, `smithers graph`, and
-  `smithers up` as local code execution.
+- Treat generated validators, generated workflows,
+  `bunx smithers-orchestrator graph`, and `bunx smithers-orchestrator up` as
+  local code execution.
 - Keep generated-code subprocesses on scrubbed environments so they do not
   inherit tokens.
 - Keep the workbench cross-origin POST checks and frontend URL scheme allowlist.

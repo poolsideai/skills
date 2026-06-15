@@ -29,8 +29,9 @@ for check violations, and `2` for argument or usage errors. In `--json` mode the
 runs through the eval runner:
 `uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay`.
 
-Eval-case coverage check (run while working on cases; this may fail for WIP skills such as
-`workspace-inventory`):
+Eval-case coverage check (run while working on cases; the v0 bundle —
+`ci-log-reducer`, `laguna-task-contract`, `repo-map`, `bead-selector`,
+`workspace-inventory` — is expected to pass):
 
 ```sh
 uv run scripts/check_eval_cases.py             # >=3 cases/skill incl. >=1 adversarial, metadata, suites, validator paths
@@ -126,7 +127,7 @@ bun ui/bench.ts models                         # pool agents list (laguna first,
 bun ui/bench.ts skill-generate --name <name> --prompt "..." --model <agent>
                                                # author + install a skill; rolled back if check_skill_structure.py fails
 bun ui/bench.ts workflow-generate --prompt "..." --model <agent> --project <path>
-                                               # generates workflow; rolls back unverified .tsx files (smithers graph gate)
+                                               # generates workflow; rolls back unverified .tsx files (Smithers graph gate)
 bun ui/bench.ts workflow-run <workflow.tsx> --project <path>
 bun ui/bench.ts runs / run-show <runId>        # workflow run history (TrajectoryRecords)
 bun ui/bench.ts eval-run --suite evals/suites/smoke.json --case <id> --arm xs_with_skill
@@ -170,7 +171,8 @@ mirror each other.
 **Authoring gates** are enforced by the substrate and CI: `skill-generate` writes into a
 scratch dir, runs `scripts/check_skill_structure.py`, rolls back + feeds violations into one repair
 round on failure. Skills only land in `skills/` if structure checks pass. `workflow-generate`
-applies the same pattern: unverified `.tsx` files are rolled back if `smithers graph` rejects them.
+applies the same pattern: unverified `.tsx` files are rolled back if
+`bunx smithers-orchestrator graph` rejects them.
 
 **Eval integration**: the server launches `uv run harness/runner/run_eval.py` detached; liveness is
 tracked via a pid sidecar under `runs/.harness/` (no in-memory registry, so restarts are safe). The
@@ -193,7 +195,8 @@ isn't already up, so the app survives terminal closes. The evals panel shows a l
 - *CSRF / cross-origin POST*: every mutating route rejects requests whose `Origin` isn't this
   server (curl / bench CLI with no Origin are allowed). A website open in the same browser can't
   drive code-gen or exec on your machine.
-- *Generated-code execution*: `bun validate_*.ts` and `smithers graph`/`up` run model-authored code.
+- *Generated-code execution*: `bun validate_*.ts` and
+  `bunx smithers-orchestrator graph`/`up` run model-authored code.
   Those sinks spawn with a **scrubbed env** (PATH/HOME/TMPDIR/LANG only), so generated code does not
   inherit `$POOLSIDE_TOKEN`.
 - *`javascript:` URLs*: trajectory links from capture data go through a scheme allowlist before
@@ -215,8 +218,11 @@ level; no README/CHANGELOG inside a skill. Shared TS helpers live in `skills/_sh
 Every skill's **Output contract** pins a **deterministic workspace path** (under `.laguna/`, e.g.
 `.laguna/ci-log-summary.json`) where the gradeable JSON artifact lands. Validators grade
 **workspace state + the final message only**, never stringified NLJSON tool transcripts. An
-artifact that only appears in chat does not exist for grading. The three v0 skills: `ci-log-reducer`
-(pathfinder), `laguna-task-contract`, `repo-map`.
+artifact that only appears in chat does not exist for grading. The v0 plan-of-record skills are
+`ci-log-reducer` (pathfinder), `laguna-task-contract`, and `repo-map`; `bead-selector` and
+`workspace-inventory` also ship full eval coverage and dedicated suites
+(`evals/suites/skill-bead-selector.json`, `evals/suites/skill-workspace-inventory.json`).
+All eval evidence is internal/directional.
 
 ### The validator contract (one grader, two callers)
 

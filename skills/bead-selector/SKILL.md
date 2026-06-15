@@ -7,7 +7,7 @@ description: >-
   validator-checked .laguna/bead-selection.json artifact grounded in bv/br
   robot output, never the interactive bv TUI.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Bead Selector
@@ -21,6 +21,16 @@ the next safe command is.
 
 This skill is for triage judgment, not backlog editing. It writes a small
 `.laguna/bead-selection.json` artifact and does not claim or close work.
+
+This skill is the repo-local source of truth for "what Bead should I pick
+next?" behavior in the Laguna skill library. It is distinct from the external
+Beads source skills the workbench onboarding panel checks against
+(`~/.codex/skills/beads-bv`, `~/.codex/skills/beads-workflow`): those are
+references outside this repo. There is no `.beads/` directory inside this
+checkout, and this skill is graded against synthesized Beads graphs in case
+fixtures, not against a live tracker DB. If the eval suite finds no `bv`/`br`
+output, the right response is to record that and stop, not to assume a hidden
+tracker exists.
 
 ## Use when
 

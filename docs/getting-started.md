@@ -16,6 +16,20 @@ GEPA path accepts `ANTHROPIC_API_KEY`; OpenRouter works through litellm with mod
 usual environment variables are present. Everything in the offline section below runs with zero
 credentials.
 
+## Task tracking and Beads in this checkout
+
+This repo does not initialize a Beads tracker locally. There is no `.beads/`
+here; do not run `br init` or copy `.beads` from another checkout as part of
+onboarding. "What Bead should I pick next?" behavior is graded through
+[`skills/bead-selector`](../skills/bead-selector/SKILL.md), whose suite at
+`evals/suites/skill-bead-selector.json` synthesizes the Beads graph inside
+fixture workspaces. The workbench onboarding page also points at external
+Beads source skills under `~/.codex/skills/beads-bv` and
+`~/.codex/skills/beads-workflow`; if those paths are missing on your machine,
+the onboarding run reports the missing source rather than implying a
+repo-local tracker exists. See the root [`README.md`](../README.md) section
+"Task tracking and Beads" for the full source-of-truth narrative.
+
 ## The loop, offline first
 
 Run these from the repo root, in order. None of them call a model or the network.
@@ -47,8 +61,10 @@ Run these from the repo root, in order. None of them call a model or the network
    uv run scripts/check_eval_cases.py
    ```
 
-   Current state: this may flag WIP skills with incomplete eval-case coverage; currently
-   `workspace-inventory` has no cases.
+   Current state: the v0 bundle — `ci-log-reducer`, `laguna-task-contract`,
+   `repo-map`, `bead-selector`, and `workspace-inventory` — meets the minimum
+   case count (≥3 cases, ≥1 adversarial). This check will flag any new WIP
+   skill that lacks coverage.
 
 4. **Eval dry run**: materializes every case into a temp workspace, prints the exact `pool`
    commands a live run would use, and gold-replays each validator against its case's `expected/`
