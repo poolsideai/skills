@@ -4,7 +4,8 @@ The single authoring standard for this repo. It reconciles the pool house style 
 `skill-creator` default skill that ships with `pool`, plus the agentskills.io spec it follows)
 with Plan A's fixed section template. Every publishable skill follows this guide; WIP skill directories must be clearly marked until they satisfy the gates. The structure checks in `scripts/` enforce the mechanical parts.
 
-Status: normative for v0 skill authors. Historical source notes live in the plan and investigation files, but this guide is the document to follow.
+This guide is normative for v0 skill authors. Historical source notes live in
+the plan and investigation files.
 
 Worked example: read [`skills/ci-log-reducer/`](../skills/ci-log-reducer/) end to end in authoring
 order (schema → validator → eval cases → `SKILL.md`); [`skills/laguna-task-contract/`](../skills/laguna-task-contract/)
@@ -30,8 +31,9 @@ Authoring order inside every skill is fixed:
 3. Eval cases (including the adversarial one)
 4. `SKILL.md` prose
 
-This is the founding design principle of the repo: a skill is a contract with a mechanical
-grader rather than a prompt pack. If you cannot write the validator, the skill is not ready to exist.
+This is the repo's core rule: a skill is a contract with a mechanical grader,
+not a prompt pack. If you cannot write the validator, the skill is not ready to
+exist.
 
 **Gate 2: non-goals and an adversarial case.**
 Every `SKILL.md` has a "Do not use when" section (non-goals, boundaries, anti-patterns), and
@@ -72,7 +74,9 @@ copied verbatim into a strange workspace.
 
 ## 3. Frontmatter
 
-Verified against `pool` 0.2.172 (`pkg/agent/llmtools/skill/types.go`):
+Source note: this frontmatter subset came from the `pool` 0.2.172 loader
+inspection recorded in the spike docs; the repo gate now enforces the subset
+below for v0 skills.
 
 ```yaml
 ---
@@ -325,8 +329,9 @@ carries the same contract):
 
 - `prompt.md` must name the deterministic artifact path from the skill's Output contract, so
   without-skill arms have the same grading target.
-- `input/` is the entire world the model sees: keep fixtures minimal but real (real log
-  shapes, real repo fragments), and never reference files outside the case folder.
+- `input/` contains all files available to the model. Keep fixtures minimal but
+  real (real log shapes, real repo fragments), and never reference files outside
+  the case folder.
 - The adversarial case should attack the skill's specific weakness: decoy evidence for
   reducers, scope bait for contract skills, hallucination bait (plausible-but-absent paths,
   frameworks) for mapping skills.

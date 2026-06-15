@@ -10,7 +10,7 @@ We evaluated three framework families for auto-optimizing skills against our
 harness (evo-hq/evo agentic tree search; DSPy/Ax program optimizers; the
 standalone `gepa` library):
 
-- **GEPA wins for our regime** — text-heavy artifact, expensive rollouts
+- **Use GEPA for this pilot**: text-heavy artifact, expensive rollouts
   (every eval is a real `pool exec`), small per-case 0..1 score vectors.
   Reflective mutation extracts a lesson from every failed rollout; per-instance
   Pareto selection maps 1:1 onto our per-case `validator_result.score`.
@@ -59,11 +59,12 @@ runs/generate/<skill>/<stamp>/   # generated case candidates (quarantined until 
   case-specific input filenames, or gold error lines; reflection side info
   uses case aliases instead of raw ids. Literals the seed SKILL.md already
   quotes (its deliberate worked example) are grandfathered, so the gate means
-  "no NEW case-specific quotes" — residual risk documented, not hidden.
+  "no NEW case-specific quotes". Existing worked-example literals remain a
+  documented residual risk.
 - **Fitness** = mean `validator_result.score` over (case × arm), arms
   defaulting to `xs_with_skill` only (baseline arms are constant w.r.t. the
   candidate). Harness failures (validator `error`, CLI rejection, missing
-  manifest/run dir) score 0.0 and are flagged — never silently dropped.
+  manifest/run dir) score 0.0 and are flagged instead of silently dropped.
   Good-failure cases (`expected_status: "fail"`) score on graded correctness.
   Exit 2 = configuration error and aborts the search (never a fake zero).
 - **Reflection fuel**: validator `repair_feedback[]` + failed check details
@@ -168,9 +169,10 @@ uv run harness/generate/gen_eval_cases.py --skill ci-log-reducer \
   we have 4. Treat lift as directional; grow the corpus with the generator
   above (target ~10-15 cases/skill near-term, ~50 val instances eventually),
   expecting roughly SWE-smith-like survival rates through the gates.
-- `workspace-inventory` (4th skill, WIP) has 0 eval cases and fails
-  `check_eval_cases.py` repo-wide — pre-existing, needs its 3-case minimum
-  before any optimization.
+- 2026-06-15 update: the previous `workspace-inventory` coverage gap is closed.
+  It now has a dedicated suite and the repo-wide `check_eval_cases.py` gate is
+  expected to pass for the v0 bundle. Future WIP skills still need their
+  3-case minimum before optimization.
 - Possible refinements: optimize `description` as a separate GEPA component
   (activation precision/recall), steal evo's stall-based stopping, fold
   optimization traces into `review-sync`, record a `harness_debt[]`-style

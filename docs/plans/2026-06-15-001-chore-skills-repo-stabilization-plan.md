@@ -14,7 +14,12 @@ Stabilize the skills repo by making the Smithers install match the current orche
 
 ## Problem Frame
 
-The repo strategy is coherent: validator-first Laguna skills, deterministic artifacts, and workbench-backed eval evidence. The current pain is operational drift around the edges. Smithers works, but some agent-facing surfaces still teach older bare `smithers` commands. Beads are not initialized in this checkout, while a separate checkout has different tracker state. Docs describe the main strategy well, but they lag behind the current `bead-selector` and `workspace-inventory` status. The plan should turn that survey into a safe stabilization pass without silently rewriting project history.
+The repo already has the core strategy in place: validator-first Laguna skills,
+deterministic artifacts, and workbench-backed eval evidence. The remaining
+drift is operational: older Smithers command examples, unclear Beads ownership,
+and status docs that lag current skill coverage. The plan should turn that
+survey into a safe stabilization pass without silently rewriting project
+history.
 
 ---
 
@@ -150,7 +155,7 @@ The stabilization pass should keep each decision lane independent until final ve
 
 ### U4. Document Beads Source of Truth
 
-- **Goal:** Document the current Beads state and make any source-of-truth decision explicit instead of implicit.
+- **Goal:** Document the current Beads state and make any ownership decision explicit instead of implicit.
 - **Requirements:** R7, R8, R9, R10.
 - **Dependencies:** U1.
 - **Files:** `README.md`, `AGENTS.md`, `docs/getting-started.md`, `ui/README.md`, `ui/views/onboard.js`, `skills/bead-selector/SKILL.md`, `evals/suites/skill-bead-selector.json`.
@@ -158,7 +163,7 @@ The stabilization pass should keep each decision lane independent until final ve
 - **Patterns to follow:** Keep `AGENTS.md` short and move detailed procedure to docs. Use `README.md` only for status and entry points.
 - **Test scenarios:**
   - Happy path: a new agent can read docs and tell whether `br`/`bv` should work in this checkout.
-  - Edge case: docs do not point at a different checkout as an implicit source of truth.
+  - Edge case: docs do not point at a different checkout as the implicit authority.
   - Error path: if external Beads source paths are missing, onboarding or docs surface a clear missing-source state.
   - Integration: onboarding text and skill catalog/eval text agree about the relationship between external Beads skills and repo-local `bead-selector`.
 - **Verification:** No repo doc implies that `.beads` exists locally unless the tracker was intentionally initialized as separate work.
@@ -207,7 +212,7 @@ The eval change affects repo-wide quality gates because `scripts/check_eval_case
 - **Smithers version churn:** Root Smithers is older than current docs/changelog entries. Mitigation: clean command drift first, then evaluate a version bump as a deliberate sub-step with workflow doctor/list/graph verification.
 - **Local-bin versus `bunx` behavior:** Workbench currently prefers local binaries. Mitigation: preserve local-bin fast path and only add a fallback or clearer error with tests around both cases.
 - **Subprocess token exposure:** Smithers graph and run operations currently have different environment needs. Mitigation: keep graph/verification scrubbed, document run-time credential inheritance, and test any fallback by operation type.
-- **Beads ownership ambiguity:** Initializing tracker state would make the checkout look authoritative without a decision. Mitigation: document the chosen source of truth before changing tracker state.
+- **Beads ownership ambiguity:** Initializing tracker state would make the checkout look authoritative without a decision. Mitigation: document the chosen authority before changing tracker state.
 - **Experiment drift:** `experiments/smithers-pool` is intentionally older than the root pack. Mitigation: verify it separately and avoid broad version normalization.
 - **Eval case fragility:** New `workspace-inventory` cases can overfit one filesystem shape. Mitigation: use small fixtures that exercise counts, exclusions, and adversarial validation separately.
 

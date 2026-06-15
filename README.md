@@ -2,7 +2,10 @@
 
 A validator-first skill library and external eval harness for Poolside's Laguna models. This repo is the place to bring a directory of skills, make each skill gradeable, measure it with `pool`, and optimize the instructions with GEPA without changing the grader.
 
-A skill is not a prompt pack. It is a contract: `SKILL.md` prose, a deterministic output schema, an executable validator, eval cases including an adversarial case, and run evidence. The newcomer path is three commands in this order:
+In this repo, a skill is a contract: `SKILL.md` prose, a deterministic output
+schema, an executable validator, eval cases including an adversarial case, and
+run evidence. Prompt-pack-only skills do not merge. The newcomer path is three
+commands in this order:
 
 ```bash
 uv run scripts/check_skill_structure.py
@@ -47,7 +50,7 @@ Publish-ready skills:
 Skills with rough evals:
 
 - [`bead-selector`](skills/bead-selector/SKILL.md) writes `.laguna/bead-selection.json`, the validator-graded record of which local Bead to pick next from `bv`/`br` robot-mode output. The dedicated suite at [`evals/suites/skill-bead-selector.json`](evals/suites/skill-bead-selector.json) covers multiple cases including adversarial ones; treat the resulting numbers as internal/directional.
-- [`workspace-inventory`](skills/workspace-inventory/SKILL.md) writes `.laguna/workspace-inventory.json`. The dedicated suite at [`evals/suites/skill-workspace-inventory.json`](evals/suites/skill-workspace-inventory.json) covers six cases — flat workspaces, nested Python and Rust workspaces, and two adversarial "good-failure" cases (`.laguna` listed in entries, shallow-only counts on a Go monorepo). The validator enforces schema, entries-match-tree, lexicographic sorting of `entries[]`, recursive directory file counts, and `total_files`. Eval numbers are internal/directional.
+- [`workspace-inventory`](skills/workspace-inventory/SKILL.md) writes `.laguna/workspace-inventory.json`. The dedicated suite at [`evals/suites/skill-workspace-inventory.json`](evals/suites/skill-workspace-inventory.json) covers six cases: flat workspaces, nested Python and Rust workspaces, and two adversarial "good-failure" cases (`.laguna` listed in entries, shallow-only counts on a Go monorepo). The validator enforces schema, entries-match-tree, lexicographic sorting of `entries[]`, recursive directory file counts, and `total_files`. Eval numbers are internal/directional.
 
 Plan of record: [`docs/plans/laguna-skills-v0-2026-06-10.md`](docs/plans/laguna-skills-v0-2026-06-10.md).
 
@@ -70,7 +73,7 @@ This repo does not initialize a Beads tracker in the checkout. There is no
 
 If owning Beads inside this repo ever becomes the right choice, that is a
 separate, approval-gated decision made before any `.beads/` initialization or
-restore — not part of this stabilization pass.
+restore. It is not part of this stabilization pass.
 
 ## Prerequisites
 
@@ -82,7 +85,8 @@ bun --version
 pool --version
 ```
 
-Known-good versions used while writing these docs: Python 3.11+, `bun` 1.3.14, and `pool` 1.0.5. Older `pool` 0.2.172 notes in spike docs are historical.
+Known-good versions used while checking these docs: Python 3.11+, `uv` 0.11.21,
+`bun` 1.3.14, and `pool` 1.0.5. Older `pool` 0.2.172 notes in spike docs are historical.
 
 `uv run ...` reads `pyproject.toml`; this repo is configured as a script-only project with `package = false`, so there is no package install step.
 
@@ -156,7 +160,7 @@ Run eval-case validation when you are working on case coverage:
 uv run scripts/check_eval_cases.py
 ```
 
-Current state: `check_eval_cases.py` is expected to pass for the v0 bundle —
+Current state: `check_eval_cases.py` is expected to pass for the v0 bundle:
 `ci-log-reducer`, `laguna-task-contract`, `repo-map`, `bead-selector`, and
 `workspace-inventory` all carry the required minimum cases (including
 adversarial cases). It will fail for any future WIP skill that lacks coverage.

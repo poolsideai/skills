@@ -25,7 +25,7 @@ skills (references/, preprocessor scripts).
   (no bootstrap mode yet). laguna-task-contract is the existing example of
   a multi-file skill (3 reference docs).
 
-## Finding 2026-06-12 (read first): contract-laden prompts cap skill lift
+## Finding from 2026-06-12 scoreboard: contract-heavy prompts cap skill lift
 
 First full-suite scoreboard (ci-log-reducer v0.1.1, 19 cases x 4 arms):
 without-skill arms score 0.959 mean / 36/40 pass; with-skill 0.868 / 30/40

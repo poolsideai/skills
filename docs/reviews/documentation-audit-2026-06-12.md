@@ -1,8 +1,17 @@
 # Documentation Audit
 
+2026-06-15 update: Retain this audit as decision history. The
+`workspace-inventory` finding is superseded: the skill now has eval coverage,
+and the v0 bundle is expected to pass the repo-wide eval-case gate.
+
 ## Executive Summary
 
-The docs are now closer to publishable: the README has a first-run path, current skill status, current artifact names, and clear boundaries between real tools and prototypes. The remaining risk is `workspace-inventory`: it is a real skill directory, but it has no eval cases, so repo-wide eval-case validation still fails until that skill is finished or removed from the publish surface.
+As of this audit on 2026-06-12, the docs were closer to publishable: the README
+had a first-run path, then-current skill status, artifact names, and clear
+boundaries between real tools and prototypes. The remaining risk at that time
+was `workspace-inventory`: it was a real skill directory, but it had no eval
+cases, so repo-wide eval-case validation still failed until that skill was
+finished or removed from the publish surface.
 
 ## Findings
 
@@ -17,7 +26,7 @@ No critical documentation issue remains after this pass.
   - Evidence: `skills/workspace-inventory/SKILL.md`; command output from `uv run scripts/check_eval_cases.py` reported 0 cases and no adversarial case; `docs/plans/skill-optimization-gepa-2026-06-11.md` already called this out.
   - Impact: Readers expect repo-wide eval checks to pass and may treat the library as fully publish-ready.
   - Fix: The README now marks `workspace-inventory` as WIP and states that `check_eval_cases.py` is expected to fail until it has three cases.
-  - Verification: verified - ran repo checks and read the skill directory.
+  - Verification: ran repo checks and read the skill directory.
   - Confidence: High.
 
 - Stale eval-case layout in the authoring guide.
@@ -25,7 +34,7 @@ No critical documentation issue remains after this pass.
   - Evidence: `docs/authoring-guide.md`; `evals/README.md`; `scripts/checklib.py`; actual `skills/*/evals/<case-id>/` directories.
   - Impact: New authors could create cases in a path the checks do not expect.
   - Fix: Updated `docs/authoring-guide.md` to show `evals/<case-id>/`.
-  - Verification: verified - cross-checked docs and file layout.
+  - Verification: cross-checked docs and file layout.
   - Confidence: High.
 
 - Run artifact docs advertised ATIF as the standard artifact.
@@ -33,7 +42,7 @@ No critical documentation issue remains after this pass.
   - Evidence: `harness/runner/run_eval.py`; `schemas/common/run-manifest.v0.schema.json`; `docs/trajectory-recovery-spike.md`.
   - Impact: Reviewers and scripts may look for the wrong artifact.
   - Fix: README and schema description now name `trajectory.ndjson` as canonical and ATIF as optional.
-  - Verification: verified - read runner artifact map and schema description.
+  - Verification: read runner artifact map and schema description.
   - Confidence: High.
 
 ### Medium
@@ -43,7 +52,7 @@ No critical documentation issue remains after this pass.
   - Evidence: `README.md`; `pyproject.toml`; `harness/runner/run_eval.py` credential checks.
   - Impact: New contributors had to guess prerequisites and why isolated live runs need `POOLSIDE_TOKEN` or copied credentials.
   - Fix: Rewrote the README with prerequisites, quick checks, dry-run, live-run auth, and review commands.
-  - Verification: verified - read runner credential logic and ran safe repo checks.
+  - Verification: read runner credential logic and ran safe repo checks.
   - Confidence: High.
 
 - Prototype pages looked more authoritative than they are.
@@ -51,7 +60,7 @@ No critical documentation issue remains after this pass.
   - Evidence: `index.html`; `skill.html`; current skill list in `skills/`.
   - Impact: A reader could mistake prototype metrics for published eval results.
   - Fix: Added visible prototype notes and corrected stale `validate_contract.py` / `evals/cases/...` examples.
-  - Verification: verified - read pages and current skill layout.
+  - Verification: read pages and current skill layout.
   - Confidence: High.
 
 - Historical spike docs front-loaded obsolete `pool` 0.2.172 facts.
@@ -69,7 +78,7 @@ No critical documentation issue remains after this pass.
   - Evidence: `schemas/common/README.md`; `scripts/check_schemas.py`.
   - Impact: Readers landing in the schema folder lacked the next action.
   - Fix: Added `uv run scripts/check_schemas.py`.
-  - Verification: verified - command was run successfully.
+  - Verification: command was run successfully.
   - Confidence: High.
 
 - Smithers experiment docs used raw commands where package scripts exist.
@@ -77,7 +86,7 @@ No critical documentation issue remains after this pass.
   - Evidence: `experiments/smithers-pool/package.json`; `experiments/smithers-pool/README.md`.
   - Impact: Users might miss the maintained script names.
   - Fix: Updated the README to use `bun run setup`, `bun run workflow`, and `bun run typecheck`.
-  - Verification: verified - script names cross-checked against `package.json`; commands not executed.
+  - Verification: script names cross-checked against `package.json`; commands not executed.
   - Confidence: High.
 
 ## Coverage Map
@@ -109,5 +118,7 @@ No critical documentation issue remains after this pass.
 
 - Ran: `uv run scripts/check_skill_structure.py`, `uv run scripts/check_eval_cases.py`, `uv run scripts/check_schemas.py`, `uv run scripts/check_validator_robustness.py`.
 - `check_skill_structure.py`, `check_schemas.py`, and `check_validator_robustness.py` passed.
-- `check_eval_cases.py` failed for `workspace-inventory` only: 0 eval cases and no adversarial case.
+- On 2026-06-12, `check_eval_cases.py` failed for `workspace-inventory` only:
+  0 eval cases and no adversarial case. See the 2026-06-15 status note above
+  for the current superseding state.
 - Orbit intentionally not checked; local files, scripts, schemas, and command output were enough for this audit.

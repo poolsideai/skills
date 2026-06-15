@@ -11,7 +11,7 @@ Everything lives in this directory. Nothing under `skills/`, `harness/`,
 
 ## TL;DR
 
-- **It works, live.** See [Results](#results). A 4-node workflow (1 intro node,
+- **Recorded run succeeded.** See [Results](#results). A 4-node workflow (1 intro node,
   then a 2→1 fan-out/fan-in) ran end-to-end with every node executed by
   `pool exec` against the real tenant (`laguna-m.1`), all outputs
   Zod-validated and persisted to `.smithers/smithers.db`. One fan-out node had
@@ -19,13 +19,12 @@ Everything lives in this directory. Nothing under `skills/`, `harness/`,
   sibling node ran skill-less.
 - **The agent contract is small and pool fits it well.** A Smithers agent is
   any object with `generate(args) => Promise<result>` where `result.text` is a
-  string. The engine — not the agent — owns prompt schema-instructions, JSON
-  extraction, Zod validation, and schema-retry loops. A CLI that streams text
-  and exits is exactly the shape the contract expects.
-- **Main blockers are quality-of-life, not showstoppers**: no token usage in
-  pool's `-o json` stream, no per-run conversation resume wired up (schema
-  retries re-send a flattened transcript), and pool's sandbox can't be enabled
-  without container-runtime + workspace config (this spike runs
+  string. The engine owns prompt schema instructions, JSON extraction, Zod
+  validation, and schema-retry loops; the agent only needs to return text.
+- **Main blockers are operational polish**: no token usage in pool's `-o json`
+  stream, no per-run conversation resume wired up (schema retries re-send a
+  flattened transcript), and pool's sandbox can't be enabled without
+  container-runtime + workspace config (this spike runs
   `--sandbox disabled` + `--unsafe-auto-allow`, same debt the eval harness
   records).
 
@@ -271,16 +270,14 @@ Success criteria, checked:
   (4× NodeStarted/NodeFinished, 56 AgentEvents bridged from PoolAgent's
   `onEvent`, RunStarted/RunFinished) alongside the output rows.
 
-The schema retries are themselves a useful result: on 2 of 4 first attempts
-the model **echoed the JSON Schema** from the engine-injected instructions
-instead of emitting an instance. PoolAgent's schema-guided extraction
-correctly rejected the echo (a naive "last JSON object" extractor would have
-crashed into Zod validation the same way), the engine's schema-retry called
-`generate({ messages })` with the flattened conversation + Zod issues, and
-both nodes produced valid instances on the second turn — i.e. the retry
-machinery and PoolAgent's `messages` flattening were exercised live, not just
-in theory. See blocker #5 for the prompt-shape fix that would avoid the extra
-calls entirely.
+The schema retries were useful evidence. On 2 of 4 first attempts, the model
+**echoed the JSON Schema** from the engine-injected instructions instead of
+emitting an instance. PoolAgent's schema-guided extraction rejected the echo
+(a naive "last JSON object" extractor would have crashed into Zod validation
+the same way), the engine's schema-retry called `generate({ messages })` with
+the flattened conversation + Zod issues, and both nodes produced valid
+instances on the second turn. See blocker #5 for the prompt-shape fix that
+would avoid the extra calls entirely.
 
 ## 7. Blockers & friction for a real integration
 
@@ -340,10 +337,9 @@ Ranked, with the smallest framework/CLI change that would fix each:
    `unable to open database file` if `.smithers/` doesn't exist yet —
    `mkdir -p .smithers` before the first run.
 
-None of these prevent the integration: the contract is genuinely
-CLI-friendly (text-in/text-out + optional events), and the engine's
-"non-native structured output" path was clearly designed for exactly this
-kind of agent.
+These issues do not block integration. The contract is CLI-friendly
+(text-in/text-out + optional events), and the engine's non-native
+structured-output path supports this kind of agent.
 
 ## 8. What's real vs. stubbed
 

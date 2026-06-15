@@ -5,9 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 A **validator-first skill library** for Poolside's Laguna models plus an **external eval harness**
-that drives the `pool` CLI to measure each skill's effect. The founding rule, which
-shapes every design decision here: *a skill is a contract with a mechanical grader, not a prompt
-pack.* A skill without an executable validator and eval evidence does not merge.
+that drives the `pool` CLI to measure each skill's effect. The founding rule
+shapes every design decision here: *a skill is a contract with a mechanical grader.*
+Prompt-pack-only skills do not merge.
 
 Plan of record: `docs/plans/laguna-skills-v0-2026-06-10.md`. Authoring standard:
 `docs/authoring-guide.md` (binding). Eval method: `docs/eval-methodology.md`.
@@ -29,9 +29,9 @@ for check violations, and `2` for argument or usage errors. In `--json` mode the
 runs through the eval runner:
 `uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay`.
 
-Eval-case coverage check (run while working on cases; the v0 bundle —
-`ci-log-reducer`, `laguna-task-contract`, `repo-map`, `bead-selector`,
-`workspace-inventory` — is expected to pass):
+Eval-case coverage check (run while working on cases; expected to pass for the
+v0 bundle: `ci-log-reducer`, `laguna-task-contract`, `repo-map`,
+`bead-selector`, `workspace-inventory`):
 
 ```sh
 uv run scripts/check_eval_cases.py             # >=3 cases/skill incl. >=1 adversarial, metadata, suites, validator paths
@@ -191,7 +191,7 @@ one per standalone node-eval trial. It replaces only `workbench/*` traces; harne
 isn't already up, so the app survives terminal closes. The evals panel shows a live
 "review traces ↗" link. Running the review server manually still works.
 
-**Security** (localhost dev tool that spawns processes; real exposures, not theoretical):
+**Security for the localhost process-spawning dev tool**:
 - *CSRF / cross-origin POST*: every mutating route rejects requests whose `Origin` isn't this
   server (curl / bench CLI with no Origin are allowed). A website open in the same browser can't
   drive code-gen or exec on your machine.
@@ -267,7 +267,7 @@ annotation UI. `validators/` = harness-side result/schema helpers. Cross-cutting
   (`bun` on PATH) and tool/network expectations as prose; enforcement is harness-side.
 - Skill `description` is written as explicit **trigger phrases** ("Use when ..."), not a summary. It's
   the only text the agent sees before loading the skill, and activation precision/recall are measured.
-- Verified against `uv` 0.10.12, `bun` 1.3.14, `pool` 1.0.5 (see addenda in `docs/model-access-spike.md`
+- Verified against `uv` 0.11.21, `bun` 1.3.14, `pool` 1.0.5 (see addenda in `docs/model-access-spike.md`
   and `docs/trajectory-recovery-spike.md`).
 - `runs/` is gitignored. `index.html`, `skill.html`, `styles.css` are the static GitHub Pages
   catalog mockup; **not part of any skill, the harness, or any check**. `workflows.html` is the

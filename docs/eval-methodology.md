@@ -1,6 +1,6 @@
 # Eval Methodology (v0)
 
-> Status: v0 — **all numbers produced under this methodology are internal and directional. None are
+> Status: v0. **All numbers produced under this methodology are internal and directional. None are
 > publishable lift claims.** (See [Reporting policy](#7-reporting-policy-internal--directional-only).)
 > Plan: `docs/plans/laguna-skills-v0-2026-06-10.md` (work item 8).
 > Substrate: `.resources/investigations/laguna-skills-and-harness-substrate-2026-06-10.md` (§3.2, §6.2, §6.4, §6.5, §8.2).
@@ -11,8 +11,9 @@
 Each skill in this library carries an output schema, an executable validator, and eval cases. The
 question the eval loop answers is narrow: **does materializing this skill into the workspace improve
 Laguna's verified outcomes on the skill's cases, compared to the same model with no skill available?**
-The runner (`harness/runner/`, plan item 10) drives today's `pool exec` as a subprocess — no forge
-changes — so everything here is bounded by what that CLI surface exposes today.
+The runner (`harness/runner/`, plan item 10) drives today's `pool exec` as a
+subprocess, with no forge changes. Everything here is bounded by what that CLI
+surface exposes today.
 
 ## 2. The v0 arm matrix
 
@@ -46,7 +47,7 @@ For every arm, the runner (`harness/runner/fixtures.py`):
 
 1. **Creates a fresh temporary workspace** and copies the case's `input/` into it. `pool` is never
    pointed at the skill source tree or the case directory itself.
-2. **For with-skill arms only**, copies `skills/<name>/` into `<workspace>/.poolside/skills/<name>/` —
+2. **For with-skill arms only**, copies `skills/<name>/` into `<workspace>/.poolside/skills/<name>/`,
    the discovery path `pool exec` actually scans. Skipping this makes the with-skill arm silently
    identical to baseline.
 3. **Runs `pool exec` under an isolated HOME** with an empty user-global skills dir
@@ -54,7 +55,7 @@ For every arm, the runner (`harness/runner/fixtures.py`):
    (e.g. `skill-creator`) can never contaminate either arm.
 4. **Leaves the skill tool enabled in both arms.** It is on by default in `pool exec`, and there is no
    public flag to disable it. The baseline is therefore *skill tool enabled, zero project skills
-   available* — the model sees the tool report no usable skills, not an absent tool.
+   available*. The model sees the tool report no usable skills, not an absent tool.
 
 Known residue, accepted for v0: `pool` auto-installs its embedded default skills
 (`configure-sandbox`, `pool-product-reference`, `skill-creator`) into the user-global dir on registry
@@ -69,10 +70,10 @@ Every skill's Output contract names a **deterministic workspace path** where the
 artifact lands (or, for patch skills, the diff target in the tree). The prompt names that path; the
 validator reads it from the workspace after the run.
 
-**Validators grade workspace state plus the final message — never stringified NLJSON tool results.**
+**Validators grade workspace state plus the final message. They never grade stringified NLJSON tool results.**
 Today's `pool exec -o json` stringifies every tool-call result (`fmt.Sprint`, substrate §6.5); parsing
 those strings for grading is brittle and will silently change when PR5 restructures telemetry. NLJSON
-is used for exactly one metric — activation (below) — and even that use is flagged as harness debt.
+is used for exactly one metric, activation, and even that use is flagged as harness debt.
 
 ## 5. Metrics computable today
 
@@ -92,8 +93,8 @@ and the recovered trajectory.
 | **Tool-call count** | Number of `toolCall` events in the NLJSON stream. Crude effort/efficiency proxy. | NLJSON |
 
 Aggregation: per skill, the report (`harness/runner/report.py`, plan item 12) renders case × arm rows
-with validator status, schema validity, activation, duration, and accumulated harness debt —
-watermarked internal/directional.
+with validator status, schema validity, activation, duration, and accumulated harness debt.
+Reports are watermarked internal/directional.
 
 ## 6. Error-analysis-first discipline
 
@@ -101,7 +102,7 @@ Per substrate §3.2: **measurement leads and graders follow.** Once runs work fo
 adding any new grader (and before trusting any aggregate number):
 
 1. Run the skill on 20–50 real cases via `pool exec`.
-2. **Read the transcripts** — outputs and trajectories, not just validator verdicts.
+2. **Read the transcripts**: outputs and trajectories, not just validator verdicts.
 3. Open-code the failures; cluster them into a per-skill failure taxonomy; count frequencies.
 4. Only then decide which checks to add to the validator, which cases to author next, and which
    harness PRs (PR2–PR7) the evidence actually justifies.

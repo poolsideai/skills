@@ -7,9 +7,8 @@ Keep this file short. Treat it as an agent index and put detailed procedures in
 ## Repo Purpose
 
 This is a validator-first skill library for Poolside Laguna models plus an
-external eval harness that drives `pool`. A skill is a gradeable contract, not a
-prompt pack. A skill without an executable validator and eval evidence does not
-merge.
+external eval harness that drives `pool`. A skill is a gradeable contract:
+validator, eval evidence, and prose. Prompt-pack-only skills do not merge.
 
 Start here:
 
@@ -52,8 +51,8 @@ While working on eval cases:
 uv run scripts/check_eval_cases.py
 ```
 
-The v0 bundle — `ci-log-reducer`, `laguna-task-contract`, `repo-map`,
-`bead-selector`, and `workspace-inventory` — is expected to pass that check;
+The v0 bundle (`ci-log-reducer`, `laguna-task-contract`, `repo-map`,
+`bead-selector`, and `workspace-inventory`) is expected to pass that check;
 it will only flag a new WIP skill that lacks coverage. See `README.md` and
 `CLAUDE.md` for live evals, GEPA optimization, trace review, and
 case-generation commands.

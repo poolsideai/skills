@@ -1,6 +1,6 @@
 # Laguna Skills v0: Skill Library + Rough-but-Real Eval Loop
 
-> Status: Historical plan of record (deep-plan 2026-06-10; design-critiqued — see `docs/reviews/laguna-skills-v0-critique-2026-06-10.md`)
+> Status: Historical plan of record; deep-plan 2026-06-10, design-critiqued in `docs/reviews/laguna-skills-v0-critique-2026-06-10.md`.
 > Sources: `.resources/investigations/laguna-skills-and-harness-substrate-2026-06-10.md` (substrate),
 > `laguna-skills-plan-approach.md` (Plan A — what to build), `laguna-skills-plus-pool.md` (Plan B — PR1 only for v0).
 >
@@ -57,10 +57,9 @@ The repo is effectively empty (LICENSE, README, static-page mockups, `.resources
 v0 ships the smallest validator-first slice that produces real internal evidence: three skills
 (`laguna-task-contract`, `ci-log-reducer`, `repo-map`), each with an output schema and executable validator
 written **before** the `SKILL.md` prose (the hard authoring gate), a small eval-case corpus (~11 cases), and an
-external runner that compares with-skill vs without-skill arms through today's `pool exec`. One skill —
-`ci-log-reducer`, the most mechanically gradeable — goes end-to-end first as the pathfinder that proves the
-whole loop; the other two follow on the established pattern. This is not a prompt-pack milestone: a skill
-without a validator and eval evidence doesn't merge.
+external runner that compares with-skill vs without-skill arms through today's `pool exec`. Start with
+`ci-log-reducer`, the most mechanically gradeable skill, to prove the loop. The other two follow the established
+pattern. Merge only skills with a validator and eval evidence.
 
 Three tracks run in parallel from day one. **Track 1 (spikes)**: named-agent invocation reaches Laguna today,
 so the model-access spike just documents which agent names map to XS.2 / M.1 plus quotas and cost reporting; a

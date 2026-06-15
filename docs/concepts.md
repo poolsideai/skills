@@ -12,9 +12,10 @@ doc, the linked doc wins.
 - **pool**: the Poolside CLI. The harness drives `pool exec` in isolated workspaces; the
   workbench uses it for authoring and playground runs. Verified version is recorded in
   [`CLAUDE.md`](../CLAUDE.md) (Conventions) and the spike addenda.
-- **skill**: in this repo, a contract with a mechanical grader, not a prompt pack: `SKILL.md`
-  plus an output schema, an executable validator, and eval cases (including one adversarial
-  case). Binding rules: [`authoring-guide.md`](authoring-guide.md).
+- **skill**: in this repo, a contract with a mechanical grader: `SKILL.md` plus
+  an output schema, an executable validator, and eval cases (including one
+  adversarial case). Prompt-pack-only skills do not qualify. Binding rules:
+  [`authoring-guide.md`](authoring-guide.md).
 - **validator**: a `bun`-run TypeScript script that grades workspace state and emits a
   `validator-result.v1` JSON file. Fixed argv contract, no network, deterministic. Spec:
   [`../evals/README.md`](../evals/README.md) and [`../schemas/common/README.md`](../schemas/common/README.md).
@@ -52,8 +53,12 @@ doc, the linked doc wins.
 - **trajectory / ATIF**: `trajectory.ndjson` (raw NDJSON) is the canonical recovered
   trajectory; ATIF is an optional export format pool can produce. Details:
   [`trajectory-recovery-spike.md`](trajectory-recovery-spike.md).
-- **Smithers**: the TypeScript workflow engine used in workbench experiments; `pool` acts as a
-  node executor via `PoolAgent`. Spike: [`../experiments/smithers-pool/README.md`](../experiments/smithers-pool/README.md).
+- **Smithers**: the TypeScript workflow engine used here for durable workflow
+  orchestration, approvals, run inspection, and seeded agent work. The root
+  workflow pack lives in `.smithers/` and is operated with
+  `bunx smithers-orchestrator`; the older `experiments/smithers-pool/` tree is
+  the PoolAgent spike where `pool` acts as a node executor. Docs:
+  [`smithers.md`](smithers.md).
 - **workbench**: the local UI (`bun ui/server.ts`, port 4319) and agent CLI (`bun ui/bench.ts`)
   over a shared substrate for authoring, runs, evals, and review. `bench.ts` also owns the
   agent CLI contract, command catalog, and JSON error responses. Docs: [`../ui/README.md`](../ui/README.md).

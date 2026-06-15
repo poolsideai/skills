@@ -1,9 +1,9 @@
 # Skills & Workflow Workbench
 
-One bench that closes the loop: **author a skill → author a workflow (with
-pool executing every node, skills installed per node) → run it → eval it →
-watch results live → iterate**. The GitHub Pages catalog (`index.html`)
-stays a separate, static showcase; this is the working surface.
+The workbench covers the skill and workflow cycle: author a skill, author a
+workflow with pool-backed nodes, run it, evaluate it, watch results, and
+iterate. The GitHub Pages catalog (`index.html`) stays a separate, static
+showcase; this is the working surface.
 
 ```
 bun ui/server.ts          # web UI  → http://127.0.0.1:4319/workflows.html
@@ -115,18 +115,17 @@ adds `references/**` files to the mutable GEPA component set.
 
 The onboarding panel runs readiness checks against external Beads source
 skills under `~/.codex/skills/beads-bv` and `~/.codex/skills/beads-workflow`.
-Those paths live outside this repo and are not the source of truth for any
-in-repo behavior — if they are missing on a given machine, the onboarding run
+Those paths live outside this repo and are not authoritative for any
+in-repo behavior. If they are missing on a given machine, the onboarding run
 records the failure and stops rather than treating the absence as repo-local
 state. Repo-local "what Bead to pick next?" behavior is owned by
 [`skills/bead-selector`](../skills/bead-selector/SKILL.md) and graded through
 fixture workspaces, not a live `.beads/` tracker; the workbench does not
 initialize `.beads/` here.
 
-## The unifying data model
+## Trajectory records
 
-"An eval is basically any trajectory." Everything the bench lists reduces to
-a trajectory record:
+The bench normalizes workflow runs and harness evals into trajectory records:
 
 - **workflow-run**: from a project's `.smithers/smithers.db`: run → nodes →
   attempts → schema-validated output rows → matched pool captures
@@ -135,7 +134,7 @@ a trajectory record:
   `runs/<suite>/<case>/<arm>/`: `manifest.json` (validator status/score/
   checks, timing, agent) + `run-facts.json` (graded_pass, token totals).
 
-Same vocabulary, same UI affordances, regardless of producer.
+The UI uses the same vocabulary and controls for both producers.
 
 ## Authoring (model-selectable)
 
@@ -147,8 +146,8 @@ models, `anthropic/claude-*`, etc.) as the author, via pool's `--agent-name`:
   current skills catalog so it can install a skill into a node
   (`PoolAgent { skill: { name, from } }`). Output is only saved after
   `bunx smithers-orchestrator graph` verifies it; one repair round on failure.
-  The verifier is resolved by `resolveSmithersRunner()` — local
-  `.smithers/node_modules/.bin/smithers` fast path, with a
+  The verifier is resolved by `resolveSmithersRunner()`: local
+  `.smithers/node_modules/.bin/smithers` is the fast path, with a
   `bunx smithers-orchestrator` fallback for fresh checkouts (see
   [`docs/smithers.md`](../docs/smithers.md) → Runner resolution). Rule
   learned live: upstream rows flow via `ctx.latest(outputs.key, "node-id")`;
@@ -215,8 +214,8 @@ it:
   workflow-node pool capture (prompt, NLJSON trajectory, `.laguna/` outputs,
   validator result from its in-workflow node-eval) and one per standalone
   node-eval trial. It replaces only `workbench/*` traces; harness traces and
-  all human labels are preserved. This is the "eval = any trajectory" payoff:
-  Smithers node runs become annotatable next to harness eval runs.
+  all human labels are preserved. This lets Smithers node runs be annotated
+  next to harness eval runs.
 
 ## Security model (local dev tool)
 

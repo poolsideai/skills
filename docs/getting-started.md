@@ -61,8 +61,8 @@ Run these from the repo root, in order. None of them call a model or the network
    uv run scripts/check_eval_cases.py
    ```
 
-   Current state: the v0 bundle — `ci-log-reducer`, `laguna-task-contract`,
-   `repo-map`, `bead-selector`, and `workspace-inventory` — meets the minimum
+   Current state: the v0 bundle (`ci-log-reducer`, `laguna-task-contract`,
+   `repo-map`, `bead-selector`, and `workspace-inventory`) meets the minimum
    case count (≥3 cases, ≥1 adversarial). This check will flag any new WIP
    skill that lacks coverage.
 
@@ -87,9 +87,10 @@ Run these from the repo root, in order. None of them call a model or the network
    uv run harness/review/serve.py          # http://127.0.0.1:8765
    ```
 
-When the repo checks, eval dry run, optimizer smoke, and demo review app work, the offline loop is
-wired for local development. Treat the eval-case coverage check as advisory until the WIP skills
-have full cases.
+When the repo checks, eval-case coverage check, eval dry run, optimizer smoke,
+and demo review app work, the offline loop is wired for local development. The
+coverage check is expected to pass for the v0 bundle; it should only turn red
+for newly added WIP skills that have not received cases yet.
 
 ## The live loop
 
