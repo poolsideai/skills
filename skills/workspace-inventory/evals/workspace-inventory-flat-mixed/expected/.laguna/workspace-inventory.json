@@ -1,0 +1,10 @@
+{
+  "schema_version": "workspace-inventory.v1",
+  "total_files": 5,
+  "entries": [
+    { "name": "LICENSE", "kind": "file" },
+    { "name": "README.md", "kind": "file" },
+    { "name": "package.json", "kind": "file" },
+    { "name": "src", "kind": "directory", "file_count": 2 }
+  ]
+}

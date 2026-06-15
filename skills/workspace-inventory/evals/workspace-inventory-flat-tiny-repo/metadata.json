@@ -1,0 +1,13 @@
+{
+  "id": "workspace-inventory-flat-tiny-repo",
+  "skill": "workspace-inventory",
+  "bucket": "easy",
+  "difficulty": "easy",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/workspace-inventory/scripts/validate_workspace_inventory.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Easy case: a flat three-entry workspace — two top-level files (LICENSE, README.md) and one src/ directory holding a single source file. The gold inventory enumerates all three entries in lexicographic order (uppercase LICENSE before README.md before src), with file_count=1 on src and total_files=3. Synthetic fixture; no customer data."
+}

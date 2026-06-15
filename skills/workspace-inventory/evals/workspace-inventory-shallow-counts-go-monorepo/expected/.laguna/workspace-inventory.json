@@ -1,0 +1,12 @@
+{
+  "schema_version": "workspace-inventory.v1",
+  "total_files": 4,
+  "entries": [
+    { "name": "Makefile", "kind": "file" },
+    { "name": "README.md", "kind": "file" },
+    { "name": "cmd", "kind": "directory", "file_count": 0 },
+    { "name": "go.mod", "kind": "file" },
+    { "name": "go.sum", "kind": "file" },
+    { "name": "internal", "kind": "directory", "file_count": 0 }
+  ]
+}

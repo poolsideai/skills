@@ -1,0 +1,9 @@
+{
+  "schema_version": "workspace-inventory.v1",
+  "total_files": 3,
+  "entries": [
+    { "name": ".laguna", "kind": "directory", "file_count": 1 },
+    { "name": "README.md", "kind": "file" },
+    { "name": "src", "kind": "directory", "file_count": 1 }
+  ]
+}

@@ -1,0 +1,11 @@
+[package]
+name = "midsize-fixture"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "midsize-fixture"
+path = "src/main.rs"

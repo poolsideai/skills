@@ -1,0 +1,12 @@
+{
+  "schema_version": "workspace-inventory.v1",
+  "total_files": 9,
+  "entries": [
+    { "name": "README.md", "kind": "file" },
+    { "name": "docs", "kind": "directory", "file_count": 1 },
+    { "name": "pyproject.toml", "kind": "file" },
+    { "name": "scripts", "kind": "directory", "file_count": 1 },
+    { "name": "src", "kind": "directory", "file_count": 3 },
+    { "name": "tests", "kind": "directory", "file_count": 2 }
+  ]
+}

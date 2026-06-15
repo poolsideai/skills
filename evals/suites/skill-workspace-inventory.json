@@ -1,0 +1,11 @@
+{
+  "name": "skill-workspace-inventory",
+  "cases": [
+    "skills/workspace-inventory/evals/workspace-inventory-flat-mixed",
+    "skills/workspace-inventory/evals/workspace-inventory-flat-tiny-repo",
+    "skills/workspace-inventory/evals/workspace-inventory-includes-laguna-artifact-dir",
+    "skills/workspace-inventory/evals/workspace-inventory-nested-python-service",
+    "skills/workspace-inventory/evals/workspace-inventory-nested-rust-project",
+    "skills/workspace-inventory/evals/workspace-inventory-shallow-counts-go-monorepo"
+  ]
+}

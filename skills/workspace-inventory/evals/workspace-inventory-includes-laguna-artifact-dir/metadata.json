@@ -1,0 +1,13 @@
+{
+  "id": "workspace-inventory-includes-laguna-artifact-dir",
+  "skill": "workspace-inventory",
+  "bucket": "adversarial",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/workspace-inventory/scripts/validate_workspace_inventory.ts"],
+    "expected_status": "fail"
+  },
+  "notes": "Good-failure adversarial case: the artifact path .laguna/ exists at the workspace root (because the inventory itself lives there) and a naive model that lists the top level without filtering will include \".laguna\" in entries[]. The gold here is that exact mistake — schema-valid and internally consistent (total_files matches the sum of claimed file counts), but listing \".laguna\" as a top-level directory. The validator's entries-match-tree check enforces the excluded-set rule, so its rejection IS the correct outcome and expected_status is \"fail\". Live-run caveat: a model that correctly excludes .laguna/ will produce a passing artifact, which mismatches expected_status; that filtering behavior is read out of transcripts during error analysis. Synthetic fixture; no customer data."
+}

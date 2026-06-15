@@ -12,6 +12,8 @@
  *   entries-match-tree     every name in entries[] exists at the workspace root,
  *                          with the correct kind (file vs directory); no top-level
  *                          entry (excluding .laguna/) is missing from entries[]
+ *   entries-sorted         entries[] is sorted lexicographically (ASCII codepoint)
+ *                          by name, as required by the SKILL.md output contract
  *   file-counts-accurate   every directory entry's file_count matches the real
  *                          recursive file count in the workspace
  *   total-files-accurate   total_files equals the sum of all directory file_counts
@@ -639,7 +641,50 @@ function grade(
     }
   }
 
-  // 4. file-counts-accurate
+  // 4. entries-sorted
+  // SKILL.md contract: entries[] must be sorted lexicographically by name
+  // (ASCII codepoint order, the JS default `<`).
+  if (claimedEntries === null) {
+    checks.push(
+      helper.check(
+        "entries-sorted",
+        false,
+        "",
+        "not evaluated: entries is not an array"
+      )
+    );
+  } else {
+    const sortProblems: string[] = [];
+    let lastName: string | null = null;
+    for (let i = 0; i < claimedEntries.length; i += 1) {
+      const entry = claimedEntries[i];
+      if (!isObj(entry)) continue;
+      const name = entry.name;
+      if (typeof name !== "string") continue;
+      if (lastName !== null && name < lastName) {
+        sortProblems.push(
+          `entries[${i}] name "${name}" sorts before previous name "${lastName}"`
+        );
+      }
+      lastName = name;
+    }
+    checks.push(
+      helper.check(
+        "entries-sorted",
+        sortProblems.length === 0,
+        "entries[] is sorted lexicographically by name",
+        sortProblems.join("; ")
+      )
+    );
+    feedback.push(
+      ...sortProblems.map(
+        (p) =>
+          `Entry order error — ${p}. Sort entries[] lexicographically (ASCII order) by name before writing the artifact.`
+      )
+    );
+  }
+
+  // 5. file-counts-accurate
   // For each directory entry, verify the claimed file_count against the real count.
   if (claimedEntries === null) {
     checks.push(
@@ -707,7 +752,7 @@ function grade(
     );
   }
 
-  // 5. total-files-accurate
+  // 6. total-files-accurate
   // total_files must equal sum of directory file_counts + count of file-kind entries.
   if (claimedEntries === null) {
     checks.push(

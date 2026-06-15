@@ -1,0 +1,13 @@
+{
+  "id": "workspace-inventory-nested-rust-project",
+  "skill": "workspace-inventory",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"],
+  "publishability": "internal",
+  "validator": {
+    "command": ["bun", "skills/workspace-inventory/scripts/validate_workspace_inventory.ts"],
+    "expected_status": "pass"
+  },
+  "notes": "Realistic mid-sized Rust workspace with several directories of varying depth: docs/ has a nested api/ subdir, src/ has a nested parser/ subdir, and tests/ is shallow. Forces the model to recurse rather than only count immediate children, and exercises a dotfile (.gitignore) at the top level (must appear in entries[], sorted ahead of regular names). Synthetic fixture."
+}
