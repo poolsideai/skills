@@ -125,6 +125,7 @@ bun ui/bench.ts commands
 bun ui/bench.ts skills
 bun ui/bench.ts eval-suites
 bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
+bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
 bun ui/bench.ts eval-run --suite evals/suites/smoke.json --arm xs_with_skill
 bun ui/bench.ts eval-runs
 bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
@@ -282,8 +283,9 @@ Eval cases can be generated, but generated cases stay quarantined until a human 
 
 ```bash
 bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
-bun ui/bench.ts eval-case-generate --skill ci-log-reducer --validate-only <case-dir>
-bun ui/bench.ts eval-case-generate --skill ci-log-reducer --promote runs/generate/ci-log-reducer/<stamp>/candidates/<case-id>
+bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote runs/generate/<name>/<stamp>/candidates/<case-id>
 ```
 
 `eval-case-generate` is the agent-facing bench wrapper around
@@ -291,6 +293,10 @@ bun ui/bench.ts eval-case-generate --skill ci-log-reducer --promote runs/generat
 mechanical gates and human-review quarantine, while normalizing stdout/stderr
 to the bench JSON contract. The raw Python invocation remains supported for
 direct debugging.
+For first-run bootstrap, `--skill` may be a path to an external skill directory.
+Passing `SKILL.md` is accepted as an alias for its parent directory. When the
+repo copy is missing, the generator imports the full skill directory into
+`skills/<name>` before bootstrapping cases.
 
 Promotion copies the reviewed case into `skills/<skill>/evals/`, appends it to the per-skill suite, reruns checks, and rolls back on failure. Review the resulting diff before committing.
 

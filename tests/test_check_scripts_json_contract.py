@@ -48,6 +48,9 @@ class CheckScriptsJsonContractTests(unittest.TestCase):
         self.assertEqual(payload["schema_version"], "repo-check-result.v1")
         self.assertEqual(payload["tool"], "check_schemas")
         self.assertEqual(payload["status"], "ok")
+        self.assertIsNone(payload["failure_kind"])
+        self.assertEqual(payload["exit_code"], 0)
+        self.assertIn("uv run scripts/check_schemas.py --json", payload["next_commands"])
         self.assertEqual(payload["violation_count"], 0)
         self.assertEqual(payload["violations"], [])
         self.assertIsInstance(payload["counts"], dict)
@@ -64,6 +67,9 @@ class CheckScriptsJsonContractTests(unittest.TestCase):
         self.assertEqual(payload["schema_version"], "repo-check-result.v1")
         self.assertEqual(payload["tool"], "check_schemas")
         self.assertEqual(payload["status"], "fail")
+        self.assertEqual(payload["failure_kind"], "validation_failure")
+        self.assertEqual(payload["exit_code"], 1)
+        self.assertIn("uv run scripts/check_schemas.py --json", payload["next_commands"])
         self.assertGreaterEqual(payload["violation_count"], 1)
         violations = payload["violations"]
         self.assertIsInstance(violations, list)
@@ -116,6 +122,8 @@ class CheckScriptsJsonContractTests(unittest.TestCase):
                 self.assertEqual(payload["schema_version"], "repo-check-result.v1")
                 self.assertEqual(payload["tool"], "check_schemas")
                 self.assertEqual(payload["status"], "fail")
+                self.assertEqual(payload["failure_kind"], "validation_failure")
+                self.assertEqual(payload["exit_code"], 1)
                 self.assertNotIn("missing shared v0 contract schema", stdout.getvalue())
                 self.assertNotIn("plan item 7", stdout.getvalue())
                 matching_violations = [

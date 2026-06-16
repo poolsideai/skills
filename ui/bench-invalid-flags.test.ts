@@ -192,6 +192,25 @@ describe("bench invalid numeric CLI flags", () => {
     expect(body.counts.runs_planned).toBeGreaterThan(0);
   });
 
+  test("eval-runs supports bounded running status view", () => {
+    const result = runBench(["eval-runs", "--running", "--limit", "1"]);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr.toString()).toBe("");
+    const body = JSON.parse(result.stdout.toString()) as { runs: { status: string }[] };
+    expect(body.runs.length).toBeLessThanOrEqual(1);
+    expect(body.runs.every((run) => run.status === "running")).toBe(true);
+  });
+
+  test("eval-runs rejects invalid status with JSON stderr", () => {
+    const result = runBench(["eval-runs", "--status", "wat"]);
+
+    expect(result.exitCode).not.toBe(0);
+    const body = stderrJson(result);
+    expect(body.status).toBe(400);
+    expect(body.error).toContain("--status must be one of");
+  });
+
   test.each([
     ["--run-id", "../bad", "runId"],
     ["--run-id", "bad/path", "runId"],

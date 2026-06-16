@@ -122,7 +122,7 @@ describe("bench discovery CLI contract", () => {
       output: "bench-onboard-prepare.v1",
     });
     expect(byName["eval-case-generate"]).toMatchObject({
-      usage: 'bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
+      usage: 'bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
       output: "bench-eval-case-generate.v1",
     });
   });
@@ -171,6 +171,16 @@ describe("bench discovery CLI contract", () => {
     expect(output.conventions.repeatable_flags).toEqual(expect.arrayContaining(["--case", "--arm"]));
     expect(output.conventions.flag_precedence).toContain("Non-repeatable duplicate flags are rejected");
     expect(output.conventions.flag_precedence).not.toContain("last occurrence wins");
+  });
+
+  test("help eval-runs advertises bounded status filters", () => {
+    const output = expectJsonStdout<{
+      command: { name: string; usage: string; flags?: { name: string; value?: string }[] };
+    }>(runBench(["help", "eval-runs"]));
+
+    expect(output.command.name).toBe("eval-runs");
+    expect(output.command.usage).toBe("bun ui/bench.ts eval-runs [--running|--status <status>] [--limit <N>]");
+    expect(output.command.flags?.map((flag) => flag.name)).toEqual(expect.arrayContaining(["--running", "--status", "--limit"]));
   });
 
   test.each([
@@ -269,9 +279,11 @@ describe("bench discovery CLI contract", () => {
       name: "eval-case-generate",
       output: "bench-eval-case-generate.v1",
     });
+    expect(output.command.usage).toContain("<name-or-path>");
     expect(output.command.flags?.map((flag) => flag.name)).toEqual(
       expect.arrayContaining(["--skill", "--n", "--spec", "--bootstrap", "--validate-only", "--promote"]),
     );
+    expect(output.command.notes?.join("\n")).toContain("path to an external skill");
     expect(output.command.flags?.filter((flag) => flag.repeatable).map((flag) => flag.name)).toEqual(
       expect.arrayContaining(["--spec", "--validate-only", "--promote"]),
     );

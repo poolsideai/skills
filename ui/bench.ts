@@ -24,9 +24,9 @@
  *   bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]
  *   bun ui/bench.ts onboard-prepare --source <dir> [--skill <name>] [--import-source] [--review-dir <dir>] [--skip-cases]
  *   bun ui/bench.ts onboard-review --run-dir runs/onboard/<skill>/<run> [--model <id>]
- *   bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."]
- *   bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>
- *   bun ui/bench.ts eval-case-generate --skill <name> --promote <case-dir>
+ *   bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."]
+ *   bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
+ *   bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote <case-dir>
  *   bun ui/bench.ts eval-suites
  *   bun ui/bench.ts eval-run --suite <path> [--case <id>]... [--arm <arm>]...
  *   bun ui/bench.ts eval-runs
@@ -157,7 +157,7 @@ const USAGE = {
     "onboard --source <dir> [--out-dir <dir>] — triage foreign skill dirs into runs/onboard/ without LM or pool",
     "onboard-prepare --source <dir> [--skill <name>] [--import-source] [--review-dir <dir>] [--skip-cases] — synthesize quarantined onboarding drafts under runs/onboard/",
     "onboard-review --run-dir <dir> [--model <id>] — ask a model to review a quarantined onboarding bundle without promotion",
-    "eval-case-generate --skill <name> [--n N|--spec '...'] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
+    "eval-case-generate --skill <name-or-path> [--n N|--spec '...'] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
     "eval-runs — harness processes + per-arm results from runs/<suite>/<case>/<arm>/",
@@ -404,10 +404,10 @@ const COMMAND_DETAILS: CommandDetail[] = [
     name: "eval-case-generate",
     category: "evals",
     summary: "Generate, validate, or promote quarantined eval cases for a skill.",
-    usage: 'bun ui/bench.ts eval-case-generate --skill <name> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
+    usage: 'bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
     output: "bench-eval-case-generate.v1",
     flags: [
-      { name: "--skill", value: "name", description: "Skill directory name. Required unless supplied as the first positional arg." },
+      { name: "--skill", value: "name-or-path", description: "Skill directory name or path to a skill directory. Passing SKILL.md is accepted as an alias for its parent. Required unless supplied as the first positional arg." },
       { name: "--n", value: "N", description: "Number of candidates to generate. Defaults to the generator default." },
       { name: "--spec", value: "text-or-json", repeatable: true, description: "Explicit case spec. Repeatable; skips LM spec proposal." },
       { name: "--model", value: "id", description: "litellm model id for generation." },
@@ -425,6 +425,7 @@ const COMMAND_DETAILS: CommandDetail[] = [
     ],
     notes: [
       "This is a JSON-normalizing wrapper around `uv run harness/generate/gen_eval_cases.py`; the raw Python invocation remains supported.",
+      "For first-run bootstrap, --skill may be a path to an external skill directory; the generator imports the full directory into skills/<name> when the repo copy is missing.",
       "`--validate-only` and `--promote` are mutually exclusive.",
       "Generated candidates remain quarantined under runs/generate/ until a human reviews and promotes them.",
     ],
@@ -449,8 +450,13 @@ const COMMAND_DETAILS: CommandDetail[] = [
     name: "eval-runs",
     category: "evals",
     summary: "List harness processes and per-arm results from runs/<suite>/<case>/<arm>/.",
-    usage: "bun ui/bench.ts eval-runs",
+    usage: "bun ui/bench.ts eval-runs [--running|--status <status>] [--limit <N>]",
     output: "{ harness, runs }",
+    flags: [
+      { name: "--running", description: "Only include eval arm records whose status is running." },
+      { name: "--status", value: "status", description: "Only include eval arm records with this status: running, pass, fail, error, or incomplete." },
+      { name: "--limit", value: "N", description: "Return at most N eval arm records after sorting newest first." },
+    ],
   },
   {
     name: "optimize-skill",
@@ -964,11 +970,11 @@ function parseEvalCaseGenerateArgs(argv: string[]): Flags {
 
     const key = arg.slice(2);
     if (!EVAL_CASE_GENERATE_FLAGS.has(key)) {
-      const usage = COMMAND_BY_NAME.get("eval-case-generate")?.usage ?? "bun ui/bench.ts eval-case-generate --skill <name>";
+      const usage = COMMAND_BY_NAME.get("eval-case-generate")?.usage ?? "bun ui/bench.ts eval-case-generate --skill <name-or-path>";
       throw unknownFlagError("eval-case-generate", key, EVAL_CASE_GENERATE_FLAGS, usage);
     }
     if (!EVAL_CASE_GENERATE_REPEATABLE_FLAGS.has(key) && (out.flags[key]?.length ?? 0) > 0) {
-      const usage = COMMAND_BY_NAME.get("eval-case-generate")?.usage ?? "bun ui/bench.ts eval-case-generate --skill <name>";
+      const usage = COMMAND_BY_NAME.get("eval-case-generate")?.usage ?? "bun ui/bench.ts eval-case-generate --skill <name-or-path>";
       throw new HttpError(400, `Duplicate flag for eval-case-generate: --${key}. --${key} is not repeatable. Usage: ${usage}`);
     }
 
@@ -1002,7 +1008,7 @@ function runEvalCaseGenerate(rawArgv: string[]): unknown {
   const args = parseEvalCaseGenerateArgs(rawArgv);
   const skillFromFlag = flag(args, "skill");
   const skill = skillFromFlag ?? args.positional[0];
-  if (!skill) throw new HttpError(400, "usage: eval-case-generate --skill <name>");
+  if (!skill) throw new HttpError(400, "usage: eval-case-generate --skill <name-or-path>");
   const unexpectedPositionals = skillFromFlag ? args.positional : args.positional.slice(1);
   if (unexpectedPositionals.length > 0) {
     throw new HttpError(400, `Unexpected positional argument(s): ${unexpectedPositionals.join(", ")}`);
@@ -1194,7 +1200,7 @@ function doctor(): unknown {
     next_commands: [
       "uv run scripts/check_skill_structure.py --json",
       "uv run scripts/check_eval_cases.py --json",
-      "bun ui/bench.ts eval-case-generate --skill <name> --n 4",
+      "bun ui/bench.ts eval-case-generate --skill <name-or-path> --n 4",
       "uv run scripts/check_schemas.py --json",
       "uv run scripts/check_validator_robustness.py --json",
       "uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay",
@@ -1321,7 +1327,20 @@ async function main() {
       return emit(result);
     }
     case "eval-runs":
-      return emit({ harness: listHarnessProcesses(), runs: listEvalRuns() });
+      {
+        const status = flag(args, "running") === "true" ? "running" : flag(args, "status");
+        const allowedStatuses = new Set(["running", "pass", "fail", "error", "incomplete"]);
+        if (status && !allowedStatuses.has(status)) {
+          throw new HttpError(400, `--status must be one of: ${[...allowedStatuses].join(", ")}`);
+        }
+        return emit({
+          harness: listHarnessProcesses(),
+          runs: listEvalRuns({
+            status: status as "running" | "pass" | "fail" | "error" | "incomplete" | undefined,
+            limit: positiveIntegerFlag(flag(args, "limit"), "--limit"),
+          }),
+        });
+      }
     case "optimize-skill": {
       const skill = flag(args, "skill") ?? args.positional[0];
       if (!skill) throw new HttpError(400, "usage: optimize-skill <skill>|--skill <name>");

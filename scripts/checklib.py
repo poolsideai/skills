@@ -70,10 +70,25 @@ class Report:
         self._counts[what] = self._counts.get(what, 0) + n
 
     def to_dict(self) -> dict[str, object]:
+        status = "fail" if self.violations else "ok"
+        failure_kind = None
+        if self.violations:
+            failure_kind = (
+                "usage_error"
+                if any(v.path == "argv" or v.check == "invalid-arguments" for v in self.violations)
+                else "validation_failure"
+            )
+        exit_code = 0 if status == "ok" else 2 if failure_kind == "usage_error" else 1
+        next_commands = [f"uv run scripts/{self.tool}.py --json"]
+        if failure_kind == "usage_error":
+            next_commands.insert(0, f"uv run scripts/{self.tool}.py --help")
         return {
             "schema_version": "repo-check-result.v1",
             "tool": self.tool,
-            "status": "fail" if self.violations else "ok",
+            "status": status,
+            "failure_kind": failure_kind,
+            "exit_code": exit_code,
+            "next_commands": next_commands,
             "counts": dict(self._counts),
             "violation_count": len(self.violations),
             "violations": [

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.1.0",
-  "tool_name": "skills",
-  "tool_repo": "/Users/ben/code/poolside/skills",
-  "audit_workspace": "/Users/ben/code/poolside/skills/agent_ergonomics_audit",
+  "tool_name": "bench",
+  "tool_repo": "/data/projects/poolside/skills",
+  "audit_workspace": "/data/projects/poolside/skills/agent_ergonomics_audit",
   "rubric_version": "<git SHA of references/rubric/SCORING-RUBRIC.md when scoring ran>",
   "passes": [
     {
@@ -40,7 +40,7 @@
         "regression_alerts": "audit/regression_alerts.md",
         "handoff": "audit/HANDOFF.md",
         "simulations_pre": "audit/agent_simulations/pre_pass_1/",
-        "simulations_post": "audit/agent_simulations/post_pass_N/"
+        "simulations_post": "audit/agent_simulations/post_pass_1/"
       }
     },
     {
@@ -80,9 +80,123 @@
         "simulations_pre": "audit/agent_simulations/pre_pass_1/",
         "simulations_post": "audit/agent_simulations/post_pass_2/"
       }
+    },
+    {
+      "pass": 3,
+      "started_at": "2026-06-15T19:02:34Z",
+      "completed_at": "2026-06-15T19:09:37Z",
+      "mode": "full",
+      "target_sha": "19da102d21bda7c1c7425b19dfc05b2c4667a870",
+      "target_branch": "main",
+      "feature_branch": null,
+      "summary": {
+        "surfaces_inventoried": 6,
+        "surfaces_scored": 6,
+        "recommendations_total": 4,
+        "recommendations_applied": 4,
+        "substantive_commits": 0,
+        "dimensions_touched": 6,
+        "ambition_bar_met": false,
+        "ambition_bar_self_prompt_run": true,
+        "median_uplift_pts": 120,
+        "regressions_count": 0,
+        "fresh_eyes_rounds": 1
+      },
+      "artifacts": {
+        "surface_inventory": "audit/surface_inventory.jsonl",
+        "agent_surfaces": "audit/agent_surfaces.jsonl",
+        "intent_corpus": "audit/intent_inference_corpus.jsonl",
+        "recommendations": "audit/recommendations.jsonl",
+        "playbook": "audit/playbook.md",
+        "applied_changes": "audit/applied_changes.jsonl",
+        "ambition_bar_check": "audit/ambition_bar_check.md",
+        "scorecard": "audit/scorecard_pass_3.md",
+        "heatmap": "audit/heatmap.svg",
+        "uplift_diff": "audit/uplift_diff.md",
+        "regression_alerts": "audit/regression_alerts.md",
+        "handoff": "audit/HANDOFF.md",
+        "simulations_pre": "audit/agent_simulations/pre_pass_3/",
+        "simulations_post": "audit/agent_simulations/post_pass_3/"
+      }
+    },
+    {
+      "pass": 4,
+      "started_at": "2026-06-16T17:20:00Z",
+      "completed_at": "2026-06-16T17:31:37Z",
+      "mode": "full",
+      "target_sha": "19da102d21bda7c1c7425b19dfc05b2c4667a870",
+      "target_branch": "main",
+      "feature_branch": null,
+      "summary": {
+        "surfaces_inventoried": 7,
+        "surfaces_scored": 7,
+        "recommendations_total": 12,
+        "recommendations_applied": 12,
+        "substantive_commits": 0,
+        "dimensions_touched": 5,
+        "ambition_bar_met": true,
+        "ambition_bar_self_prompt_run": false,
+        "median_uplift_pts": 30,
+        "regressions_count": 0,
+        "fresh_eyes_rounds": 1
+      },
+      "artifacts": {
+        "surface_inventory": "audit/surface_inventory.jsonl",
+        "agent_surfaces": "audit/agent_surfaces.jsonl",
+        "intent_corpus": "audit/intent_inference_corpus.jsonl",
+        "recommendations": "audit/recommendations.jsonl",
+        "playbook": "audit/playbook.md",
+        "applied_changes": "audit/applied_changes.jsonl",
+        "ambition_bar_check": "audit/ambition_bar_check.md",
+        "scorecard": "audit/scorecard_pass_4.md",
+        "heatmap": "audit/heatmap.svg",
+        "uplift_diff": "audit/uplift_diff.md",
+        "regression_alerts": "audit/regression_alerts.md",
+        "handoff": "audit/HANDOFF.md",
+        "simulations_pre": "audit/agent_simulations/pre_pass_4/",
+        "simulations_post": "audit/agent_simulations/post_pass_4/"
+      }
+    },
+    {
+      "pass": 5,
+      "started_at": "2026-06-16T18:05:00Z",
+      "completed_at": "2026-06-16T18:31:00Z",
+      "mode": "full",
+      "target_sha": "19da102d21bda7c1c7425b19dfc05b2c4667a870",
+      "target_branch": "main",
+      "feature_branch": null,
+      "summary": {
+        "surfaces_inventoried": 7,
+        "surfaces_scored": 7,
+        "recommendations_total": 18,
+        "recommendations_applied": 18,
+        "substantive_commits": 0,
+        "dimensions_touched": 5,
+        "ambition_bar_met": true,
+        "ambition_bar_self_prompt_run": true,
+        "median_uplift_pts": 370,
+        "regressions_count": 0,
+        "fresh_eyes_rounds": 1
+      },
+      "artifacts": {
+        "surface_inventory": "audit/surface_inventory.jsonl",
+        "agent_surfaces": "audit/agent_surfaces.jsonl",
+        "intent_corpus": "audit/intent_inference_corpus.jsonl",
+        "recommendations": "audit/recommendations.jsonl",
+        "playbook": "audit/playbook.md",
+        "applied_changes": "audit/applied_changes.jsonl",
+        "ambition_bar_check": "audit/ambition_bar_check.md",
+        "scorecard": "audit/scorecard_pass_5.md",
+        "heatmap": "audit/heatmap.svg",
+        "uplift_diff": "audit/uplift_diff.md",
+        "regression_alerts": "audit/regression_alerts.md",
+        "handoff": "audit/HANDOFF.md",
+        "simulations_pre": "audit/agent_simulations/pre_pass_5/",
+        "simulations_post": "audit/agent_simulations/post_pass_5/"
+      }
     }
   ],
-  "current_pass": 2,
+  "current_pass": 5,
   "pass_N+1_ready": true,
-  "next_pass_focus": "Promote rollback hardening, repo-check next_commands metadata, and eval-runs status filters."
+  "next_pass_focus": "After commit, run a clean re-score-only pass against the committed generator path-import and zero-case bootstrap workflow."
 }

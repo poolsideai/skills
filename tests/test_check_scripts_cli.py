@@ -31,6 +31,12 @@ class CheckScriptsCliTests(unittest.TestCase):
         self.assertEqual(payload["schema_version"], "repo-check-result.v1")
         self.assertEqual(payload["tool"], "check_schemas")
         self.assertEqual(payload["status"], "fail")
+        self.assertEqual(payload["failure_kind"], "usage_error")
+        self.assertEqual(payload["exit_code"], 2)
+        self.assertEqual(
+            payload["next_commands"][:2],
+            ["uv run scripts/check_schemas.py --help", "uv run scripts/check_schemas.py --json"],
+        )
         self.assertGreaterEqual(payload["violation_count"], 1)
         self.assertTrue(
             any("--bad-flag" in violation["message"] for violation in payload["violations"]),

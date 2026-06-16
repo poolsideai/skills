@@ -92,7 +92,8 @@ bun ui/bench.ts eval-runs                    # live harness status + per-arm res
 bun ui/bench.ts onboard --source <dir>
 bun ui/bench.ts onboard-prepare --source <dir> --skill <name> --skip-cases
 bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
-bun ui/bench.ts eval-case-generate --skill ci-log-reducer --validate-only <case-dir>
+bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
 bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-skill ci-log-reducer --components references --max-component-bytes 65536 --max-total-bytes 131072
@@ -108,6 +109,9 @@ paths with placeholders; human dry-run/debug prose is not globally redacted.
 `onboard` only triages source skill directories. `onboard-prepare` writes
 quarantined draft contracts, validators, and optional bootstrap cases under
 `runs/onboard/` for human review; it does not promote generated material.
+`eval-case-generate --skill` accepts either a repo skill name or a path to a
+skill directory; passing `SKILL.md` is accepted as an alias for its parent.
+Path mode imports the full directory before zero-case bootstrap.
 `optimize-skill` mutates `SKILL.md` by default, and `--components references`
 adds `references/**` files to the mutable GEPA component set.
 

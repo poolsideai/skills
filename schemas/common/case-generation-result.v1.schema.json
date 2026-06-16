@@ -42,6 +42,7 @@
         "replay_status": { "type": "string", "minLength": 1 },
         "sensitivity_status": { "type": "string", "minLength": 1 },
         "rolled_back": { "type": "boolean" },
+        "rollback_kind": { "type": "string", "minLength": 1 },
         "dest": { "type": "string", "minLength": 1 },
         "suite": { "type": "string", "minLength": 1 },
         "next": { "type": "string", "minLength": 1 }

@@ -90,6 +90,7 @@ from harness.runner import fixtures as fx  # noqa: E402
 from harness.runner import matrix as mx  # noqa: E402
 from harness.validators.command_result import base_env, run_command  # noqa: E402
 from harness.validators.validator_result import load_validator_result  # noqa: E402
+from checklib import SKILL_NAME_RE, split_frontmatter  # noqa: E402
 
 DEFAULT_MODEL = (
     os.environ.get("CASEGEN_LM")
@@ -103,6 +104,7 @@ CONTEXT_FILE_CHARS = 30_000
 EXAMPLE_INPUT_CHARS = 4_000
 SAFE_SEGMENT = re.compile(r"^[A-Za-z0-9._\-]+$")
 FEEDBACK_ITEM_CHARS = 500
+IMPORT_IGNORE = shutil.ignore_patterns(".git", "node_modules", "__pycache__", ".DS_Store")
 
 
 DEFAULT_ARMS = ["xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill"]
@@ -137,6 +139,215 @@ def validate_only_payload(case_dir: Path, violations: list[str], info: dict) -> 
     if info["sensitivity_status"] is not None:
         payload["sensitivity_status"] = info["sensitivity_status"]
     return payload
+
+
+def infer_skill_name_from_dir(skill_dir: Path) -> str:
+    skill_md = skill_dir / "SKILL.md"
+    if not skill_md.is_file():
+        raise SystemExit(f"skill path must contain SKILL.md: {skill_dir}")
+    text = skill_md.read_text(encoding="utf-8")
+    frontmatter = split_frontmatter(text)
+    name: str | None = None
+    if frontmatter is not None:
+        for line in frontmatter[0].splitlines():
+            match = re.fullmatch(r"\s*name:\s*[\"']?([^\"'#\s]+)[\"']?\s*(?:#.*)?", line)
+            if match:
+                name = match.group(1)
+                break
+    name = name or skill_dir.name
+    if not SKILL_NAME_RE.fullmatch(name):
+        raise SystemExit(
+            f"skill path {skill_dir} resolves to invalid skill name {name!r}; "
+            "frontmatter name must be kebab-case"
+        )
+    return name
+
+
+def resolve_skill_argument(raw_skill: str) -> tuple[str, dict[str, str | bool | None]]:
+    """Resolve --skill as either a repo skill name or a filesystem path.
+
+    Path mode is designed around a full skill directory because supporting
+    files such as references/, schemas/, scripts/, and assets/ are part of the
+    skill contract. Passing a SKILL.md file is accepted as a convenience alias
+    for its parent directory.
+    """
+    raw_path = Path(raw_skill).expanduser()
+    path_like = raw_path.is_absolute() or len(raw_path.parts) > 1 or raw_skill in {".", ".."}
+    if not path_like:
+        return raw_skill, {
+            "skill_source": None,
+            "skill_imported": False,
+            "imported_skill_dir": None,
+        }
+
+    candidate = raw_path if raw_path.is_absolute() else REPO_ROOT / raw_path
+    if candidate.is_file() and candidate.name == "SKILL.md":
+        candidate = candidate.parent
+    source_dir = candidate.resolve()
+    if not (source_dir / "SKILL.md").is_file():
+        raise SystemExit(
+            f"--skill path must be a skill directory or SKILL.md file: {raw_skill}. "
+            "Use --skill <name> for an existing repo skill."
+        )
+
+    skill = infer_skill_name_from_dir(source_dir)
+    repo_skill_dir = REPO_ROOT / "skills" / skill
+    imported = False
+    try:
+        same_as_repo = repo_skill_dir.resolve() == source_dir
+    except FileNotFoundError:
+        same_as_repo = False
+    if not same_as_repo:
+        if repo_skill_dir.exists():
+            raise SystemExit(
+                f"--skill path {source_dir} resolves to {skill!r}, but {repo_skill_dir} already exists. "
+                f"Pass --skill {skill} to use the repo copy, or rename/import the source explicitly."
+            )
+        repo_skill_dir.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(source_dir, repo_skill_dir, ignore=IMPORT_IGNORE)
+        imported = True
+
+    return skill, {
+        "skill_source": str(source_dir),
+        "skill_imported": imported,
+        "imported_skill_dir": str(repo_skill_dir.relative_to(REPO_ROOT)),
+    }
+
+
+def missing_validator_message(skill: str) -> str:
+    return "\n".join([
+        f"skill {skill} has no scripts/validate_*.ts - not generatable yet",
+        "The skill was resolved/imported, but eval-case generation needs a frozen validator first.",
+        "Next commands:",
+        f"- bun ui/bench.ts onboard-prepare --source skills/{skill} --skill {skill} --import-source",
+        f"- add schemas/*.schema.json and scripts/validate_*.ts, then rerun: uv run harness/generate/gen_eval_cases.py --skill {skill} --bootstrap --n 3",
+    ])
+
+
+def validator_slug(skill: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_]", "_", skill)
+
+
+def has_laguna_validator(skill_dir: Path) -> bool:
+    return any((skill_dir / "scripts").glob("validate_*.ts"))
+
+
+def ensure_synthetic_laguna_contract(skill: str, skill_dir: Path) -> bool:
+    """Add a minimal generated Laguna contract to an imported prompt-style skill.
+
+    The source skill is not edited; callers run this only against the repo-local
+    imported copy under skills/<name>. This gives case generation a frozen
+    validator and deterministic artifact path instead of stopping at the
+    missing-Laguna-layer gap.
+    """
+    if has_laguna_validator(skill_dir):
+        return False
+
+    schema_version = f"{skill}.synthetic-bootstrap.v1"
+    artifact_path = f".laguna/{skill}.json"
+    schema_dir = skill_dir / "schemas"
+    scripts_dir = skill_dir / "scripts"
+    schema_dir.mkdir(parents=True, exist_ok=True)
+    scripts_dir.mkdir(parents=True, exist_ok=True)
+
+    schema_path = schema_dir / f"{skill}-synthetic-bootstrap.schema.json"
+    if not schema_path.exists():
+        schema_path.write_text(
+            json.dumps(
+                {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["schema_version", "summary", "evidence"],
+                    "properties": {
+                        "schema_version": {"const": schema_version},
+                        "summary": {"type": "string", "minLength": 1},
+                        "evidence": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {"type": "string", "minLength": 1},
+                        },
+                    },
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+    validator_path = scripts_dir / f"validate_{validator_slug(skill)}_synthetic_bootstrap.ts"
+    if not validator_path.exists():
+        validator_path.write_text(
+            f"""#!/usr/bin/env bun
+import {{ mkdirSync, readFileSync, writeFileSync }} from "node:fs";
+import {{ dirname, join }} from "node:path";
+
+const valueAfter = (flag: string): string | null => {{
+  const index = process.argv.indexOf(flag);
+  return index === -1 ? null : process.argv[index + 1] ?? null;
+}};
+
+const workspace = valueAfter("--workspace") ?? ".";
+const out = valueAfter("--out");
+const caseDir = valueAfter("--case");
+if (!out) throw new Error("missing --out");
+
+let status: "pass" | "fail" = "fail";
+let detail = "artifact missing or invalid";
+try {{
+  const artifact = JSON.parse(readFileSync(join(workspace, {json.dumps(artifact_path)}), "utf8"));
+  const evidence = Array.isArray(artifact.evidence) ? artifact.evidence : [];
+  if (
+    artifact.schema_version === {json.dumps(schema_version)} &&
+    typeof artifact.summary === "string" &&
+    artifact.summary.trim().length > 0 &&
+    evidence.length > 0 &&
+    evidence.every((item: unknown) => typeof item === "string" && item.trim().length > 0)
+  ) {{
+    status = "pass";
+    detail = "synthetic bootstrap artifact satisfies the generated Laguna contract";
+  }}
+}} catch {{
+  // fall through to fail result
+}}
+
+mkdirSync(dirname(out), {{ recursive: true }});
+writeFileSync(out, JSON.stringify({{
+  schema_version: "validator-result.v1",
+  case_id: caseDir ? caseDir.split("/").filter(Boolean).pop() : {json.dumps(skill + "-synthetic-bootstrap")},
+  status,
+  score: status === "pass" ? 1 : 0,
+  checks: [{{ id: "synthetic-bootstrap-artifact", status, detail }}],
+  repair_feedback: status === "pass" ? [] : [
+    `Write {artifact_path} with schema_version {schema_version}, summary, and evidence.`
+  ],
+  duration_ms: 0
+}}, null, 2) + "\\n");
+""",
+            encoding="utf-8",
+        )
+
+    skill_md_path = skill_dir / "SKILL.md"
+    skill_md = skill_md_path.read_text(encoding="utf-8")
+    if artifact_path not in skill_md:
+        skill_md_path.write_text(
+            skill_md.rstrip()
+            + f"""
+
+## Synthetic Laguna Bootstrap Contract
+
+This section was generated during eval-case bootstrap because the imported skill did not yet contain Laguna schemas or validators.
+
+Write `{artifact_path}` with:
+
+- `schema_version`: `{schema_version}`
+- `summary`: non-empty string summarizing the completed work
+- `evidence`: non-empty array of local evidence strings
+"""
+            + "\n",
+            encoding="utf-8",
+        )
+    return True
 
 
 def clip(text: str, chars: int) -> str:
@@ -175,7 +386,7 @@ class SkillContext:
             for p in sorted((self.skill_dir / "scripts").glob("validate_*.ts"))
         }
         if not self.validators:
-            raise SystemExit(f"skill {skill} has no scripts/validate_*.ts — not generatable")
+            raise SystemExit(missing_validator_message(skill))
 
         evals_dir = self.skill_dir / "evals"
         self.cases = [
@@ -689,8 +900,11 @@ def promote(ctx: SkillContext, case_dir: Path, timeout_s: float, *, bootstrap: b
         return False
     suite_path = REPO_ROOT / "evals" / "suites" / f"skill-{ctx.skill}.json"
     suite_original = suite_path.read_text(encoding="utf-8") if suite_path.is_file() else None
+    suite_tmp_path: Path | None = None
 
     def rollback() -> None:
+        if suite_tmp_path is not None:
+            suite_tmp_path.unlink(missing_ok=True)
         shutil.rmtree(dest, ignore_errors=True)
         if suite_original is None:
             suite_path.unlink(missing_ok=True)
@@ -731,7 +945,12 @@ def promote(ctx: SkillContext, case_dir: Path, timeout_s: float, *, bootstrap: b
         if entry not in suite["cases"]:
             suite["cases"] = sorted({*suite["cases"], entry})
         suite_path.parent.mkdir(parents=True, exist_ok=True)
-        suite_path.write_text(json.dumps(suite, indent=2) + "\n", encoding="utf-8")
+        fd, tmp_name = tempfile.mkstemp(prefix=f".{suite_path.name}.", suffix=".tmp", dir=suite_path.parent)
+        suite_tmp_path = Path(tmp_name)
+        with os.fdopen(fd, "w", encoding="utf-8") as tmp:
+            tmp.write(json.dumps(suite, indent=2) + "\n")
+        os.replace(suite_tmp_path, suite_path)
+        suite_tmp_path = None
 
         # Re-run the CI checks scoped to this skill + this suite. A repo-wide
         # suite scan would fail on unrelated pre-existing suite violations and
@@ -751,13 +970,19 @@ def promote(ctx: SkillContext, case_dir: Path, timeout_s: float, *, bootstrap: b
         dry = subprocess.run(
             ["uv", "run", "harness/runner/run_eval.py", "--suite", str(suite_path),
              "--dry-run", "--replay", "--case", case.id],
-            capture_output=True, text=True, cwd=REPO_ROOT, env=child_env(),
+            capture_output=True, text=True, cwd=REPO_ROOT, env=child_env(), timeout=timeout_s,
         )
         if dry.returncode != 0:
             problems.append(f"run_eval --dry-run --replay failed:\nstdout:\n{dry.stdout[-2000:]}\nstderr:\n{dry.stderr[-2000:]}")
 
         if problems:
             return fail_rolled_back(problems)
+    except subprocess.TimeoutExpired as exc:
+        stdout = (exc.stdout or "")[-2000:] if isinstance(exc.stdout, str) else ""
+        stderr = (exc.stderr or "")[-2000:] if isinstance(exc.stderr, str) else ""
+        return fail_rolled_back([
+            f"run_eval --dry-run --replay timed out after {timeout_s:g}s:\nstdout:\n{stdout}\nstderr:\n{stderr}"
+        ])
     except Exception as exc:  # noqa: BLE001 — post-copy failures must leave no promoted residue
         return fail_rolled_back([f"promote: post-copy update failed: {exc}"])
 
@@ -828,10 +1053,17 @@ def main() -> int:
     if args.validator_timeout <= 0:
         parser.error("--validator-timeout must be greater than 0")
 
+    skill, skill_resolution = resolve_skill_argument(args.skill)
+    synthetic_laguna_bootstrap = False
+    if skill_resolution["skill_source"]:
+        synthetic_laguna_bootstrap = ensure_synthetic_laguna_contract(
+            skill,
+            REPO_ROOT / "skills" / skill,
+        )
     is_validate_or_promote = bool(args.validate_only or args.promote)
-    started_from_true_zero = is_validate_or_promote and not skill_has_visible_case_dirs(args.skill)
-    bootstrap_context = args.bootstrap or started_from_true_zero
-    ctx = SkillContext(args.skill, args.seed_example, bootstrap=bootstrap_context)
+    started_from_true_zero = not skill_has_visible_case_dirs(skill)
+    bootstrap_context = args.bootstrap or (started_from_true_zero and not args.seed_example)
+    ctx = SkillContext(skill, args.seed_example, bootstrap=bootstrap_context)
 
     if args.validate_only:
         results = []
@@ -880,7 +1112,7 @@ def main() -> int:
             if not promote(ctx, case_dir, args.validator_timeout, bootstrap=promote_batch_bootstrap):
                 failures += 1
             ctx = SkillContext(
-                args.skill,
+                skill,
                 args.seed_example,
                 bootstrap=bootstrap_context,
             )  # refresh ids/hashes after each promote
@@ -888,25 +1120,39 @@ def main() -> int:
 
     # ----------------------------------------------------------- generation
     out_dir = Path(args.out_dir).resolve() if args.out_dir else (
-        REPO_ROOT / "runs" / "generate" / args.skill / utc_stamp()
+        REPO_ROOT / "runs" / "generate" / skill / utc_stamp()
     )
     (out_dir / "candidates").mkdir(parents=True, exist_ok=True)
-    lm = make_lm(
-        args.model,
-        api_base=args.api_base,
-        api_key_env=args.api_key_env,
-        max_tokens=args.max_output_tokens,
-        temperature=args.temperature,
-    )
+    try:
+        lm = make_lm(
+            args.model,
+            api_base=args.api_base,
+            api_key_env=args.api_key_env,
+            max_tokens=args.max_output_tokens,
+            temperature=args.temperature,
+        )
+    except RuntimeError as exc:
+        print(f"error: LM setup failed: {exc}", file=sys.stderr)
+        print(
+            "next: set the requested key environment variable, pass --api-key-env with a populated variable, "
+            "or use --validate-only/--promote for already-generated candidates",
+            file=sys.stderr,
+        )
+        return 2
     config = {
-        "skill": args.skill,
+        "skill": skill,
+        "skill_source": skill_resolution["skill_source"],
+        "skill_imported": skill_resolution["skill_imported"],
+        "imported_skill_dir": skill_resolution["imported_skill_dir"],
+        "synthetic_laguna_bootstrap": synthetic_laguna_bootstrap,
         "model": args.model,
         "api_base": args.api_base,
         "n": args.n,
         "explicit_specs": args.specs,
         "max_repair_rounds": args.max_repair_rounds,
         "seed_example": ctx.example.id if ctx.example is not None else None,
-        "bootstrap": args.bootstrap,
+        "bootstrap": bootstrap_context,
+        "bootstrap_explicit": args.bootstrap,
         "argv": sys.argv[1:],
     }
     (out_dir / "config.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
@@ -957,13 +1203,17 @@ def main() -> int:
     survivors = [r for r in results if r["ok"]]
     report = {
         "schema_version": "case-generation.v1",
-        "skill": args.skill,
+        "skill": skill,
+        "skill_source": skill_resolution["skill_source"],
+        "skill_imported": skill_resolution["skill_imported"],
+        "imported_skill_dir": skill_resolution["imported_skill_dir"],
+        "synthetic_laguna_bootstrap": synthetic_laguna_bootstrap,
         "out_dir": str(out_dir),
         "n_specs": len(specs),
         "n_survivors": len(survivors),
         "results": results,
         "promote_hint": [
-            f"uv run harness/generate/gen_eval_cases.py --skill {args.skill} --promote {r['case_dir']}"
+            f"uv run harness/generate/gen_eval_cases.py --skill {skill} --promote {r['case_dir']}"
             for r in survivors
         ],
         "reminder": "candidates are quarantined; review each case BEFORE promoting — "

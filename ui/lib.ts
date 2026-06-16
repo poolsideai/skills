@@ -1833,6 +1833,11 @@ export function startEvalRun(options: { suite: string; cases?: string[]; arms?: 
     argv,
     logPath: logPath.slice(REPO_ROOT.length + 1),
     startedAtMs: Date.now(),
+    next_commands: [
+      "bun ui/bench.ts eval-runs --running",
+      `tail -n 80 ${logPath.slice(REPO_ROOT.length + 1)}`,
+    ],
+    volatile_fields: ["pid", "startedAtMs"],
   };
   writeFileSync(join(HARNESS_STATE_DIR, `harness-${tag}.json`), JSON.stringify(sidecar, null, 2));
   return { ok: true, ...sidecar };
@@ -2446,7 +2451,7 @@ export function listOptimizeRuns(): OptimizeProcess[] {
   return procs.sort((a, b) => b.startedAtMs - a.startedAtMs);
 }
 
-export function listEvalRuns(): EvalRunRecord[] {
+export function listEvalRuns(options: { status?: EvalRunRecord["status"]; limit?: number } = {}): EvalRunRecord[] {
   if (!existsSync(EVAL_RUNS_ROOT)) return [];
   const records: EvalRunRecord[] = [];
   // "running" is scoped per suite (sidecars record the suite file; the
@@ -2515,12 +2520,12 @@ export function listEvalRuns(): EvalRunRecord[] {
             // facts unreadable; manifest data stands
           }
         }
-        records.push(record);
+        if (!options.status || record.status === options.status) records.push(record);
       }
     }
   }
   records.sort((a, b) => (b.startedAt ?? "").localeCompare(a.startedAt ?? ""));
-  return records;
+  return options.limit ? records.slice(0, options.limit) : records;
 }
 
 let caseSkillCache: { at: number; map: Map<string, string> } | null = null;

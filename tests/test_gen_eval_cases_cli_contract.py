@@ -82,6 +82,218 @@ class GenEvalCasesCliContractTests(unittest.TestCase):
         )
         return case_dir
 
+    def make_zero_case_bootstrap_skill(self, skill: str, parent: Path | None = None) -> Path:
+        skill_dir = (parent or REPO_ROOT / "skills") / skill
+        self.assertFalse(skill_dir.exists(), f"refusing to delete pre-existing fixture: {skill_dir}")
+        (skill_dir / "schemas").mkdir(parents=True)
+        (skill_dir / "scripts").mkdir(parents=True)
+        (skill_dir / "references").mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            f"""---
+name: {skill}
+description: Tiny temporary bootstrap test skill.
+metadata:
+  version: "0.1.0"
+---
+
+# Zero Case Bootstrap Test
+
+## Purpose
+
+Exercise eval-case generation bootstrap behavior in tests.
+
+## Do not use when
+
+Do not use outside the generator CLI contract test.
+
+## Output contract
+
+Write `.laguna/zero-case-bootstrap.json` with:
+
+- `schema_version`: `"zero-case-bootstrap.v1"`
+- `ok`: `true`
+""",
+            encoding="utf-8",
+        )
+        (skill_dir / "schemas" / "zero-case-bootstrap.schema.json").write_text(
+            json.dumps(
+                {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["schema_version", "ok"],
+                    "properties": {
+                        "schema_version": {"const": "zero-case-bootstrap.v1"},
+                        "ok": {"const": True},
+                    },
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        (skill_dir / "references" / "guide.md").write_text(
+            "# Bootstrap Guide\n\nSupporting skill files must be imported with the skill directory.\n",
+            encoding="utf-8",
+        )
+        (skill_dir / "scripts" / "validate_zero_case_bootstrap.ts").write_text(
+            """#!/usr/bin/env bun
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+
+const valueAfter = (flag: string): string | null => {
+  const index = process.argv.indexOf(flag);
+  return index === -1 ? null : process.argv[index + 1] ?? null;
+};
+
+const workspace = valueAfter("--workspace") ?? ".";
+const out = valueAfter("--out");
+if (!out) throw new Error("missing --out");
+
+let status: "pass" | "fail" = "fail";
+let detail = "artifact missing or invalid";
+try {
+  const artifact = JSON.parse(readFileSync(join(workspace, ".laguna", "zero-case-bootstrap.json"), "utf8"));
+  if (artifact.schema_version === "zero-case-bootstrap.v1" && artifact.ok === true) {
+    status = "pass";
+    detail = "artifact matches expected bootstrap contract";
+  }
+} catch {
+  // fall through to fail result
+}
+
+mkdirSync(dirname(out), { recursive: true });
+writeFileSync(out, JSON.stringify({
+  schema_version: "validator-result.v1",
+  case_id: "zero-case-bootstrap",
+  status,
+  score: status === "pass" ? 1 : 0,
+  checks: [{ id: "artifact-valid", status, detail }],
+  repair_feedback: status === "pass" ? [] : [detail],
+  duration_ms: 0,
+}, null, 2) + "\\n");
+""",
+            encoding="utf-8",
+        )
+        return skill_dir
+
+    def make_zero_case_bootstrap_candidate(self, parent: Path, skill: str, case_id: str | None = None) -> Path:
+        case_id = case_id or f"{skill}-first-case"
+        case_dir = parent / case_id
+        (case_dir / "input").mkdir(parents=True)
+        (case_dir / "expected" / ".laguna").mkdir(parents=True)
+        (case_dir / "prompt.md").write_text(
+            "Write `.laguna/zero-case-bootstrap.json` for the bootstrap test.\n",
+            encoding="utf-8",
+        )
+        (case_dir / "metadata.json").write_text(
+            json.dumps(
+                {
+                    "id": case_id,
+                    "skill": skill,
+                    "bucket": "easy",
+                    "difficulty": "easy",
+                    "arms": ["xs_with_skill"],
+                    "publishability": "internal",
+                    "validator": {
+                        "command": ["bun", f"skills/{skill}/scripts/validate_zero_case_bootstrap.ts"],
+                        "expected_status": "pass",
+                    },
+                    "notes": "Synthetic bootstrap fixture for generator CLI contract tests.",
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        (case_dir / "expected" / ".laguna" / "zero-case-bootstrap.json").write_text(
+            json.dumps({"schema_version": "zero-case-bootstrap.v1", "ok": True}, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        return case_dir
+
+    def make_prompt_style_external_skill(self, parent: Path, skill: str) -> Path:
+        skill_dir = parent / skill
+        self.assertFalse(skill_dir.exists(), f"refusing to delete pre-existing fixture: {skill_dir}")
+        (skill_dir / "references").mkdir(parents=True)
+        (skill_dir / "scripts").mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            f"""---
+name: {skill}
+description: Temporary prompt-style skill with support files but no Laguna validator.
+metadata:
+  version: "0.1.0"
+---
+
+# Prompt Style Skill
+
+## Purpose
+
+Exercise path import for real-world prompt-style skills.
+
+## Do not use when
+
+Do not use outside generator CLI contract tests.
+""",
+            encoding="utf-8",
+        )
+        (skill_dir / "references" / "guide.md").write_text(
+            "# Guide\n\nThis support file must survive path import.\n",
+            encoding="utf-8",
+        )
+        (skill_dir / "scripts" / "helper.mjs").write_text(
+            "console.log('helper script');\n",
+            encoding="utf-8",
+        )
+        return skill_dir
+
+    def make_synthetic_laguna_candidate(self, parent: Path, skill: str, case_id: str | None = None) -> Path:
+        case_id = case_id or f"{skill}-synthetic-bootstrap-case"
+        case_dir = parent / case_id
+        artifact_rel = Path(".laguna") / f"{skill}.json"
+        (case_dir / "input").mkdir(parents=True)
+        (case_dir / "expected" / artifact_rel.parent).mkdir(parents=True)
+        (case_dir / "prompt.md").write_text(
+            f"Complete the task and write `{artifact_rel.as_posix()}` with summary and evidence.\n",
+            encoding="utf-8",
+        )
+        (case_dir / "metadata.json").write_text(
+            json.dumps(
+                {
+                    "id": case_id,
+                    "skill": skill,
+                    "bucket": "easy",
+                    "difficulty": "easy",
+                    "arms": ["xs_with_skill"],
+                    "publishability": "internal",
+                    "validator": {
+                        "command": [
+                            "bun",
+                            f"skills/{skill}/scripts/validate_{skill.replace('-', '_')}_synthetic_bootstrap.ts",
+                        ],
+                        "expected_status": "pass",
+                    },
+                    "notes": "Synthetic bootstrap fixture for prompt-style skill import tests.",
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        (case_dir / "expected" / artifact_rel).write_text(
+            json.dumps(
+                {
+                    "schema_version": f"{skill}.synthetic-bootstrap.v1",
+                    "summary": "Documented the requested behavior from local evidence.",
+                    "evidence": ["SKILL.md", "references/guide.md"],
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        return case_dir
+
     def parse_json_objects(self, stdout: str) -> list[dict]:
         decoder = json.JSONDecoder()
         idx = 0
@@ -449,19 +661,45 @@ class GenEvalCasesCliContractTests(unittest.TestCase):
             else:
                 suite_path.write_text(suite_original, encoding="utf-8")
 
-    def test_validate_only_does_not_infer_bootstrap_when_existing_case_dir_is_unloadable(self) -> None:
-        broken_dir = REPO_ROOT / "skills" / "workspace-inventory" / "evals" / "workspace-inventory-broken-existing"
+    def test_validate_only_infers_bootstrap_for_true_zero_case_skill(self) -> None:
+        skill = "zero-case-bootstrap-contract-test"
+        skill_dir = self.make_zero_case_bootstrap_skill(skill)
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                case_dir = self.make_zero_case_bootstrap_candidate(Path(tmp), skill)
+                result = self.run_generator("--skill", skill, "--validate-only", str(case_dir))
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(result.stderr, "")
+            payload = json.loads(result.stdout)
+            errors = validate_instance(payload, RESULT_SCHEMA)
+            self.assertEqual(errors, [], errors)
+            self.assertEqual(payload["schema_version"], "case-generation-result.v1")
+            self.assertEqual(payload["operation"], "validate-only")
+            self.assertEqual(payload["case_id"], f"{skill}-first-case")
+            self.assertTrue(payload["ok"])
+            self.assertEqual(payload["violations"], [])
+            self.assertEqual(payload["replay_status"], "pass")
+            self.assertEqual(payload["sensitivity_status"], "fail")
+        finally:
+            shutil.rmtree(skill_dir, ignore_errors=True)
+
+    def test_validate_only_does_not_infer_bootstrap_when_only_existing_case_dir_is_unloadable(self) -> None:
+        skill = "zero-case-broken-existing-contract-test"
+        skill_dir = self.make_zero_case_bootstrap_skill(skill)
+        broken_dir = skill_dir / "evals" / f"{skill}-broken-existing"
         self.assertFalse(broken_dir.exists(), f"refusing to delete pre-existing fixture: {broken_dir}")
 
         try:
             broken_dir.mkdir(parents=True)
             (broken_dir / "metadata.json").write_text("{not json}\n", encoding="utf-8")
             with tempfile.TemporaryDirectory() as tmp:
-                case_dir = self.make_workspace_inventory_candidate(Path(tmp))
-                result = self.run_generator("--skill", "workspace-inventory", "--validate-only", str(case_dir))
+                case_dir = self.make_zero_case_bootstrap_candidate(Path(tmp), skill)
+                result = self.run_generator("--skill", skill, "--validate-only", str(case_dir))
                 explicit = self.run_generator(
                     "--skill",
-                    "workspace-inventory",
+                    skill,
                     "--bootstrap",
                     "--validate-only",
                     str(case_dir),
@@ -476,11 +714,96 @@ class GenEvalCasesCliContractTests(unittest.TestCase):
             self.assertEqual(errors, [], errors)
             self.assertEqual(payload["schema_version"], "case-generation-result.v1")
             self.assertEqual(payload["operation"], "validate-only")
-            self.assertEqual(payload["case_id"], "workspace-inventory-bootstrap-unit-test")
+            self.assertEqual(payload["case_id"], f"{skill}-first-case")
             self.assertTrue(payload["ok"])
             self.assertEqual(payload["violations"], [])
         finally:
-            shutil.rmtree(broken_dir, ignore_errors=True)
+            shutil.rmtree(skill_dir, ignore_errors=True)
+
+    def test_validate_only_imports_external_zero_case_skill_path(self) -> None:
+        skill = "zero-case-path-import-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                source_skill = self.make_zero_case_bootstrap_skill(skill, tmp_path / "external-skills")
+                case_dir = self.make_zero_case_bootstrap_candidate(tmp_path, skill)
+                result = self.run_generator("--skill", str(source_skill), "--validate-only", str(case_dir))
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(result.stderr, "")
+            self.assertTrue(repo_skill_dir.is_dir())
+            self.assertTrue((repo_skill_dir / "SKILL.md").is_file())
+            self.assertTrue((repo_skill_dir / "references" / "guide.md").is_file())
+            payload = json.loads(result.stdout)
+            errors = validate_instance(payload, RESULT_SCHEMA)
+            self.assertEqual(errors, [], errors)
+            self.assertEqual(payload["schema_version"], "case-generation-result.v1")
+            self.assertEqual(payload["operation"], "validate-only")
+            self.assertEqual(payload["case_id"], f"{skill}-first-case")
+            self.assertTrue(payload["ok"])
+            self.assertEqual(payload["violations"], [])
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+
+    def test_generation_infers_bootstrap_for_external_zero_case_skill_path(self) -> None:
+        skill = "zero-case-path-generate-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                source_skill = self.make_zero_case_bootstrap_skill(skill, Path(tmp) / "external-skills")
+                result = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--api-key-env",
+                    "__GEN_EVAL_CASES_MISSING_KEY__",
+                )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertTrue(repo_skill_dir.is_dir())
+            self.assertNotIn("no loadable eval cases to seed from", result.stdout + result.stderr)
+            self.assertIn("__GEN_EVAL_CASES_MISSING_KEY__", result.stdout + result.stderr)
+            self.assertNotIn("Traceback", result.stdout + result.stderr)
+            self.assertIn("LM setup failed", result.stderr)
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+
+    def test_external_prompt_style_skill_imports_and_adds_synthetic_laguna_contract(self) -> None:
+        skill = "prompt-style-path-import-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                source_skill = self.make_prompt_style_external_skill(tmp_path / "external-skills", skill)
+                case_dir = self.make_synthetic_laguna_candidate(tmp_path, skill)
+                result = self.run_generator("--skill", str(source_skill), "--validate-only", str(case_dir))
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(result.stderr, "")
+            self.assertTrue(repo_skill_dir.is_dir())
+            self.assertTrue((repo_skill_dir / "references" / "guide.md").is_file())
+            self.assertTrue((repo_skill_dir / "scripts" / "helper.mjs").is_file())
+            self.assertTrue((repo_skill_dir / "schemas" / f"{skill}-synthetic-bootstrap.schema.json").is_file())
+            self.assertTrue(
+                (repo_skill_dir / "scripts" / f"validate_{skill.replace('-', '_')}_synthetic_bootstrap.ts").is_file()
+            )
+            self.assertIn(".laguna/prompt-style-path-import-contract-test.json", (repo_skill_dir / "SKILL.md").read_text(encoding="utf-8"))
+            payload = json.loads(result.stdout)
+            errors = validate_instance(payload, RESULT_SCHEMA)
+            self.assertEqual(errors, [], errors)
+            self.assertEqual(payload["schema_version"], "case-generation-result.v1")
+            self.assertTrue(payload["ok"])
+            self.assertEqual(payload["violations"], [])
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":
