@@ -1,0 +1,76 @@
+{
+  "schema_version": "ce-plan.quality-plan.v1",
+  "title": "ACP Rewind",
+  "problem_frame": "ACP Rewind needs a concrete implementation plan grounded in input/source-plan.md and input/repo-context.md. The plan must explain the case-specific ACP, rewind, state, conversation behavior, separate scope from non-goals, name repo-relative implementation and test paths, and preserve the source document's product constraints instead of summarizing it.",
+  "scope": {
+    "in_scope": [
+      "rewind",
+      "ACP",
+      "state"
+    ],
+    "non_goals": [
+      "Protocol redesign",
+      "Unrelated product work"
+    ]
+  },
+  "requirements": [
+    "rewind",
+    "ACP",
+    "state",
+    "conversation",
+    "resume",
+    "history"
+  ],
+  "decisions": [
+    "Prefer repo-local acp paths because the plan must be portable.",
+    "Separate UI and state work so that tests can isolate behavior.",
+    "Avoid stale absolute paths because the plan must work across worktrees."
+  ],
+  "implementation_units": [
+    {
+      "name": "acp unit",
+      "files": [
+        "src/features/acp/index.ts"
+      ],
+      "test_files": [
+        "src/features/acp/index.test.ts"
+      ],
+      "work": "Implement acp behavior."
+    },
+    {
+      "name": "rewind unit",
+      "files": [
+        "src/features/rewind/view.svelte"
+      ],
+      "test_files": [
+        "src/features/rewind/view.test.ts"
+      ],
+      "work": "Implement rewind UI."
+    },
+    {
+      "name": "integration unit",
+      "files": [
+        "src/app/shell/layout/main.ts"
+      ],
+      "test_files": [
+        "tests/ce-plan.integration.test.ts"
+      ],
+      "work": "Connect the feature into the app shell."
+    }
+  ],
+  "test_scenarios": [
+    "Verify rewind behavior.",
+    "Verify ACP behavior.",
+    "Verify state behavior.",
+    "Verify conversation behavior.",
+    "Verify resume behavior."
+  ],
+  "risks": [
+    "Risk around state.",
+    "Risk around history."
+  ],
+  "evidence_sources": [
+    "input/source-plan.md",
+    "input/repo-context.md"
+  ]
+}

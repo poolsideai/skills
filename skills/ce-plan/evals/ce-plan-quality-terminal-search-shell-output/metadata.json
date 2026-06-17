@@ -1,0 +1,18 @@
+{
+  "id": "ce-plan-quality-terminal-search-shell-output",
+  "skill": "ce-plan",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ce-plan/scripts/validate_ce_plan_quality.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "GEPA-calibrated ce-plan quality case derived from poolside-studio docs/plans/terminal-search-and-shell-output.md. Generated fixture; no customer data."
+}

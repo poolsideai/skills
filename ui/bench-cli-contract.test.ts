@@ -122,7 +122,7 @@ describe("bench discovery CLI contract", () => {
       output: "bench-onboard-prepare.v1",
     });
     expect(byName["eval-case-generate"]).toMatchObject({
-      usage: 'bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
+      usage: 'bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."] [--no-lm-skeleton] [--validate-only <case-dir>] [--promote <case-dir>]',
       output: "bench-eval-case-generate.v1",
     });
   });
@@ -184,7 +184,7 @@ describe("bench discovery CLI contract", () => {
   });
 
   test.each([
-    ["optimize-skill", "bun ui/bench.ts optimize-skill <skill>|--skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]"],
+    ["optimize-skill", "bun ui/bench.ts optimize-skill <skill>|--skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>|--reflection-pool-agent <agent>] [--reflection-reasoning-effort medium] [--arm <arm>]... [--smoke|--baseline-only]"],
     ["optimize-propose", "bun ui/bench.ts optimize-propose <skill>|--skill <name> [--run-dir <dir>]"],
   ])("help %s exposes positional skill metadata", (commandName, usage) => {
     const output = expectJsonStdout<{
@@ -212,7 +212,10 @@ describe("bench discovery CLI contract", () => {
     expect(output.schema_version).toBe("bench-command-help.v1");
     expect(output.command).toMatchObject({ name: "optimize-skill", output: "StartOptimizeRunResult" });
     expect(output.command.flags?.map((flag) => flag.name)).toEqual(
-      expect.arrayContaining(["--skill", "--components", "--max-component-bytes", "--max-total-bytes"]),
+      expect.arrayContaining(["--skill", "--components", "--max-component-bytes", "--max-total-bytes", "--reflection-pool-agent"]),
+    );
+    expect(output.command.flags?.map((flag) => flag.name)).toEqual(
+      expect.arrayContaining(["--reflection-reasoning-effort", "--max-candidate-bytes-over-seed", "--reject-broad-artifact-overrides"]),
     );
     expect(output.command.flags?.filter((flag) => flag.repeatable).map((flag) => flag.name)).toEqual(
       expect.arrayContaining(["--components", "--arm"]),
@@ -281,9 +284,10 @@ describe("bench discovery CLI contract", () => {
     });
     expect(output.command.usage).toContain("<name-or-path>");
     expect(output.command.flags?.map((flag) => flag.name)).toEqual(
-      expect.arrayContaining(["--skill", "--n", "--spec", "--bootstrap", "--validate-only", "--promote"]),
+      expect.arrayContaining(["--skill", "--n", "--spec", "--bootstrap", "--no-lm-skeleton", "--validate-only", "--promote"]),
     );
     expect(output.command.notes?.join("\n")).toContain("path to an external skill");
+    expect(output.command.notes?.join("\n")).toContain("starter artifacts offline");
     expect(output.command.flags?.filter((flag) => flag.repeatable).map((flag) => flag.name)).toEqual(
       expect.arrayContaining(["--spec", "--validate-only", "--promote"]),
     );
@@ -392,6 +396,25 @@ describe("bench discovery CLI contract", () => {
       "--n",
       "1",
       "--bootstrap",
+    ]);
+    expect(body.stderr_text).toContain("no such skill");
+  });
+
+  test("eval-case-generate forwards no-LM skeleton mode", () => {
+    const result = runBench(["eval-case-generate", "--skill", "__missing_skill__", "--no-lm-skeleton", "--n", "1"]);
+
+    expect(result.exitCode).toBe(1);
+    const body = expectJsonStderr<{ mode: string; command: string[]; stderr_text: string }>(result);
+    expect(body.mode).toBe("generate");
+    expect(body.command).toEqual([
+      "uv",
+      "run",
+      "harness/generate/gen_eval_cases.py",
+      "--skill",
+      "__missing_skill__",
+      "--n",
+      "1",
+      "--no-lm-skeleton",
     ]);
     expect(body.stderr_text).toContain("no such skill");
   });

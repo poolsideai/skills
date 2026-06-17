@@ -1,0 +1,36 @@
+{
+  "title_terms": [
+    "Google Drive MCP File Operations",
+    "Drive File Operations"
+  ],
+  "topic_terms": [
+    "Google Drive",
+    "MCP",
+    "file",
+    "operation"
+  ],
+  "requirement_terms": [
+    "drive",
+    "file",
+    "MCP",
+    "permission",
+    "read",
+    "write"
+  ],
+  "path_terms": [
+    "google",
+    "drive",
+    "mcp",
+    "file"
+  ],
+  "risk_terms": [
+    "permission",
+    "sharing",
+    "token"
+  ],
+  "forbidden_terms": [
+    "/Users/",
+    "/home/ben/",
+    "hard-code token"
+  ]
+}

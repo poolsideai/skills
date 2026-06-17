@@ -1,0 +1,32 @@
+{
+  "title_terms": [
+    "ACP Plan Composer Rail",
+    "Plan Composer Rail"
+  ],
+  "topic_terms": [
+    "composer",
+    "plan",
+    "transcript",
+    "rail"
+  ],
+  "requirement_terms": [
+    "bottom",
+    "composer",
+    "collapsed",
+    "completed",
+    "queued",
+    "transcript"
+  ],
+  "path_terms": [
+    "chat-plan-rail",
+    "chat-pane",
+    "chat-transcript",
+    "plan"
+  ],
+  "risk_terms": [
+    "historical",
+    "completion",
+    "scroll"
+  ],
+  "forbidden_terms": []
+}

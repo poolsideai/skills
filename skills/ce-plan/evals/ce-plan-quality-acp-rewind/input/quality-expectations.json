@@ -1,0 +1,31 @@
+{
+  "title_terms": [
+    "ACP Rewind"
+  ],
+  "topic_terms": [
+    "ACP",
+    "rewind",
+    "state",
+    "conversation"
+  ],
+  "requirement_terms": [
+    "rewind",
+    "ACP",
+    "state",
+    "conversation",
+    "resume",
+    "history"
+  ],
+  "path_terms": [
+    "acp",
+    "rewind",
+    "conversation",
+    "runtime"
+  ],
+  "risk_terms": [
+    "state",
+    "history",
+    "consistency"
+  ],
+  "forbidden_terms": []
+}

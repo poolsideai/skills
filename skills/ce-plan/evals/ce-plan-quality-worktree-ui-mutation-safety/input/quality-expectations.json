@@ -1,0 +1,35 @@
+{
+  "title_terms": [
+    "Worktree UI Mutation Safety",
+    "UI Mutation Safety Warnings"
+  ],
+  "topic_terms": [
+    "worktree",
+    "mutation",
+    "safety",
+    "warning"
+  ],
+  "requirement_terms": [
+    "worktree",
+    "mutation",
+    "warning",
+    "safety",
+    "diff",
+    "UI"
+  ],
+  "path_terms": [
+    "worktree",
+    "mutation",
+    "warning",
+    "ui"
+  ],
+  "risk_terms": [
+    "data loss",
+    "wrong worktree",
+    "destructive"
+  ],
+  "forbidden_terms": [
+    "destructive reset",
+    "absolute poolside-studio path"
+  ]
+}

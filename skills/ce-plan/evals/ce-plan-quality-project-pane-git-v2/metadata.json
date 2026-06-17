@@ -1,0 +1,18 @@
+{
+  "id": "ce-plan-quality-project-pane-git-v2",
+  "skill": "ce-plan",
+  "bucket": "realistic",
+  "difficulty": "medium",
+  "arms": [
+    "xs_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ce-plan/scripts/validate_ce_plan_quality.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "GEPA-calibrated ce-plan quality case derived from poolside-studio docs/plans/project-pane-git-v2.md. Generated fixture; no customer data."
+}

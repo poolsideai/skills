@@ -57,6 +57,10 @@ Usage (from the repo root):
         --reflection-lm my-served-model \
         --reflection-api-base http://localhost:8000/v1 --reflection-api-key-env MY_KEY
 
+    # reflection via the authenticated pool CLI / model selector surface:
+    uv run harness/optimize/gepa_skill.py --skill ci-log-reducer \
+        --reflection-pool-agent anthropic/claude-4.5-sonnet
+
 Outputs under runs/optimize/<skill>/<utc-stamp>/:
     config.json   — resolved arguments + train/val split
     gepa/         — gepa engine state (resumable run dir)
@@ -80,10 +84,12 @@ import difflib
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 import threading
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -92,6 +98,9 @@ FITNESS = REPO_ROOT / "harness" / "optimize" / "fitness.py"
 FROZEN_GATE = REPO_ROOT / "harness" / "optimize" / "frozen_paths_gate.py"
 ARM_NAMES = ("xs_without_skill", "xs_with_skill", "m_without_skill", "m_with_skill")
 DEFAULT_REFLECTION_LM = os.environ.get("GEPA_REFLECTION_LM", "anthropic/claude-sonnet-4-5")
+DEFAULT_REFLECTION_POOL_AGENT = os.environ.get("GEPA_REFLECTION_POOL_AGENT")
+SYNTHETIC_BOOTSTRAP_HEADING = "## Synthetic Laguna Bootstrap Contract"
+SYNTHETIC_BOOTSTRAP_SCHEMA_RE = re.compile(r"[a-z0-9][a-z0-9_-]*\.synthetic-bootstrap\.v1")
 
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT))  # harness.llm (shared LM client)
@@ -110,12 +119,189 @@ def load_suite(suite_path: Path) -> tuple[str, list[str]]:
     raise SystemExit(f"unsupported suite shape: {suite_path}")
 
 
+def case_validator_command(case_dir: Path) -> list[str]:
+    try:
+        meta = json.loads((case_dir / "metadata.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    validator = meta.get("validator") if isinstance(meta, dict) else None
+    command = validator.get("command") if isinstance(validator, dict) else None
+    return [str(item) for item in command] if isinstance(command, list) else []
+
+
+def suite_is_synthetic_bootstrap_only(case_dirs: list[Path]) -> bool:
+    if not case_dirs:
+        return False
+    commands = [case_validator_command(d) for d in case_dirs]
+    return bool(commands) and all(any("synthetic_bootstrap" in item for item in command) for command in commands)
+
+
+def strip_synthetic_bootstrap_contract(text: str) -> tuple[str, bool]:
+    pattern = re.compile(rf"\n+{re.escape(SYNTHETIC_BOOTSTRAP_HEADING)}\n.*?(?=\n## |\Z)", re.DOTALL)
+    stripped, count = pattern.subn("", text.rstrip())
+    if count:
+        return stripped.rstrip() + "\n", True
+    return text, False
+
+
+def case_dir_for_id(suite_path: Path, case_id: str) -> Path | None:
+    _suite_name, entries = load_suite(suite_path)
+    for entry in entries:
+        case_dir = REPO_ROOT / entry
+        if case_dir.name == case_id:
+            return case_dir
+    return None
+
+
+def case_prompt_contract_excerpt(suite_path: Path, case_id: str, max_chars: int = 1600) -> str | None:
+    case_dir = case_dir_for_id(suite_path, case_id)
+    prompt_path = case_dir / "prompt.md" if case_dir else None
+    if not prompt_path or not prompt_path.is_file():
+        return None
+    text = prompt_path.read_text(encoding="utf-8", errors="replace").strip()
+    if len(text) > max_chars:
+        text = text[:max_chars].rsplit("\n", 1)[0] + "\n..."
+    return text
+
+
 def child_env() -> dict[str, str]:
     # This script runs in uv's isolated PEP 723 env; drop VIRTUAL_ENV so the
     # nested `uv run` resolves the repo's project env instead of warning.
     env = dict(os.environ)
     env.pop("VIRTUAL_ENV", None)
     return env
+
+
+def prompt_to_text(prompt: str | list[dict]) -> str:
+    if isinstance(prompt, str):
+        return prompt
+    parts = []
+    for message in prompt:
+        role = str(message.get("role", "user"))
+        content = message.get("content", "")
+        if isinstance(content, str):
+            rendered = content
+        else:
+            rendered = json.dumps(content, ensure_ascii=True)
+        parts.append(f"<{role}>\n{rendered}\n</{role}>")
+    return "\n\n".join(parts)
+
+
+def fenced_blocks(text: str) -> list[str]:
+    return [m.group(1).strip() for m in re.finditer(r"```(?:[A-Za-z0-9_-]+)?\s*\n(.*?)```", text, re.DOTALL)]
+
+
+def clean_pool_reflection_output(text: str) -> str:
+    blocks = fenced_blocks(text)
+    if not blocks:
+        return text.strip()
+    for block in reversed(blocks):
+        stripped = block.lstrip()
+        if stripped.startswith("---\nname:") or stripped.startswith("---\r\nname:"):
+            return f"```\n{block}\n```"
+    for block in reversed(blocks):
+        if "metadata:" in block and "## Do not use when" in block and "# " in block:
+            return f"```\n{block}\n```"
+    return f"```\n{blocks[-1]}\n```"
+
+
+def make_pool_reflection_lm(args: argparse.Namespace, out_dir: Path):
+    """GEPA LanguageModel adapter backed by the repo's existing pool auth path."""
+    from harness.runner.pool_exec import (  # noqa: PLC0415
+        DEFAULT_API_URL,
+        DEFAULT_POOL_BIN,
+        cli_rejection,
+        probe_surface,
+        sandbox_available,
+    )
+
+    pool_bin = args.pool_bin or DEFAULT_POOL_BIN
+    api_url = args.api_url or DEFAULT_API_URL
+    surface = probe_surface(pool_bin)
+    base = [pool_bin, "exec"] if surface.has_exec_subcommand else [pool_bin]
+    sandbox = args.reflection_pool_sandbox
+    if sandbox == "auto":
+        sandbox = "required" if sandbox_available() else "disabled"
+    calls_dir = out_dir / "reflection-pool"
+    calls_dir.mkdir(parents=True, exist_ok=True)
+    lock = threading.Lock()
+    counter = {"n": 0}
+
+    def _lm(prompt: str | list[dict]) -> str:
+        text = (
+            "You are being used as a GEPA reflection model, not as an interactive coding agent.\n"
+            "Do not inspect files, run tools, update todos, or explain your process.\n"
+            "Return exactly one fenced code block containing only the replacement component text requested by the prompt.\n"
+            "No prose before or after the fenced block.\n\n"
+            + prompt_to_text(prompt)
+        )
+        with lock:
+            counter["n"] += 1
+            call_dir = calls_dir / f"call-{counter['n']:03d}"
+        call_dir.mkdir(parents=True, exist_ok=True)
+        prompt_file = call_dir / "prompt.md"
+        prompt_file.write_text(text, encoding="utf-8")
+        workspace = Path(tempfile.mkdtemp(prefix="gepa-reflection-", dir=str(call_dir)))
+        argv = [*base]
+        if surface.supports("--prompt-file"):
+            argv += ["--prompt-file", str(prompt_file)]
+        else:
+            argv += ["-p", text]
+        if surface.supports("--directory"):
+            argv += ["--directory", str(workspace)]
+        else:
+            argv += ["-d", str(workspace)]
+        argv += ["-o", "markdown", "--unsafe-auto-allow"]
+        if surface.supports("--sandbox"):
+            argv += ["--sandbox", sandbox]
+        argv += ["--agent-name", args.reflection_pool_agent, "--api-url", api_url]
+        (call_dir / "argv.json").write_text(json.dumps(argv, indent=2) + "\n", encoding="utf-8")
+        try:
+            proc = subprocess.run(
+                argv,
+                capture_output=True,
+                text=True,
+                cwd=REPO_ROOT,
+                env=child_env(),
+                timeout=args.reflection_pool_timeout,
+            )
+        except subprocess.TimeoutExpired as exc:
+            stdout = exc.stdout.decode("utf-8", errors="replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+            stderr = exc.stderr.decode("utf-8", errors="replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+            (call_dir / "stdout.md").write_text(stdout, encoding="utf-8")
+            (call_dir / "stderr.txt").write_text(stderr, encoding="utf-8")
+            (call_dir / "timeout.json").write_text(
+                json.dumps(
+                    {
+                        "timeout_s": args.reflection_pool_timeout,
+                        "agent": args.reflection_pool_agent,
+                        "argv": argv,
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            raise RuntimeError(
+                "pool reflection timed out "
+                f"after {args.reflection_pool_timeout}s (call_dir={call_dir})"
+            ) from exc
+        (call_dir / "stdout.md").write_text(proc.stdout, encoding="utf-8")
+        (call_dir / "stderr.txt").write_text(proc.stderr, encoding="utf-8")
+        rejection = cli_rejection(proc.stderr)
+        if proc.returncode != 0 or rejection:
+            raise RuntimeError(
+                "pool reflection failed "
+                f"(exit={proc.returncode}, rejection={rejection}, call_dir={call_dir}):\n"
+                f"{proc.stderr[-2000:]}"
+            )
+        output = clean_pool_reflection_output(proc.stdout)
+        if not output:
+            raise RuntimeError(f"pool reflection returned empty stdout (call_dir={call_dir})")
+        (call_dir / "cleaned.md").write_text(output, encoding="utf-8")
+        return output
+
+    return _lm
 
 
 def parse_components(values: list[str]) -> list[str]:
@@ -145,12 +331,25 @@ def component_relpath(component: str) -> Path:
     raise ValueError(f"unsupported component: {component}")
 
 
-def load_seed_components(skill_dir: Path, selected: list[str]) -> dict[str, str]:
+def load_seed_components(
+    skill_dir: Path,
+    selected: list[str],
+    *,
+    strip_synthetic_bootstrap: bool = False,
+) -> tuple[dict[str, str], list[str]]:
     components = {"skill_md": (skill_dir / "SKILL.md").read_text(encoding="utf-8")}
     if "references" in selected and (skill_dir / "references").is_dir():
         for path in sorted(p for p in (skill_dir / "references").rglob("*") if p.is_file()):
             components[path.relative_to(skill_dir).as_posix()] = path.read_text(encoding="utf-8")
-    return components
+    notes: list[str] = []
+    if strip_synthetic_bootstrap and "skill_md" in components:
+        components["skill_md"], changed = strip_synthetic_bootstrap_contract(components["skill_md"])
+        if changed:
+            notes.append(
+                "stripped generated Synthetic Laguna Bootstrap Contract from optimizer seed "
+                "because the active suite uses non-synthetic validators"
+            )
+    return components, notes
 
 
 def candidate_components(candidate: object) -> dict[str, str]:
@@ -172,6 +371,9 @@ class CandidateFactory:
         max_total_bytes: int,
         case_dirs: list[Path],
         seed_components: dict[str, str],
+        disallowed_literals: list[tuple[str, str]] | None = None,
+        max_candidate_bytes_over_seed: int | None = None,
+        reject_broad_artifact_overrides: bool = False,
     ) -> None:
         self.skill = skill
         self.scratch = scratch
@@ -180,6 +382,9 @@ class CandidateFactory:
         self.seed_components = dict(seed_components)
         self.allowed_components = set(seed_components)
         self.canonical_skill = REPO_ROOT / "skills" / skill
+        self.disallowed_literals = list(disallowed_literals or [])
+        self.max_candidate_bytes_over_seed = max_candidate_bytes_over_seed
+        self.reject_broad_artifact_overrides = reject_broad_artifact_overrides
         self._cache: dict[str, tuple[Path | None, list[str]]] = {}
         self._lock = threading.Lock()  # gepa may evaluate candidates in parallel
         # Grandfather literals the SEED already quotes (e.g. a deliberate
@@ -251,13 +456,55 @@ class CandidateFactory:
                     f"anti-overfit: candidate quotes {why}. The skill must stay "
                     "general — describe procedures, never specific eval cases."
                 )
+        for literal, why in self.disallowed_literals:
+            if literal in combined:
+                violations.append(f"contract-conflict: candidate contains {why}: {literal}")
         total_size = 0
         for name, text in components.items():
             size = len(text.encode("utf-8"))
             total_size += size
+            seed_size = len(self.seed_components.get(name, "").encode("utf-8"))
+            if (
+                self.max_candidate_bytes_over_seed is not None
+                and size - seed_size > self.max_candidate_bytes_over_seed
+            ):
+                violations.append(
+                    "candidate-shape: "
+                    f"{component_relpath(name)} grew by {size - seed_size} bytes; "
+                    f"cap is {self.max_candidate_bytes_over_seed}. Use a surgical "
+                    "instructional edit instead of a broad mode rewrite."
+                )
             cap = self.component_caps.get(name, self.component_caps.get("skill_md", 32768))
             if size > cap:
                 violations.append(f"byte-cap: {component_relpath(name)} is {size} bytes; cap is {cap}")
+        if self.reject_broad_artifact_overrides:
+            risky_needles = [
+                ("JSON_CONTRACT_MODE", "introduces a global JSON contract mode"),
+                ("CRITICAL OVERRIDE", "introduces a critical override block"),
+                ("Prompt-Local JSON Artifact", "introduces a broad prompt-local artifact section"),
+                ("Prompt-Local Artifact", "introduces a broad prompt-local artifact section"),
+                ("Prompt-local artifact", "introduces a broad prompt-local artifact section"),
+                ("prompt-local artifact", "introduces a broad prompt-local artifact section"),
+                ("artifact-contract mode", "introduces a broad alternate artifact workflow"),
+                ("Artifact-Contract Mode", "introduces a broad alternate artifact workflow"),
+                ("STRUCTURED_ARTIFACT_MODE", "introduces a global structured artifact mode"),
+                ("PROMPT_ARTIFACT_MODE", "introduces a global prompt artifact mode"),
+                ("DELIVERABLE_MODE=artifact-contract", "introduces a global artifact deliverable mode"),
+                ("Highest-Priority Deliverable Contract", "introduces a broad top-level deliverable override"),
+                ("bypass standard outputs", "bypasses the skill's normal output flow"),
+                ("overrides the default `docs/plans/", "overrides the skill's normal plan output flow"),
+                ("overrides the default docs/plans", "overrides the skill's normal plan output flow"),
+                ("skip the normal post-generation menu", "bypasses the skill's normal completion flow"),
+                ("skip the default interactive post-generation menu", "bypasses the skill's normal completion flow"),
+            ]
+            seed_combined = "\n".join(self.seed_components.values())
+            for needle, why in risky_needles:
+                if needle not in seed_combined and needle in combined:
+                    violations.append(
+                        "candidate-shape: "
+                        f"{why}. Keep eval-artifact guidance local and procedural, "
+                        "not as a top-level alternate workflow."
+                    )
         if total_size > self.max_total_bytes:
             violations.append(f"byte-cap: selected components total {total_size} bytes; cap is {self.max_total_bytes}")
 
@@ -332,6 +579,8 @@ def run_fitness_case(
     row = fitness.get("per_case", {}).get(f"{case_id}/{arm}", {})
     score = float(row.get("score", 0.0))
     lines = [
+        "eval prompt/output contract excerpt:",
+        case_prompt_contract_excerpt(suite_path, case_id) or "(prompt unavailable)",
         f"validator status: {row.get('validator_status')} (expected: {row.get('expected_status')})",
         f"validator score: {score}",
     ]
@@ -389,6 +638,20 @@ def main() -> int:
     parser.add_argument("--reflection-api-key-env", default=os.environ.get("GEPA_REFLECTION_API_KEY_ENV"),
                         help="name of the env var holding the API key for --reflection-api-base "
                              "(env GEPA_REFLECTION_API_KEY_ENV; default: litellm's own key resolution)")
+    parser.add_argument("--reflection-reasoning-effort",
+                        choices=("none", "minimal", "low", "medium", "high", "xhigh"),
+                        default=os.environ.get("GEPA_REFLECTION_REASONING_EFFORT"),
+                        help="optional reasoning effort for LiteLLM-backed reflection calls. "
+                             "For OpenRouter this is sent as reasoning.effort with reasoning excluded from output "
+                             "(env GEPA_REFLECTION_REASONING_EFFORT).")
+    parser.add_argument("--reflection-pool-agent", default=DEFAULT_REFLECTION_POOL_AGENT,
+                        help="pool agent name for GEPA reflection instead of LiteLLM "
+                             "(env GEPA_REFLECTION_POOL_AGENT; e.g. anthropic/claude-4.5-sonnet).")
+    parser.add_argument("--reflection-pool-timeout", type=float, default=float(os.environ.get("GEPA_REFLECTION_POOL_TIMEOUT", "240")),
+                        help="timeout in seconds for each pool-backed reflection call (default 240; env GEPA_REFLECTION_POOL_TIMEOUT)")
+    parser.add_argument("--reflection-pool-sandbox", choices=("auto", "required", "disabled"),
+                        default=os.environ.get("GEPA_REFLECTION_POOL_SANDBOX", "disabled"),
+                        help="sandbox mode for pool-backed reflection calls (default disabled; env GEPA_REFLECTION_POOL_SANDBOX)")
     parser.add_argument("--reflection-minibatch-size", type=int, default=None)
     parser.add_argument("--workers", type=int, default=1,
                         help="parallel evaluator calls (concurrent pool runs; default 1 = serial)")
@@ -400,6 +663,12 @@ def main() -> int:
                         help="hard byte cap per selected component (default: max(32768, 2x seed component))")
     parser.add_argument("--max-total-bytes", type=int, default=None,
                         help="hard byte cap across selected components (default: max(sum caps, 2x seed total))")
+    parser.add_argument("--max-candidate-bytes-over-seed", type=int, default=None,
+                        help="optional candidate-shape guard: reject any selected component that grows by more "
+                             "than this many bytes over the seed before spending pool runs")
+    parser.add_argument("--reject-broad-artifact-overrides", action="store_true",
+                        help="candidate-shape guard for bootstrap/eval-artifact optimization: reject newly "
+                             "introduced top-level JSON override modes that tend to bypass the skill workflow")
     parser.add_argument("--out-dir", help="default: runs/optimize/<skill>/<utc-stamp>")
     parser.add_argument("--timeout", type=float, help="per-pool-run timeout (fitness passthrough)")
     parser.add_argument("--pool-bin")
@@ -432,14 +701,26 @@ def main() -> int:
             buckets[d.name] = meta.get("bucket", "realistic")
         except (OSError, json.JSONDecodeError):
             buckets[d.name] = "realistic"
+    synthetic_bootstrap_only = suite_is_synthetic_bootstrap_only(case_dirs)
     arms = args.arms or ["xs_with_skill"]
     train_ids, val_ids = split_cases(case_ids, args.train_cases, args.val_cases, buckets)
     # Stable aliases keep raw case ids out of reflection side info.
     case_alias = {cid: f"case-{i + 1}" for i, cid in enumerate(sorted(case_ids))}
 
     component_selection = parse_components(args.components)
-    seed_components = load_seed_components(skill_dir, component_selection)
+    raw_skill_md = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+    seed_components, seed_sanitization_notes = load_seed_components(
+        skill_dir,
+        component_selection,
+        strip_synthetic_bootstrap=not synthetic_bootstrap_only,
+    )
     seed_text = seed_components["skill_md"]
+    disallowed_literals: list[tuple[str, str]] = []
+    if not synthetic_bootstrap_only:
+        synthetic_literals = set(SYNTHETIC_BOOTSTRAP_SCHEMA_RE.findall(raw_skill_md))
+        synthetic_literals.add(f"{args.skill}.synthetic-bootstrap.v1")
+        for match in sorted(synthetic_literals):
+            disallowed_literals.append((match, "synthetic bootstrap schema in a non-synthetic optimization suite"))
     component_caps = {
         name: args.max_component_bytes or args.max_skill_bytes or max(32768, 2 * len(text.encode("utf-8")))
         for name, text in seed_components.items()
@@ -451,7 +732,17 @@ def main() -> int:
         REPO_ROOT / "runs" / "optimize" / args.skill / utc_stamp()
     )
     out_dir.mkdir(parents=True, exist_ok=True)
-    factory = CandidateFactory(args.skill, out_dir / "candidates", component_caps, max_total_bytes, case_dirs, seed_components)
+    factory = CandidateFactory(
+        args.skill,
+        out_dir / "candidates",
+        component_caps,
+        max_total_bytes,
+        case_dirs,
+        seed_components,
+        disallowed_literals=disallowed_literals,
+        max_candidate_bytes_over_seed=args.max_candidate_bytes_over_seed,
+        reject_broad_artifact_overrides=args.reject_broad_artifact_overrides,
+    )
 
     config = {
         "skill": args.skill,
@@ -463,10 +754,19 @@ def main() -> int:
         "reflection_lm": args.reflection_lm,
         "reflection_api_base": args.reflection_api_base,
         "reflection_api_key_env": args.reflection_api_key_env,
+        "reflection_reasoning_effort": args.reflection_reasoning_effort,
+        "reflection_pool_agent": args.reflection_pool_agent,
+        "reflection_pool_timeout": args.reflection_pool_timeout,
+        "reflection_pool_sandbox": args.reflection_pool_sandbox,
+        "synthetic_bootstrap_only": synthetic_bootstrap_only,
+        "seed_sanitization": seed_sanitization_notes,
+        "disallowed_literals": [literal for literal, _why in disallowed_literals],
         "components": list(seed_components),
         "component_caps": component_caps,
         "max_total_bytes": max_total_bytes,
         "max_skill_bytes": component_caps.get("skill_md"),
+        "max_candidate_bytes_over_seed": args.max_candidate_bytes_over_seed,
+        "reject_broad_artifact_overrides": args.reject_broad_artifact_overrides,
         "workers": args.workers,
         "seed": args.seed,
         "argv": sys.argv[1:],
@@ -543,13 +843,16 @@ def main() -> int:
     # strings; an explicit OpenAI-compatible endpoint needs the callable so we
     # can pin api_base/api_key (harness/llm.py).
     reflection_lm: object = args.reflection_lm
-    if args.reflection_api_base or args.reflection_api_key_env:
+    if args.reflection_pool_agent:
+        reflection_lm = make_pool_reflection_lm(args, out_dir)
+    elif args.reflection_api_base or args.reflection_api_key_env or args.reflection_reasoning_effort:
         from harness.llm import make_lm  # noqa: PLC0415
 
         reflection_lm = make_lm(
             args.reflection_lm,
             api_base=args.reflection_api_base,
             api_key_env=args.reflection_api_key_env,
+            reasoning_effort=args.reflection_reasoning_effort,
         )
 
     def evaluator(candidate, example=None, **_kwargs):
@@ -567,7 +870,10 @@ def main() -> int:
         "eval cases. The skill must STAY GENERAL: never hardcode details of "
         "individual eval cases (ids, specific log lines, specific file names) — "
         "improve the procedure, the output contract explanation, reference guidance, "
-        "and the failure-mode warnings instead."
+        "and the failure-mode warnings instead. When a case prompt specifies a "
+        "structured `.laguna/<skill>.json` artifact, the skill should teach the "
+        "agent to follow that prompt-local artifact contract exactly rather than "
+        "falling back to any generic bootstrap example."
     )
     background = (
         "Authoring contract (mechanically enforced; violations score 0):\n"

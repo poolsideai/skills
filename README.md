@@ -284,6 +284,7 @@ Eval cases can be generated, but generated cases stay quarantined until a human 
 ```bash
 bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
 bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
+bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --no-lm-skeleton
 bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
 bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote runs/generate/<name>/<stamp>/candidates/<case-id>
 ```
@@ -297,6 +298,11 @@ For first-run bootstrap, `--skill` may be a path to an external skill directory.
 Passing `SKILL.md` is accepted as an alias for its parent directory. When the
 repo copy is missing, the generator imports the full skill directory into
 `skills/<name>` before bootstrapping cases.
+For prompt-style external skills or other first-run bootstrap contexts without
+LM credentials, `--no-lm-skeleton` writes a mechanically generated starter case
+under `runs/generate/`, gates it, and leaves it quarantined for review. Bootstrap
+generation also falls back to that starter path automatically when LM setup or
+the first provider call fails because credentials are unavailable.
 
 Promotion copies the reviewed case into `skills/<skill>/evals/`, appends it to the per-skill suite, reruns checks, and rolls back on failure. Review the resulting diff before committing.
 

@@ -1,0 +1,76 @@
+{
+  "schema_version": "ce-plan.quality-plan.v1",
+  "title": "Conversation Search",
+  "problem_frame": "Conversation Search needs a concrete implementation plan grounded in input/source-plan.md and input/repo-context.md. The plan must explain the case-specific conversation, search, index, results behavior, separate scope from non-goals, name repo-relative implementation and test paths, and preserve the source document's product constraints instead of summarizing it.",
+  "scope": {
+    "in_scope": [
+      "search",
+      "conversation",
+      "index"
+    ],
+    "non_goals": [
+      "Protocol redesign",
+      "Unrelated product work"
+    ]
+  },
+  "requirements": [
+    "search",
+    "conversation",
+    "index",
+    "result",
+    "filter",
+    "ranking"
+  ],
+  "decisions": [
+    "Prefer repo-local search paths because the plan must be portable.",
+    "Separate UI and state work so that tests can isolate behavior.",
+    "Avoid stale absolute paths because the plan must work across worktrees."
+  ],
+  "implementation_units": [
+    {
+      "name": "search unit",
+      "files": [
+        "src/features/search/index.ts"
+      ],
+      "test_files": [
+        "src/features/search/index.test.ts"
+      ],
+      "work": "Implement search behavior."
+    },
+    {
+      "name": "conversation unit",
+      "files": [
+        "src/features/conversation/view.svelte"
+      ],
+      "test_files": [
+        "src/features/conversation/view.test.ts"
+      ],
+      "work": "Implement conversation UI."
+    },
+    {
+      "name": "integration unit",
+      "files": [
+        "src/app/shell/layout/main.ts"
+      ],
+      "test_files": [
+        "tests/ce-plan.integration.test.ts"
+      ],
+      "work": "Connect the feature into the app shell."
+    }
+  ],
+  "test_scenarios": [
+    "Verify search behavior.",
+    "Verify conversation behavior.",
+    "Verify index behavior.",
+    "Verify result behavior.",
+    "Verify filter behavior."
+  ],
+  "risks": [
+    "Risk around privacy.",
+    "Risk around stale."
+  ],
+  "evidence_sources": [
+    "input/source-plan.md",
+    "input/repo-context.md"
+  ]
+}

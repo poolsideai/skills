@@ -24,13 +24,13 @@
  *   bun ui/bench.ts onboard --source <dir> [--out-dir <dir>]
  *   bun ui/bench.ts onboard-prepare --source <dir> [--skill <name>] [--import-source] [--review-dir <dir>] [--skip-cases]
  *   bun ui/bench.ts onboard-review --run-dir runs/onboard/<skill>/<run> [--model <id>]
- *   bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."]
+ *   bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."] [--no-lm-skeleton]
  *   bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
  *   bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote <case-dir>
  *   bun ui/bench.ts eval-suites
  *   bun ui/bench.ts eval-run --suite <path> [--case <id>]... [--arm <arm>]...
  *   bun ui/bench.ts eval-runs
- *   bun ui/bench.ts optimize-skill <name>|--skill <name> [--components references] [--max-metric-calls N] [--smoke|--baseline-only]
+ *   bun ui/bench.ts optimize-skill <name>|--skill <name> [--components references] [--max-metric-calls N] [--reflection-pool-agent <agent>] [--smoke|--baseline-only]
  *   bun ui/bench.ts optimize-runs
  *   bun ui/bench.ts optimize-propose <name>|--skill <name> [--run-dir <dir>]
  *   bun ui/bench.ts node-evals [--project <id>]
@@ -157,11 +157,11 @@ const USAGE = {
     "onboard --source <dir> [--out-dir <dir>] — triage foreign skill dirs into runs/onboard/ without LM or pool",
     "onboard-prepare --source <dir> [--skill <name>] [--import-source] [--review-dir <dir>] [--skip-cases] — synthesize quarantined onboarding drafts under runs/onboard/",
     "onboard-review --run-dir <dir> [--model <id>] — ask a model to review a quarantined onboarding bundle without promotion",
-    "eval-case-generate --skill <name-or-path> [--n N|--spec '...'] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
+    "eval-case-generate --skill <name-or-path> [--n N|--spec '...'] [--no-lm-skeleton] — generate, validate, or promote quarantined eval cases via harness/generate/gen_eval_cases.py",
     "eval-suites — suites + cases from evals/suites/*.json",
     "eval-run --suite evals/suites/<s>.json [--case <id>]... [--arm <arm>]... — launch harness run",
     "eval-runs — harness processes + per-arm results from runs/<suite>/<case>/<arm>/",
-    "optimize-skill <skill>|--skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA component optimization (harness/optimize/gepa_skill.py)",
+    "optimize-skill <skill>|--skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>|--reflection-pool-agent <agent>] [--reflection-reasoning-effort medium] [--arm <arm>]... [--smoke|--baseline-only] — launch detached GEPA component optimization (harness/optimize/gepa_skill.py)",
     "optimize-runs — optimization processes + result.json summaries from runs/optimize/",
     "optimize-propose <skill>|--skill <name> [--run-dir <dir>] — fold a finished GEPA run into the improvement queue (accept = version bump + checks + re-eval)",
     "node-evals [--project <id>] — node-level eval records (in-workflow + standalone)",
@@ -404,7 +404,7 @@ const COMMAND_DETAILS: CommandDetail[] = [
     name: "eval-case-generate",
     category: "evals",
     summary: "Generate, validate, or promote quarantined eval cases for a skill.",
-    usage: 'bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."] [--validate-only <case-dir>] [--promote <case-dir>]',
+    usage: 'bun ui/bench.ts eval-case-generate --skill <name-or-path> [--n N|--spec "..."] [--no-lm-skeleton] [--validate-only <case-dir>] [--promote <case-dir>]',
     output: "bench-eval-case-generate.v1",
     flags: [
       { name: "--skill", value: "name-or-path", description: "Skill directory name or path to a skill directory. Passing SKILL.md is accepted as an alias for its parent. Required unless supplied as the first positional arg." },
@@ -417,6 +417,7 @@ const COMMAND_DETAILS: CommandDetail[] = [
       { name: "--temperature", value: "number", description: "LM sampling temperature." },
       { name: "--max-repair-rounds", value: "N", description: "LM repair rounds after gate rejection; zero is allowed." },
       { name: "--bootstrap", description: "Allow zero-case generation, validation, or promotion using SKILL.md, schemas, and validator context." },
+      { name: "--no-lm-skeleton", description: "No LM: write mechanically generated starter candidate artifacts and gate them." },
       { name: "--seed-example", value: "case-id", description: "Existing case id to use as the worked example." },
       { name: "--validator-timeout", value: "seconds", description: "Per-validator timeout used by mechanical gates." },
       { name: "--out-dir", value: "dir", description: "Output directory; default is runs/generate/<skill>/<utc-stamp>." },
@@ -426,6 +427,7 @@ const COMMAND_DETAILS: CommandDetail[] = [
     notes: [
       "This is a JSON-normalizing wrapper around `uv run harness/generate/gen_eval_cases.py`; the raw Python invocation remains supported.",
       "For first-run bootstrap, --skill may be a path to an external skill directory; the generator imports the full directory into skills/<name> when the repo copy is missing.",
+      "If no LM key is configured for a bootstrap skill, --no-lm-skeleton creates reviewable starter artifacts offline; bootstrap LM setup/call failures also fall back to that path automatically.",
       "`--validate-only` and `--promote` are mutually exclusive.",
       "Generated candidates remain quarantined under runs/generate/ until a human reviews and promotes them.",
     ],
@@ -462,7 +464,7 @@ const COMMAND_DETAILS: CommandDetail[] = [
     name: "optimize-skill",
     category: "optimization",
     summary: "Launch detached GEPA optimization for selected skill components.",
-    usage: "bun ui/bench.ts optimize-skill <skill>|--skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>] [--arm <arm>]... [--smoke|--baseline-only]",
+    usage: "bun ui/bench.ts optimize-skill <skill>|--skill <name> [--components references] [--suite <path>] [--max-metric-calls N] [--reflection-lm <id>|--reflection-pool-agent <agent>] [--reflection-reasoning-effort medium] [--arm <arm>]... [--smoke|--baseline-only]",
     output: "StartOptimizeRunResult",
     positional: [{ name: "skill", description: "Skill directory name; alternative to --skill." }],
     flags: [
@@ -470,9 +472,13 @@ const COMMAND_DETAILS: CommandDetail[] = [
       { name: "--suite", value: "path", description: "Suite path override." },
       { name: "--max-metric-calls", value: "N", description: "GEPA metric-call budget." },
       { name: "--reflection-lm", value: "id", description: "Reflection model id." },
+      { name: "--reflection-reasoning-effort", value: "effort", description: "Optional LiteLLM/OpenRouter reasoning effort: none, minimal, low, medium, high, or xhigh." },
+      { name: "--reflection-pool-agent", value: "agent", description: "Use pool exec with this agent for GEPA reflection instead of LiteLLM." },
       { name: "--components", value: "set", repeatable: true, description: "Mutable component set; supported values: SKILL.md, references." },
       { name: "--max-component-bytes", value: "N", description: "Per-component byte cap." },
       { name: "--max-total-bytes", value: "N", description: "Total byte cap across selected components." },
+      { name: "--max-candidate-bytes-over-seed", value: "N", description: "Reject candidate components that grow more than N bytes over seed before pool spend." },
+      { name: "--reject-broad-artifact-overrides", description: "Reject broad top-level JSON artifact override rewrites during bootstrap/eval-artifact optimization." },
       { name: "--arm", value: "arm", repeatable: true, description: "Harness arm filter. Repeatable." },
       { name: "--smoke", description: "Run the smoke-sized optimizer path." },
       { name: "--baseline-only", description: "Run baseline scoring without proposing improvements." },
@@ -951,6 +957,7 @@ const EVAL_CASE_GENERATE_FLAGS = new Set([
   "temperature",
   "max-repair-rounds",
   "bootstrap",
+  "no-lm-skeleton",
   "seed-example",
   "validator-timeout",
   "out-dir",
@@ -990,7 +997,7 @@ function parseEvalCaseGenerateArgs(argv: string[]): Flags {
       continue;
     }
 
-    if (key === "bootstrap") {
+    if (key === "bootstrap" || key === "no-lm-skeleton") {
       (out.flags[key] ??= []).push("true");
       continue;
     }
@@ -1035,6 +1042,7 @@ function runEvalCaseGenerate(rawArgv: string[]): unknown {
   if (temperature !== undefined) argv.push("--temperature", String(temperature));
   if (maxRepairRounds !== undefined) argv.push("--max-repair-rounds", String(maxRepairRounds));
   if (flag(args, "bootstrap") === "true") argv.push("--bootstrap");
+  if (flag(args, "no-lm-skeleton") === "true") argv.push("--no-lm-skeleton");
   pushOptional(argv, "--seed-example", flag(args, "seed-example"));
   if (validatorTimeout !== undefined) argv.push("--validator-timeout", String(validatorTimeout));
   pushOptional(argv, "--out-dir", flag(args, "out-dir"));
@@ -1354,9 +1362,13 @@ async function main() {
           suite: flag(args, "suite"),
           maxMetricCalls: positiveIntegerFlag(maxMetricCalls, "--max-metric-calls"),
           reflectionLm: flag(args, "reflection-lm"),
+          reflectionReasoningEffort: flag(args, "reflection-reasoning-effort"),
+          reflectionPoolAgent: flag(args, "reflection-pool-agent"),
           components: args.flags["components"],
           maxComponentBytes: positiveIntegerFlag(flag(args, "max-component-bytes"), "--max-component-bytes"),
           maxTotalBytes: positiveIntegerFlag(flag(args, "max-total-bytes"), "--max-total-bytes"),
+          maxCandidateBytesOverSeed: positiveIntegerFlag(flag(args, "max-candidate-bytes-over-seed"), "--max-candidate-bytes-over-seed"),
+          rejectBroadArtifactOverrides: flag(args, "reject-broad-artifact-overrides") === "true",
           arms: args.flags["arm"],
           smoke,
           baselineOnly,

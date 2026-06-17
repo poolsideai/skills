@@ -1,0 +1,31 @@
+{
+  "title_terms": [
+    "Integrated Terminal Support"
+  ],
+  "topic_terms": [
+    "integrated terminal",
+    "terminal",
+    "shell",
+    "workspace"
+  ],
+  "requirement_terms": [
+    "terminal",
+    "shell",
+    "workspace",
+    "session",
+    "input",
+    "output"
+  ],
+  "path_terms": [
+    "terminal",
+    "shell",
+    "workspace",
+    "session"
+  ],
+  "risk_terms": [
+    "process",
+    "permissions",
+    "lifecycle"
+  ],
+  "forbidden_terms": []
+}

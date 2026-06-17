@@ -49,6 +49,8 @@ def make_lm(
     api_key_env: str | None = None,
     max_tokens: int | None = None,
     temperature: float | None = None,
+    reasoning_effort: str | None = None,
+    reasoning_exclude: bool = True,
 ) -> LMCallable:
     """Build a ``(prompt | messages) -> str`` callable over litellm.
 
@@ -83,6 +85,16 @@ def make_lm(
             kwargs["max_tokens"] = max_tokens
         if temperature is not None:
             kwargs["temperature"] = temperature
+        if reasoning_effort and reasoning_effort != "none":
+            if resolved.startswith("openrouter/") or (
+                api_base is not None and "openrouter" in api_base.lower()
+            ):
+                kwargs["reasoning"] = {
+                    "effort": reasoning_effort,
+                    "exclude": reasoning_exclude,
+                }
+            else:
+                kwargs["reasoning_effort"] = reasoning_effort
         response = litellm.completion(model=resolved, messages=messages, **kwargs)
         content = response.choices[0].message.content
         if not isinstance(content, str) or not content.strip():

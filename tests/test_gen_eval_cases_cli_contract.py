@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -17,13 +18,14 @@ RESULT_SCHEMA = "case-generation-result.v1"
 
 
 class GenEvalCasesCliContractTests(unittest.TestCase):
-    def run_generator(self, *args: str) -> subprocess.CompletedProcess[str]:
+    def run_generator(self, *args: str, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
             ["uv", "run", str(GEN_EVAL_CASES), *args],
             cwd=REPO_ROOT,
             text=True,
             capture_output=True,
             check=False,
+            env=env,
         )
 
     def make_workspace_inventory_candidate(
@@ -215,6 +217,8 @@ writeFileSync(out, JSON.stringify({
     def make_prompt_style_external_skill(self, parent: Path, skill: str) -> Path:
         skill_dir = parent / skill
         self.assertFalse(skill_dir.exists(), f"refusing to delete pre-existing fixture: {skill_dir}")
+        (skill_dir / ".beads").mkdir(parents=True)
+        (skill_dir / "agent_ergonomics_audit" / "audit").mkdir(parents=True)
         (skill_dir / "references").mkdir(parents=True)
         (skill_dir / "scripts").mkdir(parents=True)
         (skill_dir / "SKILL.md").write_text(
@@ -241,8 +245,42 @@ Do not use outside generator CLI contract tests.
             "# Guide\n\nThis support file must survive path import.\n",
             encoding="utf-8",
         )
+        (skill_dir / ".beads" / "issues.jsonl").write_text(
+            '{"id":"external-local-state","title":"must not be imported"}\n',
+            encoding="utf-8",
+        )
+        (skill_dir / "agent_ergonomics_audit" / "audit" / "HANDOFF.md").write_text(
+            "# External audit state\n\nMust not be imported with the skill contract.\n",
+            encoding="utf-8",
+        )
         (skill_dir / "scripts" / "helper.mjs").write_text(
             "console.log('helper script');\n",
+            encoding="utf-8",
+        )
+        return skill_dir
+
+    def make_prompt_style_external_skill_without_repo_authoring_fields(self, parent: Path, skill: str) -> Path:
+        skill_dir = parent / skill
+        self.assertFalse(skill_dir.exists(), f"refusing to delete pre-existing fixture: {skill_dir}")
+        (skill_dir / "references").mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            f"""---
+name: {skill}
+description: Temporary prompt-style skill missing repo-only Laguna authoring fields.
+argument-hint: "[task]"
+---
+
+# Prompt Style Skill
+
+## Purpose
+
+Exercise import normalization for prompt-style skills that are valid platform skills
+but do not yet satisfy this repo's GEPA/structure gates.
+""",
+            encoding="utf-8",
+        )
+        (skill_dir / "references" / "guide.md").write_text(
+            "# Guide\n\nThis support file must survive path import.\n",
             encoding="utf-8",
         )
         return skill_dir
@@ -561,6 +599,68 @@ Do not use outside generator CLI contract tests.
             else:
                 suite_path.write_text(suite_original, encoding="utf-8")
 
+    def test_promote_batch_can_complete_existing_partial_bootstrap_corpus(self) -> None:
+        case_ids = [
+            "workspace-inventory-bootstrap-partial-a",
+            "workspace-inventory-bootstrap-partial-b",
+            "workspace-inventory-bootstrap-partial-c",
+        ]
+        dests = [REPO_ROOT / "skills" / "workspace-inventory" / "evals" / case_id for case_id in case_ids]
+        suite_path = REPO_ROOT / "evals" / "suites" / "skill-workspace-inventory.json"
+        for dest in dests:
+            self.assertFalse(dest.exists(), f"refusing to delete pre-existing fixture: {dest}")
+        suite_original = suite_path.read_text(encoding="utf-8") if suite_path.is_file() else None
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                case_a = self.make_workspace_inventory_candidate(
+                    tmp_path,
+                    case_id=case_ids[0],
+                    readme_text="# Partial A\n",
+                    src_file_name="partial-a.ts",
+                    src_file_text="export const partialA = true;\n",
+                )
+                case_b = self.make_workspace_inventory_candidate(
+                    tmp_path,
+                    case_id=case_ids[1],
+                    readme_text="# Partial B\n",
+                    src_file_name="partial-b.ts",
+                    src_file_text="export const partialB = true;\n",
+                )
+                case_c = self.make_workspace_inventory_candidate(
+                    tmp_path,
+                    case_id=case_ids[2],
+                    readme_text="# Partial C\n",
+                    src_file_name="partial-c.ts",
+                    src_file_text="export const partialC = true;\n",
+                    bucket="adversarial",
+                )
+                first = self.run_generator("--skill", "workspace-inventory", "--promote", str(case_a))
+                batch = self.run_generator("--skill", "workspace-inventory", "--promote", str(case_b), str(case_c))
+
+            self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
+            self.assertEqual(batch.returncode, 0, batch.stdout + batch.stderr)
+            self.assertNotIn("skill-min-cases", batch.stdout + batch.stderr)
+            self.assertNotIn("skill-adversarial-case", batch.stdout + batch.stderr)
+            payloads = self.parse_json_objects(batch.stdout)
+            self.assertEqual(len(payloads), 2)
+            self.assertTrue(all(payload["ok"] for payload in payloads))
+            self.assertIn("commit", payloads[-1]["next"])
+            self.assertNotIn("add remaining bootstrap cases", payloads[-1]["next"])
+            for dest in dests:
+                self.assertTrue(dest.is_dir())
+            suite = json.loads(suite_path.read_text(encoding="utf-8"))
+            for case_id in case_ids:
+                self.assertIn(f"skills/workspace-inventory/evals/{case_id}", suite["cases"])
+        finally:
+            for dest in dests:
+                shutil.rmtree(dest, ignore_errors=True)
+            if suite_original is None:
+                suite_path.unlink(missing_ok=True)
+            else:
+                suite_path.write_text(suite_original, encoding="utf-8")
+
     def test_promote_rolls_back_when_existing_suite_json_is_malformed(self) -> None:
         case_id = "workspace-inventory-rollback-malformed-suite"
         dest = REPO_ROOT / "skills" / "workspace-inventory" / "evals" / case_id
@@ -791,6 +891,8 @@ Do not use outside generator CLI contract tests.
             self.assertTrue(repo_skill_dir.is_dir())
             self.assertTrue((repo_skill_dir / "references" / "guide.md").is_file())
             self.assertTrue((repo_skill_dir / "scripts" / "helper.mjs").is_file())
+            self.assertFalse((repo_skill_dir / ".beads").exists())
+            self.assertFalse((repo_skill_dir / "agent_ergonomics_audit").exists())
             self.assertTrue((repo_skill_dir / "schemas" / f"{skill}-synthetic-bootstrap.schema.json").is_file())
             self.assertTrue(
                 (repo_skill_dir / "scripts" / f"validate_{skill.replace('-', '_')}_synthetic_bootstrap.ts").is_file()
@@ -804,6 +906,260 @@ Do not use outside generator CLI contract tests.
             self.assertEqual(payload["violations"], [])
         finally:
             shutil.rmtree(repo_skill_dir, ignore_errors=True)
+
+    def test_external_prompt_style_import_adds_gepa_structure_fields(self) -> None:
+        skill = "prompt-style-gepa-structure-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                source_skill = self.make_prompt_style_external_skill_without_repo_authoring_fields(
+                    tmp_path / "external-skills",
+                    skill,
+                )
+                case_dir = self.make_synthetic_laguna_candidate(tmp_path, skill)
+                result = self.run_generator("--skill", str(source_skill), "--validate-only", str(case_dir))
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            imported = (repo_skill_dir / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn('metadata:\n  version: "0.1.0"', imported)
+            self.assertIn("## Do not use when", imported)
+            self.assertLess(imported.index("# Prompt Style Skill"), imported.index("## Do not use when"))
+            self.assertTrue((repo_skill_dir / "schemas" / f"{skill}-synthetic-bootstrap.schema.json").is_file())
+            self.assertTrue(
+                (repo_skill_dir / "scripts" / f"validate_{skill.replace('-', '_')}_synthetic_bootstrap.ts").is_file()
+            )
+            structure = subprocess.run(
+                ["uv", "run", "scripts/check_skill_structure.py", "--json"],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(structure.returncode, 0, structure.stdout + structure.stderr)
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+
+    def test_no_lm_skeleton_for_external_prompt_style_skill_creates_valid_promotable_candidate(self) -> None:
+        skill = "prompt-style-no-lm-skeleton-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        suite_path = REPO_ROOT / "evals" / "suites" / f"skill-{skill}.json"
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+        self.assertFalse(suite_path.exists(), f"refusing to overwrite pre-existing fixture: {suite_path}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                out_dir = tmp_path / "generated"
+                source_skill = self.make_prompt_style_external_skill(tmp_path / "external-skills", skill)
+                result = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--no-lm-skeleton",
+                    "--out-dir",
+                    str(out_dir),
+                )
+
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertEqual(result.stderr, "")
+                self.assertTrue(repo_skill_dir.is_dir())
+                self.assertFalse((repo_skill_dir / ".beads").exists())
+                self.assertFalse((repo_skill_dir / "agent_ergonomics_audit").exists())
+                report = json.loads(result.stdout)
+                self.assertEqual(report["schema_version"], "case-generation.v1")
+                self.assertTrue(report["generated_without_lm"])
+                self.assertTrue(report["synthetic_laguna_bootstrap"])
+                self.assertEqual(report["n_survivors"], 1)
+                self.assertEqual(len(report["results"]), 1)
+                candidate = Path(report["results"][0]["case_dir"])
+                self.assertTrue(candidate.is_dir())
+                self.assertTrue((candidate / "expected" / ".laguna" / f"{skill}.json").is_file())
+
+                validate = self.run_generator("--skill", skill, "--validate-only", str(candidate))
+                self.assertEqual(validate.returncode, 0, validate.stdout + validate.stderr)
+                self.assertEqual(validate.stderr, "")
+                validate_payload = json.loads(validate.stdout)
+                errors = validate_instance(validate_payload, RESULT_SCHEMA)
+                self.assertEqual(errors, [], errors)
+                self.assertTrue(validate_payload["ok"])
+                self.assertEqual(validate_payload["replay_status"], "pass")
+                self.assertEqual(validate_payload["sensitivity_status"], "fail")
+
+                promote = self.run_generator("--skill", skill, "--promote", str(candidate))
+                self.assertEqual(promote.returncode, 0, promote.stdout + promote.stderr)
+                self.assertEqual(promote.stderr, "")
+                promote_payload = json.loads(promote.stdout)
+                errors = validate_instance(promote_payload, RESULT_SCHEMA)
+                self.assertEqual(errors, [], errors)
+                self.assertTrue(promote_payload["ok"])
+                self.assertEqual(promote_payload["dest"], f"skills/{skill}/evals/{candidate.name}")
+                self.assertEqual(promote_payload["suite"], f"evals/suites/skill-{skill}.json")
+                self.assertTrue((repo_skill_dir / "evals" / candidate.name).is_dir())
+                self.assertTrue(suite_path.is_file())
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+            suite_path.unlink(missing_ok=True)
+
+    def test_missing_lm_key_auto_falls_back_to_skeleton_for_bootstrap_context(self) -> None:
+        skill = "prompt-style-missing-key-skeleton-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                out_dir = tmp_path / "generated"
+                source_skill = self.make_prompt_style_external_skill(tmp_path / "external-skills", skill)
+                result = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--api-key-env",
+                    "__GEN_EVAL_CASES_MISSING_KEY_AUTO_SKELETON__",
+                    "--out-dir",
+                    str(out_dir),
+                )
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("writing no-LM bootstrap skeleton instead", result.stderr)
+            self.assertNotIn("Traceback", result.stdout + result.stderr)
+            report = json.loads(result.stdout)
+            self.assertTrue(report["generated_without_lm"])
+            self.assertIn("__GEN_EVAL_CASES_MISSING_KEY_AUTO_SKELETON__", report["no_lm_reason"])
+            self.assertEqual(report["n_survivors"], 1)
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+
+    def test_lm_call_failure_auto_falls_back_to_skeleton_for_bootstrap_context(self) -> None:
+        skill = "prompt-style-lm-call-failure-skeleton-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                out_dir = tmp_path / "generated"
+                source_skill = self.make_prompt_style_external_skill(tmp_path / "external-skills", skill)
+                env = {
+                    key: value
+                    for key, value in os.environ.items()
+                    if key not in {"OPENAI_API_KEY", "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN"}
+                }
+                result = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--out-dir",
+                    str(out_dir),
+                    env=env,
+                )
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("writing no-LM bootstrap skeleton instead", result.stderr)
+            self.assertIn("LM call failed during spec proposal", result.stderr)
+            self.assertNotIn("Traceback", result.stdout + result.stderr)
+            report = json.loads(result.stdout)
+            self.assertTrue(report["generated_without_lm"])
+            self.assertIn("LM call failed during spec proposal", report["no_lm_reason"])
+            self.assertEqual(report["n_survivors"], 1)
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+
+    def test_repeated_external_skill_path_reuses_existing_repo_copy(self) -> None:
+        skill = "prompt-style-repeated-path-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                source_skill = self.make_prompt_style_external_skill(tmp_path / "external-skills", skill)
+                first = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--no-lm-skeleton",
+                    "--out-dir",
+                    str(tmp_path / "first"),
+                )
+                second = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--no-lm-skeleton",
+                    "--out-dir",
+                    str(tmp_path / "second"),
+                )
+
+            self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
+            self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
+            self.assertNotIn("already exists", second.stdout + second.stderr)
+            first_payload = json.loads(first.stdout)
+            second_payload = json.loads(second.stdout)
+            self.assertTrue(first_payload["skill_imported"])
+            self.assertFalse(first_payload["skill_import_reused"])
+            self.assertFalse(second_payload["skill_imported"])
+            self.assertTrue(second_payload["skill_import_reused"])
+            self.assertEqual(second_payload["imported_skill_dir"], f"skills/{skill}")
+            self.assertEqual(second_payload["n_survivors"], 1)
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+
+    def test_repeated_no_lm_skeleton_after_promote_uses_unique_case_id(self) -> None:
+        skill = "prompt-style-repeated-skeleton-contract-test"
+        repo_skill_dir = REPO_ROOT / "skills" / skill
+        suite_path = REPO_ROOT / "evals" / "suites" / f"skill-{skill}.json"
+        self.assertFalse(repo_skill_dir.exists(), f"refusing to delete pre-existing fixture: {repo_skill_dir}")
+        self.assertFalse(suite_path.exists(), f"refusing to overwrite pre-existing fixture: {suite_path}")
+
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                source_skill = self.make_prompt_style_external_skill(tmp_path / "external-skills", skill)
+                first = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--no-lm-skeleton",
+                    "--out-dir",
+                    str(tmp_path / "first"),
+                )
+                self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
+                first_payload = json.loads(first.stdout)
+                first_case = Path(first_payload["results"][0]["case_dir"])
+                promote = self.run_generator("--skill", skill, "--promote", str(first_case))
+                self.assertEqual(promote.returncode, 0, promote.stdout + promote.stderr)
+
+                second = self.run_generator(
+                    "--skill",
+                    str(source_skill),
+                    "--n",
+                    "1",
+                    "--no-lm-skeleton",
+                    "--out-dir",
+                    str(tmp_path / "second"),
+                )
+
+            self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
+            self.assertNotIn("dedup:", second.stdout + second.stderr)
+            second_payload = json.loads(second.stdout)
+            self.assertTrue(second_payload["skill_import_reused"])
+            self.assertEqual(second_payload["n_survivors"], 1)
+            second_case = Path(second_payload["results"][0]["case_dir"]).name
+            self.assertNotEqual(second_case, first_case.name)
+            self.assertTrue(second_case.endswith("-2"))
+        finally:
+            shutil.rmtree(repo_skill_dir, ignore_errors=True)
+            suite_path.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":

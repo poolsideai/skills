@@ -1,0 +1,76 @@
+{
+  "schema_version": "ce-plan.quality-plan.v1",
+  "title": "Worktree UI Mutation Safety",
+  "problem_frame": "Worktree UI Mutation Safety needs a concrete implementation plan grounded in input/source-plan.md and input/repo-context.md. The plan must explain the case-specific worktree, mutation, safety, warning behavior, separate scope from non-goals, name repo-relative implementation and test paths, and preserve the source document's product constraints instead of summarizing it.",
+  "scope": {
+    "in_scope": [
+      "worktree",
+      "mutation",
+      "warning"
+    ],
+    "non_goals": [
+      "Protocol redesign",
+      "Unrelated product work"
+    ]
+  },
+  "requirements": [
+    "worktree",
+    "mutation",
+    "warning",
+    "safety",
+    "diff",
+    "UI"
+  ],
+  "decisions": [
+    "Prefer repo-local worktree paths because the plan must be portable.",
+    "Separate UI and state work so that tests can isolate behavior.",
+    "Avoid stale absolute paths because the plan must work across worktrees."
+  ],
+  "implementation_units": [
+    {
+      "name": "worktree unit",
+      "files": [
+        "src/features/worktree/index.ts"
+      ],
+      "test_files": [
+        "src/features/worktree/index.test.ts"
+      ],
+      "work": "Implement worktree behavior."
+    },
+    {
+      "name": "mutation unit",
+      "files": [
+        "src/features/mutation/view.svelte"
+      ],
+      "test_files": [
+        "src/features/mutation/view.test.ts"
+      ],
+      "work": "Implement mutation UI."
+    },
+    {
+      "name": "integration unit",
+      "files": [
+        "src/app/shell/layout/main.ts"
+      ],
+      "test_files": [
+        "tests/ce-plan.integration.test.ts"
+      ],
+      "work": "Connect the feature into the app shell."
+    }
+  ],
+  "test_scenarios": [
+    "Verify worktree behavior.",
+    "Verify mutation behavior.",
+    "Verify warning behavior.",
+    "Verify safety behavior.",
+    "Verify diff behavior."
+  ],
+  "risks": [
+    "Risk around data loss.",
+    "Risk around wrong worktree."
+  ],
+  "evidence_sources": [
+    "input/source-plan.md",
+    "input/repo-context.md"
+  ]
+}

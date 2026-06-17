@@ -1,0 +1,32 @@
+{
+  "title_terms": [
+    "Connector Tool Search",
+    "Tool Search"
+  ],
+  "topic_terms": [
+    "connector",
+    "tool search",
+    "MCP",
+    "capability"
+  ],
+  "requirement_terms": [
+    "connector",
+    "tool",
+    "search",
+    "ranking",
+    "schema",
+    "lazy"
+  ],
+  "path_terms": [
+    "connector",
+    "tool",
+    "mcp",
+    "search"
+  ],
+  "risk_terms": [
+    "permission",
+    "latency",
+    "ranking"
+  ],
+  "forbidden_terms": []
+}

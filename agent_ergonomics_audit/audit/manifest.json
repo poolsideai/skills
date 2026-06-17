@@ -194,9 +194,51 @@
         "simulations_pre": "audit/agent_simulations/pre_pass_5/",
         "simulations_post": "audit/agent_simulations/post_pass_5/"
       }
+    },
+    {
+      "pass": 6,
+      "started_at": "2026-06-16T19:00:00Z",
+      "completed_at": "2026-06-16T21:28:30Z",
+      "mode": "full",
+      "target_sha": "575e94c56e471d398f08673d20d9ca9298fc607e",
+      "target_branch": "main",
+      "feature_branch": null,
+      "summary": {
+        "surfaces_inventoried": 14,
+        "surfaces_scored": 14,
+        "recommendations_total": 30,
+        "recommendations_applied": 30,
+        "substantive_commits": 0,
+        "dimensions_touched": 5,
+        "ambition_bar_met": true,
+        "ambition_bar_self_prompt_run": false,
+        "median_uplift_pts": 420,
+        "regressions_count": 0,
+        "fresh_eyes_rounds": 1
+      },
+      "artifacts": {
+        "surface_inventory": "audit/surface_inventory.jsonl",
+        "agent_surfaces": "audit/agent_surfaces.jsonl",
+        "intent_corpus": "audit/intent_inference_corpus.jsonl",
+        "recommendations": "audit/recommendations.jsonl",
+        "playbook": "audit/playbook.md",
+        "applied_changes": "audit/applied_changes.jsonl",
+        "ambition_bar_check": "audit/ambition_bar_check.md",
+        "scorecard": "audit/scorecard_pass_6.md",
+        "philip_smoke": "audit/pass_6_philip_bootstrap_smoke.md",
+        "ce_plan_smoke": "audit/pass_6_ce_plan_bootstrap_smoke.md",
+        "ce_plan_functional_gepa": "audit/pass_6_ce_plan_functional_gepa.md",
+        "heatmap": "audit/heatmap.svg",
+        "uplift_diff": "audit/uplift_diff.md",
+        "regression_alerts": "audit/regression_alerts.md",
+        "handoff": "audit/HANDOFF_pass_6.md",
+        "latest_handoff": "audit/HANDOFF.md",
+        "simulations_pre": "audit/agent_simulations/pre_pass_6/",
+        "simulations_post": "audit/agent_simulations/post_pass_6/"
+      }
     }
   ],
-  "current_pass": 5,
+  "current_pass": 6,
   "pass_N+1_ready": true,
-  "next_pass_focus": "After commit, run a clean re-score-only pass against the committed generator path-import and zero-case bootstrap workflow."
+  "next_pass_focus": "After commit, run a clean re-score-only pass against the committed external-skill bootstrap-to-GEPA workflow. Functional ce-plan cases now produce non-perfect seed scores, GEPA runs through Pool-backed or OpenRouter reflection, and synthetic bootstrap scaffolding is stripped from non-synthetic optimizer seeds, but measured skill-performance uplift is still 0.0 because proposed rewrites were skipped or rejected; next pass should improve proposal quality or component granularity."
 }

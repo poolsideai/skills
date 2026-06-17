@@ -1,0 +1,76 @@
+{
+  "schema_version": "ce-plan.quality-plan.v1",
+  "title": "Integrated Terminal Support",
+  "problem_frame": "Integrated Terminal Support needs a concrete implementation plan grounded in input/source-plan.md and input/repo-context.md. The plan must explain the case-specific integrated terminal, terminal, shell, workspace behavior, separate scope from non-goals, name repo-relative implementation and test paths, and preserve the source document's product constraints instead of summarizing it.",
+  "scope": {
+    "in_scope": [
+      "terminal",
+      "shell",
+      "workspace"
+    ],
+    "non_goals": [
+      "Protocol redesign",
+      "Unrelated product work"
+    ]
+  },
+  "requirements": [
+    "terminal",
+    "shell",
+    "workspace",
+    "session",
+    "input",
+    "output"
+  ],
+  "decisions": [
+    "Prefer repo-local terminal paths because the plan must be portable.",
+    "Separate UI and state work so that tests can isolate behavior.",
+    "Avoid stale absolute paths because the plan must work across worktrees."
+  ],
+  "implementation_units": [
+    {
+      "name": "terminal unit",
+      "files": [
+        "src/features/terminal/index.ts"
+      ],
+      "test_files": [
+        "src/features/terminal/index.test.ts"
+      ],
+      "work": "Implement terminal behavior."
+    },
+    {
+      "name": "shell unit",
+      "files": [
+        "src/features/shell/view.svelte"
+      ],
+      "test_files": [
+        "src/features/shell/view.test.ts"
+      ],
+      "work": "Implement shell UI."
+    },
+    {
+      "name": "integration unit",
+      "files": [
+        "src/app/shell/layout/main.ts"
+      ],
+      "test_files": [
+        "tests/ce-plan.integration.test.ts"
+      ],
+      "work": "Connect the feature into the app shell."
+    }
+  ],
+  "test_scenarios": [
+    "Verify terminal behavior.",
+    "Verify shell behavior.",
+    "Verify workspace behavior.",
+    "Verify session behavior.",
+    "Verify input behavior."
+  ],
+  "risks": [
+    "Risk around process.",
+    "Risk around permissions."
+  ],
+  "evidence_sources": [
+    "input/source-plan.md",
+    "input/repo-context.md"
+  ]
+}

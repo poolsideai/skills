@@ -1,0 +1,32 @@
+{
+  "title_terms": [
+    "MCP Apps UI Rendering",
+    "Apps UI Rendering"
+  ],
+  "topic_terms": [
+    "MCP",
+    "apps",
+    "UI",
+    "rendering"
+  ],
+  "requirement_terms": [
+    "app",
+    "render",
+    "MCP",
+    "iframe",
+    "component",
+    "security"
+  ],
+  "path_terms": [
+    "mcp",
+    "apps",
+    "ui",
+    "render"
+  ],
+  "risk_terms": [
+    "sandbox",
+    "security",
+    "origin"
+  ],
+  "forbidden_terms": []
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "ce-plan.quality-plan.v1",
+  "title": "Google Drive MCP File Operations",
+  "problem_frame": "Google Drive MCP File Operations needs a concrete implementation plan grounded in input/source-plan.md and input/repo-context.md. The plan must explain the case-specific Google Drive, MCP, file, operation behavior, separate scope from non-goals, name repo-relative implementation and test paths, and preserve the source document's product constraints instead of summarizing it.",
+  "scope": {
+    "in_scope": [
+      "drive",
+      "file",
+      "MCP"
+    ],
+    "non_goals": [
+      "Protocol redesign",
+      "Unrelated product work"
+    ]
+  },
+  "requirements": [
+    "drive",
+    "file",
+    "MCP",
+    "permission",
+    "read",
+    "write"
+  ],
+  "decisions": [
+    "Prefer repo-local google paths because the plan must be portable.",
+    "Separate UI and state work so that tests can isolate behavior.",
+    "Avoid stale absolute paths because the plan must work across worktrees."
+  ],
+  "implementation_units": [
+    {
+      "name": "google unit",
+      "files": [
+        "src/features/google/index.ts"
+      ],
+      "test_files": [
+        "src/features/google/index.test.ts"
+      ],
+      "work": "Implement google behavior."
+    },
+    {
+      "name": "drive unit",
+      "files": [
+        "src/features/drive/view.svelte"
+      ],
+      "test_files": [
+        "src/features/drive/view.test.ts"
+      ],
+      "work": "Implement drive UI."
+    },
+    {
+      "name": "integration unit",
+      "files": [
+        "src/app/shell/layout/main.ts"
+      ],
+      "test_files": [
+        "tests/ce-plan.integration.test.ts"
+      ],
+      "work": "Connect the feature into the app shell."
+    }
+  ],
+  "test_scenarios": [
+    "Verify drive behavior.",
+    "Verify file behavior.",
+    "Verify MCP behavior.",
+    "Verify permission behavior.",
+    "Verify read behavior."
+  ],
+  "risks": [
+    "Risk around permission.",
+    "Risk around sharing."
+  ],
+  "evidence_sources": [
+    "input/source-plan.md",
+    "input/repo-context.md"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "skill-ce-plan",
+  "cases": [
+    "skills/ce-plan/evals/ce-plan-quality-acp-plan-composer-rail",
+    "skills/ce-plan/evals/ce-plan-quality-acp-slash-command-support",
+    "skills/ce-plan/evals/ce-plan-quality-conversation-search",
+    "skills/ce-plan/evals/ce-plan-quality-terminal-search-shell-output",
+    "skills/ce-plan/evals/ce-plan-quality-project-pane-git-v2",
+    "skills/ce-plan/evals/ce-plan-quality-connector-tool-search",
+    "skills/ce-plan/evals/ce-plan-quality-mcp-apps-ui-rendering",
+    "skills/ce-plan/evals/ce-plan-quality-chat-startup-performance",
+    "skills/ce-plan/evals/ce-plan-quality-acp-rewind",
+    "skills/ce-plan/evals/ce-plan-quality-integrated-terminal-support",
+    "skills/ce-plan/evals/ce-plan-quality-google-drive-mcp-file-operations",
+    "skills/ce-plan/evals/ce-plan-quality-worktree-ui-mutation-safety"
+  ]
+}

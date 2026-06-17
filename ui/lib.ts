@@ -2248,11 +2248,15 @@ export function startOptimizeRun(options: {
   suite?: string;
   maxMetricCalls?: number;
   reflectionLm?: string;
+  reflectionReasoningEffort?: string;
+  reflectionPoolAgent?: string;
   arms?: string[];
   workers?: number;
   components?: string[];
   maxComponentBytes?: number;
   maxTotalBytes?: number;
+  maxCandidateBytesOverSeed?: number;
+  rejectBroadArtifactOverrides?: boolean;
   smoke?: boolean;
   baselineOnly?: boolean;
 }) {
@@ -2274,10 +2278,14 @@ export function startOptimizeRun(options: {
   }
   if (options.maxMetricCalls) argv.push("--max-metric-calls", String(options.maxMetricCalls));
   if (options.reflectionLm) argv.push("--reflection-lm", options.reflectionLm);
+  if (options.reflectionReasoningEffort) argv.push("--reflection-reasoning-effort", options.reflectionReasoningEffort);
+  if (options.reflectionPoolAgent) argv.push("--reflection-pool-agent", options.reflectionPoolAgent);
   if (options.workers) argv.push("--workers", String(Math.max(1, Math.min(8, options.workers))));
   for (const component of options.components ?? []) argv.push("--components", component);
   if (options.maxComponentBytes) argv.push("--max-component-bytes", String(options.maxComponentBytes));
   if (options.maxTotalBytes) argv.push("--max-total-bytes", String(options.maxTotalBytes));
+  if (options.maxCandidateBytesOverSeed) argv.push("--max-candidate-bytes-over-seed", String(options.maxCandidateBytesOverSeed));
+  if (options.rejectBroadArtifactOverrides) argv.push("--reject-broad-artifact-overrides");
   for (const a of options.arms ?? []) argv.push("--arm", a);
   if (options.smoke) argv.push("--smoke");
   if (options.baselineOnly) argv.push("--baseline-only");

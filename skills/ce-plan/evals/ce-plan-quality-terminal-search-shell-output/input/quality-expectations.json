@@ -1,0 +1,32 @@
+{
+  "title_terms": [
+    "Terminal Search",
+    "Shell Output Search"
+  ],
+  "topic_terms": [
+    "terminal",
+    "search",
+    "shell",
+    "output"
+  ],
+  "requirement_terms": [
+    "terminal",
+    "search",
+    "shell",
+    "output",
+    "match",
+    "scroll"
+  ],
+  "path_terms": [
+    "terminal",
+    "shell",
+    "search",
+    "output"
+  ],
+  "risk_terms": [
+    "large output",
+    "performance",
+    "escape"
+  ],
+  "forbidden_terms": []
+}

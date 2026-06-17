@@ -1,0 +1,76 @@
+{
+  "schema_version": "ce-plan.quality-plan.v1",
+  "title": "ACP Slash Command Support",
+  "problem_frame": "ACP Slash Command Support needs a concrete implementation plan grounded in input/source-plan.md and input/repo-context.md. The plan must explain the case-specific slash, command, ACP, composer behavior, separate scope from non-goals, name repo-relative implementation and test paths, and preserve the source document's product constraints instead of summarizing it.",
+  "scope": {
+    "in_scope": [
+      "slash",
+      "command",
+      "autocomplete"
+    ],
+    "non_goals": [
+      "Protocol redesign",
+      "Unrelated product work"
+    ]
+  },
+  "requirements": [
+    "slash",
+    "command",
+    "autocomplete",
+    "ACP",
+    "composer",
+    "submit"
+  ],
+  "decisions": [
+    "Prefer repo-local composer paths because the plan must be portable.",
+    "Separate UI and state work so that tests can isolate behavior.",
+    "Avoid stale absolute paths because the plan must work across worktrees."
+  ],
+  "implementation_units": [
+    {
+      "name": "composer unit",
+      "files": [
+        "src/features/composer/index.ts"
+      ],
+      "test_files": [
+        "src/features/composer/index.test.ts"
+      ],
+      "work": "Implement composer behavior."
+    },
+    {
+      "name": "slash unit",
+      "files": [
+        "src/features/slash/view.svelte"
+      ],
+      "test_files": [
+        "src/features/slash/view.test.ts"
+      ],
+      "work": "Implement slash UI."
+    },
+    {
+      "name": "integration unit",
+      "files": [
+        "src/app/shell/layout/main.ts"
+      ],
+      "test_files": [
+        "tests/ce-plan.integration.test.ts"
+      ],
+      "work": "Connect the feature into the app shell."
+    }
+  ],
+  "test_scenarios": [
+    "Verify slash behavior.",
+    "Verify command behavior.",
+    "Verify autocomplete behavior.",
+    "Verify ACP behavior.",
+    "Verify composer behavior."
+  ],
+  "risks": [
+    "Risk around parsing.",
+    "Risk around autocomplete."
+  ],
+  "evidence_sources": [
+    "input/source-plan.md",
+    "input/repo-context.md"
+  ]
+}

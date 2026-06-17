@@ -93,10 +93,12 @@ bun ui/bench.ts onboard --source <dir>
 bun ui/bench.ts onboard-prepare --source <dir> --skill <name> --skip-cases
 bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
 bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
+bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --no-lm-skeleton
 bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
 bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-skill ci-log-reducer --components references --max-component-bytes 65536 --max-total-bytes 131072
+bun ui/bench.ts optimize-skill ci-log-reducer --reflection-pool-agent anthropic/claude-4.5-sonnet
 bun ui/bench.ts optimize-runs
 bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
 bun ui/bench.ts optimize-propose ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
@@ -112,8 +114,15 @@ quarantined draft contracts, validators, and optional bootstrap cases under
 `eval-case-generate --skill` accepts either a repo skill name or a path to a
 skill directory; passing `SKILL.md` is accepted as an alias for its parent.
 Path mode imports the full directory before zero-case bootstrap.
+`--no-lm-skeleton` keeps first-run bootstrap usable without model credentials:
+it writes a quarantined starter case under `runs/generate/` and runs the same
+mechanical gates before any promotion. Bootstrap generation also falls back to
+that starter path automatically when LM setup or the first provider call fails
+because credentials are unavailable.
 `optimize-skill` mutates `SKILL.md` by default, and `--components references`
 adds `references/**` files to the mutable GEPA component set.
+`--reflection-pool-agent` uses the authenticated `pool` model-selector path for
+GEPA reflection instead of a LiteLLM/OpenRouter key.
 
 ### Onboarding and external Beads source skills
 

@@ -1,0 +1,31 @@
+{
+  "title_terms": [
+    "Conversation Search"
+  ],
+  "topic_terms": [
+    "conversation",
+    "search",
+    "index",
+    "results"
+  ],
+  "requirement_terms": [
+    "search",
+    "conversation",
+    "index",
+    "result",
+    "filter",
+    "ranking"
+  ],
+  "path_terms": [
+    "search",
+    "conversation",
+    "chat",
+    "store"
+  ],
+  "risk_terms": [
+    "privacy",
+    "stale",
+    "performance"
+  ],
+  "forbidden_terms": []
+}

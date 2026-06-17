@@ -1,0 +1,31 @@
+{
+  "title_terms": [
+    "Chat Startup Performance"
+  ],
+  "topic_terms": [
+    "chat",
+    "startup",
+    "performance",
+    "load"
+  ],
+  "requirement_terms": [
+    "startup",
+    "performance",
+    "chat",
+    "load",
+    "latency",
+    "cache"
+  ],
+  "path_terms": [
+    "chat",
+    "startup",
+    "performance",
+    "store"
+  ],
+  "risk_terms": [
+    "regression",
+    "latency",
+    "measurement"
+  ],
+  "forbidden_terms": []
+}

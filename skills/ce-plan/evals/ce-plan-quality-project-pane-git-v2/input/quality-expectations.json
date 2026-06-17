@@ -1,0 +1,32 @@
+{
+  "title_terms": [
+    "Project Pane Git v2",
+    "Git v2"
+  ],
+  "topic_terms": [
+    "project pane",
+    "git",
+    "branch",
+    "status"
+  ],
+  "requirement_terms": [
+    "git",
+    "branch",
+    "status",
+    "project",
+    "worktree",
+    "diff"
+  ],
+  "path_terms": [
+    "project",
+    "git",
+    "worktree",
+    "sidebar"
+  ],
+  "risk_terms": [
+    "dirty",
+    "worktree",
+    "latency"
+  ],
+  "forbidden_terms": []
+}

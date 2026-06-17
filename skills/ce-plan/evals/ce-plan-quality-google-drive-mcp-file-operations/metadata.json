@@ -1,0 +1,18 @@
+{
+  "id": "ce-plan-quality-google-drive-mcp-file-operations",
+  "skill": "ce-plan",
+  "bucket": "adversarial",
+  "difficulty": "hard",
+  "arms": [
+    "xs_with_skill"
+  ],
+  "publishability": "internal",
+  "validator": {
+    "command": [
+      "bun",
+      "skills/ce-plan/scripts/validate_ce_plan_quality.ts"
+    ],
+    "expected_status": "pass"
+  },
+  "notes": "GEPA-calibrated ce-plan quality case derived from poolside-studio docs/plans/google-drive-mcp-file-operations.md. Generated fixture; no customer data."
+}

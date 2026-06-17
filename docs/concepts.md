@@ -71,9 +71,10 @@ doc, the linked doc wins.
 | `uv run harness/runner/run_eval.py --suite ... --dry-run --replay` | nothing |
 | `uv run harness/optimize/gepa_skill.py --skill <name> --smoke` | nothing |
 | `bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>` | nothing |
+| `bun ui/bench.ts eval-case-generate --skill <name-or-path> --no-lm-skeleton` | nothing |
 | `uv run harness/review/extract_traces.py [--demo]` + `serve.py` | nothing |
 | `uv run harness/runner/run_eval.py --suite ...` (live) | `pool` auth (`POOLSIDE_TOKEN` or `~/.config/poolside/credentials.json`) |
 | `bun ui/server.ts` / `bun ui/bench.ts` run commands | `pool` auth for anything that executes models |
-| `bun ui/bench.ts eval-case-generate --skill <name> --n N` | an LM key (litellm id, e.g. `OPENROUTER_API_KEY`) |
+| `bun ui/bench.ts eval-case-generate --skill <name-or-path> --n N` | an LM key (litellm id, e.g. `OPENROUTER_API_KEY`) unless bootstrap falls back to a no-LM skeleton |
 | `uv run harness/optimize/gepa_skill.py` (live) | `pool` auth **and** a reflection LM key |
 | `uv run harness/review/judge.py` | `OPENROUTER_API_KEY` (optional reading aid only) |

@@ -1,0 +1,32 @@
+{
+  "title_terms": [
+    "ACP Slash Command Support",
+    "Slash Command Support"
+  ],
+  "topic_terms": [
+    "slash",
+    "command",
+    "ACP",
+    "composer"
+  ],
+  "requirement_terms": [
+    "slash",
+    "command",
+    "autocomplete",
+    "ACP",
+    "composer",
+    "submit"
+  ],
+  "path_terms": [
+    "composer",
+    "slash",
+    "command",
+    "chat"
+  ],
+  "risk_terms": [
+    "parsing",
+    "autocomplete",
+    "provider"
+  ],
+  "forbidden_terms": []
+}
