@@ -95,10 +95,13 @@ bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
 bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
 bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --no-lm-skeleton
 bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote <case-dir>
 bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-skill ci-log-reducer --smoke
 bun ui/bench.ts optimize-skill ci-log-reducer --components references --max-component-bytes 65536 --max-total-bytes 131072
 bun ui/bench.ts optimize-skill ci-log-reducer --reflection-pool-agent anthropic/claude-4.5-sonnet
+bun ui/bench.ts optimize-skill ci-log-reducer --reflection-lm openrouter/openai/gpt-5.4 --reflection-reasoning-effort medium
+bun ui/bench.ts optimize-skill ci-log-reducer --max-candidate-bytes-over-seed 2500 --reject-broad-artifact-overrides
 bun ui/bench.ts optimize-runs
 bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
 bun ui/bench.ts optimize-propose ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
@@ -113,16 +116,21 @@ quarantined draft contracts, validators, and optional bootstrap cases under
 `runs/onboard/` for human review; it does not promote generated material.
 `eval-case-generate --skill` accepts either a repo skill name or a path to a
 skill directory; passing `SKILL.md` is accepted as an alias for its parent.
-Path mode imports the full directory before zero-case bootstrap.
+Path mode imports the full directory before zero-case bootstrap when the repo
+copy is missing.
 `--no-lm-skeleton` keeps first-run bootstrap usable without model credentials:
 it writes a quarantined starter case under `runs/generate/` and runs the same
 mechanical gates before any promotion. Bootstrap generation also falls back to
-that starter path automatically when LM setup or the first provider call fails
-because credentials are unavailable.
+that starter path automatically when LM setup or the first provider call fails.
 `optimize-skill` mutates `SKILL.md` by default, and `--components references`
 adds `references/**` files to the mutable GEPA component set.
 `--reflection-pool-agent` uses the authenticated `pool` model-selector path for
-GEPA reflection instead of a LiteLLM/OpenRouter key.
+GEPA reflection instead of a LiteLLM provider key such as `OPENROUTER_API_KEY`
+or `ANTHROPIC_API_KEY`.
+`--reflection-reasoning-effort` passes reasoning-effort controls to
+LiteLLM/OpenRouter reflection calls. `--max-candidate-bytes-over-seed` and
+`--reject-broad-artifact-overrides` are optional guards for imported/bootstrap
+skills whose reflection runs keep proposing broad artifact-mode rewrites.
 
 ### Onboarding and external Beads source skills
 

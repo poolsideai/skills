@@ -14,6 +14,8 @@ Start here:
 
 - Overview and common workflows: `README.md`
 - Full agent/reference guide: `CLAUDE.md`
+- External skill bootstrap and no-LM skeletons: `docs/external-skill-bootstrap.md`
+- GEPA reflection, provider keys, and mutation guards: `docs/gepa-optimization.md`
 - Binding authoring standard: `docs/authoring-guide.md`
 - Eval method and known debt: `docs/eval-methodology.md`
 - Plan of record: `docs/plans/laguna-skills-v0-2026-06-10.md`

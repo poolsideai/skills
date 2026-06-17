@@ -55,15 +55,23 @@ Useful flags: `--case <id>` and `--arm <arm>` (repeatable filters), `--keep-work
 (1 case/skill), `first-bundle.json` (all v0 cases).
 
 Skill optimization (GEPA track; see docs/plans/skill-optimization-gepa-2026-06-11.md;
-genome is SKILL.md prose only, validators/cases/schemas are frozen and gate-enforced):
+selected components are mutable, validators/cases/schemas are frozen and gate-enforced):
 
 ```sh
 uv run harness/optimize/gepa_skill.py --skill <name> --smoke   # wiring check, no pool/API keys
 uv run harness/optimize/gepa_skill.py --skill <name> --max-metric-calls 60   # live (pool + reflection key)
+uv run harness/optimize/gepa_skill.py --skill <name> --components references  # mutate SKILL.md + references/**
+uv run harness/optimize/gepa_skill.py --skill <name> --reflection-pool-agent anthropic/claude-4.5-sonnet
+uv run harness/optimize/gepa_skill.py --skill <name> --reflection-lm openrouter/openai/gpt-5.4 --reflection-reasoning-effort medium
+uv run harness/optimize/gepa_skill.py --skill <name> --max-candidate-bytes-over-seed 2500 --reject-broad-artifact-overrides
 uv run harness/optimize/fitness.py --skill <name> --skills-root <candidate>/skills  # mean validator score
 uv run harness/optimize/frozen_paths_gate.py --skill <name> --candidate-root <dir>  # byte-immutability gate
 bun ui/bench.ts optimize-skill --skill <name> [--smoke] && bun ui/bench.ts optimize-runs  # detached + status
 ```
+
+For large imported prompt skills, do not default to optimizing the whole
+`SKILL.md` if a smaller reference/supplement can carry the desired behavior.
+The optimizer does better with a narrow mutable component than a long monolith.
 
 Eval-case generation (gskill/SWE-smith recipe: LM-synthesize -> mechanical gates incl. gold
 replay against the frozen validator -> quarantine under runs/generate/ -> human-reviewed
@@ -71,18 +79,33 @@ replay against the frozen validator -> quarantine under runs/generate/ -> human-
 
 ```sh
 bun ui/bench.ts eval-case-generate --skill <name> --n 4                       # needs LM key
-bun ui/bench.ts eval-case-generate --skill <name> --validate-only <case-dir>  # offline, no LM
-bun ui/bench.ts eval-case-generate --skill <name> --promote <candidate-dir>   # gate + copy + suite
+bun ui/bench.ts eval-case-generate --skill /path/to/external-skill --n 3      # imports into skills/<name>
+bun ui/bench.ts eval-case-generate --skill /path/to/external-skill --no-lm-skeleton  # offline bootstrap
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>  # offline, no LM
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote <candidate-dir>   # gate + copy + suite
 ```
 
 The bench command delegates to `uv run harness/generate/gen_eval_cases.py`;
-use the raw Python script only when debugging the generator itself.
+use the raw Python script only when debugging the generator itself. Passing a
+`SKILL.md` path is accepted as an alias for its parent directory. Prompt-style
+external skills without a Laguna schema/validator get a synthetic bootstrap
+contract, schema, and validator so they can produce reviewable first cases.
+`--no-lm-skeleton` keeps this path usable without model credentials; LM
+bootstrap also falls back to the skeleton when provider setup or the first
+provider call fails. Treat synthetic bootstrap cases as corpus starters only;
+build reviewed functional cases before using GEPA output as skill-performance
+evidence.
+
+`--validate-only` and `--promote` are repeatable. Use repeated flags when several
+reviewed candidate cases should be gated or promoted together.
 
 LM selection (`harness/llm.py`): any litellm id; OpenRouter via
 `openrouter/<provider>/<model>` + `OPENROUTER_API_KEY`. For eval-case generation,
 OpenAI-compatible endpoints use `--api-base` (+ `--api-key-env`). Reflection endpoint
-flags (`--reflection-api-base`, `--reflection-api-key-env`) are for GEPA optimization
-reflection only.
+flags (`--reflection-api-base`, `--reflection-api-key-env`,
+`--reflection-reasoning-effort`) are for GEPA optimization reflection only.
+`--reflection-pool-agent` uses authenticated `pool` instead of a separate
+LiteLLM/OpenRouter provider key.
 
 Trace annotation (error-analysis-first; the labels file feeds the failure taxonomy):
 

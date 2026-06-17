@@ -4,16 +4,12 @@ A validator-first skill library and external eval harness for Poolside's models.
 
 In this repo, a skill is a contract: `SKILL.md` prose, a deterministic output
 schema, an executable validator, eval cases including an adversarial case, and
-run evidence. Prompt-pack-only skills do not merge. The newcomer path is three
-commands in this order:
-
-```bash
-uv run scripts/check_skill_structure.py
-uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay
-uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
-```
-
-That is the short form of the full loop: **check -> eval -> optimize**. Once credentials are available, replace the smoke and dry-run commands with the live per-skill suite and GEPA run, then review the proposal before accepting anything.
+run evidence. Prompt-pack-only skills do not merge. The short form of the loop
+is **check -> eval -> optimize**: run local contract checks, replay eval cases,
+then search for better skill instructions without changing the grader. Once
+credentials are available, replace smoke and dry-run commands with the live
+per-skill suite and GEPA run, then review the proposal before accepting
+anything.
 
 The worked example is [`ci-log-reducer`](skills/ci-log-reducer/SKILL.md): its validation score moved from 0.694 to 0.837 to 0.939 across two GEPA rounds. Those numbers are internal and directional only, not publishable lift claims; see [`docs/eval-methodology.md`](docs/eval-methodology.md) section 7.
 
@@ -23,7 +19,7 @@ New here? [`docs/getting-started.md`](docs/getting-started.md) walks the full lo
 
 - **A skill library** for reusable Laguna behaviors, including CI log reduction, task scoping, and repo mapping.
 - **An eval harness** that compares model runs with and without a skill, using deterministic workspace artifacts rather than subjective judgment.
-- **GEPA-based skill optimization** that rewrites `SKILL.md` candidates and scores them against frozen validators.
+- **GEPA-based skill optimization** that rewrites selected skill authoring components and scores candidates against frozen validators.
 - **Eval-case generation** for growing the test corpus, with generated cases quarantined until human review.
 - **A local workbench** for the skills catalog, workflow catalog, eval runs, node-level grades, optimization runs, proposals, and trace review.
 - **Smithers workflow experiments** where Pool executes workflow nodes and skills can be installed per node.
@@ -35,7 +31,7 @@ A publishable skill has:
 - `SKILL.md` with clear trigger and boundary instructions.
 - A JSON output schema in `schemas/`.
 - A validator in `scripts/validate_*.ts`.
-- Eval cases under `skills/<name>/evals/<case-id>/`, including one adversarial case.
+- At least three eval cases under `skills/<name>/evals/<case-id>/`, including one adversarial case.
 
 `skill-generate` can draft a structure-valid skill, but generated drafts are not publishable until they pass the eval-case gates.
 
@@ -51,6 +47,10 @@ Skills with rough evals:
 
 - [`bead-selector`](skills/bead-selector/SKILL.md) writes `.laguna/bead-selection.json`, the validator-graded record of which local Bead to pick next from `bv`/`br` robot-mode output. The dedicated suite at [`evals/suites/skill-bead-selector.json`](evals/suites/skill-bead-selector.json) covers multiple cases including adversarial ones; treat the resulting numbers as internal/directional.
 - [`workspace-inventory`](skills/workspace-inventory/SKILL.md) writes `.laguna/workspace-inventory.json`. The dedicated suite at [`evals/suites/skill-workspace-inventory.json`](evals/suites/skill-workspace-inventory.json) covers six cases: flat workspaces, nested Python and Rust workspaces, and two adversarial "good-failure" cases (`.laguna` listed in entries, shallow-only counts on a Go monorepo). The validator enforces schema, entries-match-tree, lexicographic sorting of `entries[]`, recursive directory file counts, and `total_files`. Eval numbers are internal/directional.
+
+Experimental imports:
+
+- [`ce-plan`](skills/ce-plan/SKILL.md) is an imported prompt-style planning skill with a synthetic bootstrap contract and a 12-case experimental plan-quality corpus. It is committed as Pass 6 evidence, not as a reviewed publishable Laguna skill.
 
 Plan of record: [`docs/plans/laguna-skills-v0-2026-06-10.md`](docs/plans/laguna-skills-v0-2026-06-10.md).
 
@@ -92,22 +92,25 @@ Known-good versions used while checking these docs: Python 3.11+, `uv` 0.11.21,
 
 ## Start here
 
-Start with the repo and CLI contract:
+Use [`docs/getting-started.md`](docs/getting-started.md) for the full first
+session. The short readiness path is:
 
 ```bash
 bun ui/bench.ts doctor
 bun ui/bench.ts capabilities
-bun ui/bench.ts help eval-run
+uv run scripts/check_skill_structure.py
+uv run scripts/check_schemas.py
+uv run scripts/check_validator_robustness.py
+uv run scripts/check_eval_cases.py
+uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay
+uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
 ```
 
 `doctor` reports tool availability plus basic skill-contract, eval-suite, and WIP
-coverage checks. It does not require the web server.
-
-`bench.ts` writes JSON to stdout on success and JSON to stderr on errors. Exit codes are
-`0` for success, `1` for runtime, validation, or command errors, and `2` for unknown
-commands. Use `bun ui/bench.ts help <command>` or `bun ui/bench.ts <command> --help` for
-command-specific JSON help; `capabilities` and `commands` list repeatable flags and known
-CLI↔HTTP mirrors.
+coverage checks without starting the web server. `bench.ts` writes JSON to
+stdout on success and JSON to stderr on errors; use
+`bun ui/bench.ts help <command>` or `bun ui/bench.ts commands` for the current
+CLI contract.
 
 Run the local workbench when you want the browser UI:
 
@@ -116,21 +119,7 @@ bun ui/server.ts          # http://127.0.0.1:4319/workflows.html
 bun ui/bench.ts help      # JSON help for the agent CLI
 ```
 
-Use the workbench to browse skills, inspect workflows, launch evals, see GEPA optimization runs, review proposals, and sync traces into the review app. Details: [`ui/README.md`](ui/README.md).
-
-Useful workbench CLI commands:
-
-```bash
-bun ui/bench.ts commands
-bun ui/bench.ts skills
-bun ui/bench.ts eval-suites
-bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
-bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
-bun ui/bench.ts eval-run --suite evals/suites/smoke.json --arm xs_with_skill
-bun ui/bench.ts eval-runs
-bun ui/bench.ts optimize-skill --skill ci-log-reducer --smoke
-bun ui/bench.ts optimize-runs
-```
+Workbench details live in [`ui/README.md`](ui/README.md).
 
 Smithers is installed for this repo as a root workflow pack under `.smithers/`.
 Agents should use it for durable multi-step, long-running, approval-gated, or
@@ -171,173 +160,96 @@ or usage errors. Use `--json` when another tool needs a `repo-check-result.v1` p
 stdout. The payload includes `schema_version`, `tool`, `status`, `counts`,
 `violation_count`, and `violations[]` entries with `path`, `check`, and `message`.
 
-## Zero to one: onboard and optimize an existing skill for Laguna
+## Common workflows
 
-Use onboarding when the source skill is outside this repo or needs a quarantined
-review bundle before promotion:
+### Import an external skill and create starter cases
 
-```bash
-bun ui/bench.ts onboard --source <dir>
-bun ui/bench.ts onboard-prepare --source <dir> --skill <name> --import-source
-bun ui/bench.ts onboard-review --run-dir runs/onboard/<name>/<stamp>
-```
-
-Onboarding writes reports, imported baselines, generated drafts, and agent
-reviews under `runs/onboard/`; it does not promote files automatically. For a
-fully manual path, use this workflow:
-
-1. **Create a skill folder.** Copy the existing skill into `skills/<name>/SKILL.md`. Keep the name lowercase and kebab-case.
-2. **Make the output gradeable.** Add an output schema in `skills/<name>/schemas/` and a validator in `skills/<name>/scripts/validate_*.ts`. If the skill cannot name a deterministic artifact or diff target, it is not ready for optimization here.
-3. **Add eval cases.** Create at least three cases under `skills/<name>/evals/<case-id>/`, including one adversarial case. Each case needs `prompt.md`, `input/`, `expected/`, and `metadata.json`.
-4. **Add a suite.** Create `evals/suites/skill-<name>.json` listing those case directories.
-5. **Run the gates.**
+Use this when the source skill lives outside this repo or has no eval corpus yet:
 
 ```bash
-uv run scripts/check_skill_structure.py
-uv run scripts/check_eval_cases.py
-uv run harness/runner/run_eval.py --suite evals/suites/skill-<name>.json --dry-run --replay
+bun ui/bench.ts eval-case-generate --skill /path/to/external-skill --no-lm-skeleton
+bun ui/bench.ts eval-case-generate --skill /path/to/external-skill --n 3
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only runs/generate/<name>/<stamp>/candidates/<case-id>
+bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote runs/generate/<name>/<stamp>/candidates/<case-id>
 ```
 
-6. **Run GEPA.** Start with the smoke check, then run a baseline or live optimization when Poolside auth and a reflection-model key are available.
+`--skill` accepts a repo skill name, an external skill directory, or a
+`SKILL.md` path. Path mode imports the full skill directory into
+`skills/<name>` when the repo copy is missing. Prompt-style skills missing
+Laguna contracts get a synthetic bootstrap schema and validator so the first
+cases can be reviewed mechanically. Treat that synthetic contract as a starter
+scaffold only; build reviewed functional cases before reading GEPA results as
+skill-performance evidence.
+Generated cases stay quarantined under `runs/generate/` until `--promote` copies
+them into `skills/<skill>/evals/` and updates the per-skill suite.
+Full details: [`docs/external-skill-bootstrap.md`](docs/external-skill-bootstrap.md).
 
-```bash
-uv run harness/optimize/gepa_skill.py --skill <name> --smoke
-uv run harness/optimize/gepa_skill.py --skill <name> --baseline-only
-uv run harness/optimize/gepa_skill.py --skill <name> --max-metric-calls 60
-```
+### Run evals
 
-7. **Promote manually.** Review `runs/optimize/<name>/<stamp>/best.diff`, then use the proposal flow or patch `SKILL.md` directly and rerun the checks.
-
-```bash
-bun ui/bench.ts optimize-propose --skill <name> --run-dir runs/optimize/<name>/<stamp>
-```
-
-If the existing skill has `references/` or helper scripts, copy them into
-`skills/<name>/` too. GEPA can now work with multi-file skill components, but
-manual review and repo checks are still required before promotion.
-
-## Eval dry run
-
-Dry run validates fixtures, materialization, manifest shape, and gold replay. It does not call `pool` or any model.
+Dry run validates fixtures, materialization, manifest shape, and gold replay
+without calling `pool`:
 
 ```bash
 uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay
 ```
 
-Live runs require an authenticated Poolside CLI path. The non-interactive path is `POOLSIDE_TOKEN`; otherwise the runner copies `~/.config/poolside/credentials.json` into the isolated HOME when it exists.
+Live runs require Poolside CLI auth through `POOLSIDE_TOKEN` or
+`~/.config/poolside/credentials.json`:
 
 ```bash
-POOLSIDE_TOKEN=... uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --api-url https://api.poolsi.de
+bun ui/bench.ts eval-run --suite evals/suites/smoke.json --arm xs_with_skill
+bun ui/bench.ts eval-runs
 ```
 
-Useful flags are documented by:
+Run outputs land under `runs/<suite>/<case>/<arm>/`. Eval numbers are internal
+and directional; do not publish lift claims from them.
+
+### Optimize a skill
+
+GEPA mutates selected skill authoring components and grades candidates against
+frozen eval cases, schemas, and validators. By default the mutable component is
+`SKILL.md`; `--components references` adds `references/**`. For large imported
+prompt skills, prefer a small reference/supplement component over full-`SKILL.md`
+mutation so the optimizer has a narrow target.
+Provider-backed reflection uses LiteLLM environment keys such as
+`OPENROUTER_API_KEY` or `ANTHROPIC_API_KEY`; `--reflection-pool-agent` uses the
+authenticated `pool` model-selector path instead.
 
 ```bash
-uv run harness/runner/run_eval.py --help
+uv run harness/optimize/gepa_skill.py --skill <name> --smoke
+uv run harness/optimize/gepa_skill.py --skill <name> --baseline-only
+uv run harness/optimize/gepa_skill.py --skill <name> --max-metric-calls 60
+uv run harness/optimize/gepa_skill.py --skill <name> \
+  --reflection-lm openrouter/openai/gpt-5.4 \
+  --reflection-reasoning-effort medium
+uv run harness/optimize/gepa_skill.py --skill <name> \
+  --reflection-pool-agent anthropic/claude-4.5-sonnet
+uv run harness/optimize/gepa_skill.py --skill <name> \
+  --max-candidate-bytes-over-seed 2500 \
+  --reject-broad-artifact-overrides
 ```
 
-Run outputs are written under:
-
-```text
-runs/<suite>/<case>/<arm>/
-  prompt.md
-  stdout.nljson
-  stderr.txt
-  trajectory.ndjson          # canonical when recovered
-  trajectory.atif.json       # optional, only when pool supports ATIF export
-  validator.json
-  run-facts.json
-  manifest.json
-```
-
-All v0 numbers are internal and directional. Do not publish lift claims from these runs; see [`docs/eval-methodology.md`](docs/eval-methodology.md).
-
-## Skill optimization
-
-The GEPA pilot rewrites only `SKILL.md` prose and grades candidates against frozen eval cases, schemas, and validators. It cannot change the grader. Gate failures score zero before any `pool` spend.
-
-Start with the offline smoke check:
+Gate failures score zero before any `pool` spend. Outputs land under
+`runs/optimize/<skill>/<stamp>/`; promotion is manual through diff review or:
 
 ```bash
-uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
+bun ui/bench.ts optimize-propose --skill <name> --run-dir runs/optimize/<name>/<stamp>
 ```
 
-Live optimization needs Poolside CLI auth plus a reflection-model API key such as `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY`:
+Full details: [`docs/gepa-optimization.md`](docs/gepa-optimization.md).
 
-```bash
-uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --max-metric-calls 60
-```
+### Review traces
 
-Outputs land under `runs/optimize/<skill>/<stamp>/`, including `result.json`, `best/SKILL.md`, and `best.diff`. Promotion is manual: review the diff, turn it into a proposal if useful, then rerun the normal checks and eval suite.
-
-```bash
-bun ui/bench.ts optimize-skill --skill ci-log-reducer --baseline-only
-bun ui/bench.ts optimize-propose --skill ci-log-reducer --run-dir runs/optimize/ci-log-reducer/<stamp>
-```
-
-These numbers are candidate-selection evidence only. Do not publish lift claims from optimization runs.
-
-## Eval-case generation
-
-Eval cases can be generated, but generated cases stay quarantined until a human reviews and promotes them. The generator runs the repo's mechanical gates, plus gold replay and a sensitivity probe that rejects cases whose validator passes on junk gold.
-
-```bash
-bun ui/bench.ts eval-case-generate --skill ci-log-reducer --n 4
-bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --n 3
-bun ui/bench.ts eval-case-generate --skill /path/to/new-skill --no-lm-skeleton
-bun ui/bench.ts eval-case-generate --skill <name-or-path> --validate-only <case-dir>
-bun ui/bench.ts eval-case-generate --skill <name-or-path> --promote runs/generate/<name>/<stamp>/candidates/<case-id>
-```
-
-`eval-case-generate` is the agent-facing bench wrapper around
-`uv run harness/generate/gen_eval_cases.py`. It preserves the generator's
-mechanical gates and human-review quarantine, while normalizing stdout/stderr
-to the bench JSON contract. The raw Python invocation remains supported for
-direct debugging.
-For first-run bootstrap, `--skill` may be a path to an external skill directory.
-Passing `SKILL.md` is accepted as an alias for its parent directory. When the
-repo copy is missing, the generator imports the full skill directory into
-`skills/<name>` before bootstrapping cases.
-For prompt-style external skills or other first-run bootstrap contexts without
-LM credentials, `--no-lm-skeleton` writes a mechanically generated starter case
-under `runs/generate/`, gates it, and leaves it quarantined for review. Bootstrap
-generation also falls back to that starter path automatically when LM setup or
-the first provider call fails because credentials are unavailable.
-
-Promotion copies the reviewed case into `skills/<skill>/evals/`, appends it to the per-skill suite, reruns checks, and rolls back on failure. Review the resulting diff before committing.
-
-## Review runs
-
-The standalone review app flattens run directories into traces and serves a local annotation UI.
+The standalone review app flattens run directories into traces and serves a
+local annotation UI:
 
 ```bash
 uv run harness/review/extract_traces.py
 uv run harness/review/serve.py          # http://127.0.0.1:8765
 ```
 
-For synthetic demo traces instead of real run output:
-
-```bash
-uv run harness/review/extract_traces.py --demo
-uv run harness/review/serve.py          # http://127.0.0.1:8765
-```
-
-Optional LLM judging exists as a reading aid, not a metric. It requires `OPENROUTER_API_KEY` and is not a substitute for calibrated human labels.
-
-```bash
-uv run harness/review/judge.py
-```
-
-## Local workbench
-
-The workbench is a localhost tool for browsing and operating the loop: skills, Smithers workflows, eval runs, node evals, playground runs, optimization runs, proposals, and review traces. It is separate from the static catalog prototype.
-
-```bash
-bun ui/server.ts          # http://127.0.0.1:4319/workflows.html
-bun ui/bench.ts help
-```
-
-The web UI exposes the main browse/review/run flows. `bun ui/bench.ts` also exposes agent-friendly commands for detached eval runs, GEPA optimization, and proposal creation. The workbench auto-starts the review app on port `8901` by passing `--port 8901`; the standalone review app defaults to `8765`.
+Use `--demo` for synthetic traces. Optional LLM judging is a reading aid, not a
+metric, and requires `OPENROUTER_API_KEY`.
 
 ## Repo layout
 

@@ -42,8 +42,9 @@ doc, the linked doc wins.
 - **fixture materialization**: building the isolated per-run sandbox (workspace copy, fresh
   HOME, private `XDG_STATE_HOME`, scrubbed env) before `pool exec` runs. Spec:
   [`../harness/fixtures/README.md`](../harness/fixtures/README.md).
-- **GEPA**: the optimization track that rewrites `SKILL.md` prose only, graded against frozen
-  cases/validators (the grader can never change). Plan:
+- **GEPA**: the optimization track that rewrites selected skill authoring
+  components, usually `SKILL.md` and optionally `references/**`, graded against
+  frozen cases/validators (the grader can never change). Plan:
   [`plans/skill-optimization-gepa-2026-06-11.md`](plans/skill-optimization-gepa-2026-06-11.md).
 - **harness debt**: known workarounds (e.g. trajectories recovered via `history --latest`)
   recorded per run in `manifest.json` `harness_debt[]`; the list drives hardening priorities.
@@ -75,6 +76,6 @@ doc, the linked doc wins.
 | `uv run harness/review/extract_traces.py [--demo]` + `serve.py` | nothing |
 | `uv run harness/runner/run_eval.py --suite ...` (live) | `pool` auth (`POOLSIDE_TOKEN` or `~/.config/poolside/credentials.json`) |
 | `bun ui/server.ts` / `bun ui/bench.ts` run commands | `pool` auth for anything that executes models |
-| `bun ui/bench.ts eval-case-generate --skill <name-or-path> --n N` | an LM key (litellm id, e.g. `OPENROUTER_API_KEY`) unless bootstrap falls back to a no-LM skeleton |
-| `uv run harness/optimize/gepa_skill.py` (live) | `pool` auth **and** a reflection LM key |
+| `bun ui/bench.ts eval-case-generate --skill <name-or-path> --n N` | a provider key for the chosen litellm model, commonly `OPENROUTER_API_KEY` or `ANTHROPIC_API_KEY`, unless bootstrap falls back to a no-LM skeleton |
+| `uv run harness/optimize/gepa_skill.py` (live) | `pool` auth **and** a reflection provider key such as `OPENROUTER_API_KEY` or `ANTHROPIC_API_KEY`, unless using `--reflection-pool-agent` |
 | `uv run harness/review/judge.py` | `OPENROUTER_API_KEY` (optional reading aid only) |

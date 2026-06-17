@@ -126,9 +126,11 @@ internal suite" and feed prioritization. They may not appear in the README, cata
 material as lift claims.
 
 GEPA optimization runs are candidate-selection evidence, not release evidence. They select a possible
-`SKILL.md` rewrite against a small train/validation split; accepting a candidate still requires human
-review, normal structure checks, and a full skill eval run. LM-generated eval cases are also internal
-until a human reviews and promotes them into `skills/<skill>/evals/`.
+rewrite of chosen skill authoring components, usually `SKILL.md` and optionally
+`references/**`, against a small train/validation split; accepting a candidate
+still requires human review, normal structure checks, and a full skill eval run.
+LM-generated eval cases are also internal until a human reviews and promotes
+them into `skills/<skill>/evals/`.
 
 ## 8. Workbench and node-level evals
 

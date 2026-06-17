@@ -10,6 +10,9 @@ the plan and investigation files.
 Worked example: read [`skills/ci-log-reducer/`](../skills/ci-log-reducer/) end to end in authoring
 order (schema → validator → eval cases → `SKILL.md`); [`skills/laguna-task-contract/`](../skills/laguna-task-contract/)
 shows `references/` usage. A narrative walkthrough lives in [`getting-started.md`](getting-started.md).
+For imported external skills or first-run case generation, use
+[`external-skill-bootstrap.md`](external-skill-bootstrap.md). For GEPA search
+setup and reflection credentials, use [`gepa-optimization.md`](gepa-optimization.md).
 
 ---
 
@@ -20,6 +23,9 @@ These are not style preferences. A skill that fails either gate does not merge.
 Workbench-generated skills are drafts until they pass both gates. `skill-generate` can create a
 structure-valid `SKILL.md`, schema, and validator, but publishable status still requires at least
 three eval cases, one adversarial case, and a green `uv run scripts/check_eval_cases.py` pass.
+When an external prompt-style skill lacks a Laguna schema or validator, the
+bootstrap flow may create a synthetic contract and no-LM skeleton case; that is
+a starter scaffold, not a publishable substitute for reviewed functional cases.
 
 **Gate 1: schema and validator before prose.**
 The output schema (`schemas/*.schema.json`) and an executable validator

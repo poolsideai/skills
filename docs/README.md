@@ -6,9 +6,9 @@ vocabulary and the offline-vs-credentials matrix.
 ## By audience
 
 - **Newcomer**: [`getting-started.md`](getting-started.md), then the root [`README.md`](../README.md).
-- **Skill author**: [`authoring-guide.md`](authoring-guide.md) (binding) + [`../evals/README.md`](../evals/README.md) + [`../schemas/common/README.md`](../schemas/common/README.md).
-- **Evaluator**: [`eval-methodology.md`](eval-methodology.md) + the root README's eval sections.
-- **Skill optimizer**: [`plans/skill-optimization-gepa-2026-06-11.md`](plans/skill-optimization-gepa-2026-06-11.md).
+- **Skill author**: [`authoring-guide.md`](authoring-guide.md) (binding) + [`external-skill-bootstrap.md`](external-skill-bootstrap.md) + [`../evals/README.md`](../evals/README.md) + [`../schemas/common/README.md`](../schemas/common/README.md).
+- **Evaluator**: [`eval-methodology.md`](eval-methodology.md) + the root README's common workflows.
+- **Skill optimizer**: [`gepa-optimization.md`](gepa-optimization.md) + [`plans/skill-optimization-gepa-2026-06-11.md`](plans/skill-optimization-gepa-2026-06-11.md).
 - **Harness developer**: [`plans/laguna-skills-v0-2026-06-10.md`](plans/laguna-skills-v0-2026-06-10.md) + [`../harness/fixtures/README.md`](../harness/fixtures/README.md) + the two spike docs.
 - **Workbench / UI developer**: [`../ui/README.md`](../ui/README.md) + [`../plans/README.md`](../plans/README.md) (workbench redesign plans).
 - **Smithers workflow author/operator**: [`smithers.md`](smithers.md) + the root
@@ -20,6 +20,8 @@ vocabulary and the offline-vs-credentials matrix.
 - [`getting-started.md`](getting-started.md): first-session walkthrough, offline first.
 - [`concepts.md`](concepts.md): glossary + credentials matrix.
 - [`authoring-guide.md`](authoring-guide.md): binding skill authoring standard (the two hard gates).
+- [`external-skill-bootstrap.md`](external-skill-bootstrap.md): importing external skills, no-LM skeletons, synthetic bootstrap contracts, and promote/validate loops.
+- [`gepa-optimization.md`](gepa-optimization.md): GEPA credentials, Pool-backed reflection, reasoning effort, mutation surfaces, and bootstrap guards.
 - [`eval-methodology.md`](eval-methodology.md): arms, isolation, metrics, reporting policy.
 - [`smithers.md`](smithers.md): repo-local Smithers setup, operating commands, and
   the PoolAgent experiment boundary.
