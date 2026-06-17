@@ -7,7 +7,7 @@ out rather than restating rules.
 ## Prerequisites
 
 Install `uv`, `bun`, and `pool` on PATH. Versions and notes are in the root
-[`README.md`](../README.md) (Prerequisites). Authenticate `pool` before live evals; the runner can
+[`README.md`](../README.md) (Quick start). Authenticate `pool` before live evals; the runner can
 use `POOLSIDE_TOKEN` or `~/.config/poolside/credentials.json`.
 
 Live evals need `pool` auth. Optimization and eval-case generation also need
@@ -26,7 +26,7 @@ set +a
 
 Everything in the offline section below runs with zero credentials.
 
-## Agent starter prompt
+## Fastest agent path
 
 For the fastest path to a live pool success, hand an agent the checked-in prompt:
 
@@ -38,20 +38,6 @@ Use ci-log-reducer unless I name a different skill.
 The prompt runs readiness checks, one dry-run suite, a tiny live pool comparison,
 GEPA smoke, a small GEPA search, and proposal creation. It tells the agent not
 to promote skill changes without explicit approval.
-
-## Task tracking and Beads in this checkout
-
-This repo does not initialize a Beads tracker locally. There is no `.beads/`
-here; do not run `br init` or copy `.beads` from another checkout as part of
-onboarding. "What Bead should I pick next?" behavior is graded through
-[`skills/bead-selector`](../skills/bead-selector/SKILL.md), whose suite at
-`evals/suites/skill-bead-selector.json` synthesizes the Beads graph inside
-fixture workspaces. The workbench onboarding page also points at external
-Beads source skills under `~/.codex/skills/beads-bv` and
-`~/.codex/skills/beads-workflow`; if those paths are missing on your machine,
-the onboarding run reports the missing source rather than implying a
-repo-local tracker exists. See the root [`README.md`](../README.md) section
-"Task tracking and Beads" for the full source-of-truth narrative.
 
 ## The loop, offline first
 
@@ -241,6 +227,8 @@ Live steps need credentials. See the matrix in [`concepts.md`](concepts.md).
   [`plans/skill-optimization-gepa-2026-06-11.md`](plans/skill-optimization-gepa-2026-06-11.md).
   All resulting numbers are internal/directional only
   ([`eval-methodology.md`](eval-methodology.md) §7).
+- **Beads** are optional in this checkout. See [`beads.md`](beads.md) only when
+  working on `bead-selector` or onboarding checks.
 
 ## Where next
 

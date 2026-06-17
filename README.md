@@ -1,6 +1,8 @@
 # Poolside Skills
 
-A validator-first skill library and external eval harness for Poolside's models. This repo is the place to bring a directory of skills, make each skill gradeable, measure it with `pool`, and optimize the instructions with GEPA without changing the grader.
+A validator-first skill library and external eval harness for Poolside's models.
+Use it to make skills gradeable, measure them with `pool`, and optimize their
+instructions with GEPA without changing the grader.
 
 In this repo, a skill is a contract: `SKILL.md` prose, a deterministic output
 schema, an executable validator, eval cases including an adversarial case, and
@@ -15,7 +17,42 @@ The worked example is [`ci-log-reducer`](skills/ci-log-reducer/SKILL.md): its va
 
 New here? [`docs/getting-started.md`](docs/getting-started.md) walks the full loop, and [`docs/concepts.md`](docs/concepts.md) defines the vocabulary, including Laguna, arms, gold replay, and GEPA.
 
-## What this gives you
+## Quick start
+
+From the repo root, these commands should exist:
+
+```bash
+uv --version
+bun --version
+pool --version
+```
+
+To hand the repo to an agent for the fastest live success path, tell it:
+
+```text
+Read AGENTS.md, then follow docs/prompts/first-success-pool-run.md.
+Use ci-log-reducer unless I name a different skill.
+```
+
+For a local readiness pass that does not call a model:
+
+```bash
+bun ui/bench.ts doctor
+bun ui/bench.ts capabilities
+uv run scripts/check_skill_structure.py
+uv run scripts/check_schemas.py
+uv run scripts/check_validator_robustness.py
+uv run scripts/check_eval_cases.py
+uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay
+uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
+```
+
+Known-good versions used while checking these docs: Python 3.11+, `uv` 0.11.21,
+`bun` 1.3.14, and `pool` 1.0.5. `uv run ...` reads `pyproject.toml`; this repo
+is configured as a script-only project with `package = false`, so there is no
+package install step.
+
+## What is here
 
 - **A skill library** for reusable Laguna behaviors, including CI log reduction, task scoping, and repo mapping.
 - **An eval harness** that compares model runs with and without a skill, using deterministic workspace artifacts rather than subjective judgment.
@@ -45,7 +82,7 @@ Publish-ready skills:
 
 Skills with rough evals:
 
-- [`bead-selector`](skills/bead-selector/SKILL.md) writes `.laguna/bead-selection.json`, the validator-graded record of which local Bead to pick next from `bv`/`br` robot-mode output. The dedicated suite at [`evals/suites/skill-bead-selector.json`](evals/suites/skill-bead-selector.json) covers multiple cases including adversarial ones; treat the resulting numbers as internal/directional.
+- [`bead-selector`](skills/bead-selector/SKILL.md) writes `.laguna/bead-selection.json` for optional Beads selection workflows; see [`docs/beads.md`](docs/beads.md) for the checkout boundary.
 - [`workspace-inventory`](skills/workspace-inventory/SKILL.md) writes `.laguna/workspace-inventory.json`. The dedicated suite at [`evals/suites/skill-workspace-inventory.json`](evals/suites/skill-workspace-inventory.json) covers six cases: flat workspaces, nested Python and Rust workspaces, and two adversarial "good-failure" cases (`.laguna` listed in entries, shallow-only counts on a Go monorepo). The validator enforces schema, entries-match-tree, lexicographic sorting of `entries[]`, recursive directory file counts, and `total_files`. Eval numbers are internal/directional.
 
 Experimental imports:
@@ -54,64 +91,7 @@ Experimental imports:
 
 Plan of record: [`docs/plans/laguna-skills-v0-2026-06-10.md`](docs/plans/laguna-skills-v0-2026-06-10.md).
 
-## Task tracking and Beads
-
-This repo does not initialize a Beads tracker in the checkout. There is no
-`.beads/` directory here, and stabilization work does not run `br init` or copy
-`.beads` from another checkout. Beads shows up in two distinct, deliberate ways:
-
-- **Repo-local grading**: [`skills/bead-selector`](skills/bead-selector/SKILL.md)
-  is the authoritative repo truth for "what Bead should I pick next?" behavior.
-  Its eval suite synthesizes Beads graphs inside fixture workspaces and grades
-  the model's selection artifact; it does not depend on a live `.beads/` here.
-- **External source skills used by onboarding**: the workbench onboarding page
-  ([`ui/views/onboard.js`](ui/views/onboard.js)) starts readiness checks
-  against external Beads source skills under `~/.codex/skills/beads-bv` and
-  `~/.codex/skills/beads-workflow`. Those paths live outside this checkout. If
-  they are missing on a given machine, the onboarding run records the failure
-  rather than implying repo-local Beads state.
-
-If owning Beads inside this repo ever becomes the right choice, that is a
-separate, approval-gated decision made before any `.beads/` initialization or
-restore. It is not part of this stabilization pass.
-
-## Prerequisites
-
-From the repo root, these commands should exist:
-
-```bash
-uv --version
-bun --version
-pool --version
-```
-
-Known-good versions used while checking these docs: Python 3.11+, `uv` 0.11.21,
-`bun` 1.3.14, and `pool` 1.0.5. Older `pool` 0.2.172 notes in spike docs are historical.
-
-`uv run ...` reads `pyproject.toml`; this repo is configured as a script-only project with `package = false`, so there is no package install step.
-
-## Start here
-
-Use [`docs/getting-started.md`](docs/getting-started.md) for the full first
-session. The short readiness path is:
-
-To hand the repo to an agent for the fastest live success path, tell it:
-
-```text
-Read AGENTS.md, then follow docs/prompts/first-success-pool-run.md.
-Use ci-log-reducer unless I name a different skill.
-```
-
-```bash
-bun ui/bench.ts doctor
-bun ui/bench.ts capabilities
-uv run scripts/check_skill_structure.py
-uv run scripts/check_schemas.py
-uv run scripts/check_validator_robustness.py
-uv run scripts/check_eval_cases.py
-uv run harness/runner/run_eval.py --suite evals/suites/smoke.json --dry-run --replay
-uv run harness/optimize/gepa_skill.py --skill ci-log-reducer --smoke
-```
+## Workbench and checks
 
 `doctor` reports tool availability plus basic skill-contract, eval-suite, and WIP
 coverage checks without starting the web server. `bench.ts` writes JSON to

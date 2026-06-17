@@ -25,6 +25,7 @@ vocabulary and the offline-vs-credentials matrix.
 - [`external-skill-bootstrap.md`](external-skill-bootstrap.md): importing external skills, no-LM skeletons, synthetic bootstrap contracts, and promote/validate loops.
 - [`gepa-optimization.md`](gepa-optimization.md): GEPA credentials, Pool-backed reflection, reasoning effort, mutation surfaces, and bootstrap guards.
 - [`eval-methodology.md`](eval-methodology.md): arms, isolation, metrics, reporting policy.
+- [`beads.md`](beads.md): optional Beads boundaries for `bead-selector` and onboarding checks.
 - [`smithers.md`](smithers.md): repo-local Smithers setup, operating commands, and
   the PoolAgent experiment boundary.
 - [`model-access-spike.md`](model-access-spike.md): agent-name → Laguna model mapping, quotas (spike + addenda).

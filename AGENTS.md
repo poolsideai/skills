@@ -13,10 +13,11 @@ validator, eval evidence, and prose. Prompt-pack-only skills do not merge.
 Start here:
 
 - Overview and common workflows: `README.md`
-- Full agent/reference guide: `CLAUDE.md`
 - First live pool run prompt: `docs/prompts/first-success-pool-run.md`
+- Full agent/reference guide: `CLAUDE.md`
 - External skill bootstrap and no-LM skeletons: `docs/external-skill-bootstrap.md`
 - GEPA reflection, provider keys, and mutation guards: `docs/gepa-optimization.md`
+- Optional Beads boundaries: `docs/beads.md`
 - Binding authoring standard: `docs/authoring-guide.md`
 - Eval method and known debt: `docs/eval-methodology.md`
 - Plan of record: `docs/plans/laguna-skills-v0-2026-06-10.md`
@@ -60,24 +61,11 @@ it will only flag a new WIP skill that lacks coverage. See `README.md` and
 `CLAUDE.md` for live evals, GEPA optimization, trace review, and
 case-generation commands.
 
-## Task tracking (Beads)
+## Optional Beads
 
-This checkout does not initialize a Beads tracker. `.beads/` is absent here on
-purpose: stabilization work must not run `br init` or copy `.beads` from
-another checkout without an explicit, approval-gated source-of-truth decision.
-
-- Repo-local "what Bead to pick next?" truth lives in
-  [`skills/bead-selector`](skills/bead-selector/SKILL.md); its eval suite at
-  `evals/suites/skill-bead-selector.json` grades selection artifacts against
-  synthesized Beads graphs and does not need a live `.beads/` here.
-- The workbench onboarding page reaches external Beads source skills under
-  `~/.codex/skills/beads-bv` and `~/.codex/skills/beads-workflow`. Those paths
-  live outside this repo; missing paths must surface as a clear onboarding
-  failure rather than be interpreted as repo-local Beads state.
-
-If you are tempted to run `bv` or `br` against this checkout and see no graph,
-that is expected. Use the `bead-selector` fixtures for grading, and treat any
-move toward repo-owned Beads as separate work.
+This checkout does not initialize a Beads tracker. Do not run `br init` or copy
+`.beads` into the repo during ordinary skill work. See `docs/beads.md` only when
+working on `bead-selector` or onboarding checks.
 
 ## Smithers
 
