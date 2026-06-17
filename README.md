@@ -95,6 +95,13 @@ Known-good versions used while checking these docs: Python 3.11+, `uv` 0.11.21,
 Use [`docs/getting-started.md`](docs/getting-started.md) for the full first
 session. The short readiness path is:
 
+To hand the repo to an agent for the fastest live success path, tell it:
+
+```text
+Read AGENTS.md, then follow docs/prompts/first-success-pool-run.md.
+Use ci-log-reducer unless I name a different skill.
+```
+
 ```bash
 bun ui/bench.ts doctor
 bun ui/bench.ts capabilities

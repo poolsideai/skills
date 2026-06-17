@@ -6,6 +6,7 @@ vocabulary and the offline-vs-credentials matrix.
 ## By audience
 
 - **Newcomer**: [`getting-started.md`](getting-started.md), then the root [`README.md`](../README.md).
+- **Agent doing the first live pool run**: [`prompts/first-success-pool-run.md`](prompts/first-success-pool-run.md).
 - **Skill author**: [`authoring-guide.md`](authoring-guide.md) (binding) + [`external-skill-bootstrap.md`](external-skill-bootstrap.md) + [`../evals/README.md`](../evals/README.md) + [`../schemas/common/README.md`](../schemas/common/README.md).
 - **Evaluator**: [`eval-methodology.md`](eval-methodology.md) + the root README's common workflows.
 - **Skill optimizer**: [`gepa-optimization.md`](gepa-optimization.md) + [`plans/skill-optimization-gepa-2026-06-11.md`](plans/skill-optimization-gepa-2026-06-11.md).
@@ -18,6 +19,7 @@ vocabulary and the offline-vs-credentials matrix.
 ## All docs
 
 - [`getting-started.md`](getting-started.md): first-session walkthrough, offline first.
+- [`prompts/first-success-pool-run.md`](prompts/first-success-pool-run.md): copyable agent prompt for one live pool eval plus small GEPA run.
 - [`concepts.md`](concepts.md): glossary + credentials matrix.
 - [`authoring-guide.md`](authoring-guide.md): binding skill authoring standard (the two hard gates).
 - [`external-skill-bootstrap.md`](external-skill-bootstrap.md): importing external skills, no-LM skeletons, synthetic bootstrap contracts, and promote/validate loops.

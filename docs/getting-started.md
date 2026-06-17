@@ -26,6 +26,19 @@ set +a
 
 Everything in the offline section below runs with zero credentials.
 
+## Agent starter prompt
+
+For the fastest path to a live pool success, hand an agent the checked-in prompt:
+
+```text
+Read AGENTS.md, then follow docs/prompts/first-success-pool-run.md.
+Use ci-log-reducer unless I name a different skill.
+```
+
+The prompt runs readiness checks, one dry-run suite, a tiny live pool comparison,
+GEPA smoke, a small GEPA search, and proposal creation. It tells the agent not
+to promote skill changes without explicit approval.
+
 ## Task tracking and Beads in this checkout
 
 This repo does not initialize a Beads tracker locally. There is no `.beads/`

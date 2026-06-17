@@ -14,6 +14,7 @@ Start here:
 
 - Overview and common workflows: `README.md`
 - Full agent/reference guide: `CLAUDE.md`
+- First live pool run prompt: `docs/prompts/first-success-pool-run.md`
 - External skill bootstrap and no-LM skeletons: `docs/external-skill-bootstrap.md`
 - GEPA reflection, provider keys, and mutation guards: `docs/gepa-optimization.md`
 - Binding authoring standard: `docs/authoring-guide.md`
