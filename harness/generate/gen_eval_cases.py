@@ -1346,7 +1346,6 @@ def main() -> int:
             skill,
             REPO_ROOT / "skills" / skill,
         )
-    is_validate_or_promote = bool(args.validate_only or args.promote)
     started_from_true_zero = not skill_has_visible_case_dirs(skill)
     bootstrap_context = args.bootstrap or (started_from_true_zero and not args.seed_example)
     ctx = SkillContext(skill, args.seed_example, bootstrap=bootstrap_context)
