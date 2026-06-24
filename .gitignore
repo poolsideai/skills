@@ -23,3 +23,5 @@ smithers.db-wal
 # Generated design handoff archives
 .resources/handoff/**/*.zip
 .resources/handoff/**/*.pdf
+
+.compound-engineering/*.local.yaml
