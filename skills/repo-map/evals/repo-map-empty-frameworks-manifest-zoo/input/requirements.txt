@@ -1,5 +1,5 @@
 # Python development dependencies only
-black==23.9.1
+black==26.3.1
 mypy==1.5.1
-pytest==7.4.2
+pytest==9.0.3
 pytest-cov==4.1.0
